@@ -1,0 +1,23 @@
+{
+  "name": "sunny_graph",
+  "version": "1.0.0",
+  "description": "sunny_graph",
+  "main": "app.js",
+  "directories": {
+    "lib": "lib"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@gitlab.buaaoo.top:2021_alige_homeworks/group_projects/wan_li_yang_guang_hao/front_end.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@miniprogram-component-plus/col": "^1.0.0",
+    "@miniprogram-component-plus/row": "^1.0.0",
+    "@vant/weapp": "^1.6.8"
+  }
+}

@@ -1,0 +1,33 @@
+<!--pages/personal/personal.wxml-->
+<view class="container">
+  <block>
+    <image class="logo" src='/lib/image/icon/portrait.jpeg'></image>
+    <view class='title'>hi~ duckingss</view>
+  
+    <text>\n\n\n\n\n\n\n\n</text>
+    <view class="content">
+      <view class='menu-line' bindtap=''>
+        <view class='menu-name'>
+          <image src=''></image>
+          <view>微信授权</view>
+        </view>
+        <image src=''></image>
+      </view>
+      <view class='menu-line' bindtap='inputFace'>
+        <view class='menu-name'>
+          <image src=''></image>
+        <view>偏好设置</view>
+        </view>
+        <image src=''></image>
+      </view>
+
+      <view class='menu-line' bindtap='about_us'>
+        <view class='menu-name'>
+          <image src=''></image>
+        <view>关于我们</view>
+        </view>
+        <image src=''></image>
+      </view>
+    </view>
+  </block>
+</view>

@@ -1,0 +1,23 @@
+<!-- 最好加入一个面包屑导航 -->
+<view class="top_box">
+  <van-row>
+    此处应该添加一个面包屑导航&返回
+  </van-row>
+  <van-row>
+  <van-col span="12">
+        <van-dropdown-menu style="width:100%">
+          <van-dropdown-item value="{{ value1 }}" options="{{ option1 }}" />
+        </van-dropdown-menu >
+  </van-col>
+  <van-col span="12">
+    <van-search style="width:100%" value="{{ value }}" placeholder="请输入搜索关键词" />
+  </van-col>
+</van-row>
+</view>
+<text>\n\n\n\n</text>
+<view>
+<van-cell-group>
+  <van-cell title="最近访问" is-link />
+  <van-cell title="草稿箱" is-link />
+</van-cell-group>
+</view>

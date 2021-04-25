@@ -1,0 +1,34 @@
+<!--template/input/input.wxml-->
+<view class="text-center f-8x">文字复制 </view>
+<view>
+<van-dropdown-menu >
+  <van-dropdown-item  model:value="{{ value }} "  options="{{ option }}" />
+</van-dropdown-menu>
+</view>
+<view wx:if="{{value=='count'}}">
+  <view  class="mbox">
+  <van-cell-group>
+  <van-field class="mbox"
+    model:value="{{ input }}"
+    placeholder="复制示例: 苹果:3个，梨子:7个"
+    border="{{ false }}"
+  />
+  </van-cell-group>
+</view>
+</view>
+<view wx:if="{{value=='data'}}">
+  <view  class="mbox">
+  <van-cell-group style="height:100% !important;display:inline !important">
+  <van-field
+    model:value="{{ input }}"
+    placeholder="复制示例: 电压3.5伏特，电流1.1安培"
+    border="{{ false }}"
+  />
+  </van-cell-group>
+</view>
+</view>
+
+<text>\n\n</text>
+<van-button type="primary" block >确定</van-button>
+<view class="v_off1"></view>
+<van-button type="default"  block >清空</van-button>

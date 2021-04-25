@@ -1,10 +1,68 @@
 /**app.wxss**/
-.container {
-  height: 100%;
-  display: flex;
+@import 'template/bootstrap.wxss';
+/* 常用盒子 */
+.box1{
+  background-color: #fff;
+  margin: 0px 15px 0px 15px; 
+  padding: 5px;
+  height:150px;
+  position:relative;
+  overflow: scroll;
+  top:10rpx;
+  border-radius: 8px;
+  box-shadow: 1px 1px 3px #aaaaaa; 
+}
+.bottom_box{
+  overflow:scroll;
+  background-color: #fff;
+  position: absolute; bottom: 0rpx;
+  width: 100%;
+  /* height: 200rpx; */
+  box-shadow: 1px 1px 3px #aaaaaa;
+}
+.top_box{
+  overflow:scroll;
+  background-color: #fff;
+  position: absolute; top: 0rpx;
+  width: 100%;
+  /* height: 200rpx; */
+  box-shadow: 1px 1px 3px #aaaaaa;
+}
+.v_box{
   flex-direction: column;
-  align-items: center;
-  justify-content: space-between;
-  padding: 200rpx 0;
-  box-sizing: border-box;
-} 
+  display: flex;
+  align-items:center;
+}
+.mbox{
+  background-color:#fff;
+  margin: 15rpx 15rpx; 
+  /* align-self: center; */
+  height: 400rpx;
+  padding: 20rpx;
+  position:relative;
+  top:30px;
+  border-radius: 4px !important;
+  /* box-shadow: 1px 1px 3px #aaaaaa;  */
+}
+/* 数值偏移 */
+.v_off1{
+  margin-top:10rpx
+}
+.v_off2{
+  margin-top:20rpx
+}
+.v_off3{
+  margin-top:30rpx
+}
+.v_off4{
+  margin-top:40rpx
+}
+.v_off5{
+  margin-top:50rpx
+}
+.title{
+  text-align: center;
+}
+page {
+  background-color: #eee;
+}

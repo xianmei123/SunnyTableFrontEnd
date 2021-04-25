@@ -1,0 +1,30 @@
+<!--template/input/input.wxml-->
+<view style="text-align:center">图像输入 </view>
+<view>
+<van-dropdown-menu >
+  <van-dropdown-item  model:value="{{ value }} "  options="{{ option }}" />
+</van-dropdown-menu>
+</view>
+<view wx:if="{{value=='count'}}">
+  <text>\n\n\n</text>
+  <view style="text-align:center">
+    <image style="height:300rpx;width:70%" src="/lib/image/icon/camera.png"></image>
+  </view>
+
+</view>
+<view wx:if="{{value=='data'}}">
+  <view  class="mbox">
+  <van-cell-group>:
+  <van-field
+    model:value="{{ input }}"
+    placeholder="复制示例: 电压3.5伏特，电流1.1安培"
+    border="{{ false }}"
+  />
+  </van-cell-group>
+</view>
+</view>
+
+<text>\n\n</text>
+<van-button type="primary" block >确定</van-button>
+<view class="v_off1"></view>
+<van-button type="default"  block >清空</van-button>
