@@ -15,8 +15,16 @@ Page({
   },
   // 事件处理函数
   bindViewTap() {
+    var nameToIndex = {};
+    nameToIndex.name = [1,2,3] ;
+    console.log(nameToIndex);
     wx.navigateTo({
       url: '../logs/logs'
+    })
+  },
+  goDraw(){
+    wx.navigateTo({
+      url: '../draw/draw',
     })
   },
   onLoad() {
