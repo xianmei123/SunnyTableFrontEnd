@@ -23,8 +23,8 @@ class LineGraph {
 
     // 多个折线图需要在option中添加多个{},即可，每一个数据需要自行指派。
     lineChart;
-    inputList = []; // 
-    pointToName = []; // <index, name>
+    inputList = []; // 输入数据 坐标列表 
+    indexToName = []; // <index, name>
     nameToIndex = {};
 
     xMap = new Map(); // <data.index, data.index.x> // data中每一个数组在data中下标-> 该下标对应的两个元素的x坐标
@@ -41,17 +41,18 @@ class LineGraph {
         "userId": 123, //用户id
         "radius": 20, //圆半径
         "point": [], //点样式  
-        "color": [],
+        "color": ['red','#ba55d3'],
         "showDight": false, //"true" or "false"，是否显示数值，指图中每个点是否标注数值
         "font": 5, //字体大小
         "legendPos": 456, //图例位置
         "textColor": [], //字体颜色
     };
 
-    constructor() {}
-
-    setLineModel() {
+    constructor() {
+        console.log("lingraph!!");
     }
+
+    setLineModel() {}
 
     setInputList(name, data) {
         this.nameToIndex[name] = {
@@ -59,16 +60,53 @@ class LineGraph {
             "maxIndex": this.inputList.length + data.length
         };
         for (var i = 0; i < data.length; i++) {
-            this.pointToName.push(name);
+            this.indexToName.push(name);
         }
         for (var i in data) {
             this.inputList.push(data[i]);
         }
     }
+
+    convertToSend() {
+        var dataArray = [];
+        var tempJson = {};
+        tempJson['xLable'] = getSingleData(this.inputList.slice(this.nameToIndex[this.indexToName[0]].minIndex, this.nameToIndex[this.indexToName[0]].maxIndex), 0);
+        dataArray.push(tempJson);
+        for (var i = 0; i < this.inputList.length;) {
+            var name = this.indexToName[i];
+            var tempArr = getSingleData(this.inputList.slice(this.nameToIndex[name].minIndex, this.nameToIndex[name].maxIndex),1);
+            tempJson = {};
+            tempJson[name] = tempArr;
+            dataArray.push(tempJson);
+            i = this.nameToIndex[name].maxIndex;
+        }
+        console.log(dataArray);
+    }
+}
+
+function getSingleData(tempData, index) {
+    var result = [];
+    for (var i = 0; i < tempData.length; i++) {
+        result.push(tempData[i][index]);
+    }
+    return result;
 }
 
 var line = new LineGraph();
-
+line.setInputList("sb", [
+    ['sb1', 0],
+    ['sb2', 10],
+    ['sb3', 20],
+    ['sb4', 30],
+    ['sb5', 40]
+]);
+line.setInputList("sbqqh", [
+    ['sb1', 8],
+    ['sb2', 20],
+    ['sb3', 25],
+    ['sb4', 35],
+    ['sb5', 45]
+]);
 Page({
     data: {
         option1: [{
@@ -114,17 +152,8 @@ function initLineChart(canvas, width, height, dpr) {
         devicePixelRatio: dpr // new
     });
     line.lineChart = lineChart;
-
-    line.setInputList("sb", [
-        ['sb1', 0],
-        ['sb2', 10],
-        ['sb3', 20],
-        ['sb4', 30],
-        ['sb5', 40]
-    ]);
     canvas.setChart(lineChart);
-
-    var option = setOption();
+    var option = setLineOption();
     lineChart.setOption(option); // 
     lineChart.setOption({
         graphic: echarts.util.map(line.inputList, function (dataItem, dataIndex) {
@@ -139,6 +168,7 @@ function initLineChart(canvas, width, height, dpr) {
                 position: line.lineChart.convertToPixel('grid', dataItem),
                 shape: {
                     r: line.lineModelPro.radius / 2
+                    // r : 20 / 2
                 },
                 invisible: true,
                 draggable: line.draggable,
@@ -153,25 +183,36 @@ function initLineChart(canvas, width, height, dpr) {
     return lineChart;
 }
 
-function setOption() {
-    var series=[];
+function setLineOption() {
+    var series = [];
+    var count = 0;
     for (var i = 0; i < line.inputList.length;) {
-        var name = line.pointToName[i];
+        var name = line.indexToName[i];
         var tempJson = {
             name: name,
             type: "line",
             smooth: true,
             symbolSize: line.lineModelPro.radius,
-            data: line.inputList.slice(line.nameToIndex[name].minIndex, line.nameToIndex[name].maxIndex)
+            data: line.inputList.slice(line.nameToIndex[name].minIndex, line.nameToIndex[name].maxIndex),
+            lineStyle: {
+                color: line.lineModelPro.color[count],
+            }
         };
         i = line.nameToIndex[name].maxIndex;
         series.push(tempJson);
+        count++;
     }
+    console.log(series);
     var option = {
         tooltip: {
             triggerOn: 'none',
             formatter: function (params) {
-                return 'X: ' + params.data[0] + '\nY: ' + params.data[1].toFixed(2);
+                var xstr = line.xType === "string" ? params.data[0] : params.data[0].toFixed(2);
+                var ystr = line.yType === "string" ? params.data[1] : params.data[1].toFixed(2);
+                return 'X: ' 
+                + xstr
+                + '\nY: ' 
+                + ystr;
             }
         },
         xAxis: {
@@ -202,17 +243,18 @@ function onPointDragging(dataIndex) {
     if (line.xType === "string") {
         line.inputList[dataIndex][0] = line.xMap.get(dataIndex);
     }
-    var name = line.pointToName[dataIndex];
-    this.position = [line.lineChart.convertToPixel({xAxisIndex: 0}, line.xMap.get(dataIndex)),this.position[1]];
+    var name = line.indexToName[dataIndex];
+    this.position = [line.lineChart.convertToPixel({xAxisIndex: 0}, line.xMap.get(dataIndex)), this.position[1]];
     setTimeout(function () {
         line.lineChart.setOption({
             series: [{
                 name: name,
-                data: line.inputList
+                data: line.inputList.slice(line.nameToIndex[name].minIndex, line.nameToIndex[name].maxIndex)
             }]
         });
     }, 0);
 }
+
 function showTooltip(dataIndex) {
     line.lineChart.dispatchAction({
         type: 'showTip',
