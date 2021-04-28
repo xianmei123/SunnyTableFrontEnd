@@ -1,56 +1,63 @@
 <!--垂直滚动，这里必须设置高度-->
-<van-dropdown-menu>
-    <van-dropdown-item model:value="{{ value1 }}" options="{{ option1 }}" />
-    <van-dropdown-item model:value="{{ value2 }}" options="{{ option2 }}" />
-</van-dropdown-menu>
-<view style="text-align:center">物理实验图</view>
-<view class="box1" name="图表部分">
-    <!-- 折线图 -->
-    <view wx:if="{{value1=='line'}}">
-        <view class="container">
-            <ec-canvas id="lineChartId" canvas-id="line-canvas" ec="{{ lineChart }}"></ec-canvas>
+<view>
+
+
+    <van-dropdown-menu>
+        <van-dropdown-item model:value="{{ value1 }}" options="{{ option1 }}" />
+        <van-dropdown-item model:value="{{ value2 }}" options="{{ option2 }}" />
+    </van-dropdown-menu>
+    <view style="text-align:center">物理实验图</view>
+    <view class="box1" name="图表部分">
+        <!-- 折线图 -->
+        <view wx:if="{{value1=='line'}}">
+            <scroll-view scroll-y="true" scroll-x="true">
+                <view class="container">
+                <ec-canvas id="lineChartId" canvas-id="line-canvas" ec="{{ lineChart }}"></ec-canvas>
+            </view>
+            </scroll-view>
+            
+        </view>
+        <!-- 柱状图 -->
+        <view wx:if="{{value1=='bar'}}">
+        </view>
+        <!-- 饼状图 -->
+        <view wx:if="{{value1=='pie'}}">
+            <scroll-view scroll-y="true" scroll-x="true">
+            </scroll-view>
+        </view>
+
+    </view>
+
+    <text>\n</text>
+    <view class="title">物理实验数据</view>
+    <view class="box1" name="表格部分">
+        <!-- 表格 -->
+        <view wx:if="{{value2=='excel'}}">
+            <view style="background: red; width: 100px; height: 100px">a</view>
+            <view style="background: green; width: 100px; height: 100px">a</view>
+            <view style="background: blue; width: 100px; height: 100px">a</view>
+            <view style="background: yellow; width: 100px; height: 100px">a</view>
+        </view>
+        <!-- 文字 -->
+        <view wx:if="{{value2=='text'}}">
+            <scroll-view scroll-y="true" scroll-x="true">
+                <view style="background: red; width: 100px; height: 100px">b</view>
+                <view style="background: green; width: 100px; height: 100px">b</view>
+                <view style="background: blue; width: 100px; height: 100px">b</view>
+                <view style="background: yellow; width: 100px; height: 100px">b</view>
+            </scroll-view>
         </view>
     </view>
-    <!-- 柱状图 -->
-    <view wx:if="{{value1=='bar'}}">
-    </view>
-    <!-- 饼状图 -->
-    <view wx:if="{{value1=='pie'}}">
-        <scroll-view scroll-y="true" scroll-x="true">
-        </scroll-view>
-    </view>
 
+    <van-row class="bottom_box">
+        <van-col span="8" style="text-align:center">
+            <van-icon name="plus" />
+        </van-col>
+        <van-col span="8" style="text-align:center" bindtap="saveTO">
+            <van-icon name="down" />
+        </van-col>
+        <van-col span="8" style="text-align:center">
+            <van-icon name="apps-o" />
+        </van-col>
+    </van-row>
 </view>
-
-<text>\n</text>
-<view class="title">物理实验数据</view>
-<view class="box1" name="表格部分">
-    <!-- 表格 -->
-    <view wx:if="{{value2=='excel'}}">
-        <view style="background: red; width: 100px; height: 100px">a</view>
-        <view style="background: green; width: 100px; height: 100px">a</view>
-        <view style="background: blue; width: 100px; height: 100px">a</view>
-        <view style="background: yellow; width: 100px; height: 100px">a</view>
-    </view>
-    <!-- 文字 -->
-    <view wx:if="{{value2=='text'}}">
-        <scroll-view scroll-y="true" scroll-x="true">
-            <view style="background: red; width: 100px; height: 100px">b</view>
-            <view style="background: green; width: 100px; height: 100px">b</view>
-            <view style="background: blue; width: 100px; height: 100px">b</view>
-            <view style="background: yellow; width: 100px; height: 100px">b</view>
-        </scroll-view>
-    </view>
-</view>
-
-<van-row class="bottom_box">
-    <van-col span="8" style="text-align:center">
-        <van-icon name="plus" />
-    </van-col>
-    <van-col span="8" style="text-align:center" bindtap="saveTO">
-        <van-icon name="down" />
-    </van-col>
-    <van-col span="8" style="text-align:center">
-        <van-icon name="apps-o" />
-    </van-col>
-</van-row>
