@@ -145,6 +145,8 @@ Page({
     }
 });
 
+
+
 function initLineChart(canvas, width, height, dpr) {
     var lineChart = echarts.init(canvas, null, {
         width: width,
