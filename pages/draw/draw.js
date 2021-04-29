@@ -209,6 +209,7 @@ function initLineChart(canvas, width, height, dpr) {
         devicePixelRatio: dpr // new
     });
     line.lineChart = lineChart;
+
     canvas.setChart(lineChart);
     var option = setLineOption();
     lineChart.setOption(option); // 
@@ -501,6 +502,7 @@ function onPointLineDragging(dataIndex) {
             }]
         });
     }, 0);
+
 }
 
 function onPointBarDragging(dataIndex) {

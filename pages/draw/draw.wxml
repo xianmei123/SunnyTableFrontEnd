@@ -33,6 +33,7 @@
     </view>
 </view>
 <view>
+
     <text>\n</text>
     <view class="title">物理实验数据</view>
     <view class="box1" name="表格部分">
