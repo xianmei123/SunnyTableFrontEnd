@@ -2,7 +2,7 @@
   width: 10%;
 }
 .container{
-    height: 500rpx;
+    height: 700rpx;
 }
 #lineChartId{
     width: 500rpx;

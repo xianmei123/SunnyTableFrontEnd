@@ -12,20 +12,27 @@
         <view wx:if="{{value1=='line'}}">
             <scroll-view scroll-y="true" scroll-x="true">
                 <view class="container">
-                <ec-canvas id="lineChartId" canvas-id="line-canvas" ec="{{ lineChart }}"></ec-canvas>
-            </view>
+                    <ec-canvas id="lineChartId" canvas-id="line-canvas" ec="{{ lineChart }}"></ec-canvas>
+                </view>
             </scroll-view>
-            
+
         </view>
         <!-- 柱状图 -->
         <view wx:if="{{value1=='bar'}}">
+            <scroll-view scroll-y="true" scroll-x="true">
+                <view class="container">
+                    <ec-canvas id="barChartId" canvas-id="bar-canvas" ec="{{ barChart }}"></ec-canvas>
+                </view>
+            </scroll-view>
         </view>
         <!-- 饼状图 -->
         <view wx:if="{{value1=='pie'}}">
             <scroll-view scroll-y="true" scroll-x="true">
+                <view class="container">
+                    <ec-canvas id="pieChartId" canvas-id="pie-canvas" ec="{{ pieChart }}"></ec-canvas>
+                </view>
             </scroll-view>
         </view>
-
     </view>
 
     <text>\n</text>
