@@ -5,7 +5,6 @@
   background-color: #fff;
   margin: 0px 15px 0px 15px; 
   padding: 5px;
-  height: 300px;
   position:relative;
   overflow: scroll;
   top:10rpx;
