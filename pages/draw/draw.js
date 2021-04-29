@@ -209,17 +209,6 @@ function initLineChart(canvas, width, height, dpr) {
         devicePixelRatio: dpr // new
     });
     line.lineChart = lineChart;
-<<<<<<< HEAD
-
-    line.setInputList("sb", [
-        ['0', 0],
-        ['7', 10],
-        ['1', 20],
-        ['3', 30],
-        ['15', 40]
-    ]);
-=======
->>>>>>> 04b616427a4549af61cf6c330adc408c6fd29e5e
     canvas.setChart(lineChart);
     var option = setLineOption();
     lineChart.setOption(option); // 
@@ -496,16 +485,12 @@ function onPointLineDragging(dataIndex) {
     // 这里的 data 就是本文最初的代码块中声明的 data，在这里会被更新。
     // 这里的 this 就是被拖拽的圆点。this.position 就是圆点当前的位置。
     line.inputList[dataIndex] = line.lineChart.convertFromPixel('grid', this.position);
-<<<<<<< HEAD
-    if (line.xType === "string" ) {
-        line.inputList[dataIndex][0] = line.xMap[dataIndex];
-=======
+
     if (line.xType === "string") {
         line.inputList[dataIndex][0] = line.xMap.get(dataIndex);
         this.position = [line.lineChart.convertToPixel({
             xAxisIndex: 0
         }, line.xMap.get(dataIndex)), this.position[1]];
->>>>>>> 04b616427a4549af61cf6c330adc408c6fd29e5e
     }
     var name = line.indexToName[dataIndex];
     setTimeout(function () {
@@ -515,12 +500,7 @@ function onPointLineDragging(dataIndex) {
                 data: line.inputList.slice(line.nameToIndex[name].minIndex, line.nameToIndex[name].maxIndex)
             }]
         });
-<<<<<<< HEAD
-    },5);
-=======
     }, 0);
-
->>>>>>> 04b616427a4549af61cf6c330adc408c6fd29e5e
 }
 
 function onPointBarDragging(dataIndex) {
