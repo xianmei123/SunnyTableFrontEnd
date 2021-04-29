@@ -2,12 +2,7 @@
   width: 10%;
 }
 .container{
-<<<<<<< HEAD
-    height: 500rpx;
-    /* position: fixed; */
-=======
     height: 700rpx;
->>>>>>> 04b616427a4549af61cf6c330adc408c6fd29e5e
 }
 #lineChartId{
     width: 500rpx;

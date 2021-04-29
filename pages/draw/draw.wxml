@@ -1,5 +1,5 @@
 <!--垂直滚动，这里必须设置高度-->
-<<<<<<< HEAD
+
 <van-dropdown-menu>
     <van-dropdown-item model:value="{{ value1 }}" options="{{ option1 }}" />
     <van-dropdown-item model:value="{{ value2 }}" options="{{ option2 }}" />
@@ -8,56 +8,31 @@
 <view class="box1" name="图表部分">
     <!-- 折线图 -->
     <view wx:if="{{value1=='line'}}">
-        <view class="container">
-            <ec-canvas id="lineChartId" canvas-id="line-canvas" ec="{{ lineChart }}" disable-scroll="true"></ec-canvas>
-        </view>
+        <scroll-view scroll-y="true" scroll-x="true">
+            <view class="container">
+                <ec-canvas id="lineChartId" canvas-id="line-canvas" ec="{{ lineChart }}"></ec-canvas>
+            </view>
+        </scroll-view>
+
     </view>
     <!-- 柱状图 -->
     <view wx:if="{{value1=='bar'}}">
+        <scroll-view scroll-y="true" scroll-x="true">
+            <view class="container">
+                <ec-canvas id="barChartId" canvas-id="bar-canvas" ec="{{ barChart }}"></ec-canvas>
+            </view>
+        </scroll-view>
     </view>
     <!-- 饼状图 -->
     <view wx:if="{{value1=='pie'}}">
         <scroll-view scroll-y="true" scroll-x="true">
+            <view class="container">
+                <ec-canvas id="pieChartId" canvas-id="pie-canvas" ec="{{ pieChart }}"></ec-canvas>
+            </view>
         </scroll-view>
     </view>
-=======
+</view>
 <view>
-
->>>>>>> 04b616427a4549af61cf6c330adc408c6fd29e5e
-
-    <van-dropdown-menu>
-        <van-dropdown-item model:value="{{ value1 }}" options="{{ option1 }}" />
-        <van-dropdown-item model:value="{{ value2 }}" options="{{ option2 }}" />
-    </van-dropdown-menu>
-    <view style="text-align:center">物理实验图</view>
-    <view class="box1" name="图表部分">
-        <!-- 折线图 -->
-        <view wx:if="{{value1=='line'}}">
-            <scroll-view scroll-y="true" scroll-x="true">
-                <view class="container">
-                    <ec-canvas id="lineChartId" canvas-id="line-canvas" ec="{{ lineChart }}"></ec-canvas>
-                </view>
-            </scroll-view>
-
-        </view>
-        <!-- 柱状图 -->
-        <view wx:if="{{value1=='bar'}}">
-            <scroll-view scroll-y="true" scroll-x="true">
-                <view class="container">
-                    <ec-canvas id="barChartId" canvas-id="bar-canvas" ec="{{ barChart }}"></ec-canvas>
-                </view>
-            </scroll-view>
-        </view>
-        <!-- 饼状图 -->
-        <view wx:if="{{value1=='pie'}}">
-            <scroll-view scroll-y="true" scroll-x="true">
-                <view class="container">
-                    <ec-canvas id="pieChartId" canvas-id="pie-canvas" ec="{{ pieChart }}"></ec-canvas>
-                </view>
-            </scroll-view>
-        </view>
-    </view>
-
     <text>\n</text>
     <view class="title">物理实验数据</view>
     <view class="box1" name="表格部分">

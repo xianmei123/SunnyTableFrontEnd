@@ -28,7 +28,7 @@ class LineGraph {
     indexToName = []; // <index, name>
     nameToIndex = {};
 
-    xMap = []; // <data.index, data.index.x> // data中每一个数组在data中下标-> 该下标对应的两个元素的x坐标
+    xMap = new Map(); // <data.index, data.index.x> // data中每一个数组在data中下标-> 该下标对应的两个元素的x坐标
     yMap = new Map(); // 同上。
 
     xType = "string"; // 暂定于为 两个值 'string' 和 'number', xAxis 和 yAxix 中的 boundaryGap、type均以此变量决定。
@@ -215,7 +215,7 @@ function initLineChart(canvas, width, height, dpr) {
     lineChart.setOption({
         graphic: echarts.util.map(line.inputList, function (dataItem, dataIndex) {
             if (line.xType === 'string') {
-                line.xMap.push(dataItem[0]);
+                line.xMap.set(dataIndex, dataItem[0]);
             }
             if (line.yType === 'string') {
                 line.yMap.set(dataIndex, dataItem[1]);
