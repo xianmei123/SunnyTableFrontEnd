@@ -8,7 +8,7 @@ class LineGraph {
     pointToName = new Map(); // <index, name>
     nameToIndex = {};
 
-    xMap = new Map(); // <data.index, data.index.x> // data中每一个数组在data中下标-> 该下标对应的两个元素的x坐标
+    xMap = []; // <data.index, data.index.x> // data中每一个数组在data中下标-> 该下标对应的两个元素的x坐标
     yMap = new Map(); // 同上。
 
     xType = "string"; // 暂定于为 两个值 'string' 和 'number', xAxis 和 yAxix 中的 boundaryGap、type均以此变量决定。
@@ -116,11 +116,11 @@ function initLineChart(canvas, width, height, dpr) {
     line.lineChart = lineChart;
 
     line.setInputList("sb", [
-        ['sb1', 0],
-        ['sb2', 10],
-        ['sb3', 20],
-        ['sb4', 30],
-        ['sb5', 40]
+        ['0', 0],
+        ['7', 10],
+        ['1', 20],
+        ['3', 30],
+        ['15', 40]
     ]);
     canvas.setChart(lineChart);
 
@@ -131,7 +131,7 @@ function initLineChart(canvas, width, height, dpr) {
             console.log(dataIndex);
             var position = lineChart.convertToPixel('grid', dataItem);
             if (line.xType === 'string') {
-                line.xMap.set(dataIndex, dataItem[0]);
+                line.xMap.push(dataItem[0]);
             }
             if (line.yType === 'string') {
                 line.yMap.set(dataIndex, dataItem[1]);
@@ -182,6 +182,8 @@ function setOption() {
         xAxis: {
             type: line.xType === "string" ? 'category' : 'value',
             boundaryGap: !(line.xType === "string"),
+            // min: -10,
+            // max: 100,
             axisLine: {
                 onZero: false
             },
@@ -206,7 +208,7 @@ function onPointDragging(dataIndex) {
     // 这里的 this 就是被拖拽的圆点。this.position 就是圆点当前的位置。
     line.inputList[dataIndex] = line.lineChart.convertFromPixel('grid', this.position);
     if (line.xType === "string" ) {
-        line.inputList[dataIndex][0] = line.xMap.get(dataIndex);
+        line.inputList[dataIndex][0] = line.xMap[dataIndex];
     }
     if (line.yType === "string") {
         line.inputList[dataIndex][1] = line.yMap.get(dataIndex);
@@ -219,7 +221,7 @@ function onPointDragging(dataIndex) {
                 data: line.inputList.slice(line.nameToIndex[name].minIndex, line.nameToIndex[name].maxIndex)
             }]
         });
-    }, 0);
+    },5);
 }
 
 function showTooltip(dataIndex) {

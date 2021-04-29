@@ -3,6 +3,7 @@
 }
 .container{
     height: 500rpx;
+    /* position: fixed; */
 }
 #lineChartId{
     width: 100%;

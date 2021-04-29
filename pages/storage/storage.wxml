@@ -16,8 +16,20 @@
 </view>
 <text>\n\n\n\n</text>
 <view>
-<van-cell-group>
-  <van-cell title="最近访问" is-link />
-  <van-cell title="草稿箱" is-link />
+<van-cell-group wx:for="{{fileList}}">
+  <van-cell wx:if="{{item.type == 0}}" title="{{item.name}}"  bindlongpress="popUp" is-link />
+  <van-cell wx:else title="{{item.name}}"  clickable="true" bindlongpress="popUp" bindtap="openObj"
+  data-item="{{item}}"/>
 </van-cell-group>
 </view>
+
+<van-popup show="{{ popShow }}"  position="bottom"   custom-style="height: 30%;"
+  bind:close="popDown">
+  <van-cell  title="删除" clickable="true" bindtap="delObj"  />
+  <van-cell  title="复制"  clickable="true" bindtap="copyObj"/>
+  <van-cell  title="移动"  clickable="true" bindtap="moveObj"/>
+</van-popup>
+
+
+<button bindtap="duck"> test
+</button>

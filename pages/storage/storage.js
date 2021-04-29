@@ -11,6 +11,16 @@ Page({
       { text: '活动商品', value: 2 },
     ],
     value1: 0,
+    fileList:[
+      {name:'最近打开',type:0,id:"0",createTime:"2021-04-12"},
+      {name:'物理实验',type:1,id:"1",createTime:"2021-04-13"}
+    ],
+    dirstack:[
+      {name:"/",type:0,id:0,createTime:"2021-04-01"},
+      
+    ],
+    // activeObj,
+    popShow:false
   },
 
   /**
@@ -66,6 +76,61 @@ Page({
    * 用户点击右上角分享
    */
   onShareAppMessage: function () {
+
+  },
+
+  onclick:function(event){
+      console.log("aa")
+  },
+  popUp: function(event){
+    this.setData(
+      {
+        popShow:true,
+        activeObj:event.currentTarget.dataset.item
+      }
+    )
+  },
+  popDown:function(event){
+    this.setData()
+    this.setData({
+      popShow:false,
+    })
+  },
+  updata:function(data){
+    console.log(data)
+  },
+  openObj:function(event){
+
+  },
+  delObj:function(event){
+    console.log("cool")
+    wx.request({
+      url: 'https://test.com/getinfo',
+      data:['delte',this.data.activeObj],
+      method:"POST",
+      // success: function(res) {
+      //   console.log(res)// 服务器回包信息
+      //   this.update(rese.data);
+      // },
+      // fail:function(){
+
+      // },
+      success:function(res){
+        console.log(res)
+      },
+      complete:function(res){
+        console.log(5);
+        this.update(5);
+      },
+      fail:function(res){
+        console.log(res)
+      }
+    })
+  },
+  copyObj:function(event){
+    console.log("cool")
+  },
+  moveObj:function(e){
 
   }
 })
