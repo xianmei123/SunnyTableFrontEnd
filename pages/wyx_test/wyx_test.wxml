@@ -1,0 +1,95 @@
+<wxs src="wyx_test.wxs" module="tools"></wxs>
+<view class='text_align' >输入数据</view>
+<van-cell-group>
+  <van-row>
+    <van-col span="6">
+      <van-cell title="横坐标"/>
+    </van-col>
+    <van-col span="9">
+      <van-field
+        value="{{ value }}"
+        placeholder="名称"
+        border="{{ false }}"
+        bind:change="getXName"
+      />
+    </van-col>
+    <van-col span="9">
+      <van-field
+        value="{{ value }}"
+        placeholder="内容"
+        border="{{ false }}"
+        bind:change="getXContent"
+      />
+    </van-col>
+  </van-row>
+  <van-row>
+    <van-col span="6">
+      <van-cell title="纵坐标"/>
+    </van-col>
+    <van-col span="9">
+      <van-field
+        value="{{ value }}"
+        placeholder="名称"
+        border="{{ false }}"
+        bind:change="getYName"
+      />
+    </van-col>
+    <van-col span="9">
+      <van-field
+        value="{{ value }}"
+        placeholder="内容"
+        border="{{ false }}"
+        bind:change="getYContent"
+      />
+    </van-col>
+  </van-row>
+</van-cell-group>
+<block wx:for="{{datas}}" wx:for-item="i" wx:for-index="idx">
+  <h1>数据组{{idx + 1}}</h1>
+  <block wx:for="{{i}}" wx:for-item="j">
+    <van-row>
+      <van-col span="6">
+        <van-cell title="数据{{j}}"/>
+      </van-col>
+      <van-col span="9">
+        <van-field
+          value="{{ value }}"
+          placeholder="横坐标"
+          border="{{ false }}"
+          bind:change="getData"
+          data-a="{{idx + 1}}"
+          data-b="{{j}}"
+          data-c="0"
+        />
+      </van-col>
+      <van-col span="9">
+        <van-field
+          value="{{ value }}"
+          placeholder="纵坐标"
+          border="{{ false }}"
+          bind:change="getData"
+          data-a="{{idx + 1}}"
+          data-b="{{j}}"
+          data-c="1"
+        />
+      </van-col>
+    </van-row>
+  </block>
+ <view>
+  <van-button
+    round="true"
+    type="default"
+    id="addData"
+    bind:click="addData"
+    data-a="{{idx}}">
+    添加数据
+  </van-button>
+ </view>
+</block>
+<van-button
+  round="true"
+  type="default"
+  id="addDataGroup"
+  bind:click="addDataGroup">
+  添加数据组
+</van-button>

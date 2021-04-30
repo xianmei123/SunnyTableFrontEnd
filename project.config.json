@@ -23,7 +23,7 @@
     "compileHotReLoad": false,
     "useMultiFrameRuntime": true,
     "useApiHook": true,
-    "useApiHostProcess": true,
+    "useApiHostProcess": false,
     "babelSetting": {
       "ignore": [],
       "disablePlugins": [],
@@ -41,7 +41,7 @@
   },
   "compileType": "miniprogram",
   "libVersion": "2.16.1",
-  "appid": "wx817390f04865eabe",
+  "appid": "wx1051a156c57637ce",
   "projectname": "Sunny_graph",
   "debugOptions": {
     "hidedInDevtools": []
