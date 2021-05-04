@@ -1,5 +1,0 @@
-var str = function(i) {
-  console.log(i);
-  return i;
-}
-module.exports.str = str;
