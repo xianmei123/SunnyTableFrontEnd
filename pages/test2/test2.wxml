@@ -7,8 +7,8 @@
             value="{{ value }}"
             placeholder="数据组{{ j }}"
             border="{{ false }}"
-            bind:change="getXValue"
-            data-a="{{}}"
+            bind:change="setGroupName"
+            data-a="{{j}}"
           />
       </view>
     </block>
@@ -96,5 +96,3 @@
     </van-col>
   </van-row>
 </view>
-
-

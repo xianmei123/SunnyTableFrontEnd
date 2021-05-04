@@ -57,7 +57,7 @@ export function getSingleData(tempData, index) {
 scatter.setInputList(inputData);
 
 function initLineChart(canvas, width, height, dpr) {
-    line.init(inputData, xType, yType);
+    //line.init(convertData(), xType, yType);
     var lineChart = echarts.init(canvas, null, {
         width: width,
         height: height,
@@ -540,6 +540,7 @@ Page({
         xValues: [
             []
         ],
+        groupName: ["", ""],
         chooseRegion: false,
         firstReady: false,
         groupNum: 2,
@@ -595,18 +596,30 @@ Page({
         }
         var newIterator2 = this.data.iterator2;
         var newDatas = this.data.datas;
-        var newXValues = this.data.xValues;
-        newXValues.push([]);
+        var newGroupName = this.data.groupName;
         newDatas.push([]);
         newIterator2.push(newIterator2.length + 1);
+        newGroupName.push("");
         this.setData({
             datas: newDatas,
-            xValues: newXValues,
             iterator2: newIterator2,
             chooseRegion: false,
+            groupName: newGroupName,
             groupNum: this.data.groupNum + 1
         })
         this.onLoad();
+    },
+    setGroupName: function (event) {
+        if (this.data.chooseRegion) {
+            return;
+        }
+        var index = event.target.dataset.a;
+        var newGroupName = this.data.groupName;
+        newGroupName[index - 1] = event.detail;
+        console.log(newGroupName[index - 1]);
+        this.setData({
+            groupName: newGroupName
+        })
     },
     addX: function () {
         if (this.data.chooseRegion) {
@@ -671,17 +684,60 @@ Page({
         })
         this.onLoad();
     },
+    judgeXType: function () {
+        var i;
+        var regex = /^[0-9]+.?[0-9]*/;
+        for (i = 0; i < this.data.xValues.length; i++) {
+            if (!regex.test(this.data.xValues[i])) {
+                return "string";
+            }
+        }
+        return "number";
+    },
+    judgeYType: function () {
+        var i, j;
+        var regex = /^[0-9]+.?[0-9]*/;
+        for (i = 0; i < this.data.xValues.length; i++) {
+            for (j = 0; j < this.data.groupNum; j++) {
+                if (!regex.test(this.data.datas[i][j])) {
+                    return "string";
+                }
+            }
+        }
+        return "number";
+    },
     convertData: function () {
-        var ret = [];
+        var ret = {};
         var i;
         var j;
         for (i = 0; i < this.data.groupNum; i++) {
-            ret.push([]);
+            var tmp = [];
             for (j = 0; j < this.data.xValues.length; j++) {
-                ret[i].push([this.data.xValues[j], this.data.datas[i][j]]);
+                tmp.push([this.data.xValues[j], this.data.datas[i][j]]);
             }
+            ret[this.data.groupName[i]] = tmp;
         }
         return ret;
+    },
+    repaint: function () {
+        console.log(this.data.xValues);
+        inputData = this.convertData();
+        console.log(inputData);
+        switch (this.data.value1) {
+            case "line":
+                line.init(inputData, this.judgeXType(), this.judgeYType());
+                break;
+            case "bar":
+                bar.init(inputData, this.judgeXType(), this.judgeYType());
+                break;
+            case "pie":
+                pie.init(inputData, this.judgeXType(), this.judgeYType());
+                break;
+            case "scatter":
+                scatter.init(inputData, this.judgeXType(), this.judgeYType());
+                break;
+        }
+        this.onLoad();
     },
     //导出csv
     exportToCSV() {

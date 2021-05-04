@@ -4,6 +4,7 @@ Page({
     iterator2:[1,2],
     datas:[[1,2], [1,2]],
     xValues:[[]],
+    groupName: ["", ""],
     chooseRegion: false,
     firstReady: false,
     groupNum: 2,
@@ -59,18 +60,30 @@ Page({
     }
     var newIterator2 = this.data.iterator2;
     var newDatas = this.data.datas;
-    var newXValues = this.data.xValues;
-    newXValues.push([]);
+    var newGroupName = this.data.groupName;
     newDatas.push([]);
     newIterator2.push(newIterator2.length + 1);
+    newGroupName.push("");
     this.setData({
       datas: newDatas,
-      xValues: newXValues,
       iterator2: newIterator2,
       chooseRegion: false,
+      groupName: newGroupName,
       groupNum: this.data.groupNum + 1
     })
     this.onLoad();
+  },
+  setGroupName: function(event) {
+    if (this.data.chooseRegion) {
+      return;
+    }
+    var index = event.target.dataset.a;
+    var newGroupName = this.data.groupName;
+    newXValue[index - 1] = event.detail;
+    console.log(newGroupName[index - 1]);
+    this.setData({
+      groupName: newGroupName
+    })
   },
   addX: function() {
     if (this.data.chooseRegion) {
@@ -136,14 +149,15 @@ Page({
     this.onLoad();
   },
   convertData: function() {
-    var ret = [];
+    var ret = {};
     var i;
     var j;
     for (i = 0; i < this.data.groupNum; i++) {
-      ret.push([]);
+      var tmp = [];
       for (j = 0; j < this.data.xValues.length; j++) {
-        ret[i].push([this.data.xValues[j], this.data.datas[i][j]]);
+        tmp.push([this.data.xValues[j], this.data.datas[i][j]]);
       }
+      ret.put(this.data.groupName[i], tmp);
     }
     return ret;
   }
