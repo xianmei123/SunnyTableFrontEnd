@@ -1,3 +1,10 @@
 .button_img{
   width: 10%;
 }
+.container{
+    height: 700rpx;
+}
+#lineChartId{
+    width: 500rpx;
+    height: 400rpx;
+}

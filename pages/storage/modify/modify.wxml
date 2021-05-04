@@ -1,14 +1,8 @@
-<!-- 最好加入一个面包屑导航 -->
-<mp-dialog title="新建文件夹" show="{{dialogShow}}" bindbuttontap="tapDialogButton" buttons="{{dialogButton}}">
-  <view>
-    <van-field
-      model:value="{{ newDir }}"
-      placeholder="请输入用户名"
-      border="{{ false }}"
-      bind:change="onChange"/>
-  </view>
-</mp-dialog>
-  <!-- 顶部功能栏目 -->
+<script>
+  import Toast from '@vant/weapp/dist/toast/toast';
+  Toast('我是提示文案，建议不超过十五字~');
+</script>
+<van-toast id="van-toast" />
 <view class="top_box">
   <!-- 面包屑栏 -->
   <van-row>
@@ -25,8 +19,8 @@
   <!-- 添加排序搜索 -->
   <van-row >
   <van-col span = "2"  offset="1">
-  <mp-icon  icon="add" color="black" size="{{25}}" style="bottom:10rpx!important"
-  bindtap="showDialog"></mp-icon>
+  <mp-icon  icon="download" color="black" size="{{25}}" style="bottom:10rpx!important"
+  bindtap="saveObj"></mp-icon>
  </van-col>
   <van-col span="16" offset="1">
         <van-dropdown-menu >
@@ -40,24 +34,12 @@
 </van-row>
 </view>
 
-<text>\n\n\n\n</text>
+<text>\n\n</text>
 <!-- 当前文件夹内容 -->
 <view>
 <van-cell-group wx:for="{{fileList}}">
-  <van-cell wx:if="{{item.type == 0}}" title="{{item.name}}" label="{{item.createTime}}" bindlongpress="popUp"
+  <van-cell wx:if="{{item.type == 0}}" title="{{item.name}}" label="{{item.createTime}}" 
   bindtap="openDir" data-item="{{item}}" is-link />
-  <van-cell wx:else title="{{item.name}}" label="{{item.createTime}}" clickable="true" bindlongpress="popUp" bindtap="openObj"
-  data-item="{{item}}"/>
+  <van-cell wx:else title="{{item.name}}" label="{{item.createTime}}" clickable="true" />
 </van-cell-group>
 </view>
-<!-- 弹出框 -->
-<van-popup show="{{ popShow }}"  position="bottom"   custom-style="height: 30%;"
-  bind:close="popDown">
-  <van-cell  title="删除" clickable="true" bindtap="delObj"  />
-  <van-cell  title="复制"  clickable="true" bindtap="copyObj"/>
-  <van-cell  title="移动"  clickable="true" bindtap="moveObj"/>
-</van-popup>
-
-
-<button bindtap="duck"> test
-</button>

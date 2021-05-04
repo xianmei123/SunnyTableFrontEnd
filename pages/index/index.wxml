@@ -14,7 +14,6 @@
     <!-- 时间图表类似 -->
   </van-tab>
 </van-tabs>
-<!-- 选择器用法
-<van-button custom-class="test">
-  默认按钮
-</van-button> -->
+<van-button type="primary" bind:click="goDraw">
+创建图表
+</van-button>

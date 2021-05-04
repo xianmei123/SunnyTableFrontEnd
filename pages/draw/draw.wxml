@@ -1,66 +1,91 @@
-<!--垂直滚动，这里必须设置高度-->
+<!-- 垂直滚动，这里必须设置高度 -->
 <van-dropdown-menu>
-  <van-dropdown-item model:value="{{ value1 }}" options="{{ option1 }}" />
-  <van-dropdown-item model:value="{{ value2 }}" options="{{ option2 }}" />
+    <van-dropdown-item model:value="{{ value1 }}" options="{{ option1 }}" />
+    <van-dropdown-item model:value="{{ value2 }}" options="{{ option2 }}" />
 </van-dropdown-menu>
-<view style="text-align:center">物理实验图</view>
 <view class="box1" name="图表部分">
-<!-- 柱状图 -->
-<view wx:if="{{value1=='bar'}}">
- <view style="background: red; width: 100px; height: 100px" >a</view>
- <view style="background: green; width: 100px; height: 100px">a</view>
- <view style="background: blue; width: 100px; height: 100px">a</view>
- <view style="background: yellow; width: 100px; height: 100px">a</view>
+    <!-- 折线图 -->
+    <view wx:if="{{value1=='line'}}">
+        <block wx:if="{{showLineChart}}">
+            <scroll-view scroll-y="true" scroll-x="true">
+                <view class="container">
+                    <ec-canvas id="lineChartId" canvas-id="line-canvas" ec="{{ lineChart }}"></ec-canvas>
+                </view>
+            </scroll-view>
+        </block>
+        <block wx:else>
+            <view>{{errorChart}}</view>
+        </block>
+    </view>
+    <!-- 柱状图 -->
+    <view wx:if="{{value1=='bar'}}">
+        <block wx:if="{{showBarChart}}">
+            <scroll-view scroll-y="true" scroll-x="true">
+                <view class="container">
+                    <ec-canvas id="barChartId" canvas-id="bar-canvas" ec="{{ barChart }}"></ec-canvas>
+                </view>
+            </scroll-view>
+        </block>
+        <block wx:else>
+            <view>{{errorChart}}</view>
+        </block>
+    </view>
+    <!-- 饼状图 -->
+    <view wx:if="{{value1=='pie'}}">
+        <block wx:if="{{showPieChart}}">
+            <scroll-view scroll-y="true" scroll-x="true">
+                <view class="container">
+                    <ec-canvas id="pieChartId" canvas-id="pie-canvas" ec="{{ pieChart }}"></ec-canvas>
+                </view>
+            </scroll-view>
+        </block>
+    </view>
+    <view wx:if="{{value1=='scatter'}}">
+        <block wx:if="{{showScatterChart}}">
+            <scroll-view scroll-y="true" scroll-x="true">
+                <view class="container">
+                    <ec-canvas id="scatterChartId" canvas-id="scatter-canvas" ec="{{ scatterChart }}"></ec-canvas>
+                </view>
+            </scroll-view>
+        </block>
+        <block wx:else>
+            <view>{{errorChart}}</view>
+        </block>
+    </view>
 </view>
-<!-- 折线图 -->
-<view wx:if="{{value1=='line'}}">
-<scroll-view scroll-y="true"scroll-x="true" >
- <view style="background: red; width: 500px; height: 100px" >b</view>
- <view style="background: green; width: 100px; height: 100px">b</view>
- <view style="background: blue; width: 100px; height: 100px">b</view>
- <view style="background: yellow; width: 100px; height: 100px">b</view>
-</scroll-view>
+<view>
+    <text>\n</text>
+    <view class="title">物理实验数据</view>
+    <view class="box1" name="表格部分">
+        <!-- 表格 -->
+        <view wx:if="{{value2=='excel'}}">
+            <view style="background: red; width: 100px; height: 100px">a</view>
+            <view style="background: green; width: 100px; height: 100px">a</view>
+            <view style="background: blue; width: 100px; height: 100px">a</view>
+            <view style="background: yellow; width: 100px; height: 100px">a</view>
+        </view>
+        <!-- 文字 -->
+        <view wx:if="{{value2=='text'}}">
+            <scroll-view scroll-y="true" scroll-x="true">
+                <view style="background: red; width: 100px; height: 100px">b</view>
+                <view style="background: green; width: 100px; height: 100px">b</view>
+                <view style="background: blue; width: 100px; height: 100px">b</view>
+                <view style="background: yellow; width: 100px; height: 100px">b</view>
+            </scroll-view>
+        </view>
+    </view>
+    <van-row class="bottom_box">
+        <van-col span="6" style="text-align:center">
+            <van-icon name="plus" />
+        </van-col>
+        <van-col span="6" style="text-align:center" bindtap="exportToCSV">
+            <van-icon name="down" />
+        </van-col>
+        <van-col span="6" style="text-align:center" bindtap="saveImage">
+            <van-icon name="photo" />
+        </van-col>
+        <van-col span="6" style="text-align:center">
+            <van-icon name="apps-o" />
+        </van-col>
+    </van-row>
 </view>
-<!-- 饼状图 -->
-<view wx:if="{{value1=='pie'}}">
-<scroll-view scroll-y="true"scroll-x="true" >
- <view style="background: red; width: 100px; height: 100px" >c</view>
- <view style="background: green; width: 100px; height: 100px">c</view>
- <view style="background: blue; width: 100px; height: 100px">c</view>
- <view style="background: yellow; width: 100px; height: 100px">c</view>
-</scroll-view>
-</view>
-</view>
-
-<text>\n</text>
-<view class="title">物理实验数据</view>
-<view class="box1" name="表格部分">
-<!-- 表格 -->
-<view wx:if="{{value2=='excel'}}">
- <view style="background: red; width: 100px; height: 100px" >a</view>
- <view style="background: green; width: 100px; height: 100px">a</view>
- <view style="background: blue; width: 100px; height: 100px">a</view>
- <view style="background: yellow; width: 100px; height: 100px">a</view>
-</view>
-<!-- 文字 -->
-<view wx:if="{{value2=='text'}}">
-<scroll-view scroll-y="true"scroll-x="true" >
- <view style="background: red; width: 100px; height: 100px" >b</view>
- <view style="background: green; width: 100px; height: 100px">b</view>
- <view style="background: blue; width: 100px; height: 100px">b</view>
- <view style="background: yellow; width: 100px; height: 100px">b</view>
-</scroll-view>
-</view>
-</view>
-
-<van-row  class="bottom_box">
-<van-col span="8" style="text-align:center">
-  <van-icon name="plus" />
-</van-col>
-  <van-col span="8" style="text-align:center">
-    <van-icon name="down" />
-  </van-col>
-  <van-col span="8" style="text-align:center">
-    <van-icon name="apps-o" />
-  </van-col>
-</van-row>
