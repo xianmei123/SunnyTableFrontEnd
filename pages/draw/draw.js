@@ -14,24 +14,7 @@ const replaceBarTemplateUrl = "/template/barchart/replace";
 const replacePieTemplateUrl = "/template/fanchart/replace";
 const replaceScatterTemplateUrl = "/template/scatterplot/replace";
 
-export var inputData = {
-    "sb": [
-        ['sb1', 7],
-        ['sb2', 10],
-        ['sb3', 20],
-        ['sb4', 30],
-        ['sb5', 40]
-    ],
-
-    // "sb":  [[40, -10], [-30, -5], [-76.5, 20], [-63.5, 40], [-22.1, 50]]
-    // "qqhsb": [
-    //     ['sb1', 7],
-    //     ['sb2', 40],
-    //     ['sb3', 30],
-    //     ['sb4', 25],
-    //     ['sb5', 11]
-    // ],
-}; // 输入数据
+export var inputData = {}; // 输入数据
 
 var xType = "string"; // 输入数据x轴类型
 var yType = "number"; // 输入数据y轴类型
@@ -57,7 +40,7 @@ export function getSingleData(tempData, index) {
 scatter.setInputList(inputData);
 
 function initLineChart(canvas, width, height, dpr) {
-    //line.init(convertData(), xType, yType);
+    line.init(inputData, xType, yType);
     var lineChart = echarts.init(canvas, null, {
         width: width,
         height: height,
@@ -65,54 +48,16 @@ function initLineChart(canvas, width, height, dpr) {
     });
     line.lineChart = lineChart;
     canvas.setChart(lineChart);
-    var option = setLineOption();
-    lineChart.setOption(option); // 
-    if (line.lineTemplate.showDigit) {
-        lineChart.setOption({
-            tooltip: {
-                triggerOn: 'none',
-                formatter: function (params) {
-                    var xstr = line.xType === "string" ? params.data[0] : params.data[0].toFixed(2);
-                    var ystr = line.yType === "string" ? params.data[1] : params.data[1].toFixed(2);
-                    return 'X: ' +
-                        xstr +
-                        '\nY: ' +
-                        ystr;
-                }
-            },
-        });
-    }
-    lineChart.setOption({
-        graphic: echarts.util.map(line.inputList, function (dataItem, dataIndex) {
-            if (line.xType === 'string') {
-                line.xMap.set(dataIndex, dataItem[0]);
-            }
-            if (line.yType === 'string') {
-                line.yMap.set(dataIndex, dataItem[1]);
-            }
-            return {
-                type: 'circle',
-                position: line.lineChart.convertToPixel('grid', dataItem),
-                shape: {
-                    r: line.lineTemplate.radius / 2
-                    // r : 20 / 2
-                },
-                invisible: true,
-                draggable: line.draggable,
-                ondrag: echarts.util.curry(onPointLineDragging, dataIndex),
-                z: 100,
-                onmousemove: echarts.util.curry(showLineTooltip, dataIndex),
-                onmouseout: echarts.util.curry(hideLineTooltip, dataIndex),
-            };
-        })
-    });
+    lineChart = setLineOption(lineChart);
     console.log("init LineGraph Success!!");
     return lineChart;
 }
 
-function setLineOption() {
+function setLineOption(lineChart) {
     var series = [];
     var count = 0;
+    var option;
+    var legendArr = line.lineTemplate.legendPos.split(",");
     for (var i = 0; i < line.inputList.length;) {
         var name = line.indexToName[i];
         var tempJson = {
@@ -129,8 +74,8 @@ function setLineOption() {
         count++;
     }
     console.log(series);
-    var legendArr = line.lineTemplate.legendPos.split(",");
-    var option = {
+
+    option = {
         grid: {
             top: '16%',
             bottom: '12%',
@@ -170,7 +115,58 @@ function setLineOption() {
     };
     option = setMinAndMax(option);
     console.log(option);
-    return option;
+    lineChart.setOption(option); // 
+    if (line.lineTemplate.showDigit) {
+        lineChart.setOption({
+            tooltip: {
+                triggerOn: 'none',
+                formatter: function (params) {
+                    var xstr = line.xType === "string" ? params.data[0] : parseFloat(params.data[0]).toFixed(2);
+                    var ystr = line.yType === "string" ? params.data[1] : parseFloat(params.data[1]).toFixed(2);
+                    return 'X: ' +
+                        xstr +
+                        '\nY: ' +
+                        ystr;
+                }
+                // formatter: function (params) {
+                //     console.log(params);
+                //     var xstr = line.xType === "string" ? params[0].data[0] : parseFloat(params[0].data[0]).toFixed(2);
+                //     var ystr = line.yType === "string" ? params[0].data[1] : parseFloat(params[0].data[1]).toFixed(2);
+                //     return 'X: ' +
+                //         xstr +
+                //         '\nY: ' +
+                //         ystr;
+                // }
+            },
+        });
+    }
+    lineChart.setOption({
+        graphic: echarts.util.map(line.inputList, function (dataItem, dataIndex) {
+            //dataIndex - line.nameToIndex[line.indexToName[dataIndex]].minIndex
+            if (line.xType === 'string') {
+                line.xMap.set(dataIndex, dataItem[0]);
+            }
+            if (line.yType === 'string') {
+                line.yMap.set(dataIndex, dataItem[1]);
+            }
+            return {
+                type: 'circle',
+                position: line.lineChart.convertToPixel('grid', dataItem),
+                shape: {
+                    r: line.lineTemplate.radius / 2
+                    // r : 20 / 2
+                },
+                invisible: true,
+                draggable: !(xType === 'string' && yType === 'string'),
+                ondrag: echarts.util.curry(onPointLineDragging, dataIndex),
+                z: 100,
+                onmousemove: echarts.util.curry(showLineTooltip, dataIndex),
+                onmouseout: echarts.util.curry(hideLineTooltip, dataIndex),
+            };
+        })
+    });
+    console.log("init LineGraph Success!!");
+    return lineChart;
 }
 
 function initBarChart(canvas, width, height, dpr) {
@@ -182,7 +178,64 @@ function initBarChart(canvas, width, height, dpr) {
     });
     bar.barChart = barChart;
     canvas.setChart(barChart);
-    var option = setBarOption();
+    barChart = setBarOption(barChart);
+    console.log("init BarGraph Success!!");
+    return barChart;
+}
+
+function setBarOption(barChart) {
+    var series = [];
+    var count = 0;
+    var option;
+    var legendArr = bar.barTemplate.legendPos.split(",");
+    for (var i = 0; i < line.inputList.length;) {
+        var name = line.indexToName[i];
+        var tempJson = {
+            name: name,
+            type: "bar",
+            data: bar.inputList.slice(bar.nameToIndex[name].minIndex, bar.nameToIndex[name].maxIndex),
+            barWidth: bar.barTemplate.width,
+            barGap: bar.barTemplate.gap,
+            color: bar.barTemplate.color[count]
+        };
+        i = line.nameToIndex[name].maxIndex;
+        series.push(tempJson);
+        count++;
+    }
+    option = {
+        legend: {
+            top: legendArr[0],
+            bottom: legendArr[1],
+            left: legendArr[2],
+            right: legendArr[3],
+            orient: legendArr[4]
+        },
+        title: {
+            text: bar.title,
+            left: "center",
+            textStyle: {
+                color: bar.barTemplate.textColor,
+                fontSize: bar.barTemplate.font
+            }
+        },
+        xAxis: [{
+            name: xName,
+            type: 'category',
+            // axisLine: {
+            //     onZero: false
+            // }
+        }],
+        yAxis: [{
+            name: yName,
+            type: 'value',
+            // axisLine: {
+            //     onZero: false
+            // }
+        }],
+        series: series
+    };
+    setMinAndMax(option);
+    console.log("barOption: ", option);
     barChart.setOption(option);
     if (bar.barTemplate.showDigit) {
         barChart.setOption({
@@ -192,8 +245,8 @@ function initBarChart(canvas, width, height, dpr) {
                     type: 'shadow' // 默认为直线，可选为：'line' | 'shadow'
                 },
                 formatter: function (params) {
-                    var xstr = bar.xType === "string" ? params[0].data[0] : params[0].data[0].toFixed(2);
-                    var ystr = bar.yType === "string" ? params[0].data[1] : params[0].data[1].toFixed(2);
+                    var xstr = bar.xType === "string" ? params[0].data[0] : parseFloat(params[0].data[0]).toFixed(2);
+                    var ystr = bar.yType === "string" ? params[0].data[1] : parseFloat(params[0].data[1]).toFixed(2);
                     return 'X: ' +
                         xstr +
                         '\nY: ' +
@@ -228,68 +281,11 @@ function initBarChart(canvas, width, height, dpr) {
     //         };
     //     })
     // });
-    console.log("init BarGraph Success!!");
     return barChart;
-}
-
-function setBarOption() {
-    var series = [];
-    var count = 0;
-    for (var i = 0; i < line.inputList.length;) {
-        var name = line.indexToName[i];
-        var tempJson = {
-            name: name,
-            type: "bar",
-            data: bar.inputList.slice(bar.nameToIndex[name].minIndex, bar.nameToIndex[name].maxIndex),
-            barWidth: bar.barTemplate.width,
-            barGap: bar.barTemplate.gap,
-            color: bar.barTemplate.color[count]
-        };
-        i = line.nameToIndex[name].maxIndex;
-        series.push(tempJson);
-        count++;
-    }
-    var legendArr = bar.barTemplate.legendPos.split(",");
-    var option = {
-        legend: {
-            top: legendArr[0],
-            bottom: legendArr[1],
-            left: legendArr[2],
-            right: legendArr[3],
-            orient: legendArr[4]
-        },
-        title: {
-            text: bar.title,
-            left: "center",
-            textStyle: {
-                color: bar.barTemplate.textColor,
-                fontSize: bar.barTemplate.font
-            }
-        },
-        xAxis: [{
-            name: xName,
-            type: 'category',
-            // axisLine: {
-            //     onZero: false
-            // }
-        }],
-        yAxis: [{
-            name: yName,
-            type: 'value',
-            // axisLine: {
-            //     onZero: false
-            // }
-        }],
-        series: series
-    };
-    setMinAndMax(option);
-    return option;
 }
 
 function initPieChart(canvas, width, height, dpr) {
     // 由于pie图无法进行拖拽，直接从全局输入数据中取数据即可，对象中不需要保存。
-    var flag = pie.setInpuData('sb', inputData['sb']); // 
-    console.log(flag);
     var pieChart = echarts.init(canvas, null, {
         width: width,
         height: height,
@@ -297,24 +293,15 @@ function initPieChart(canvas, width, height, dpr) {
     });
     pie.pieChart = pieChart;
     canvas.setChart(pieChart);
-    var option;
-    if (flag) {
-        option = setPieOption();
-    } else {
-        option = {
-            title: {
-                text: "你tm是不是傻逼，输入我们画不出来的图，是不是傻逼！！！\n你要是再有下次直接删除账号，永远不允许登录！！！",
-            },
-        };
-    }
-    console.log(option);
-    pieChart.setOption(option);
+    pieChart = setPieOption(pieChart, true);
     console.log("init PieGraph Success!!");
     return pieChart;
 }
 
-function setPieOption() {
+function setPieOption(pieChart) {
+    var option;
     var series = [];
+    var legendArr = pie.pieTemplate.legendPos.split(",");
     var tempJson = {
         name: pie.name,
         type: 'pie',
@@ -322,11 +309,8 @@ function setPieOption() {
         avoidLabelOverlap: true,
         data: pie.convertToPieData(pie.pieData)
     };
-    console.log(tempJson);
     series.push(tempJson);
-    var legendArr = pie.pieTemplate.legendPos.split(",");
-    console.log(legendArr);
-    var option = {
+    option = {
         title: {
             text: graphName,
             subtext: '纯属虚构',
@@ -365,7 +349,9 @@ function setPieOption() {
         },
         series: series
     };
-    return option;
+
+    pieChart.setOption(option);
+    return pieChart;
 }
 
 function initScatterChart(canvas, width, height, dpr) {
@@ -377,7 +363,55 @@ function initScatterChart(canvas, width, height, dpr) {
     });
     scatter.scatterChart = scatterChart;
     canvas.setChart(scatterChart);
-    var option = setScatterOption();
+    scatterChart = setScatterOption(scatterChart);
+    console.log("init ScatterGraph Success!!");
+    return scatterChart;
+
+}
+
+function setScatterOption(scatterChart) {
+    var legendArr = scatter.scatterTemplate.legendPos.split(",");
+    var option = {
+        title: {
+            text: graphName,
+            subtext: '纯属虚构',
+            left: 'center',
+            textStyle: {
+                color: scatter.scatterTemplate.textColor,
+                fontSize: scatter.scatterTemplate.font
+            }
+        },
+        itemStyle: {
+            color: scatter.scatterTemplate.color[0]
+        },
+        xAxis: {
+            name: xName,
+            type: scatter.xType === "string" ? "category" : "value",
+            boundaryGap: xType === "string" ? false : true,
+
+        },
+        yAxis: {
+            name: yName,
+            type: scatter.yType === "string" ? "category" : "value",
+            boundaryGap: yType === "string" ? false : true
+        },
+        legend: {
+            top: legendArr[0],
+            bottom: legendArr[1],
+            left: legendArr[2],
+            right: legendArr[3],
+            orient: legendArr[4],
+            left: scatter.scatterTemplate.legendPos,
+        },
+        series: [{
+            symbolSize: scatter.scatterTemplate.increase ? function (data, params) {
+                return Math.sqrt(data[1]) * 7; // 开方 此函数不能处理负数
+            } : 15,
+            type: "scatter",
+            data: scatter.inputList
+        }]
+    };
+    setMinAndMax(option);
     scatterChart.setOption(option);
     if (scatter.scatterTemplate.showLine) {
         scatterChart.setOption({
@@ -425,7 +459,7 @@ function initScatterChart(canvas, width, height, dpr) {
                     r: Math.sqrt(dataItem[1]) * 7,
                 },
                 invisible: true,
-                draggable: scatter.draggable,
+                draggable: !(xType === 'string' && yType === 'string'),
                 ondrag: echarts.util.curry(onPointScatterDragging, dataIndex),
                 z: 100,
                 onmousemove: echarts.util.curry(showScatterTooltip, dataIndex),
@@ -433,55 +467,7 @@ function initScatterChart(canvas, width, height, dpr) {
             };
         })
     });
-    console.log("init ScatterGraph Success!!");
     return scatterChart;
-
-}
-
-function setScatterOption() {
-    var legendArr = scatter.scatterTemplate.legendPos.split(",");
-    var option = {
-        title: {
-            text: graphName,
-            subtext: '纯属虚构',
-            left: 'center',
-            textStyle: {
-                color: scatter.scatterTemplate.textColor,
-                fontSize: scatter.scatterTemplate.font
-            }
-        },
-        itemStyle: {
-            color: scatter.scatterTemplate.color[0]
-        },
-        xAxis: {
-            name: xName,
-            type: scatter.xType === "string" ? "category" : "value",
-            boundaryGap: xType === "string" ? false : true,
-
-        },
-        yAxis: {
-            name: yName,
-            type: scatter.yType === "string" ? "category" : "value",
-            boundaryGap: yType === "string" ? false : true
-        },
-        legend: {
-            top: legendArr[0],
-            bottom: legendArr[1],
-            left: legendArr[2],
-            right: legendArr[3],
-            orient: legendArr[4],
-            left: scatter.scatterTemplate.legendPos,
-        },
-        series: [{
-            symbolSize: scatter.scatterTemplate.increase ? function (data, params) {
-                return Math.sqrt(data[1]) * 7; // 开方 此函数不能处理负数
-            } : 15,
-            type: "scatter",
-            data: scatter.inputList
-        }]
-    };
-    setMinAndMax(option);
-    return option;
 }
 
 Page({
@@ -516,7 +502,7 @@ Page({
         value2: 'excel',
         showLineChart: true,
         showBarChart: true,
-        showPieChart: isShowPie(),
+        showPieChart: true,
         showScatterChart: true,
         errorChart: "你tm是不是傻逼，输入我们画不出来的图，是不是傻逼！！！\n你要是再有下次直接删除账号，永远不允许登录！！！",
         lineChart: {
@@ -720,24 +706,21 @@ Page({
         return ret;
     },
     repaint: function () {
-        console.log(this.data.xValues);
         inputData = this.convertData();
-        console.log(inputData);
         switch (this.data.value1) {
             case "line":
-                line.init(inputData, this.judgeXType(), this.judgeYType());
+                updateLineData(inputData, this.judgeXType(), this.judgeYType());
                 break;
             case "bar":
-                bar.init(inputData, this.judgeXType(), this.judgeYType());
+                updateBarData(inputData, this.judgeXType(), this.judgeYType());
                 break;
             case "pie":
-                pie.init(inputData, this.judgeXType(), this.judgeYType());
+                updatePieData(inputData, this.judgeXType(), this.judgeYType());
                 break;
             case "scatter":
-                scatter.init(inputData, this.judgeXType(), this.judgeYType());
+                updateScatterData(inputData, this.judgeXType(), this.judgeYType());
                 break;
         }
-        this.onLoad();
     },
     //导出csv
     exportToCSV() {
@@ -829,6 +812,7 @@ Page({
     onShareAppMessage: function () {
 
     },
+    onReady: function () {},
     saveImage: function () {
         wx.showModal({
             cancelColor: '#9ba8ae',
@@ -861,17 +845,77 @@ Page({
 
     }
 });
-// 坐标轴min和max还有待函数进行处理。
-// 散点图的大小变化函数要能够处理负数。
-function isShowPie() {
-    // 扇形图展示不能有负数
-    // 扇形图不能展示全为number的数据
-    // 扇形图不能展示全为string的数据
-    if ((xType === "string" && yType === "string") || (xType === "number" && yType === "number")) {
-        return false;
+
+function getPage() {
+    var pages = getCurrentPages();
+    return pages[pages.length - 1];
+}
+
+function updateLineData(inputData, xType1, yType1) {
+
+    line.init(inputData, xType1, yType1);
+    xType = xType1;
+    yType = yType1;
+    setLineOption(line.lineChart);
+}
+
+
+
+function updateBarData(inputData, xType1, yType1) {
+    bar.init(inputData, xType1, yType1);
+    xType = xType1;
+    yType = yType1;
+    setBarOption(bar.barChart);
+}
+
+function updatePieData(name, data, xType1, yType1) {
+    xType = xType1;
+    yType = yType1;
+    if (!(xType === "string" && yType === "string") || (xType === "number" && yType === "number")) {
+        if (pie.setInpuData(name, data)) {
+            getPage().setData({
+                showPieChart: true
+            });
+            setPieOption(pie.pieChart);
+        } else {
+            getPage().setData({
+                showPieChart: false
+            });
+        }
     } else {
-        return true;
+        getPage().setData({
+            showPieChart: false
+        });
     }
+
+}
+
+function updateScatterData(inputData, xType1, yType1) {
+    scatter.init(inputData, xType1, yType1);
+    xType = xType1;
+    yType = yType1;
+    setScatterOption(scatter.scatterChart);
+
+}
+
+function updateLineTemplate(template) {
+    line.setLineTemplate(template);
+    setLineOption(line.lineChart);
+}
+
+function updateBarTemplate(template) {
+    bar.setLineTemplate(template);
+    setBarOption(bar.barChart);
+}
+
+function updatePieTemplate(template) {
+    pie.setLineTemplate(template);
+    setPieOption(pie.pieChart);
+}
+
+function updateScatterTemplate(template) {
+    scatter.setLineTemplate(template);
+    setScatterOption(scatter.scatterChart);
 }
 
 function saveLineTemplate() {
@@ -1019,10 +1063,21 @@ function onPointScatterDragging(dataIndex) {
 
 
 function showLineTooltip(dataIndex) {
+    var name = line.indexToName[dataIndex];
+    var count = 0;
+    for (var key in inputData) {
+        if (key === name) {
+            break;
+        } else {
+            count++;
+        }
+    }
+    console.log("count: ", count);
+    console.log("dataIndex", dataIndex);
     line.lineChart.dispatchAction({
         type: 'showTip',
-        seriesIndex: 0,
-        dataIndex: dataIndex
+        seriesIndex: count,
+        dataIndex: dataIndex - line.nameToIndex[line.indexToName[dataIndex]].minIndex
     });
 }
 
