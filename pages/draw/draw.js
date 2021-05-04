@@ -22,6 +22,8 @@ export var inputData = {
         ['sb4', 30],
         ['sb5', 40]
     ],
+
+    // "sb":  [[40, -10], [-30, -5], [-76.5, 20], [-63.5, 40], [-22.1, 50]]
     // "qqhsb": [
     //     ['sb1', 7],
     //     ['sb2', 40],
@@ -30,6 +32,7 @@ export var inputData = {
     //     ['sb5', 11]
     // ],
 }; // 输入数据
+
 var xType = "string"; // 输入数据x轴类型
 var yType = "number"; // 输入数据y轴类型
 
@@ -42,10 +45,8 @@ var graphName = "sb"; // 在图的最上方显示的标题
 var graphId = null; //图的id 是否应该存在内存中？
 var xName = "x";
 var yName = "y";
-var xId = 0;
-var yId = [1];
 
-function getSingleData(tempData, index) {
+export function getSingleData(tempData, index) {
     var result = [];
     for (var i = 0; i < tempData.length; i++) {
         result.push(tempData[i][index]);
@@ -96,7 +97,7 @@ function initLineChart(canvas, width, height, dpr) {
                     r: line.lineTemplate.radius / 2
                     // r : 20 / 2
                 },
-                invisible: false,
+                invisible: true,
                 draggable: line.draggable,
                 ondrag: echarts.util.curry(onPointLineDragging, dataIndex),
                 z: 100,
@@ -105,7 +106,7 @@ function initLineChart(canvas, width, height, dpr) {
             };
         })
     });
-    console.log("init LineChart success");
+    console.log("init LineGraph Success!!");
     return lineChart;
 }
 
@@ -128,10 +129,15 @@ function setLineOption() {
         count++;
     }
     console.log(series);
-    var legendArr = line.lineTemplate.legendPos.split(" ");
+    var legendArr = line.lineTemplate.legendPos.split(",");
     var option = {
+        grid: {
+            top: '16%',
+            bottom: '12%',
+        },
         title: {
             text: line.title,
+            left: "center",
             textStyle: {
                 color: line.lineTemplate.textColor,
                 fontSize: line.lineTemplate.font
@@ -142,13 +148,14 @@ function setLineOption() {
             bottom: legendArr[1],
             left: legendArr[2],
             right: legendArr[3],
+            orient: legendArr[4]
         },
         xAxis: {
             name: xName,
             type: line.xType === "string" ? 'category' : 'value',
             boundaryGap: !(line.xType === "string"),
             axisLine: {
-                onZero: false
+                onZero: false,
             }
         },
         yAxis: {
@@ -221,7 +228,7 @@ function initBarChart(canvas, width, height, dpr) {
     //         };
     //     })
     // });
-    console.log("init BarGraph Success!");
+    console.log("init BarGraph Success!!");
     return barChart;
 }
 
@@ -242,30 +249,32 @@ function setBarOption() {
         series.push(tempJson);
         count++;
     }
-    var legendArr = bar.barTemplate.legendPos.split(" ");
+    var legendArr = bar.barTemplate.legendPos.split(",");
     var option = {
         legend: {
             top: legendArr[0],
             bottom: legendArr[1],
             left: legendArr[2],
             right: legendArr[3],
+            orient: legendArr[4]
         },
         title: {
             text: bar.title,
+            left: "center",
             textStyle: {
                 color: bar.barTemplate.textColor,
                 fontSize: bar.barTemplate.font
             }
         },
         xAxis: [{
+            name: xName,
             type: 'category',
             // axisLine: {
             //     onZero: false
             // }
         }],
         yAxis: [{
-            min: -20,
-            max: 80,
+            name: yName,
             type: 'value',
             // axisLine: {
             //     onZero: false
@@ -279,7 +288,8 @@ function setBarOption() {
 
 function initPieChart(canvas, width, height, dpr) {
     // 由于pie图无法进行拖拽，直接从全局输入数据中取数据即可，对象中不需要保存。
-    pie.setInpuData('sb', inputData['sb']); // 
+    var flag = pie.setInpuData('sb', inputData['sb']); // 
+    console.log(flag);
     var pieChart = echarts.init(canvas, null, {
         width: width,
         height: height,
@@ -287,8 +297,19 @@ function initPieChart(canvas, width, height, dpr) {
     });
     pie.pieChart = pieChart;
     canvas.setChart(pieChart);
-    var option = setPieOption();
+    var option;
+    if (flag) {
+        option = setPieOption();
+    } else {
+        option = {
+            title: {
+                text: "你tm是不是傻逼，输入我们画不出来的图，是不是傻逼！！！\n你要是再有下次直接删除账号，永远不允许登录！！！",
+            },
+        };
+    }
+    console.log(option);
     pieChart.setOption(option);
+    console.log("init PieGraph Success!!");
     return pieChart;
 }
 
@@ -433,11 +454,13 @@ function setScatterOption() {
             color: scatter.scatterTemplate.color[0]
         },
         xAxis: {
+            name: xName,
             type: scatter.xType === "string" ? "category" : "value",
             boundaryGap: xType === "string" ? false : true,
 
         },
         yAxis: {
+            name: yName,
             type: scatter.yType === "string" ? "category" : "value",
             boundaryGap: yType === "string" ? false : true
         },
@@ -451,12 +474,11 @@ function setScatterOption() {
         },
         series: [{
             symbolSize: scatter.scatterTemplate.increase ? function (data, params) {
-                return Math.sqrt(data[1]) * 7;
+                return Math.sqrt(data[1]) * 7; // 开方 此函数不能处理负数
             } : 15,
             type: "scatter",
             data: scatter.inputList
         }]
-
     };
     setMinAndMax(option);
     return option;
@@ -494,7 +516,7 @@ Page({
         value2: 'excel',
         showLineChart: true,
         showBarChart: true,
-        showPieChart: true,
+        showPieChart: isShowPie(),
         showScatterChart: true,
         errorChart: "你tm是不是傻逼，输入我们画不出来的图，是不是傻逼！！！\n你要是再有下次直接删除账号，永远不允许登录！！！",
         lineChart: {
@@ -525,13 +547,22 @@ Page({
             },
             method: "POST",
             success: function () {
-                wx.showToast({
-                    title: '导出成功',
-                });
+                wx.downloadFile({
+                    url: '',
+                    success: res => {
+                        wx.saveFile({
+                            tempFilePath: res.tempFilePath,
+                            success: res => {
+                                console.log(res.savedFilePath);
+                            }
+                        })
+                    }
+
+                })
             },
         });
     },
-    // 保存模板
+    // 保存全部模板
     saveModel: function () {
         line.lineTemplate.visible = 1;
         scatter.scatterTemplate.visible = 1;
@@ -615,7 +646,7 @@ Page({
                     });
                 } else {
                     wx.showToast({
-                      title: '您取消了保存',
+                        title: '您取消了保存',
                     });
                 }
             }
@@ -623,6 +654,18 @@ Page({
 
     }
 });
+// 坐标轴min和max还有待函数进行处理。
+// 散点图的大小变化函数要能够处理负数。
+function isShowPie() {
+    // 扇形图展示不能有负数
+    // 扇形图不能展示全为number的数据
+    // 扇形图不能展示全为string的数据
+    if ((xType === "string" && yType === "string") || (xType === "number" && yType === "number")) {
+        return false;
+    } else {
+        return true;
+    }
+}
 
 function saveLineTemplate() {
     line.lineTemplate.visible = 1;
@@ -812,7 +855,7 @@ function setMinAndMax(option) {
 
 function getMinInInput(index) {
     // index 表示 是 哪一个轴上的最小值
-    return "-30";
+    return "-90";
 }
 
 function getMaxInInput(index) {

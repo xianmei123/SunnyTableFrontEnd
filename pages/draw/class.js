@@ -1,4 +1,7 @@
-import {inputData} from './draw'
+import {
+    inputData,
+    getSingleData
+} from './draw'
 export class LineGraph {
     lineChart = null;
     count = 0;
@@ -23,9 +26,9 @@ export class LineGraph {
         "point": [], //点样式  
         "color": ['red', '#ba55d3'],
         "showDigit": true, //"true" or "false"，是否显示数值，指图中每个点是否标注数值
-        "font": 5, //字体大小
-        "legendPos": "s", //图例位置
-        "textColor": [], //字体颜色
+        "font": 14, //字体大小
+        "legendPos": ",,,,vertical", //图例位置
+        "textColor": "#1e90ff", //字体颜色
         "isVisible": 0,
     };
 
@@ -122,9 +125,9 @@ export class BarGraph {
         "color": ['red', '#ba55d3'],
         "showDigit": true, //"true" or "false"，是否显示数值，指图中每个点是否标注数值
         "transpose": 1,
-        "font": 5, //字体大小
-        "legendPos": "", //图例位置
-        "textColor": "", //字体颜色
+        "font": 14, //字体大小
+        "legendPos": ",,,,vertical", //图例位置
+        "textColor": "#1e90ff", //字体颜色
         "isVisible": 0
     };
 
@@ -224,8 +227,16 @@ export class PieGraph {
         return resultArr;
     }
     setInpuData(name, data) {
+        var index = this.xType === "number" ? 0 : 1;
+        var flag = true;
+        for (var i in data) {
+            if (data[i][index] < 0) {
+                flag = false;
+            }
+        }
         this.name = name;
         this.pieData = data;
+        return flag;
     }
 }
 
