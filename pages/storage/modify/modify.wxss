@@ -1,0 +1,2 @@
+/* pages/storage/modify/modify.wxss */
+@import '/pages/storage/storage.wxss';

@@ -1,7 +1,9 @@
 {
+  "component": true,
   "usingComponents": {
     "van-popup": "@vant/weapp/popup/index",
     "mp-icon": "weui-miniprogram/icon/icon",
-    "van-dialog": "@vant/weapp/dialog/index"
+    "van-dialog": "@vant/weapp/dialog/index",
+    "van-toast": "@vant/weapp/toast/index"
   }
 }

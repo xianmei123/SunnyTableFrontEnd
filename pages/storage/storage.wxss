@@ -1,1 +1,9 @@
 /* pages/storage/storage.wxss */
+.crumb_normal{
+  font-size: 30rpx;
+  color:gray
+}
+.crumb_active{
+  font-size: 30rpx;
+  color:red
+}

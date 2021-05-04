@@ -7,7 +7,8 @@
     "pages/test/test",
     "pages/logs/logs",
     "pages/mine/mine",
-    "pages/storage/storage"
+    "pages/storage/storage",
+    "pages/storage/modify/modify"
   ],
   "window": {
     "backgroundColor": "#D4F2E7",
