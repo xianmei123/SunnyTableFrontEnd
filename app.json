@@ -1,5 +1,6 @@
 {
   "pages": [
+    "pages/test2/test2",
     "pages/index/index",
     "pages/input/text",
     "pages/input/photo",

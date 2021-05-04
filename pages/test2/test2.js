@@ -12,6 +12,18 @@ Page({
     x2: 0,
     y2: 0
   },
+  getXValue: function(event) {
+    if (this.data.chooseRegion) {
+      return;
+    }
+    var index = event.target.dataset.a;
+    var newXValue = this.data.xValues;
+    newXValue[index - 1] = event.detail;
+    console.log(newXValue[index - 1]);
+    this.setData({
+      xValues: newXValue
+    })
+  },
   getData: function(event) {
     if (this.data.chooseRegion) {
       if (!this.data.firstReady) {
@@ -65,9 +77,12 @@ Page({
       return;
     }
     var newIterator1 = this.data.iterator1;
-    newIterator1.push(newIterator1.size + 1);
+    var newXValues = this.data.xValues;
+    newIterator1.push(newIterator1.length + 1);
+    newXValues.push(newXValues.length + 1);
     this.setData({
       iterator1: newIterator1,
+      xValues: newXValues,
       chooseRegion: false
     })
     this.onLoad();
@@ -96,9 +111,12 @@ Page({
       return;
     }
     var newIterator1 = this.data.iterator1;
+    var newXValues = this.data.xValues;
     newIterator1.pop();
+    xValues.pop();
     this.setData({
       iterator1: newIterator1,
+      xValues: newXValues,
       chooseRegion: false
     })
     this.onLoad();
@@ -116,5 +134,17 @@ Page({
       datas: givenData
     })
     this.onLoad();
+  },
+  convertData: function() {
+    var ret = [];
+    var i;
+    var j;
+    for (i = 0; i < this.data.groupNum; i++) {
+      ret.push([]);
+      for (j = 0; j < this.data.xValues.length; j++) {
+        ret[i].push([this.data.xValues[j], this.data.datas[i][j]]);
+      }
+    }
+    return ret;
   }
 })

@@ -7,14 +7,23 @@
             value="{{ value }}"
             placeholder="数据组{{ j }}"
             border="{{ false }}"
-            bind:change="getData"
+            bind:change="getXValue"
+            data-a="{{}}"
           />
       </view>
     </block>
   </view>
   <block wx:for="{{iterator1}}" wx:for-index="i">
     <view class="tr bg-g" wx:if="{{i % 2 == 0}}">
-      <view class="td">横坐标{{i + 1}}</view>
+      <view class="td">
+        <van-field
+          value="{{ value }}"
+          placeholder="横坐标{{ i + 1 }}"
+          border="{{ false }}"
+          bind:change="getXValue"
+          data-a="{{i + 1}}"
+        />
+      </view>
       <block wx:for="{{iterator2}}" wx:for-item="j">
         <view class="td">
           <block wx:if="{{!chooseRegion}}">
@@ -34,7 +43,15 @@
       </block>
     </view>
     <view class="tr" wx:else>
-      <view class="td">横坐标{{i + 1}}</view>
+      <view class="td">
+        <van-field
+          value="{{ value }}"
+          placeholder="横坐标{{ i + 1 }}"
+          border="{{ false }}"
+          bind:change="getXValue"
+          data-a="{{i + 1}}"
+        />
+      </view>
       <block wx:for="{{iterator2}}" wx:for-item="j">
         <view class="td">
           <block wx:if="{{!chooseRegion}}">
