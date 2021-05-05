@@ -184,6 +184,8 @@ export class PieGraph {
     pieChart = null;
     name; // 由于暂时只允许在扇形图上一次性展示一个图，在有组数据时，需要首先进行选择并调用setInputData方法来进行设置PieGraph的对象中的数据
     pieData;
+    xType;
+    yType;
     constructor() {}
 
     pieTemplate = {
@@ -214,10 +216,11 @@ export class PieGraph {
 
     convertToPieData(tempData) {
         var resultArr = [];
+        var index = xType === "string" ? 1 : 0;
         for (var i in tempData) {
             var tempJson = {};
-            tempJson.name = tempData[i][0];
-            tempJson.value = tempData[i][1];
+            tempJson.name = tempData[i][1 - index];
+            tempJson.value = tempData[i][index];
             if (this.pieTemplate.color[i] != "") {
                 tempJson.itemStyle = {};
                 tempJson.itemStyle['color'] = this.pieTemplate.color[i];
@@ -228,15 +231,14 @@ export class PieGraph {
     }
     setInpuData(name, data) {
         var index = this.xType === "number" ? 0 : 1;
-        var flag = true;
         for (var i in data) {
             if (data[i][index] < 0) {
-                flag = false;
+                return false;
             }
         }
         this.name = name;
         this.pieData = data;
-        return flag;
+        return true;
     }
 }
 
@@ -263,7 +265,7 @@ export class ScatterGraph {
         "color": ["blue"],
         "showLine": true,
         "showDigit": true,
-        "increase": true, // 点大小是否会随着数值变化而变化，
+        "increase": false, // 点大小是否会随着数值变化而变化，
         "font": 12,
         "legendPos": ",,,,vertical",
         "textColor": "blue"

@@ -13,7 +13,7 @@
                 </view>
             </scroll-view>
         </block>
-        <block wx:else>
+        <block wx:if="{{showLineChart ? false : true}}">
             <view>{{errorChart}}</view>
         </block>
     </view>
@@ -26,7 +26,7 @@
                 </view>
             </scroll-view>
         </block>
-        <block wx:else>
+        <block wx:if="{{showBarChart ? false : true}}">
             <view>{{errorChart}}</view>
         </block>
     </view>
@@ -39,6 +39,9 @@
                 </view>
             </scroll-view>
         </block>
+        <block wx:if="{{showPieChart ? false : true}}">
+            <view>{{errorChart}}</view>
+        </block>
     </view>
     <view wx:if="{{value1=='scatter'}}">
         <block wx:if="{{showScatterChart}}">
@@ -48,7 +51,7 @@
                 </view>
             </scroll-view>
         </block>
-        <block wx:else>
+        <block wx:if="{{showScatterChart ? false : true}}">
             <view>{{errorChart}}</view>
         </block>
     </view>
