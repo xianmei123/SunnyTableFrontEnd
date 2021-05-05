@@ -16,7 +16,7 @@ const replaceScatterTemplateUrl = "/template/scatterplot/replace";
 
 export var inputData = {}; // 输入数据
 
-var xType = "string"; // 输入数据x轴类型
+var xType = "number"; // 输入数据x轴类型
 var yType = "number"; // 输入数据y轴类型
 
 var line = new graph.LineGraph();
@@ -37,7 +37,6 @@ export function getSingleData(tempData, index) {
     return result;
 }
 
-scatter.setInputList(inputData);
 
 function initLineChart(canvas, width, height, dpr) {
     line.init(inputData, xType, yType);
@@ -73,12 +72,18 @@ function setLineOption(lineChart) {
         series.push(tempJson);
         count++;
     }
-    console.log(series);
 
     option = {
         grid: {
             top: '16%',
             bottom: '12%',
+        },
+        toolbox: {
+            feature: {
+                restore: {
+                    show: true
+                }
+            }
         },
         title: {
             text: line.title,
@@ -114,7 +119,6 @@ function setLineOption(lineChart) {
         series: series
     };
     option = setMinAndMax(option);
-    console.log(option);
     lineChart.setOption(option); // 
     if (line.lineTemplate.showDigit) {
         lineChart.setOption({
@@ -178,7 +182,9 @@ function initBarChart(canvas, width, height, dpr) {
     });
     bar.barChart = barChart;
     canvas.setChart(barChart);
-    barChart = setBarOption(barChart);
+    if (isShowBarChart()) {
+        barChart = setBarOption(barChart);
+    }
     console.log("init BarGraph Success!!");
     return barChart;
 }
@@ -188,8 +194,8 @@ function setBarOption(barChart) {
     var count = 0;
     var option;
     var legendArr = bar.barTemplate.legendPos.split(",");
-    for (var i = 0; i < line.inputList.length;) {
-        var name = line.indexToName[i];
+    for (var i = 0; i < bar.inputList.length;) {
+        var name = bar.indexToName[i];
         var tempJson = {
             name: name,
             type: "bar",
@@ -198,7 +204,7 @@ function setBarOption(barChart) {
             barGap: bar.barTemplate.gap,
             color: bar.barTemplate.color[count]
         };
-        i = line.nameToIndex[name].maxIndex;
+        i = bar.nameToIndex[name].maxIndex;
         series.push(tempJson);
         count++;
     }
@@ -235,7 +241,6 @@ function setBarOption(barChart) {
         series: series
     };
     setMinAndMax(option);
-    console.log("barOption: ", option);
     barChart.setOption(option);
     if (bar.barTemplate.showDigit) {
         barChart.setOption({
@@ -244,14 +249,15 @@ function setBarOption(barChart) {
                 axisPointer: { // 坐标轴指示器，坐标轴触发有效
                     type: 'shadow' // 默认为直线，可选为：'line' | 'shadow'
                 },
-                formatter: function (params) {
-                    var xstr = bar.xType === "string" ? params[0].data[0] : parseFloat(params[0].data[0]).toFixed(2);
-                    var ystr = bar.yType === "string" ? params[0].data[1] : parseFloat(params[0].data[1]).toFixed(2);
-                    return 'X: ' +
-                        xstr +
-                        '\nY: ' +
-                        ystr;
-                }
+                // formatter: function (params) {
+                //     console.log(params);
+                //     var result = '';
+                //     params.forEach(function(item){
+                //         result += item.marker + " " + item.seriesName + " " + parseFloat(item.data[1 - item.axisIndex]) + '\n';
+                //     })
+                //     console.log(result);
+                //     return params[0].marker;
+                // }
             },
         });
     }
@@ -363,7 +369,16 @@ function initScatterChart(canvas, width, height, dpr) {
     });
     scatter.scatterChart = scatterChart;
     canvas.setChart(scatterChart);
-    scatterChart = setScatterOption(scatterChart);
+    if (scatter.xType === "number" && scatter.yType === "number") {
+        getPage().setData({
+            showScatterChart: true
+        });
+        scatterChart = setScatterOption(scatterChart);
+    } else {
+        getPage().setData({
+            showScatterChart: false
+        });
+    }
     console.log("init ScatterGraph Success!!");
     return scatterChart;
 
@@ -418,12 +433,12 @@ function setScatterOption(scatterChart) {
             tooltip: {
                 trigger: "axis",
                 formatter: function (params) {
-                    var xstr = scatter.xType === "string" ? params[0].data[0] : params[0].data[0].toFixed(2);
-                    var ystr = scatter.yType === "string" ? params[0].data[1] : params[0].data[1].toFixed(2);
+                    var xstr = scatter.xType === "string" ? params[0].data[0] : parseFloat(params[0].data[0]).toFixed(2);
+                    var ystr = scatter.yType === "string" ? params[0].data[1] : parseFloat(params[0].data[1]).toFixed(2);
                     return 'X: ' + xstr + '\nY: ' + ystr;
                 },
                 axisPointer: {
-                    type: "line"
+                    type: "line",
                 }
 
             },
@@ -468,6 +483,8 @@ function setScatterOption(scatterChart) {
         })
     });
     return scatterChart;
+
+
 }
 
 Page({
@@ -707,18 +724,21 @@ Page({
     },
     repaint: function () {
         inputData = this.convertData();
+        xType = this.judgeXType();
+        yType = this.judgeYType();
+        updateShow();
         switch (this.data.value1) {
             case "line":
-                updateLineData(inputData, this.judgeXType(), this.judgeYType());
+                updateLineData(inputData);
                 break;
             case "bar":
-                updateBarData(inputData, this.judgeXType(), this.judgeYType());
+                updateBarData(inputData);
                 break;
             case "pie":
-                updatePieData(inputData, this.judgeXType(), this.judgeYType());
+                updatePieData(inputData);
                 break;
             case "scatter":
-                updateScatterData(inputData, this.judgeXType(), this.judgeYType());
+                updateScatterData(inputData);
                 break;
         }
     },
@@ -812,7 +832,9 @@ Page({
     onShareAppMessage: function () {
 
     },
-    onReady: function () {},
+    onReady: function () {
+
+    },
     saveImage: function () {
         wx.showModal({
             cancelColor: '#9ba8ae',
@@ -846,31 +868,45 @@ Page({
     }
 });
 
+function updateShow() {
+    getPage().setData({
+        showBarChart: isShowBarChart(),
+        showPieChart: isShowPieChart(),
+        showScatterChart: isShowScatterChart()
+    });
+}
+
+function isShowBarChart(){
+    return (xType === "string" && yType === "number") || (xType === "string" && yType === "number");
+}
+
+function isShowPieChart(){
+    return (xType === "string" && yType === "number") || (xType === "string" && yType === "number");
+}
+
+function isShowScatterChart(){
+    return (xType === "number" && yType === "number");
+}
+
 function getPage() {
     var pages = getCurrentPages();
     return pages[pages.length - 1];
 }
 
-function updateLineData(inputData, xType1, yType1) {
-
-    line.init(inputData, xType1, yType1);
-    xType = xType1;
-    yType = yType1;
+function updateLineData(inputData) {
+    line.init(inputData, xType, yType);
     setLineOption(line.lineChart);
 }
 
-
-
-function updateBarData(inputData, xType1, yType1) {
-    bar.init(inputData, xType1, yType1);
-    xType = xType1;
-    yType = yType1;
-    setBarOption(bar.barChart);
+function updateBarData(inputData) {
+    bar.init(inputData, xType, yType);
+    if (isShowBarChart()) {
+        setBarOption(bar.barChart);
+    }
+    
 }
 
-function updatePieData(name, data, xType1, yType1) {
-    xType = xType1;
-    yType = yType1;
+function updatePieData(name, data) {
     if (!(xType === "string" && yType === "string") || (xType === "number" && yType === "number")) {
         if (pie.setInpuData(name, data)) {
             getPage().setData({
@@ -890,14 +926,21 @@ function updatePieData(name, data, xType1, yType1) {
 
 }
 
-function updateScatterData(inputData, xType1, yType1) {
-    scatter.init(inputData, xType1, yType1);
-    xType = xType1;
-    yType = yType1;
-    setScatterOption(scatter.scatterChart);
-
+function updateScatterData(inputData) {
+    scatter.init(inputData, xType, yType);
+    var flag = (scatter.xType === "number" && scatter.yType === "number");
+    if (flag) {
+        getPage().setData({
+            showScatterChart: true
+        });
+        setScatterOption(scatter.scatterChart);
+    } else {
+        getPage().setData({
+            showScatterChart: false
+        });
+    }
 }
-
+// 下面四个方法是更换和更新模板调用接口，传入数据暂定为整个模板属性
 function updateLineTemplate(template) {
     line.setLineTemplate(template);
     setLineOption(line.lineChart);
@@ -917,7 +960,7 @@ function updateScatterTemplate(template) {
     scatter.setLineTemplate(template);
     setScatterOption(scatter.scatterChart);
 }
-
+//下面四个方法是保存模板到服务器
 function saveLineTemplate() {
     line.lineTemplate.visible = 1;
     wx.request({
@@ -985,13 +1028,15 @@ function onPointLineDragging(dataIndex) {
 
     if (line.xType === "string") {
         line.inputList[dataIndex][0] = line.xMap.get(dataIndex);
-        this.position = [line.lineChart.convertToPixel({
+        line.inputList[dataIndex][1] = parseFloat(line.inputList[dataIndex][1]).toFixed(2);
+        this.position[0] = line.lineChart.convertToPixel({
             xAxisIndex: 0
-        }, line.xMap.get(dataIndex)), this.position[1]];
+        }, line.xMap.get(dataIndex));
     }
 
     if (line.yType === "string") {
-        line.inputList[dataIndex][1] = line.xMap.get(dataIndex);
+        line.inputList[dataIndex][1] = line.yMap.get(dataIndex);
+        line.inputList[dataIndex][0] = parseFloat(line.inputList[dataIndex][0]).toFixed(2);
         this.position[1] = line.lineChart.convertToPixel({
             yAxisIndex: 0
         }, line.yMap.get(dataIndex));
@@ -1041,12 +1086,14 @@ function onPointScatterDragging(dataIndex) {
     scatter.inputList[dataIndex] = scatter.scatterChart.convertFromPixel('grid', this.position);
     if (scatter.xType === "string") {
         scatter.inputList[dataIndex][0] = scatter.xMap.get(dataIndex);
+        scatter.inputList[dataIndex][1] = parseFloat(scatter.inputList[dataIndex][1]).toFixed(2);
         this.position[0] = scatter.scatterChart.convertToPixel({
             xAxisIndex: 0
         }, scatter.xMap.get(dataIndex));
     }
     if (scatter.yType === "string") {
         scatter.inputList[dataIndex][1] = scatter.yMap.get(dataIndex);
+        scatter.inputList[dataIndex][0] = parseFloat(scatter.inputList[dataIndex][0]).toFixed(2);
         this.position[1] = scatter.scatterChart.convertToPixel({
             yAxisIndex: 0
         }, scatter.yMap.get(dataIndex));
@@ -1072,8 +1119,7 @@ function showLineTooltip(dataIndex) {
             count++;
         }
     }
-    console.log("count: ", count);
-    console.log("dataIndex", dataIndex);
+
     line.lineChart.dispatchAction({
         type: 'showTip',
         seriesIndex: count,

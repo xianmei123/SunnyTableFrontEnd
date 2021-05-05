@@ -184,6 +184,8 @@ export class PieGraph {
     pieChart = null;
     name; // 由于暂时只允许在扇形图上一次性展示一个图，在有组数据时，需要首先进行选择并调用setInputData方法来进行设置PieGraph的对象中的数据
     pieData;
+    xType;
+    yType;
     constructor() {}
 
     pieTemplate = {
@@ -263,7 +265,7 @@ export class ScatterGraph {
         "color": ["blue"],
         "showLine": true,
         "showDigit": true,
-        "increase": true, // 点大小是否会随着数值变化而变化，
+        "increase": false, // 点大小是否会随着数值变化而变化，
         "font": 12,
         "legendPos": ",,,,vertical",
         "textColor": "blue"
