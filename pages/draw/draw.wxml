@@ -96,7 +96,7 @@
                         <view class="td">
                             <block wx:if="{{!chooseRegion}}">
                                 <van-field value="{{ value }}" placeholder="数据{{ j }}" border="{{ false }}"
-                                    bind:change="getData" data-a="{{j}}" data-b="{{i + 1}}" />
+                                    bindtap="changeRegion" bind:change="getData" data-a="{{j}}" data-b="{{i + 1}}" />
                             </block>
                             <block wx:if="{{chooseRegion}}">
                                 <button style="width:{{500 / groupNum}}rpx" bindtap="getData" data-a="{{j}}"

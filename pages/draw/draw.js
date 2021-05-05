@@ -547,7 +547,15 @@ Page({
         x1: 0,
         y1: 0,
         x2: 0,
-        y2: 0
+        y2: 0,
+        region: [0, 0]
+    },
+    changeRegion: function (event) {
+        var newRegion = [event.target.dataset.a, event.target.dataset.b];
+        console.log("现在是" + newRegion[0] + newRegion[1]);
+        this.setData ({
+            region: newRegion
+        });
     },
     getXValue: function (event) {
         if (this.data.chooseRegion) {
@@ -642,13 +650,12 @@ Page({
         }
         var newIterator2 = this.data.iterator2;
         var newDatas = this.data.datas;
-        var newXValues = this.data.xValues;
-        newXValues.pop();
-        newDatas.pop();
+        var newGroupName = this.data.groupName;
+        newGroupName.splice(this.data.region[0], 1);
+        newDatas.splice(this.data.region[0], 1);
         newIterator2.pop();
         this.setData({
             datas: newDatas,
-            xValues: newXValues,
             iterator2: newIterator2,
             chooseRegion: false,
             groupNum: this.data.groupNum - 1
@@ -661,12 +668,18 @@ Page({
         }
         var newIterator1 = this.data.iterator1;
         var newXValues = this.data.xValues;
+        var newDatas = this.data.datas;
         newIterator1.pop();
-        xValues.pop();
+        newXValues.splice(this.data.region[1], 1);
+        var i;
+        for (i = 0; i < newDatas.length; i++) {
+            newDatas[i].splice(this.data.region[1], 1);
+        }
         this.setData({
             iterator1: newIterator1,
             xValues: newXValues,
-            chooseRegion: false
+            chooseRegion: false,
+            datas: newDatas
         })
         this.onLoad();
     },
@@ -731,7 +744,7 @@ Page({
                 bar.init(inputData, this.judgeXType(), this.judgeYType());
                 break;
             case "pie":
-                pie.init(inputData, this.judgeXType(), this.judgeYType());
+                pie.init([inputData.keys(), inputData.values()], this.judgeXType(), this.judgeYType());
                 break;
             case "scatter":
                 scatter.init(inputData, this.judgeXType(), this.judgeYType());
