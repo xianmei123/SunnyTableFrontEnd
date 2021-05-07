@@ -748,11 +748,7 @@ Page({
                 updateBarData(inputData);
                 break;
             case "pie":
-<<<<<<< HEAD
                 pie.init([inputData.keys(), inputData.values()], this.judgeXType(), this.judgeYType());
-=======
-                updatePieData(inputData);
->>>>>>> 0a8e56137325d62020a7f225db8309ab8dcf7dfa
                 break;
             case "scatter":
                 updateScatterData(inputData);
