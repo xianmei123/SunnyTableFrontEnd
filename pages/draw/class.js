@@ -76,19 +76,32 @@ export class LineGraph {
         this.yMap.clear();
     }
 
+
     convertToSend() {
+        var kk = {
+            'dataArray': [{
+                'name': "lsp",
+                'cid': null,
+                'lineData':[[]]
+            }]
+        }
         var dataArray = [];
         var tempJson = {};
-        tempJson['xLable'] = getSingleData(this.inputList.slice(this.nameToIndex[this.indexToName[0]].minIndex, this.nameToIndex[this.indexToName[0]].maxIndex), 0);
+        tempJson.name = 'xlabel';
+        tempJson.cid = null;
+        tempJson.lineData =  getSingleData(this.inputList.slice(this.nameToIndex[this.indexToName[0]].minIndex, this.nameToIndex[this.indexToName[0]].maxIndex), 0);
         dataArray.push(tempJson);
         for (var i = 0; i < this.inputList.length;) {
             var name = this.indexToName[i];
             var tempArr = getSingleData(this.inputList.slice(this.nameToIndex[name].minIndex, this.nameToIndex[name].maxIndex), 1);
             tempJson = {};
-            tempJson[name] = tempArr;
+            tempJson.name = name;
+            tempJson.cid = null;
+            tempJson.lineData = tempArr;
             dataArray.push(tempJson);
             i = this.nameToIndex[name].maxIndex;
         }
+        console.log(dataArray);
         return dataArray;
     }
 

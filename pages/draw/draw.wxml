@@ -66,44 +66,41 @@
                 <view class="th"></view>
                 <block wx:for="{{iterator2}}" wx:for-item="j">
                     <view class="th">
-                        <van-field value="{{ value }}" placeholder="数据组{{ j }}" border="{{ false }}"
-                            bind:change="setGroupName" data-a="{{j}}" />
+                        <van-field value="{{ value }}" placeholder="数据组{{ j }}" border="{{ false }}" bind:change="setGroupName" data-a="{{j}}" />
                     </view>
                 </block>
             </view>
             <block wx:for="{{iterator1}}" wx:for-index="i">
                 <view class="tr bg-g" wx:if="{{i % 2 == 0}}">
                     <view class="td">
-                        <van-field value="{{ value }}" placeholder="横坐标{{ i + 1 }}" border="{{ false }}"
-                            bind:change="getXValue" data-a="{{i + 1}}" />
+                        <van-field value="{{ value }}" placeholder="横坐标{{ i + 1 }}" border="{{ false }}" bind:change="getXValue" data-a="{{i + 1}}" />
                     </view>
                     <block wx:for="{{iterator2}}" wx:for-item="j">
                         <view class="td">
                             <block wx:if="{{!chooseRegion}}">
-                                <van-field value="{{ value }}" placeholder="数据{{ j }}" border="{{ false }}"
-                                    bind:change="getData" data-a="{{j}}" data-b="{{i + 1}}" />
+                                <van-field value="{{ value }}" placeholder="数据{{ j }}" border="{{ false }}" bind:change="getData" data-a="{{j}}" data-b="{{i + 1}}" />
                             </block>
                             <block wx:if="{{chooseRegion}}">
-                                <button style="width:{{500 / groupNum}}rpx" bindtap="getData" data-a="{{j}}"
-                                    data-b="{{i + 1}}">选中</button>
+                                <button style="width:{{500 / groupNum}}rpx" bindtap="getData" data-a="{{j}}" data-b="{{i + 1}}">
+                                    选中
+                                </button>
                             </block>
                         </view>
                     </block>
                 </view>
                 <view class="tr" wx:else>
                     <view class="td">
-                        <van-field value="{{ value }}" placeholder="横坐标{{ i + 1 }}" border="{{ false }}"
-                            bind:change="getXValue" data-a="{{i + 1}}" />
+                        <van-field value="{{ value }}" placeholder="横坐标{{ i + 1 }}" border="{{ false }}" bind:change="getXValue" data-a="{{i + 1}}" />
                     </view>
                     <block wx:for="{{iterator2}}" wx:for-item="j">
                         <view class="td">
                             <block wx:if="{{!chooseRegion}}">
-                                <van-field value="{{ value }}" placeholder="数据{{ j }}" border="{{ false }}"
-                                    bindtap="changeRegion" bind:change="getData" data-a="{{j}}" data-b="{{i + 1}}" />
+                                <van-field value="{{ value }}" placeholder="数据{{ j }}" border="{{ false }}" bind:change="getData" data-a="{{j}}" data-b="{{i + 1}}" />
                             </block>
                             <block wx:if="{{chooseRegion}}">
-                                <button style="width:{{500 / groupNum}}rpx" bindtap="getData" data-a="{{j}}"
-                                    data-b="{{i + 1}}">选中</button>
+                                <button style="width:{{500 / groupNum}}rpx" bindtap="getData" data-a="{{j}}" data-b="{{i + 1}}">
+                                    选中
+                                </button>
                             </block>
                         </view>
                     </block>
@@ -142,7 +139,7 @@
         <van-col span="6" style="text-align:center" bindtap="exportToCSV">
             <van-icon name="down" />
         </van-col>
-        <van-col span="6" style="text-align:center" bindtap="saveImage">
+        <van-col span="6" style="text-align:center" bindtap="exportToCSV">
             <van-icon name="photo" />
         </van-col>
         <van-col span="6" style="text-align:center">
@@ -151,5 +148,4 @@
     </van-row>
 </view>
 <text>\n</text>
-
 <van-button type="primary" size="large" bindtap="repaint">绘制图表</van-button>

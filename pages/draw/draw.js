@@ -3,11 +3,11 @@
 import * as echarts from '../../ec-canvas/echarts';
 import * as graph from './class';
 
-const saveLineTemplateUrl = "/template/linechart/save";
+const saveLineTemplateUrl = "jaripon.xyz/template/linechart/save";
 const saveBarTemplateUrl = "/template/barchart/save";
 const savePieTemplateUrl = "/template/fanchart/save";
 const saveScatterTemplateUrl = "/template/scatterplot/save";
-const exportToCSVUrl = "/data/export/csv";
+const exportToCSVUrl = "http://www.jaripon.xyz/data/export/1";
 
 const replaceLineTemplateUrl = "/template/linechart/replace";
 const replaceBarTemplateUrl = "/template/barchart/replace";
@@ -760,29 +760,47 @@ Page({
         wx.request({
             url: exportToCSVUrl,
             data: {
-                type: 'csv',
-                dataSet: {
-                    "id": null,
-                    "name": null,
-                    "userId": wx.getStorageSync('user'),
-                    "dataArray": line.convertToSend(), //将当前绘图的数据进行导出csv
-                },
+                "id": null,
+                "name": "lsp",
+                "userId": "sdsd",
+                // "dataArray": line.convertToSend() //将当前绘图的数据进行导出csv
+                "dataArray": [
+                    {
+                        "name": "col1",
+                        "cid": null,
+                        "lineData": ["sa1", "sa2","sa3"]
+                    },
+                    {
+                        "name": "col2",
+                        "cid": null,
+                        "lineData": ["sb1","sb2", "sb3"]
+                    },
+                    {
+                        "name": "lsp",
+                        "cid": null,
+                        "lineData": ["sc1","sc2", "sc3"]
+                    }
+                ]
             },
             method: "POST",
-            success: function () {
-                wx.downloadFile({
-                    url: '',
-                    success: res => {
-                        wx.saveFile({
-                            tempFilePath: res.tempFilePath,
-                            success: res => {
-                                console.log(res.savedFilePath);
-                            }
-                        })
-                    }
+            success: function (res) {
+                console.log(res);
+                // wx.downloadFile({
+                //     url: '',
+                //     success: res => {
+                //         wx.saveFile({
+                //             tempFilePath: res.tempFilePath,
+                //             success: res => {
+                //                 console.log(res.savedFilePath);
+                //             }
+                //         })
+                //     }
 
-                })
+                // })
             },
+            fail: function () {
+                console.log("error");
+            }
         });
     },
     // 保存全部模板
@@ -889,15 +907,15 @@ function updateShow() {
     });
 }
 
-function isShowBarChart(){
+function isShowBarChart() {
     return (xType === "string" && yType === "number") || (xType === "string" && yType === "number");
 }
 
-function isShowPieChart(){
+function isShowPieChart() {
     return (xType === "string" && yType === "number") || (xType === "string" && yType === "number");
 }
 
-function isShowScatterChart(){
+function isShowScatterChart() {
     return (xType === "number" && yType === "number");
 }
 
@@ -916,7 +934,7 @@ function updateBarData(inputData) {
     if (isShowBarChart()) {
         setBarOption(bar.barChart);
     }
-    
+
 }
 
 function updatePieData(name, data) {
