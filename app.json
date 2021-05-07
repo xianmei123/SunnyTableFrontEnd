@@ -8,7 +8,8 @@
     "pages/logs/logs",
     "pages/mine/mine",
     "pages/storage/storage",
-    "pages/storage/modify/modify"
+    "pages/storage/modify/modify",
+    "pages/attribute/attribute"
   ],
   "window": {
     "backgroundColor": "#D4F2E7",

@@ -148,4 +148,7 @@
     </van-row>
 </view>
 <text>\n</text>
+<<<<<<< Updated upstream
 <van-button type="primary" size="large" bindtap="repaint">绘制图表</van-button>
+=======
+>>>>>>> Stashed changes

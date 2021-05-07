@@ -1,6 +1,6 @@
 // pages/storage/storage.js
 var storage = require('../storage')
-console.log(storage)
+var baseUrl = 'http://www.jaripon.xyz'
 Page({
   /**
    * 页面的初始数据
@@ -17,51 +17,25 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-  },
-
-  /**
-   * 生命周期函数--监听页面初次渲染完成
-   */
-  onReady: function () {
-
-  },
-
-  /**
-   * 生命周期函数--监听页面显示
-   */
-  onShow: function () {
-    var root = storage.server.init()
-    var fileList = root.fileList
+    var root = {name:'root',id:wx.getStorageSync('rootId'),type:4,createTime:'xx-xx-xx'}
+    while(!this.changeDir(root));
     var dirStack = [root]
-    this.setData({fileList,dirStack})
+    this.setData({dirStack})
     const eventChannel = this.getOpenerEventChannel()
     eventChannel.on("setObj",data=>{
-      console.log(data)
       var activeObj = data.item
       var modifyType = data.modifyType
-      this.setData({activeObj,modifyType})
+      var baseUrl = data.url
+      this.setData({activeObj,modifyType,baseUrl})
     })
   },
-
-  /**
-   * 生命周期函数--监听页面隐藏
-   */
-  onHide: function () {
-  },
-
-  /**
-   * 生命周期函数--监听页面卸载
-   */
-  onUnload: function () {
-
-  },
-
-
-  /**
-   * 用户点击右上角分享
-   */
-  onShareAppMessage: function () {
-
+  crumbChange(event){
+    var dirStack = this.data.dirStack
+    var index  = event.currentTarget.dataset.index +1
+    var item  = dirStack[index-1]
+    if(!this.changeDir(item)) return false
+    dirStack.splice(index,dirStack.length-index)
+    this.setData({dirStack})
   },
   openDir:function(event){
     var item = event.currentTarget.dataset.item
@@ -71,20 +45,23 @@ Page({
         icon:'error'
       })
     }else{
-      this.changeDir(item)
+      if(!this.changeDir(event.currentTarget.dataset.item)){
+        return false;
+      }
+      this.data.dirStack.push(item)
+      this.setData({dirStack:this.data.dirStack})
     }
   },
-  changeDir:function(item){
-    var url = this.data.baseUrl + "/file/dir/open/{uid}/{fid}"
-    var data = {uid:"",fid:""}
-    // console.log(server.root)
-    // console.log(item,server.bfs(item.id))
-    this.data.dirStack.push(item)
-    this.data.fileList = JSON.parse(JSON.stringify(storage.server.bfs(item.id)[1].fileList))
-    this.setData({dirStack:this.data.dirStack,fileList:this.data.fileList})
 
+  async changeDir(item){
+    var url = baseUrl + "/file/dir/open" + '/' +wx.getStorageSync('uid') + '/' + item.id
+    var res = await storage.server.trans(url);
+    this.data.fileList = res.data
+   if(storage.hasError(res)) return false
+    this.setData({fileList:this.data.fileList})
+    return true
   },
-  saveObj:function(){
+  async saveObj(){
     // var 
     if(!storage.checks(this.data.fileList,this.data.activeObj.name)){
         wx.showToast({
@@ -94,15 +71,11 @@ Page({
       }else {
         var dirStack = this.data.dirStack
         var notify = this.data.modifyType==0?"复制成功":"移动成功"
-        console.log(storage.server.root)
-        if(this.data.modifyType==1){
-          storage.server.delObj(this.data.activeObj.id)
-          console.log(storage.server.root)
-        }
-        this.data.fileList.push(this.data.activeObj)
-        storage.server.addDir(dirStack[dirStack.length-1].id,this.data.activeObj)
-        this.setData({dirStack,fileList:this.data.fileList})
-        console.log(storage.server.root)
+        var url = this.data.baseUrl + '/' + dirStack[dirStack.length-1].id 
+        var res = await storage.server.trans(url)
+        if(storage.hasError(res)) return false
+        // this.data.fileList.push(this.data.activeObj)
+        // this.setData({dirStack,fileList:this.data.fileList})
         wx.showToast({
           title: notify,
           complete:function(){

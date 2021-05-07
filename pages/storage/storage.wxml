@@ -1,9 +1,9 @@
-<!-- 最好加入一个面包屑导航 -->
-<mp-dialog title="新建文件夹" show="{{dialogShow}}" bindbuttontap="tapDialogButton" buttons="{{dialogButton}}">
+<!-- 提示框 -->
+<mp-dialog title="{{popTitle}}" show="{{dialogShow}}" bindbuttontap="tapDialogButton" buttons="{{dialogButton}}">
   <view>
     <van-field
       model:value="{{ newDir }}"
-      placeholder="请输入用户名"
+      placeholder="请输入文件名"
       border="{{ false }}"
       bind:change="onChange"/>
   </view>
@@ -26,7 +26,7 @@
   <van-row >
   <van-col span = "2"  offset="1">
   <mp-icon  icon="add" color="black" size="{{25}}" style="bottom:10rpx!important"
-  bindtap="showDialog"></mp-icon>
+  bindtap="showDialog" data-index="{{0}}"></mp-icon>
  </van-col>
   <van-col span="16" offset="1">
         <van-dropdown-menu >
@@ -44,7 +44,7 @@
 <!-- 当前文件夹内容 -->
 <view>
 <van-cell-group wx:for="{{fileList}}">
-  <van-cell wx:if="{{item.type == 0}}" title="{{item.name}}" label="{{item.createTime}}" bindlongpress="popUp"
+  <van-cell wx:if="{{item.type == 4}}" title="{{item.name}}" label="{{item.createTime}}" bindlongpress="popUp"
   bindtap="openDir" data-item="{{item}}" is-link />
   <van-cell wx:else title="{{item.name}}" label="{{item.createTime}}" clickable="true" bindlongpress="popUp" bindtap="openObj"
   data-item="{{item}}"/>
@@ -53,8 +53,9 @@
 <!-- 弹出框 -->
 <van-popup show="{{ popShow }}"  position="bottom"   custom-style="height: 30%;"
   bind:close="popDown">
+  <van-cell  title="重命名"  clickable="true" bindtap="showDialog" data-index="{{1}}"/>
   <van-cell  title="删除" clickable="true" bindtap="delObj"  />
-  <van-cell  title="复制"  clickable="true" bindtap="copyObj"/>
+  <!-- <van-cell  title="复制"  clickable="true" bindtap="copyObj"/> -->
   <van-cell  title="移动"  clickable="true" bindtap="moveObj"/>
 </van-popup>
 

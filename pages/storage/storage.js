@@ -1,12 +1,17 @@
+// const { getCurrentPage } = require("../../miniprogram_npm/@vant/weapp/common/utils")
+
 // pages/storage/storage.js
 class Server{
   trans = async function(url,data,method){
-    const res = await new Promise((resolve,reject) =>
+    var res = await new Promise((resolve,reject) =>
     {
       wx.request({
         url: url,
         data:data,
-        success:function(res){resolve(res)}
+        complete(res){
+          console.log(res)
+          resolve(res)
+        }
       })
     })
     return res
@@ -18,52 +23,47 @@ class Server{
     this.root.fileList = this.fileList
     this.fileList[0].fileList = [{name:'计算机科学方法论',type:1,id:3,createTime:"2021-04-23"}]
   }
-  bfs(fid) {
-    //注意此处有耦合，不同数据可以合并到一起
-    if(fid==0) return [this.root,this.root]
-    var now = [this.root]
-    var x ={},top
-   while(now.length!=0){
-      top = now[0]
-      now.splice(0,1)
-      if(top.type==1) continue
-      for(x of top.fileList){
-        now.push(x)
-        if( x.id == fid){
-          return [top,x]
-        }
-      }
-      now.push(x)
-    }
-  }
-  init(){
-    var x = JSON.parse(JSON.stringify(this.root))
-    return x
-  }
-  delObj(fid){
-    var items = this.bfs(fid)
-    var fa = items[0],son = items[1]
-    for(var i = 0;i<fa.fileList.length;i++)
-      if(son.id==fa.fileList[i].id){
-        fa.fileList.splice(i,1)
-        break
-      }
-  
-  }
-  addDir(fid,item){
-    var items = this.bfs(fid)
-    items[1].fileList.push(item)
-  }
 }
+
 var server = new Server()
+var baseUrl = 'http://www.jaripon.xyz'
 var checks =(fileList,name)=>{
   for(var x of fileList){
     if(x.name==name) return false
   }
   return true
 }
-module.exports.server = server
-module.exports.checks = checks
+var hasError = function (res){
+  if(res.data.code && res.data.code!=0){
+    wx.showToast({
+      title: '操作失败',
+      icon:'error'
+    })
+    return true
+  }
+  return false
+}
+var dateTrans = function formatDate(time,format='YY-MM-DD hh:mm:ss'){
+    var date = new Date(time);
+
+    var year = date.getFullYear(),
+        month = date.getMonth()+1,//月份是从0开始的
+        day = date.getDate(),
+        hour = date.getHours(),
+        min = date.getMinutes(),
+        sec = date.getSeconds();
+    var preArr = Array.apply(null,Array(10)).map(function(elem, index) {
+        return '0'+index;
+    });//开个长度为10的数组 格式为 ["00", "01", "02", "03", "04", "05", "06", "07", "08", "09"]
+ 
+    var newTime = format.replace(/YY/g,year)
+        .replace(/MM/g,preArr[month]||month)
+        .replace(/DD/g,preArr[day]||day)
+        .replace(/hh/g,preArr[hour]||hour)
+        .replace(/mm/g,preArr[min]||min)
+        .replace(/ss/g,preArr[sec]||sec);
+    return newTime;
+}
 Page({
   /**
    * 页面的初始数据
@@ -82,75 +82,43 @@ Page({
     dialogButton:[{text: '取消'}, {text: '确定'}],
     newDir:"",
     baseUrl:"",
-    id:5
+    id:5,
+    popTitleList:["新建文件夹","文件夹重命名"]
   },
   /**
    * 生命周期函数--监听页面加载
    */
-  onLoad: function (options) {
-    var root = server.init()
-    var fileList = root.fileList
+  async onLoad(options){
+    var root = {name:'root',id:wx.getStorageSync('rootId'),type:4,createTime:'xx-xx-xx'}
+    while(!this.changeDir(root));
     var dirStack = [root]
-    this.setData({fileList,dirStack})
+    this.setData({dirStack})
   },
-  /**
-   * 生命周期函数--监听页面初次渲染完成
-   */
-  onReady: function () {
-
-  },
-
   /**
    * 生命周期函数--监听页面显示
    */
-  onShow: function () {
+  async onShow() {
       this.flush()
-  },
-
-  /**
-   * 生命周期函数--监听页面隐藏
-   */
-  onHide: function () {
-
-  },
-
-  /**
-   * 生命周期函数--监听页面卸载
-   */
-  onUnload: function () {
-
-  },
-
-  /**
-   * 页面相关事件处理函数--监听用户下拉动作
-   */
-  onPullDownRefresh: function () {
-
-  },
-
-  /**
-   * 页面上拉触底事件的处理函数
-   */
-  onReachBottom: function () {
-
-  },
-
-  /**
-   * 用户点击右上角分享
-   */
-  onShareAppMessage: function () {
-
+      console.log(getCurrentPages())
   },
   // 弹出显示框函数
-  showDialog:function(){
+  showDialog(event){
+    var dialogType  = event.currentTarget.dataset.index
+    var popTitle = this.data.popTitleList[event.currentTarget.dataset.index]
     this.setData({
+      popTitle,
+      dialogType,
       dialogShow:true
     })
   },
-  tapDialogButton:function(event){
+  tapDialogButton(event){
     if(event.detail.index==1){
-      if(checks(this.data.fileList,this.data.newDir))
-        this.createObj(this.data.newDir)
+      if(checks(this.data.fileList,this.data.newDir)){
+        if(this.data.dialogType==0)
+          this.createObj(this.data.newDir)
+        else 
+        this.renameObj(this.data.newDir)
+      }
       else{
         wx.showToast({
           title: '已存在同名对象',
@@ -166,7 +134,6 @@ Page({
   },
 // 底部滑出函数
   popUp: function(event){
-    console.log(event)
     this.setData(
       {
         popShow:true,
@@ -174,14 +141,14 @@ Page({
       }
     )
   },
-  popDown:function(event){
+  popDown(event){
     this.setData()
     this.setData({
       popShow:false,
     })
   },
   // 文件函数
-  cmp:function(obj1,obj2){
+  cmp(obj1,obj2){
     var o1 = obj1 instanceof Object;
     var o2 = obj2 instanceof Object;
     if(!o1 || !o2){/*  判断不是对象  */
@@ -202,27 +169,21 @@ Page({
     }
     return true;
   },
-  crumbChange:function(event){
+  crumbChange(event){
     var dirStack = this.data.dirStack
     var index  = event.currentTarget.dataset.index +1
     var item  = dirStack[index-1]
-    this.changeDir(item)
+    if(!this.changeDir(item)) return false
     dirStack.splice(index,dirStack.length-index)
     this.setData({dirStack})
   },
-  updata:function(data){
-    console.log(data)
-  },
-  getFilelist:function(){
-
-  },
-  flush:function(){
+  flush(){
     var dirStack = this.data.dirStack
-    var fileList = server.bfs(dirStack[dirStack.length-1].id)[1].fileList
-    this.setData({fileList})
-    wx.startPullDownRefresh()
+    this.changeDir(dirStack[dirStack.length-1])
+    // var fileList = JSON.parse(JSON.stringify(server.bfs(dirStack[dirStack.length-1].id)[1].fileList))
+    // this.setData({fileList})
   },
-  sortObj:function(event){
+  sortObj(event){
     let dropValue = this.data.dropValue
     let fileList = this.data.fileList
     if(dropValue == 0) //名称
@@ -231,37 +192,41 @@ Page({
       fileList.sort((a,b) => {return a.createTime==b.createTime?0:a.createTime<b.createTime?-1:1}) 
     this.setData({fileList})
   },
-  createObj:function(name){
-    var url = this.data.baseUrl+ '/file/dir/create/{uid}/{fid}/{name}'
-    var data ={uid:"",fid:"",name:""}
-    var item = {name:name,type:0,id:this.data.id++,createTime:"2021-05-02",fileList:[]}
+async createObj(name){
+    var faFid = this.data.dirStack[this.data.dirStack.length-1].id
+    var url = baseUrl+ '/file/dir/create' +'/'+ wx.getStorageSync('uid') +'/'+ faFid +'/' + name
+    var res = await server.trans(url)
+    if(hasError(res)) return false
+    var item = res.data
     var dirStack = this.data.dirStack
     this.data.fileList.push(item)
-    server.addDir(dirStack[dirStack.length-1].id,item)
     this.setData({fileList:this.data.fileList})
+    return true 
   },
-  changeDir:function(item){
-    var url = this.data.baseUrl + "/file/dir/open/{uid}/{fid}"
-    var data = {uid:"",fid:""}
-    // console.log(server.root)
-    // console.log(item,server.bfs(item.id))
-    this.data.dirStack.push(item)
-    this.data.fileList = JSON.parse(JSON.stringify(server.bfs(item.id)[1].fileList))
-    this.setData({dirStack:this.data.dirStack,fileList:this.data.fileList})
+  async changeDir(item){
+    var url = baseUrl + "/file/dir/open" + '/' +wx.getStorageSync('uid') + '/' + item.id
+    var res = await server.trans(url);
+    this.data.fileList = res.data
+   if(hasError(res)) return false
+    this.setData({fileList:this.data.fileList})
+    return true
+  },
+  openDir(event){
+    if(!this.changeDir(event.currentTarget.dataset.item)){
+      return false;
+    }
+    this.data.dirStack.push(event.currentTarget.dataset.item)
+    this.setData({dirStack:this.data.dirStack})
+  },
+  openObj(event){
 
   },
-  openDir:function(event){
-    this.changeDir(event.currentTarget.dataset.item)
-  },
-  openObj:function(event){
-
-  },
-  delObj:function(event){
-    var url = "/file/dir/remove/{srcfid}"
-    var data = {srcFid:""}
+  async delObj(event){
+    var srcfid = this.data.activeObj.id 
+    var url = baseUrl + "/file/dir/remove" +'/' + srcfid
+    var res = await server.trans(url)
+    if(hasError(res)) return false
     var fileList = this.data.fileList
-    server.delObj(this.data.activeObj.id)
-    // console.log(this.data)
     for(var i =0;i<fileList.length;i++){
       if(fileList[i].id==this.data.activeObj.id){
           fileList.splice(i,1)
@@ -272,28 +237,52 @@ Page({
       fileList,
       popShow:false
     })
+    return true
   },
-  copyObj:function(event){
-    var url = this.data.baseUrl + "/dir/copy/{srcfid}/{dstfid}"
+  async renameObj(name){
+    var fid = this.data.activeObj.id
+    var url = baseUrl + '/file/dir/rename'+ '/' + fid+'/'+ name
+    var res  = await server.trans(url)
+    if(hasError(res)) return false
+    for (var x of this.data.fileList){
+      if(x.id == this.data.activeObj.id)
+        x.name = name
+    }
+    this.setData({
+      fileList:this.data.fileList,
+      popShow:false
+    })
+    return true
+  },
+  async copyObj(event){
+    var url = baseUrl + "/dir/copy/{srcfid}/{dstfid}"
     var data ={srcFid:"",dstFid:""}
     //必然不会出现在本文件夹，故不用监听
    wx.navigateTo({
      url: 'modify/modify',
      success: (result) => {
-       result.eventChannel.emit("setObj",{item:this.data.activeObj,modifyType:0});
+       result.eventChannel.emit("setObj",{
+         url,
+         item:this.data.activeObj,
+         modifyType:0,
+         changeDir:this.changeDir,
+        });
        this.setData({
         popShow:false
        })
      },
    })
   },
-  moveObj:function(e){
-    var url = this.data.baseUrl+"/file/dir/move/{srcfid}/{dstfid}"
-    var data = {srcFid:"",dstFid:""}
+  async moveObj(e){
+    var url = baseUrl+"/file/dir/move"+'/' + this.data.activeObj.id
     wx.navigateTo({
       url: 'modify/modify',
       complete: (result) => {
-        result.eventChannel.emit("setObj",{item:this.data.activeObj,modifyType:1});
+        result.eventChannel.emit("setObj",{
+          item:this.data.activeObj,
+          modifyType:1,
+          url,
+        });
         this.setData({
          popShow:false,
         })
@@ -301,3 +290,6 @@ Page({
     })
   }
 })
+module.exports.server = server
+module.exports.checks = checks
+module.exports.hasError = hasError

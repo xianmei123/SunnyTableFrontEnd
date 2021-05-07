@@ -1,8 +1,3 @@
-<script>
-  import Toast from '@vant/weapp/dist/toast/toast';
-  Toast('我是提示文案，建议不超过十五字~');
-</script>
-<van-toast id="van-toast" />
 <view class="top_box">
   <!-- 面包屑栏 -->
   <van-row>
@@ -34,12 +29,14 @@
 </van-row>
 </view>
 
-<text>\n\n</text>
+<text>\n\n\n\n</text>
 <!-- 当前文件夹内容 -->
 <view>
 <van-cell-group wx:for="{{fileList}}">
-  <van-cell wx:if="{{item.type == 0}}" title="{{item.name}}" label="{{item.createTime}}" 
+  <van-cell wx:if="{{item.type == 4}}" title="{{item.name}}" label="{{item.createTime}}" 
   bindtap="openDir" data-item="{{item}}" is-link />
   <van-cell wx:else title="{{item.name}}" label="{{item.createTime}}" clickable="true" />
 </van-cell-group>
 </view>
+
+

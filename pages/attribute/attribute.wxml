@@ -1,0 +1,8 @@
+<!--pages/attribute/attribute.wxml-->
+<view>
+<van-cell-group wx:for="{{attributeSet}}">
+  <van-cell  title="{{item.name}}"  bindlongpress="popUp"
+  bindtap="openDir" data-item="{{item}}" is-link />
+</van-cell-group>
+</view>
+<button bindtap="getInfo"> test</button>

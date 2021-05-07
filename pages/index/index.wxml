@@ -17,3 +17,9 @@
 <van-button type="primary" bind:click="goDraw">
 创建图表
 </van-button>
+<text>\n\n </text>
+<navigator url='../attribute/attribute'>
+<van-button type="primary" >
+ 属性页面 
+</van-button>
+</navigator>
