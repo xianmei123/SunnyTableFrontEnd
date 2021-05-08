@@ -742,8 +742,9 @@ Page({
                 y2: tmp
             });
         }
-        console.log(this.data.xValues);
-        console.log(this.data.datas);
+        if (this.data.x1 == 0 && this.data.x2 == 0 && this.data.y1 == 0 && this.data.y2 == 0) {
+            return this.convertData();
+        }
         for (i = this.data.x1; i <= this.data.x2; i++) {
             var tmp = [];
             for (j = this.data.y1; j <= this.data.y2; j++) {
@@ -819,29 +820,24 @@ Page({
     },
     //导出csv
     exportToCSV() {
+        var i;
+        var dataArray = [];
+        for (i = 0; i < this.data.groupNum; i++) {
+            var obj = {
+                "name": this.data.groupName[i],
+                "cid": null,
+                "lineData": this.data.datas[i]
+            }
+            dataArray.push(obj);
+        }
         wx.request({
             url: exportToCSVUrl,
             data: {
                 "id": null,
-                "name": "lsp",
-                "userId": "sdsd",
+                "name": null,
+                "userId": wx.getStorageSync('uid'),
                 // "dataArray": line.convertToSend() //将当前绘图的数据进行导出csv
-                "dataArray": [{
-                        "name": "col1",
-                        "cid": null,
-                        "lineData": ["sa1", "sa2", "sa3"]
-                    },
-                    {
-                        "name": "col2",
-                        "cid": null,
-                        "lineData": ["sb1", "sb2", "sb3"]
-                    },
-                    {
-                        "name": "lsp",
-                        "cid": null,
-                        "lineData": ["sc1", "sc2", "sc3"]
-                    }
-                ]
+                "dataArray": dataArray
             },
             method: "POST",
             success: function (res) {
@@ -858,6 +854,47 @@ Page({
                 //     }
 
                 // })
+            },
+            fail: function () {
+                console.log("error");
+            }
+        });
+    },
+    openData: function (data) {
+        var newGroupName = [];
+        var newDatas = [];
+        var dataArray = data[dataArray];
+        for (i = 0; i < dataArray.length; i++) {
+            newGroupName.push(dataArray[i][name]);
+            newDatas.push(dataArray[i][lineData]);
+        }
+        this.setData({
+            datas: newDatas,
+            groupName: newGroupName
+        })
+    },
+    exportData() {
+        var i;
+        var dataArray = [];
+        for (i = 0; i < this.data.groupNum; i++) {
+            var obj = {
+                "name": this.data.groupName[i],
+                "cid": null,
+                "lineData": this.data.datas[i]
+            }
+            dataArray.push(obj);
+        }
+        wx.request({
+            url: "http://www.jaripon.xyz/data/export/" + this.judgeXType(),
+            data: {
+                "id": null,
+                "name": null,
+                "userId": wx.getStorageSync('uid'),
+                "dataArray": dataArray
+            },
+            method: "POST",
+            success: function (res) {
+                console.log(res);
             },
             fail: function () {
                 console.log("error");
@@ -912,7 +949,6 @@ Page({
                 title: '保存成功',
             });
         }
-
     },
     saveLineTemplate: saveLineTemplate,
     saveBarTemplate: saveBarTemplate,
