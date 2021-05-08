@@ -864,9 +864,10 @@ Page({
         var newGroupName = [];
         var newDatas = [];
         var dataArray = data[dataArray];
+        var i;
         for (i = 0; i < dataArray.length; i++) {
-            newGroupName.push(dataArray[i][name]);
-            newDatas.push(dataArray[i][lineData]);
+            newGroupName.push(dataArray[i]["name"]);
+            newDatas.push(dataArray[i]["lineData"]);
         }
         this.setData({
             datas: newDatas,
