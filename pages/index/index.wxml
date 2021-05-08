@@ -14,9 +14,11 @@
     <!-- 时间图表类似 -->
   </van-tab>
 </van-tabs>
-<van-button type="primary" bind:click="goDraw">
+<navigator url="/pages/model_select/model_select">
+<van-button type="primary" >
 创建图表
 </van-button>
+</navigator>
 <text>\n\n </text>
 <navigator url='../attribute/attribute'>
 <van-button type="primary" >

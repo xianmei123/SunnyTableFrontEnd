@@ -34,7 +34,7 @@ var checks =(fileList,name)=>{
   return true
 }
 var hasError = function (res){
-  if(res.data.code && res.data.code!=0){
+  if((res.data.code && res.data.code!=0) || (res.statusCode&& res.statusCode !=200)){
     wx.showToast({
       title: '操作失败',
       icon:'error'
