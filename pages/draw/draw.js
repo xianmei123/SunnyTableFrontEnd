@@ -19,10 +19,10 @@ export var inputData = {}; // 输入数据
 var xType = "number"; // 输入数据x轴类型
 var yType = "number"; // 输入数据y轴类型
 
-var line = new graph.LineGraph();
-var bar = new graph.BarGraph();
-var pie = new graph.PieGraph();
-var scatter = new graph.ScatterGraph();
+export var bar = new graph.BarGraph();
+export var line = new graph.LineGraph();
+export var pie = new graph.PieGraph();
+export var scatter = new graph.ScatterGraph();
 
 var graphName = "sb"; // 在图的最上方显示的标题
 var graphId = null; //图的id 是否应该存在内存中？

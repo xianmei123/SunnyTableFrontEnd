@@ -1,0 +1,16 @@
+<!--pages/model_Select/model_select.wxml-->
+<van-tree-select
+  items="{{ items }}"
+  main-active-index="{{ mainActiveIndex }}"
+  active-id="{{ activeId }}"
+  bind:click-nav="onClickNav"
+  bind:click-item="onClickItem"
+  height="400"
+>
+</van-tree-select>
+<view class="bottom_button">
+<van-button type="primary" bindtap="goDraw">
+    创建
+</van-button>
+</view>
+
