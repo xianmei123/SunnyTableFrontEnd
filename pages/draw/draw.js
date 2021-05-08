@@ -720,6 +720,40 @@ Page({
         }
         return "number";
     },
+    convertPaintData: function() {          //转化所需数据
+        var ret = {};
+        var i;
+        var j;
+        if (this.data.x1 > this.data.x2) {
+            var tmp = this.data.x1;
+            this.setData( {
+                x1: this.data.x2
+            });
+            this.setData( {
+                x2: tmp
+            });
+        }
+        if (this.data.y1 > this.data.y2) {
+            var tmp = this.data.y1;
+            this.setData( {
+                y1: this.data.y2
+            });
+            this.setData( {
+                y2: tmp
+            });
+        }
+        console.log(this.data.xValues);
+        console.log(this.data.datas);
+        for (i = this.data.x1; i <= this.data.x2; i++) {
+            var tmp = [];
+            for (j = this.data.y1; j <= this.data.y2; j++) {
+                tmp.push([this.data.xValues[j], this.data.datas[i][j]]);
+            }
+            ret[this.data.groupName[i]] = tmp;
+        }
+        console.log(ret);
+        return ret;
+    },
     convertData: function () {
         var ret = {};
         var i;
@@ -734,7 +768,7 @@ Page({
         return ret;
     },
     repaint: function () {
-        inputData = this.convertData();
+        inputData = this.convertPaintData();
         xType = this.judgeXType();
         yType = this.judgeYType();
         updateShow();
