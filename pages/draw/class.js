@@ -27,7 +27,7 @@ export class LineGraph {
         "color": ['red', '#ba55d3'],
         "showDigit": true, //"true" or "false"，是否显示数值，指图中每个点是否标注数值
         "font": 14, //字体大小
-        "legendPos": ",,,,vertical", //图例位置
+        "legendPos": "30%,,,0%,vertical", //图例位置 top bottom left right
         "textColor": "#1e90ff", //字体颜色
         "isVisible": 0,
     };
@@ -139,7 +139,7 @@ export class BarGraph {
         "showDigit": true, //"true" or "false"，是否显示数值，指图中每个点是否标注数值
         "transpose": 1,
         "font": 14, //字体大小
-        "legendPos": ",,,,vertical", //图例位置
+        "legendPos": "30%,,,0%,vertical", //图例位置
         "textColor": "#1e90ff", //字体颜色
         "isVisible": 0
     };
@@ -212,7 +212,7 @@ export class PieGraph {
         "showPercent": 1,
         "titleFont": 20,
         "labelFont": 10,
-        "legendPos": ",,,,vertical",
+        "legendPos": "30%,,,0%,vertical", 
         "textColor": "red",
         "isVisible": 0,
     };
@@ -280,7 +280,7 @@ export class ScatterGraph {
         "showDigit": true,
         "increase": false, // 点大小是否会随着数值变化而变化，
         "font": 12,
-        "legendPos": ",,,,vertical",
+        "legendPos": "30%,,,0%,vertical", 
         "textColor": "blue"
     }
     setScatterTemplate(template) {

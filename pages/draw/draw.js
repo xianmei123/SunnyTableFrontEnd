@@ -3,16 +3,16 @@
 import * as echarts from '../../ec-canvas/echarts';
 import * as graph from './class';
 
-const saveLineTemplateUrl = "jaripon.xyz/template/linechart/save";
-const saveBarTemplateUrl = "/template/barchart/save";
-const savePieTemplateUrl = "/template/fanchart/save";
-const saveScatterTemplateUrl = "/template/scatterplot/save";
+const saveLineTemplateUrl = "http://www.jaripon.xyz/template/linechart/save";
+const saveBarTemplateUrl = "http://www.jaripon.xyz/template/barchart/save";
+const savePieTemplateUrl = "http://www.jaripon.xyz/template/fanchart/save";
+const saveScatterTemplateUrl = "http://www.jaripon.xyz/template/scatterplot/save";
 const exportToCSVUrl = "http://www.jaripon.xyz/data/export/1";
 
-const replaceLineTemplateUrl = "/template/linechart/replace";
-const replaceBarTemplateUrl = "/template/barchart/replace";
-const replacePieTemplateUrl = "/template/fanchart/replace";
-const replaceScatterTemplateUrl = "/template/scatterplot/replace";
+const replaceLineTemplateUrl = "http://www.jaripon.xyz/template/linechart/replace";
+const replaceBarTemplateUrl = "http://www.jaripon.xyz/template/barchart/replace";
+const replacePieTemplateUrl = "http://www.jaripon.xyz/template/fanchart/replace";
+const replaceScatterTemplateUrl = "http://www.jaripon.xyz/template/scatterplot/replace";
 
 export var inputData = {}; // 输入数据
 
@@ -75,13 +75,48 @@ function setLineOption(lineChart) {
 
     option = {
         grid: {
+            right: '18%',
             top: '16%',
             bottom: '12%',
         },
         toolbox: {
             feature: {
-                restore: {
-                    show: true
+                mySaveAsImage: {
+                    show: true,
+                    title: '保存为图片',
+                    icon: 'path://M.002 3a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2h-12a2 2 0 0 1-2-2V3zm1 9v1a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V9.5l-3.777-1.947a.5.5 0 0 0-.577.093l-3.71 3.71-2.66-1.772a.5.5 0 0 0-.63.062L1.002 12zm5-6.5a1.5 1.5 0 1 0-3 0 1.5 1.5 0 0 0 3 0z',
+                    onclick: function () {
+                        wx.showModal({
+                            cancelColor: '#9ba8ae',
+                            title: '提示',
+                            content: '你确定要将此图保存到相册中吗？',
+                            success: res => {
+                                if (res.confirm) {
+                                    const ecCompoent = getPage().selectComponent('#' + this.data.value1 + "ChartId");
+                                    //const ecCompoent = this.selectComponent('#pie' + "ChartId");
+                                    ecCompoent.canvasToTempFilePath({
+                                        success: res => {
+                                            console.log("tempFilePath:", res.tempFilePath);
+                                            wx.saveImageToPhotosAlbum({
+                                                filePath: res.tempFilePath || '',
+                                                success: res => {
+                                                    wx.showToast({
+                                                        title: '保存成功'
+
+                                                    })
+                                                }
+                                            })
+                                        }
+                                    });
+                                } else {
+                                    wx.showToast({
+                                        title: '您取消了保存',
+                                        icon: "error"
+                                    });
+                                }
+                            }
+                        });
+                    }
                 }
             }
         },
@@ -93,13 +128,7 @@ function setLineOption(lineChart) {
                 fontSize: line.lineTemplate.font
             }
         },
-        legend: {
-            top: legendArr[0],
-            bottom: legendArr[1],
-            left: legendArr[2],
-            right: legendArr[3],
-            orient: legendArr[4]
-        },
+
         xAxis: {
             name: xName,
             type: line.xType === "string" ? 'category' : 'value',
@@ -119,6 +148,7 @@ function setLineOption(lineChart) {
         series: series
     };
     option = setMinAndMax(option);
+    setLegendOption(option, line.lineTemplate.legendPos);
     lineChart.setOption(option); // 
     if (line.lineTemplate.showDigit) {
         lineChart.setOption({
@@ -240,6 +270,7 @@ function setBarOption(barChart) {
         }],
         series: series
     };
+    setLegendOption(option, bar.barTemplate.legendPos);
     setMinAndMax(option);
     barChart.setOption(option);
     if (bar.barTemplate.showDigit) {
@@ -355,7 +386,7 @@ function setPieOption(pieChart) {
         },
         series: series
     };
-
+    setLegendOption(option, pie.pieTemplate.legendPos);
     pieChart.setOption(option);
     return pieChart;
 }
@@ -426,6 +457,7 @@ function setScatterOption(scatterChart) {
             data: scatter.inputList
         }]
     };
+    setLegendOption(option, scatter.scatterTemplate.legendPos);
     setMinAndMax(option);
     scatterChart.setOption(option);
     if (scatter.scatterTemplate.showLine) {
@@ -1022,38 +1054,9 @@ Page({
     onReady: function () {
 
     },
-    saveImage: function () {
-        wx.showModal({
-            cancelColor: '#9ba8ae',
-            title: '提示',
-            content: '你确定要将此图保存到相册中吗？',
-            success: res => {
-                if (res.confirm) {
-                    const ecCompoent = this.selectComponent('#' + this.data.value1 + "ChartId");
-                    //const ecCompoent = this.selectComponent('#pie' + "ChartId");
-                    ecCompoent.canvasToTempFilePath({
-                        success: res => {
-                            console.log("tempFilePath:", res.tempFilePath);
-                            wx.saveImageToPhotosAlbum({
-                                filePath: res.tempFilePath || '',
-                                success: res => {
-                                    wx.showToast({
-                                        title: '保存成功',
-                                    })
-                                }
-                            })
-                        }
-                    });
-                } else {
-                    wx.showToast({
-                        title: '您取消了保存',
-                    });
-                }
-            }
-        });
-
-    }
-
+    onUnload: function () {
+        inputData = [];
+    },
 });
 
 function updateShow() {
@@ -1084,6 +1087,7 @@ function getPage() {
 function updateLineData(inputData) {
     line.init(inputData, xType, yType);
     setLineOption(line.lineChart);
+    line.lineChart.on('dataZoom', updatePosition);
 }
 
 function updateBarData(inputData) {
@@ -1091,7 +1095,40 @@ function updateBarData(inputData) {
     if (isShowBarChart()) {
         setBarOption(bar.barChart);
     }
+}
 
+function setLegendOption(option, legendPos) {
+    var legendArr = legendPos.split(",");
+    var tempJson = {};
+    if (legendArr[0] != "") {
+        tempJson.top = legendArr[0];
+    }
+    if (legendArr[1] != "") {
+        tempJson.bottom = legendArr[1];
+    }
+    if (legendArr[2] != "") {
+        tempJson.left = legendArr[2];
+    }
+    if (legendArr[3] != "") {
+        tempJson.right = legendArr[3];
+    }
+    if (legendArr[4] != "") {
+        tempJson.orient = legendArr[4];
+    } else {
+        tempJson.orient = 'horizontal';
+    }
+    option.legend = tempJson;
+}
+
+
+function updatePosition() {
+    line.lineChart.setOption({
+        graphic: line.inputList.map(function (item, dataIndex) {
+            return {
+                position: line.lineChart.convertToPixel('grid', item)
+            };
+        })
+    });
 }
 
 function updatePieData(name, data) {
