@@ -483,8 +483,6 @@ function setScatterOption(scatterChart) {
         })
     });
     return scatterChart;
-
-
 }
 
 Page({
@@ -556,7 +554,7 @@ Page({
     changeRegion: function (event) {
         var newRegion = [event.target.dataset.a, event.target.dataset.b];
         console.log("现在是" + newRegion[0] + newRegion[1]);
-        this.setData ({
+        this.setData({
             region: newRegion
         });
     },
@@ -755,6 +753,36 @@ Page({
                 break;
         }
     },
+    async storeData() {
+        var ret = {};
+        ret["id"] = null;
+        ret["name"] = "";
+        ret["userId"] = wx.getStorageSync('uid');
+        var i;
+        var dataArray = [];
+        for (i = 0; i < this.data.groupNum; i++) {
+            var obj = {
+                "name": this.data.groupName[i],
+                "cid": null,
+                "lineData": this.data.datas[i]
+            }
+            dataArray.push(obj);
+        }
+        ret["dataArray"] = dataArray;
+        var url = "http://www.jaripon.xyz/data/save";
+        wx.request({
+          url: url,
+          data: ret,
+          method: "POST",
+          success: function (res) {
+              console.log(res);
+          },
+          fail: function (res) {
+              console.log("fail");
+          }
+        });
+        // var x = await this.trans(url, ret);
+    },
     //导出csv
     exportToCSV() {
         wx.request({
@@ -764,21 +792,20 @@ Page({
                 "name": "lsp",
                 "userId": "sdsd",
                 // "dataArray": line.convertToSend() //将当前绘图的数据进行导出csv
-                "dataArray": [
-                    {
+                "dataArray": [{
                         "name": "col1",
                         "cid": null,
-                        "lineData": ["sa1", "sa2","sa3"]
+                        "lineData": ["sa1", "sa2", "sa3"]
                     },
                     {
                         "name": "col2",
                         "cid": null,
-                        "lineData": ["sb1","sb2", "sb3"]
+                        "lineData": ["sb1", "sb2", "sb3"]
                     },
                     {
                         "name": "lsp",
                         "cid": null,
-                        "lineData": ["sc1","sc2", "sc3"]
+                        "lineData": ["sc1", "sc2", "sc3"]
                     }
                 ]
             },
@@ -897,7 +924,7 @@ Page({
         });
 
     }
-    
+
 });
 
 function updateShow() {

@@ -4,7 +4,6 @@
     "pages/input/text",
     "pages/input/photo",
     "pages/draw/draw",
-    "pages/test/test",
     "pages/logs/logs",
     "pages/mine/mine",
     "pages/storage/storage",
