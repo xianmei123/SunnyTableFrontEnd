@@ -788,7 +788,7 @@ Page({
                 break;
         }
     },
-    async storeData() {
+    async saveData() {
         var ret = {};
         ret["id"] = null;
         ret["name"] = "";
@@ -901,6 +901,64 @@ Page({
                 console.log("error");
             }
         });
+    },
+    saveChart() {
+        var ret = {};
+        ret["id"] = null;
+        ret["name"] = "";
+        ret["userId"] = wx.getStorageSync('uid');
+        var i;
+        var dataArray = [];
+        if (this.data.x1 > this.data.x2) {
+            var tmp = this.data.x1;
+            this.setData( {
+                x1: this.data.x2
+            });
+            this.setData( {
+                x2: tmp
+            });
+        }
+        if (this.data.y1 > this.data.y2) {
+            var tmp = this.data.y1;
+            this.setData( {
+                y1: this.data.y2
+            });
+            this.setData( {
+                y2: tmp
+            });
+        }
+        if (this.data.x1 == 0 && this.data.x2 == 0 && this.data.y1 == 0 && this.data.y2 == 0) {
+            this.setData( {
+                x1: 0,
+                x2: groupNum - 1,
+                y1: 0,
+                y2: this.data.xValues.length - 1
+            });
+        }
+        for (i = this.data.x1; i <= this.data.x2; i++) {
+            var obj = {
+                "name": this.data.groupName[i],
+                "cid": null,
+                "lineData": this.data.datas[i].slice(this.data.y1, this.data.y2 + 1)
+            }
+            dataArray.push(obj);
+        }
+        ret["dataArray"] = dataArray;
+        var url = "http://www.jaripon.xyz/data/save";
+        wx.request({
+          url: url,
+          data: ret,
+          method: "POST",
+          success: function (res) {
+              console.log(res);
+          },
+          fail: function (res) {
+              console.log("fail");
+          }
+        });
+    },
+    openChart(chart) {
+        
     },
     // 保存全部模板
     saveModel: function () {
