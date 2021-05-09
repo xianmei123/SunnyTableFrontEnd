@@ -1,5 +1,6 @@
 {
   "pages": [
+    "pages/draw/draw",
     "pages/index/index",
     "pages/storage/storage",
     "pages/attribute/attribute",
@@ -17,8 +18,8 @@
       "pages": [
         "pages/logs/logs",
         "pages/input/text",
-        "pages/input/photo",
-        "pages/draw/draw"
+        "pages/input/photo"
+
       ]
     }
   ],

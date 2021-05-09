@@ -140,7 +140,9 @@
             <van-icon name="down" />
         </van-col>
         <van-col span="8" style="text-align:center">
+        <navigator url='/pages/attribute/attribute'>
             <van-icon name="apps-o" />
+        </navigator>
         </van-col>
     </van-row>
     <van-button type="primary" size="large" bindtap="repaint">绘制图表</van-button>

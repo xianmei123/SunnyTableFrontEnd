@@ -1,15 +1,15 @@
 <!--pages/personal/personal.wxml-->
 <view class="container">
   <block>
-    <image class="logo" src='/lib/image/icon/portrait.jpeg'></image>
-    <view class='title'>hi~ duckingss</view>
+    <image class="logo" src='{{userLogo}}'></image>
+    <view class='title'>hi~ {{userName}}</view>
   
     <text>\n\n\n\n\n\n\n\n</text>
     <view class="content">
-      <view class='menu-line' bindtap=''>
-        <view class='menu-name'>
+      <view class='menu-line' bindtap="login">
+        <view class='menu-name' >
           <image src=''></image>
-          <view>微信授权</view>
+          <view >微信授权</view>
         </view>
         <image src=''></image>
       </view>

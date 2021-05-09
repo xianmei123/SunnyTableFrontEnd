@@ -1,4 +1,5 @@
 // pages/attribute/attribute.js
+// import {pie,line,bar,scatter} from '../draw/draw.js' 
 var baseUrl = 'http://www.jaripon.xyz/'
 Page({
   /**
@@ -9,51 +10,51 @@ Page({
     lineRaiuds: null,
     lineShowDigit: true,
     lineFont: 17,
-    lineLegendPosTop:null,
-    lineLegendPosBottom:null,
-    lineLegendPosLeft:null,
-    lineLegendPosRight:null,
+    lineLegendPosTop: null,
+    lineLegendPosBottom: null,
+    lineLegendPosLeft: null,
+    lineLegendPosRight: null,
     lineTextColor: 'rgb(0,154,97)', //初始值
     lineTextColorPick: false,
     // 条属性
     barWidth: null,
-    barGap:null,
+    barGap: null,
     barShowDigit: true,
-    barFont:null,
-    barLegendPosTop:null,
-    barLegendPosBottom:null,
-    barLegendPosLeft:null,
-    barLegendPosRight:null,
+    barFont: null,
+    barLegendPosTop: null,
+    barLegendPosBottom: null,
+    barLegendPosLeft: null,
+    barLegendPosRight: null,
     barTextColor: 'rgb(0,154,97)', //初始值
     barTextColorPick: false,
     // 扇形图
     pieRadius: null,
-    piePrecision:null,
+    piePrecision: null,
     pieShowPercent: true,
-    pieShowLable:false,
-    pieTitleFont:null,
-    pieLabelFont:null,
-    pieLegendPosTop:null,
-    pieLegendPosBottom:null,
-    pieLegendPosLeft:null,
-    pieLegendPosRight:null,
+    pieShowLable: false,
+    pieTitleFont: null,
+    pieLabelFont: null,
+    pieLegendPosTop: null,
+    pieLegendPosBottom: null,
+    pieLegendPosLeft: null,
+    pieLegendPosRight: null,
     pieTextColor: 'rgb(0,154,97)', //初始值
     pieTextColorPick: false,
     // 散点图
     scatterShowLine: true,
     scatterShowDigit: true,
     scatterIncrease: false,
-    scatterFont:null,
-    scatterLegendPosTop:null,
-    scatterLegendPosBottom:null,
-    scatterLegendPosLeft:null,
-    scatterLegendPosRight:null,
+    scatterFont: null,
+    scatterLegendPosTop: null,
+    scatterLegendPosBottom: null,
+    scatterLegendPosLeft: null,
+    scatterLegendPosRight: null,
     scatterTextColor: 'rgb(0,154,97)', //初始值
     scatterTextColorPick: false,
   },
-  initLine(){
+  initLine() {
     var lineColors = [],
-    lineColorsValue = 0
+      lineColorsValue = 0
     for (var x = 0; x < 10; x++) {
       lineColors.push({
         text: `线条${x}`,
@@ -63,23 +64,43 @@ Page({
       })
     }
     this.setData({
-    lineColors,
-    lineColorsValue
+      lineColors,
+      lineColorsValue
     })
   },
-  getlineTemplate(){
+fillZero(str) {
+    if(parseInt(str, 16) < 16) {
+        return '0' + str
+    }
+    return str
+  },
+  transColor(str) {
+    
+    const newstr = str.replace(/(rgb\()|(\))/g, '')
+    const arr = newstr.split(',')
+    let res = '#'
+    for (var val of arr) {
+      res += this.fillZero(parseInt(val).toString(16))
+    }
+    return res
+  },
+  transColors(item) {
+    return this.transColor(item.rgb)
+  },
+  getlineTemplate() {
+    var lengendPosList = [this.data.lineLegendPosTop+'%', this.data.lineLegendPosBottom+'%', this.data.lineLegendPosLeft+'%', this.data.lineLegendPosRight+'%'].join(',')
     return {
-      radius: this.data.lineRaiuds,
-      color: this.data.lineColors,
+      radius: this.data.lineRaiuds.toString(),
+      color: this.data.lineColors.map(this.transColors),
       showDigit: this.data.lineShowDigit,
-      font:this.data.lineFont,
-      legendPos: [this.data.lineLegendPosTop,this.data.lineLegendPosBottom,this.data.lineLegendPosLeft,this.data.lineLegendPosRight],
-      textColor: this.data.lineTextColor
+      font: this.data.lineFont,
+      legendPos: lengendPosList,
+      textColor: this.transColor(this.data.lineTextColor)
     }
   },
-  initBar(){
+  initBar() {
     var barColors = [],
-    barColorsValue = 0
+      barColorsValue = 0
     for (var x = 0; x < 10; x++) {
       barColors.push({
         text: `柱图${x}`,
@@ -89,24 +110,25 @@ Page({
       })
     }
     this.setData({
-    barColors,
-    barColorsValue
+      barColors,
+      barColorsValue
     })
   },
-  getBarTemplate(){
+  getBarTemplate() {
+    var lengendPosList = [this.data.barLegendPosTop+'%', this.data.barLegendPosBottom+'%', this.data.barLegendPosLeft+'%', this.data.barLegendPosRight+'%'].join(',')
     return {
-      width: this.data.barWidth,
-      gap: this.data.barGap,
-      color: this.data.barColors,
+      width: this.data.barWidth+'%',
+      gap: this.data.barGap+'%',
+      color: this.data.barColors.map(this.transColors),
       showDigit: this.data.barShowDigit,
-      font:this.data.barFont,
-      legendPos: [this.data.barLegendPosTop,this.data.barLegendPosBottom,this.data.barLegendPosLeft,this.data.barLegendPosRight],
-      textColor: this.data.barTextColor
+      font: this.data.barFont,
+      legendPos: lengendPosList,
+      textColor: this.transColor(this.data.barTextColor)
     }
   },
-  initPie(){
+  initPie() {
     var pieColors = [],
-    pieColorsValue = 0
+      pieColorsValue = 0
     for (var x = 0; x < 10; x++) {
       pieColors.push({
         text: `饼图${x}`,
@@ -116,26 +138,27 @@ Page({
       })
     }
     this.setData({
-    pieColors,
-    pieColorsValue
+      pieColors,
+      pieColorsValue
     })
   },
-  getPieTemplate(){
+  getPieTemplate() {
+    var lengendPosList = [this.data.pieLegendPosTop+'%', this.data.pieLegendPosBottom+'%', this.data.pieLegendPosLeft+'%', this.data.pieLegendPosRight+'%'].join(',')
     return {
-      radius: this.data.pieRadius,
+      radius: this.data.pieRadius+"%",
       precision: this.data.piePrecision,
-      color: this.data.pieColors,
+      color: this.data.pieColors.map(this.transColors),
       showPercent: this.data.pieShowPercent,
       showLabel: this.data.pieShowLable,
-      titleFont:this.data.pieTitleFont,
-      labelFont:this.data.pieLabelFont,
-      legendPos: [this.data.pieLegendPosTop,this.data.pieLegendPosBottom,this.data.pieLegendPosLeft,this.data.pieLegendPosRight],
-      textColor: this.data.barTextColor
+      titleFont: this.data.pieTitleFont,
+      labelFont: this.data.pieLabelFont,
+      legendPos: lengendPosList,
+      textColor: this.transColor(this.data.barTextColor)
     }
   },
-  initSactter(){
+  initSactter() {
     var scatterColors = [],
-    scatterColorsValue = 0
+      scatterColorsValue = 0
     for (var x = 0; x < 10; x++) {
       scatterColors.push({
         text: `点图${x}`,
@@ -145,20 +168,21 @@ Page({
       })
     }
     this.setData({
-    scatterColors,
-    scatterColorsValue
+      scatterColors,
+      scatterColorsValue
     })
   },
-  getScatterTemplate(){
-      return{
-        showLine:this.data.scatterShowLine,
-        increate:this.data.scatterIncrease,
-        color: this.data.scatterColors,
-        showDigit: this.data.scatterShowDigit,
-        font:this.data.scatterFont,
-        legendPos: [this.data.scatterLegendPosTop,this.data.scatterLegendPosBottom,this.data.scatterLegendPosLeft,this.data.scatterLegendPosRight],
-        textColor: this.data.scatterTextColor
-      }
+  getScatterTemplate() {
+    var lengendPosList = [this.data.scatterLegendPosTop+'%', this.data.scatterLegendPosBottom+'%', this.data.scatterLegendPosLeft+'%', this.data.scatterLegendPosRight+'%'].join(',')
+    return {
+      showLine: this.data.scatterShowLine,
+      increate: this.data.scatterIncrease,
+      color: this.data.scatterColors.map(this.transColors),
+      showDigit: this.data.scatterShowDigit,
+      font: this.data.scatterFont,
+      legendPos: lengendPosList,
+      textColor: this.transColor(this.data.scatterTextColor)
+    }
   },
   onLoad: function (options) {
     this.initLine()
@@ -183,7 +207,7 @@ Page({
   pickColor(e) {
     var rgb = e.detail.color;
     var name = e.currentTarget.dataset.color
-    console.log(name,rgb)
+    console.log(name, rgb)
     this.setData({
       [name]: rgb
     })
@@ -197,7 +221,9 @@ Page({
   changeBool(event) {
     var detail = event.detail
     var name = event.currentTarget.dataset.name
-    this.setData({[name]:detail});
+    this.setData({
+      [name]: detail
+    });
   },
   submit(event) {
     var lineTemplate = this.getlineTemplate()
@@ -208,9 +234,22 @@ Page({
     console.log(barTemplate)
     console.log(pieTemplate)
     console.log(scatterTemplate)
+    // line.updateLineTemplate(lineTemplate)
+    // bar.updateBarTemplate(barTemplate)
+    // pie.updatePieTemplate(pieTemplate)
+    // scatter.updateScatterTemplate(scatterTemplate)
+    wx.showToast({
+      title: '设置成功',
+      complete: function () {
+        // wx.navigateBack({delta: 1})
+      }
+    })
+
   },
-  stepperChange(event){
+  stepperChange(event) {
     var name = event.currentTarget.dataset.name
-    this.setData({[name]:event.detail})
+    this.setData({
+      [name]: event.detail
+    })
   }
 })
