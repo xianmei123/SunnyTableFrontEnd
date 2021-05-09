@@ -1,47 +1,12 @@
 // const { getCurrentPage } = require("../../miniprogram_npm/@vant/weapp/common/utils")
 
-// pages/storage/storage.js
-class Server{
-  trans = async function(url,data,method){
-    var res = await new Promise((resolve,reject) =>
-    {
-      wx.request({
-        url: url,
-        data:data,
-        complete(res){
-          console.log(res)
-          resolve(res)
-        }
-      })
-    })
-    return res
-  }
-  constructor(){
-    this.root = {name:"根目录",type:0,id:0,createTime:"2021-04-18"}
-    this.fileList =   [{name:'最近打开',type:0,id:1,createTime:"2021-04-18"},
-                      {name:'物理实验',type:1,id:2,createTime:"2021-04-13"} ]
-    this.root.fileList = this.fileList
-    this.fileList[0].fileList = [{name:'计算机科学方法论',type:1,id:3,createTime:"2021-04-23"}]
-  }
-}
-
-var server = new Server()
+import {trans,hasError} from './helper'
 var baseUrl = 'http://www.jaripon.xyz'
 var checks =(fileList,name)=>{
   for(var x of fileList){
     if(x.name==name) return false
   }
   return true
-}
-var hasError = function (res){
-  if((res.data.code && res.data.code!=0) || (res.statusCode&& res.statusCode !=200)){
-    wx.showToast({
-      title: '操作失败',
-      icon:'error'
-    })
-    return true
-  }
-  return false
 }
 var dateTrans = function formatDate(time,format='YY-MM-DD hh:mm:ss'){
     var date = new Date(time);
@@ -195,7 +160,7 @@ Page({
 async createObj(name){
     var faFid = this.data.dirStack[this.data.dirStack.length-1].id
     var url = baseUrl+ '/file/dir/create' +'/'+ wx.getStorageSync('uid') +'/'+ faFid +'/' + name
-    var res = await server.trans(url)
+    var res = await trans(url)
     if(hasError(res)) return false
     var item = res.data
     var dirStack = this.data.dirStack
@@ -205,7 +170,7 @@ async createObj(name){
   },
   async changeDir(item){
     var url = baseUrl + "/file/dir/open" + '/' +wx.getStorageSync('uid') + '/' + item.id
-    var res = await server.trans(url);
+    var res = await trans(url);
     this.data.fileList = res.data
    if(hasError(res)) return false
     this.setData({fileList:this.data.fileList})
@@ -218,13 +183,58 @@ async createObj(name){
     this.data.dirStack.push(event.currentTarget.dataset.item)
     this.setData({dirStack:this.data.dirStack})
   },
-  openObj(event){
+  async openGraph(item){
+      
+  },
+  async openData(item){
+    console.log(item)
+    var url = baseUrl + '/' +'data/open' + '/' + item.id
+    var res = await trans(url)
+    // console.log(res)
+    // // if(hasError(res)) return false
+    // wx.navigateTo({
+    //   url: '/pages/draw/draw',
+    //   success(result){
+    //     console.log('res.data',res.data)
+    //     result.eventChannel.emit("openData",{
+    //         data:res.data
+    //      });
+    //   }
+    // })
+  },
+  async openTemplate(item){
 
+  },
+  async openObj(event){
+    var item =  event.currentTarget.dataset.item
+    var url = baseUrl + '/' +'data/open' + '/' + item.id
+    // var res = await trans(url)
+    wx.request({
+      url: url,
+      complete:(res)=>{
+        wx.navigateTo({
+        url: '/pages/display_data/display_data',
+      success(result){
+        console.log('res.data',res.data)
+        result.eventChannel.emit("openData",{
+            data:res.data
+         });
+      }
+    })
+      }
+    })
+    // this.openData(item)
+    // if(item.type == 1)
+    //   this.openGraph(item)
+    // else if(item.type==2)
+    //   this.openData(item)
+    // else 
+    //   this.openTemplate(item)
   },
   async delObj(event){
     var srcfid = this.data.activeObj.id 
     var url = baseUrl + "/file/dir/remove" +'/' + srcfid
-    var res = await server.trans(url)
+    var res = await trans(url)
     if(hasError(res)) return false
     var fileList = this.data.fileList
     for(var i =0;i<fileList.length;i++){
@@ -242,7 +252,7 @@ async createObj(name){
   async renameObj(name){
     var fid = this.data.activeObj.id
     var url = baseUrl + '/file/dir/rename'+ '/' + fid+'/'+ name
-    var res  = await server.trans(url)
+    var res  = await trans(url)
     if(hasError(res)) return false
     for (var x of this.data.fileList){
       if(x.id == this.data.activeObj.id)
@@ -290,6 +300,3 @@ async createObj(name){
     })
   }
 })
-module.exports.server = server
-module.exports.checks = checks
-module.exports.hasError = hasError

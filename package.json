@@ -18,6 +18,7 @@
   "dependencies": {
     "@miniprogram-component-plus/col": "^1.0.0",
     "@miniprogram-component-plus/row": "^1.0.0",
-    "@vant/weapp": "^1.6.8"
+    "@vant/weapp": "^1.6.8",
+    "mini-color-picker": "^0.1.2"
   }
 }

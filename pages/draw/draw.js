@@ -583,6 +583,14 @@ Page({
         y2: 0,
         region: [0, 0]
     },
+    async onLoad(){
+        const eventChannel = this.getOpenerEventChannel()
+        if(eventChannel){
+            eventChannel.on("openData",res=>{
+                this.openData(res.data)
+            })
+        }
+    },
     changeRegion: function (event) {
         var newRegion = [event.target.dataset.a, event.target.dataset.b];
         console.log("现在是" + newRegion[0] + newRegion[1]);
@@ -901,6 +909,7 @@ Page({
             newGroupName.push(dataArray[i]["name"]);
             newDatas.push(dataArray[i]["lineData"]);
         }
+        console.log('newDatas',newDatas)
         this.setData({
             datas: newDatas,
             groupName: newGroupName
@@ -1350,8 +1359,7 @@ function showLineTooltip(dataIndex) {
         seriesIndex: count,
         dataIndex: dataIndex - line.nameToIndex[line.indexToName[dataIndex]].minIndex
     });
-}
-
+}    
 function hideLineTooltip(dataIndex) {
     line.lineChart.dispatchAction({
         type: 'hideTip'

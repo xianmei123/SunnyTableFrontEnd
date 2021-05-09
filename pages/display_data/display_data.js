@@ -33,6 +33,14 @@ Page({
           xValues: newXValue
       })
   },
+  async onLoad(){
+    const eventChannel = this.getOpenerEventChannel()
+    if(eventChannel){
+        eventChannel.on("openData",res=>{
+            this.openData(res.data)
+        })
+    }
+},
   getData: function (event) {
       if (this.data.chooseRegion) {
           if (!this.data.firstReady) {
@@ -62,6 +70,7 @@ Page({
           chooseRegion: false
       });
   },
+  
   addDataGroup: function () {
       if (this.data.chooseRegion) {
           return;
@@ -81,6 +90,21 @@ Page({
       })
       this.onLoad();
   },
+  openData: function (data) {
+    var newGroupName = [];
+    var newDatas = [];
+    var dataArray = data[dataArray];
+    var i;
+    for (i = 0; i < dataArray.length; i++) {
+        newGroupName.push(dataArray[i]["name"]);
+        newDatas.push(dataArray[i]["lineData"]);
+    }
+    console.log('newDatas',newDatas)
+    this.setData({
+        datas: newDatas,
+        groupName: newGroupName
+    })
+},
   setGroupName: function (event) {
       if (this.data.chooseRegion) {
           return;

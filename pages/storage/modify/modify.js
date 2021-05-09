@@ -1,5 +1,5 @@
 // pages/storage/storage.js
-var storage = require('../storage')
+import {hasError,trans} from '../helper'
 var baseUrl = 'http://www.jaripon.xyz'
 Page({
   /**
@@ -55,9 +55,9 @@ Page({
 
   async changeDir(item){
     var url = baseUrl + "/file/dir/open" + '/' +wx.getStorageSync('uid') + '/' + item.id
-    var res = await storage.server.trans(url);
+    var res = await trans(url);
     this.data.fileList = res.data
-   if(storage.hasError(res)) return false
+   if(hasError(res)) return false
     this.setData({fileList:this.data.fileList})
     return true
   },
@@ -72,8 +72,8 @@ Page({
         var dirStack = this.data.dirStack
         var notify = this.data.modifyType==0?"复制成功":"移动成功"
         var url = this.data.baseUrl + '/' + dirStack[dirStack.length-1].id 
-        var res = await storage.server.trans(url)
-        if(storage.hasError(res)) return false
+        var res = await trans(url)
+        if(hasError(res)) return false
         // this.data.fileList.push(this.data.activeObj)
         // this.setData({dirStack,fileList:this.data.fileList})
         wx.showToast({

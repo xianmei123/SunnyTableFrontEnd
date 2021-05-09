@@ -1,5 +1,4 @@
-var trans = require('../storage/storage').server.trans
-var hasError = require('../storage/storage').hasError
+import {trans,hasError} from '../storage/helper'
 var baseUrl = 'http://www.jaripon.xyz/template/chart/display'
 import {pie,line,bar,scatter} from '../draw/draw.js' 
 Page({

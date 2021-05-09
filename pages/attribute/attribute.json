@@ -2,6 +2,11 @@
   "usingComponents": {
     "van-popup": "@vant/weapp/popup/index",
     "mp-icon": "weui-miniprogram/icon/icon",
-    "van-dialog": "@vant/weapp/dialog/index"
+    "van-dialog": "@vant/weapp/dialog/index",
+    "van-slider": "@vant/weapp/slider/index",
+    "van-picker": "@vant/weapp/picker/index",
+    "van-stepper": "@vant/weapp/stepper/index",
+    "van-switch": "@vant/weapp/switch/index",
+    "color-picker":"mini-color-picker/color-picker" 
   }
 }
