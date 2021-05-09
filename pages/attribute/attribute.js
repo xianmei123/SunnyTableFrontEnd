@@ -1,5 +1,10 @@
 // pages/attribute/attribute.js
-import {pie,line,bar,scatter} from '../draw/draw.js' 
+import {
+  pie,
+  line,
+  bar,
+  scatter
+} from '../draw/draw.js'
 var baseUrl = 'http://www.jaripon.xyz/'
 Page({
   /**
@@ -68,14 +73,14 @@ Page({
       lineColorsValue
     })
   },
-fillZero(str) {
-    if(parseInt(str, 16) < 16) {
-        return '0' + str
+  fillZero(str) {
+    if (parseInt(str, 16) < 16) {
+      return '0' + str
     }
     return str
   },
   transColor(str) {
-    
+
     const newstr = str.replace(/(rgb\()|(\))/g, '')
     const arr = newstr.split(',')
     let res = '#'
@@ -88,7 +93,7 @@ fillZero(str) {
     return this.transColor(item.rgb)
   },
   getlineTemplate() {
-    var lengendPosList = [this.data.lineLegendPosTop+'%', this.data.lineLegendPosBottom+'%', this.data.lineLegendPosLeft+'%', this.data.lineLegendPosRight+'%'].join(',')
+    var lengendPosList = [this.data.lineLegendPosTop + '%', this.data.lineLegendPosBottom + '%', this.data.lineLegendPosLeft + '%', this.data.lineLegendPosRight + '%'].join(',')
     return {
       radius: this.data.lineRaiuds.toString(),
       color: this.data.lineColors.map(this.transColors),
@@ -115,10 +120,10 @@ fillZero(str) {
     })
   },
   getBarTemplate() {
-    var lengendPosList = [this.data.barLegendPosTop+'%', this.data.barLegendPosBottom+'%', this.data.barLegendPosLeft+'%', this.data.barLegendPosRight+'%'].join(',')
+    var lengendPosList = [this.data.barLegendPosTop + '%', this.data.barLegendPosBottom + '%', this.data.barLegendPosLeft + '%', this.data.barLegendPosRight + '%'].join(',')
     return {
-      width: this.data.barWidth+'%',
-      gap: this.data.barGap+'%',
+      width: this.data.barWidth + '%',
+      gap: this.data.barGap + '%',
       color: this.data.barColors.map(this.transColors),
       showDigit: this.data.barShowDigit,
       font: this.data.barFont,
@@ -143,9 +148,9 @@ fillZero(str) {
     })
   },
   getPieTemplate() {
-    var lengendPosList = [this.data.pieLegendPosTop+'%', this.data.pieLegendPosBottom+'%', this.data.pieLegendPosLeft+'%', this.data.pieLegendPosRight+'%'].join(',')
+    var lengendPosList = [this.data.pieLegendPosTop + '%', this.data.pieLegendPosBottom + '%', this.data.pieLegendPosLeft + '%', this.data.pieLegendPosRight + '%'].join(',')
     return {
-      radius: this.data.pieRadius+"%",
+      radius: this.data.pieRadius + "%",
       precision: this.data.piePrecision,
       color: this.data.pieColors.map(this.transColors),
       showPercent: this.data.pieShowPercent,
@@ -173,7 +178,7 @@ fillZero(str) {
     })
   },
   getScatterTemplate() {
-    var lengendPosList = [this.data.scatterLegendPosTop+'%', this.data.scatterLegendPosBottom+'%', this.data.scatterLegendPosLeft+'%', this.data.scatterLegendPosRight+'%'].join(',')
+    var lengendPosList = [this.data.scatterLegendPosTop + '%', this.data.scatterLegendPosBottom + '%', this.data.scatterLegendPosLeft + '%', this.data.scatterLegendPosRight + '%'].join(',')
     return {
       showLine: this.data.scatterShowLine,
       increate: this.data.scatterIncrease,

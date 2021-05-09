@@ -37,7 +37,11 @@ export function getSingleData(tempData, index) {
     return result;
 }
 
-
+/**
+ * 初始化折线图
+ * 
+ * 初始化折线图画图对象
+ */
 function initLineChart(canvas, width, height, dpr) {
     line.init(inputData, xType, yType);
     var lineChart = echarts.init(canvas, null, {
@@ -52,6 +56,14 @@ function initLineChart(canvas, width, height, dpr) {
     return lineChart;
 }
 
+/**
+ * 设置折线图画图option
+ * 
+ * 传入需要被设置option的lineChart
+ * 对此对象进行设置option
+ * @param {*} lineChart 
+ * @returns 设置option成功后的lineChart
+ */
 function setLineOption(lineChart) {
     var series = [];
     var count = 0;
@@ -165,6 +177,12 @@ function setLineOption(lineChart) {
     return lineChart;
 }
 
+/**
+ * 
+ * 初始化条形图
+ * 初始化条形图画图对象
+ * @returns 
+ */
 function initBarChart(canvas, width, height, dpr) {
     bar.init(inputData, xType, yType);
     var barChart = echarts.init(canvas, null, {
@@ -180,7 +198,14 @@ function initBarChart(canvas, width, height, dpr) {
     console.log("init BarGraph Success!!");
     return barChart;
 }
-
+/**
+ * 设置条形图画图option
+ * 
+ * 传入需要被设置option的barChart
+ * 对此对象进行设置option
+ * @param {} barChart 
+ * @returns 设置option成功后的barChart
+ */
 function setBarOption(barChart) {
     var series = [];
     var count = 0;
@@ -284,6 +309,11 @@ function setBarOption(barChart) {
     return barChart;
 }
 
+/**
+ * 初始化饼状图
+ * 
+ * 初始化饼状图画图对象
+ */
 function initPieChart(canvas, width, height, dpr) {
     // 由于pie图无法进行拖拽，直接从全局输入数据中取数据即可，对象中不需要保存。
     var pieChart = echarts.init(canvas, null, {
@@ -297,7 +327,14 @@ function initPieChart(canvas, width, height, dpr) {
     console.log("init PieGraph Success!!");
     return pieChart;
 }
-
+/**
+ * 设置饼状图画图option
+ * 
+ * 传入需要被设置option的pieChart
+ * 对此对象进行设置option
+ * @param {} pieChart 
+ * @returns 设置option成功后的pieChart
+ */
 function setPieOption(pieChart) {
     var option;
     var series = [];
@@ -362,6 +399,11 @@ function setPieOption(pieChart) {
     return pieChart;
 }
 
+/**
+ * 初始化散点图
+ * 
+ * 初始化散点图画图对象
+ */
 function initScatterChart(canvas, width, height, dpr) {
     scatter.init(inputData, xType, yType);
     var scatterChart = echarts.init(canvas, null, {
@@ -385,7 +427,14 @@ function initScatterChart(canvas, width, height, dpr) {
     return scatterChart;
 
 }
-
+/**
+ * 设置散点图画图option
+ * 
+ * 传入需要被设置option的scatterChart
+ * 对此对象进行设置option
+ * @param {} scatterChart 
+ * @returns 设置option成功后的scatterChart
+ */
 function setScatterOption(scatterChart) {
     var legendArr = scatter.scatterTemplate.legendPos.split(",");
     var series = [];
@@ -814,7 +863,7 @@ Page({
                 updateBarData(inputData);
                 break;
             case "pie":
-                pie.init([inputData.keys(), inputData.values()], this.judgeXType(), this.judgeYType());
+                updatePieData(inputData.keys(), inputData.values());
                 break;
             case "scatter":
                 updateScatterData(inputData);
@@ -1104,6 +1153,9 @@ Page({
     },
 });
 
+/**
+ * 此方法用来在重画图表（repaint）时设置图的可见性
+ */
 function updateShow() {
     getPage().setData({
         showBarChart: isShowBarChart(),
@@ -1111,30 +1163,54 @@ function updateShow() {
         showScatterChart: isShowScatterChart()
     });
 }
-
+/**
+ * 
+ * @returns 是否显示条形图
+ */
 function isShowBarChart() {
     return (xType === "string" && yType === "number") || (xType === "string" && yType === "number");
 }
 
+/**
+ * 
+ * @returns 是否显示饼状图
+ */
 function isShowPieChart() {
     return (xType === "string" && yType === "number") || (xType === "string" && yType === "number");
 }
 
+/**
+ * 
+ * @returns 是否显示散点图
+ */
 function isShowScatterChart() {
     return (xType === "number" && yType === "number");
 }
 
+/**
+ * 
+ * @returns 当前页面对象
+ */
 export function getPage() {
     var pages = getCurrentPages();
     return pages[pages.length - 1];
 }
 
+/**
+ * 折线图
+ * 此方法传入更新数据，用来更新折线图的数据并重新画图
+ * @param {*} inputData 
+ */
 function updateLineData(inputData) {
     line.init(inputData, xType, yType);
     setLineOption(line.lineChart);
-    line.lineChart.on('dataZoom', updatePosition);
 }
 
+/**
+ * 条形图
+ * 此方法传入更新数据，用来更新条形图的数据并重新画图
+ * @param {*} inputData 
+ */
 function updateBarData(inputData) {
     bar.init(inputData, xType, yType);
     if (isShowBarChart()) {
@@ -1142,40 +1218,11 @@ function updateBarData(inputData) {
     }
 }
 
-export function setLegendOption(option, legendPos) {
-    var legendArr = legendPos.split(",");
-    var tempJson = {};
-    if (legendArr[0] != "") {
-        tempJson.top = legendArr[0];
-    }
-    if (legendArr[1] != "") {
-        tempJson.bottom = legendArr[1];
-    }
-    if (legendArr[2] != "") {
-        tempJson.left = legendArr[2];
-    }
-    if (legendArr[3] != "") {
-        tempJson.right = legendArr[3];
-    }
-    if (legendArr[4] != "") {
-        tempJson.orient = legendArr[4];
-    } else {
-        tempJson.orient = 'horizontal';
-    }
-    option.legend = tempJson;
-}
-
-
-function updatePosition() {
-    line.lineChart.setOption({
-        graphic: line.inputList.map(function (item, dataIndex) {
-            return {
-                position: line.lineChart.convertToPixel('grid', item)
-            };
-        })
-    });
-}
-
+/**
+ * 扇形图
+ * 此方法传入更新数据的name和data，用来更新扇形图的数据并重新画图
+ * @param {*} inputData 
+ */
 function updatePieData(name, data) {
     if (!(xType === "string" && yType === "string") || (xType === "number" && yType === "number")) {
         if (pie.setInpuData(name, data)) {
@@ -1195,7 +1242,11 @@ function updatePieData(name, data) {
     }
 
 }
-
+/**
+ * 散点图
+ * 此方法传入更新数据，用来更新散点图的数据并重新画图
+ * @param {*} inputData 
+ */
 function updateScatterData(inputData) {
     scatter.init(inputData, xType, yType);
     var flag = (scatter.xType === "number" && scatter.yType === "number");
@@ -1210,27 +1261,54 @@ function updateScatterData(inputData) {
         });
     }
 }
-// 下面四个方法是更换和更新模板调用接口，传入数据暂定为整个模板属性
-function updateLineTemplate(template) {
+
+/**
+ * 折线图模板
+ * 此方法需要传入修改后或更换后的模板json对象
+ * 用来修改和更换折线图模板，并重新画图
+ * @param {*} template 
+ */
+export function updateLineTemplate(template) {
     line.setLineTemplate(template);
     setLineOption(line.lineChart);
 }
 
-function updateBarTemplate(template) {
+/**
+ * 条形图模板
+ * 此方法需要传入修改后或更换后的模板json对象
+ * 用来修改和更换条形图模板，并重新画图
+ * @param {*} template 
+ */
+export function updateBarTemplate(template) {
     bar.setLineTemplate(template);
     setBarOption(bar.barChart);
 }
 
-function updatePieTemplate(template) {
+/**
+ * 饼状图模板
+ * 此方法需要传入修改后或更换后的模板json对象
+ * 用来修改和更换饼状图模板，并重新画图
+ * @param {*} template 
+ */
+export function updatePieTemplate(template) {
     pie.setLineTemplate(template);
     setPieOption(pie.pieChart);
 }
 
-function updateScatterTemplate(template) {
+/**
+ * 散点图模板
+ * 此方法需要传入修改后或更换后的模板json对象
+ * 用来修改和更换散点图模板，并重新画图
+ * @param {*} template 
+ */
+export function updateScatterTemplate(template) {
     scatter.setLineTemplate(template);
     setScatterOption(scatter.scatterChart);
 }
-//下面四个方法是保存模板到服务器
+/**
+ * 折线图模板上传
+ * 此方法是将折线图模板上传到服务器
+ */
 function saveLineTemplate() {
     line.lineTemplate.visible = "true";
     wx.request({
@@ -1246,6 +1324,10 @@ function saveLineTemplate() {
     });
 }
 
+/**
+ * 条形图模板上传
+ * 此方法是将条形图模板上传到服务器
+ */
 function saveBarTemplate() {
     bar.barTemplate.visible = 1;
     wx.request({
@@ -1261,6 +1343,10 @@ function saveBarTemplate() {
     });
 }
 
+/**
+ * 饼状图模板上传
+ * 此方法是将饼状图模板上传到服务器
+ */
 function savePieTemplate() {
     pie.pieTemplate.visible = 1;
     wx.request({
@@ -1276,6 +1362,10 @@ function savePieTemplate() {
     });
 }
 
+/**
+ * 散点图模板上传
+ * 此方法是将散点图模板上传到服务器
+ */
 function saveScatterTemplate() {
     scatter.scatterTemplate.visible = 1;
     wx.request({
@@ -1291,6 +1381,13 @@ function saveScatterTemplate() {
     });
 }
 
+/**
+ * 此方法传入一个符合前端格式模板json对象和模板种类（line，bar，pie，scatter）
+ * 返回一个符合后端模板格式要求的新的json对象
+ * @param {*} template 
+ * @param {*} type 
+ * @returns tempJson
+ */
 function converToBackTemplate(template, type) {
     var tempJson = {}
     switch (type) {
@@ -1338,15 +1435,67 @@ function converToBackTemplate(template, type) {
     return tempJson;
 }
 
+/**
+ * 此方法传入一个后端模板对象和模板种类（line,bar,pie,scatter）
+ * 返回一个符合前端模板格式要求的新的json对象
+ * @param {*} template 
+ * @param {*} type 
+ * @returns 
+ */
 function convertFromBackTemplate(template, type) {
+    var tempJson = {};
     switch (type) {
         case "line":
+            for (var key in template) {
+                if (key === "showDigit" || key === "isVisible") {
+                    tempJson[key] = JSON.parse(template[key]);
+                } else {
+                    tempJson[key] = template[key];
+                }
+            }
+            break;
         case "bar":
+            for (var key in template) {
+                if (key === "showDigit" || key === "transpose" || key === "isVisible") {
+                    tempJson[key] = JSON.parse(template[key]);
+                } else if (key === "gap" || key === "width") {
+                    tempJson[key] = parseFloat(template[key]) * 100 + "%";
+                } else {
+                    tempJson[key] = template[key];
+                }
+            }
+            break;
         case "pie":
+            for (var key in template) {
+                if (key === "showLabel" || key === "showPercent" || key === "isVisible") {
+                    tempJson[key] = JSON.parse(template[key]);
+                } else if (key === "radius") {
+                    tempJson[key] = parseFloat(template[key]) * 100 + "%";
+                } else {
+                    tempJson[key] = template[key];
+                }
+            }
+            break;
         case "scatter":
+            for (var key in template) {
+                if (key === "showLine" || key === "showDigit" || key === "isVisible" ||
+                    key === "increase") {
+                    tempJson[key] = JSON.parse(template[key]);
+                } else if (key === "radius") {
+                    tempJson[key] = parseFloat(template[key]) * 100 + "%";
+                } else {
+                    tempJson[key] = template[key];
+                }
+            }
+            break;
     }
+    return tempJson;
 }
 
+/**
+ * 此方法自定义一个echarts toolbox.feature中的一个保存图到本地的属性
+ * @returns 
+ */
 function mySaveImage() {
     return {
         show: true,
@@ -1388,7 +1537,10 @@ function mySaveImage() {
     };
 }
 
-
+/**
+ * 此方法是折线图中点被拖拽时触发的更新位置方法
+ * @param {*} dataIndex 
+ */
 function onPointLineDragging(dataIndex) {
     // 这里的 data 就是本文最初的代码块中声明的 data，在这里会被更新。
     // 这里的 this 就是被拖拽的圆点。this.position 就是圆点当前的位置。
@@ -1422,6 +1574,11 @@ function onPointLineDragging(dataIndex) {
 }
 
 
+/**
+ * 此方法是柱状图图中点被拖拽时触发的更新位置方法
+ * @param {*} dataIndex 
+ */
+
 function onPointBarDragging(dataIndex) {
     // 这里的 data 就是本文最初的代码块中声明的 data，在这里会被更新。
     // 这里的 this 就是被拖拽的圆点。this.position 就是圆点当前的位置。
@@ -1450,6 +1607,11 @@ function onPointBarDragging(dataIndex) {
     bar.updateInputData(dataIndex, bar.inputList[dataIndex]);
 }
 
+/**
+ * 此方法是散点图中点被拖拽时触发的更新位置方法
+ * @param {*} dataIndex 
+ */
+
 function onPointScatterDragging(dataIndex) {
     scatter.inputList[dataIndex] = scatter.scatterChart.convertFromPixel('grid', this.position);
     if (scatter.xType === "string") {
@@ -1476,7 +1638,10 @@ function onPointScatterDragging(dataIndex) {
     scatter.updateInputData(dataIndex, scatter.inputList[dataIndex]);
 }
 
-
+/**
+ * 此方法是显示折线图中点旁边的标注，触发条件为点击拖拽点
+ * @param {*} dataIndex 
+ */
 function showLineTooltip(dataIndex) {
     var name = line.indexToName[dataIndex];
     var count = 0;
@@ -1495,12 +1660,21 @@ function showLineTooltip(dataIndex) {
     });
 }
 
+/**
+ * 此方法是隐藏折线图中点旁边的标注，触发条件为不点击拖拽点
+ * @param {*} dataIndex 
+ */
+
 function hideLineTooltip(dataIndex) {
     line.lineChart.dispatchAction({
         type: 'hideTip'
     });
 }
 
+/**
+ * 此方法是显示散点图中点旁边的标注，触发条件为点击拖拽点
+ * @param {*} dataIndex 
+ */
 
 function showScatterTooltip(dataIndex) {
     var name = scatter.indexToName[dataIndex];
@@ -1519,11 +1693,51 @@ function showScatterTooltip(dataIndex) {
     });
 }
 
+/**
+ * 此方法是隐藏散点图中点旁边的标注，触发条件为不点击拖拽点
+ * @param {*} dataIndex 
+ */
 function hideScatterTooltip(dataIndex) {
     scatter.scatterChart.dispatchAction({
         type: 'hideTip'
     });
 }
+
+/**
+ * 此方法传入需要被设置图例的option，
+ * 并根据传入的图例字符串来进行设置
+ * @param {*} option 
+ * @param {*} legendPos 
+ */
+export function setLegendOption(option, legendPos) {
+    var legendArr = legendPos.split(",");
+    var tempJson = {};
+    if (legendArr[0] != "") {
+        tempJson.top = legendArr[0];
+    }
+    if (legendArr[1] != "") {
+        tempJson.bottom = legendArr[1];
+    }
+    if (legendArr[2] != "") {
+        tempJson.left = legendArr[2];
+    }
+    if (legendArr[3] != "") {
+        tempJson.right = legendArr[3];
+    }
+    if (legendArr[4] != "") {
+        tempJson.orient = legendArr[4];
+    } else {
+        tempJson.orient = 'horizontal';
+    }
+    option.legend = tempJson;
+}
+
+/**
+ * 此方法传入一个需要被设置min和max属性的option
+ * 为传入的option设置min和max值
+ * @param {*} option 
+ * @returns 
+ */
 
 function setMinAndMax(option) {
     if (xType === "number") {
@@ -1537,11 +1751,24 @@ function setMinAndMax(option) {
     return option;
 }
 
+/**
+ * 此方法传入一个index，0表示x轴，1表示y轴
+ * 为传入的轴创建最小值
+ * @param {} index 
+ * @returns 
+ */
 
 function getMinInInput(index) {
     // index 表示 是 哪一个轴上的最小值
     return "-90";
 }
+
+/**
+ * 此方法传入一个index，0表示x轴，1表示y轴
+ * 为传入的轴创建最大值
+ * @param {} index 
+ * @returns 
+ */
 
 function getMaxInInput(index) {
     // index 表示 是 哪一个轴上的最大值

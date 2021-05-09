@@ -1,9 +1,9 @@
 {
   "pages": [
-    "pages/draw/draw",
     "pages/index/index",
     "pages/storage/storage",
     "pages/attribute/attribute",
+    "pages/draw/draw",
     "pages/mine/mine"
   ],
   "subPackages": [

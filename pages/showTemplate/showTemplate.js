@@ -4,7 +4,6 @@ import {
     setLegendOption,
     getPage
 } from '../draw/draw';
-var type = "line" // line or bar or pie or scatter 模板类型
 var inputData = [
     ['product', 'Matcha Latte', 'Milk Tea','Cheese Cocoa'],
     ['2012', 41.1, 86.5, 24.1],
@@ -457,4 +456,11 @@ Page({
     onShow: function () {
 
     },
-})
+});
+
+export function setShowTemplate(showData, showTemplate, showXType, showYType) {
+    inputData = showData;
+    template = showTemplate,
+    xType = showXType;
+    yType = showYType;
+}

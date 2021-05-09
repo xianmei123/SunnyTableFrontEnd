@@ -5,7 +5,7 @@ import {
 export class LineGraph {
     lineChart = null;
     count = 0;
-    title = "默认标题";
+    title = "默认标题"; 
     inputList = []; // 输入数据 坐标列表 
     indexToName = []; // <index, name>
     nameToIndex = {};
@@ -134,8 +134,8 @@ export class BarGraph {
         "id": null, //扇形图模版id
         "name": "条形图默认模板", //模板名称
         "userId": null, //用户id
-        "width": "25%", //条宽度 需要为了后端转换为字符串！！！
-        "gap": '0%', //条间隔 需要为了后端转换为字符串！！！
+        "width": "25%", //条宽度 需要为了后端转换为double！！！
+        "gap": '0%', //条间隔 需要为了后端转换为double！！！
         "color": ['red', '#ba55d3'],
         "showDigit": true, //"true" or "false"，是否显示数值，指图中每个点是否标注数值
         "transpose": true, // 完全用不到
