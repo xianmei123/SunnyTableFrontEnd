@@ -19,17 +19,18 @@ export class LineGraph {
     draggable = !(this.xType === 'string' && this.yType === 'string');
 
     lineTemplate = {
-        "id": null, //扇形图模版id
-        "name": "", //模板名称
-        "userId": 123, //用户id
-        "radius": '20', //圆半径
-        "point": [], //点样式  
+        "id": null, //模板id
+        "name": "默认折线图模板", //模板名称
+        "userId": null, //用户id
+        "radius": '20', //圆半径,后端没有
+        "point": null, //点样式 
+        "line": null,
         "color": ['red', '#ba55d3'],
         "showDigit": true, //"true" or "false"，是否显示数值，指图中每个点是否标注数值
         "font": 14, //字体大小
         "legendPos": "30%,,,0%,vertical", //图例位置 top bottom left right
         "textColor": "#1e90ff", //字体颜色
-        "isVisible": 0,
+        "isVisible": false,
     };
 
     constructor() {
@@ -130,18 +131,18 @@ export class BarGraph {
     draggable = !(this.xType === 'string' && this.yType === 'string');
 
     barTemplate = {
-        "id": 5, //扇形图模版id
-        "name": "lsp", //模板名称
-        "userId": 123, //用户id
-        "width": "25%", //条宽度
-        "gap": '0%', //条间隔
+        "id": null, //扇形图模版id
+        "name": "条形图默认模板", //模板名称
+        "userId": null, //用户id
+        "width": "25%", //条宽度 需要为了后端转换为字符串！！！
+        "gap": '0%', //条间隔 需要为了后端转换为字符串！！！
         "color": ['red', '#ba55d3'],
         "showDigit": true, //"true" or "false"，是否显示数值，指图中每个点是否标注数值
-        "transpose": 1,
+        "transpose": true, // 完全用不到
         "font": 14, //字体大小
         "legendPos": "30%,,,0%,vertical", //图例位置
         "textColor": "#1e90ff", //字体颜色
-        "isVisible": 0
+        "isVisible": false
     };
 
     setBarTemplate(template) {
@@ -202,19 +203,19 @@ export class PieGraph {
     constructor() {}
 
     pieTemplate = {
-        "id": 123,
-        "name": "lsp",
-        "userId": "lsp",
-        "radius": "50%",
+        "id": null,
+        "name": "饼状图默认模板",
+        "userId": null,
+        "radius": "50%", //需要为了后端转换为小数
         "precision": 2,
         "color": ['red', "purple", "", "", ""], //默认为每一个数据组指定颜色，如果使用默认则其值为""
         "showLabel": true,
-        "showPercent": 1,
+        "showPercent": true,
         "titleFont": 20,
         "labelFont": 10,
         "legendPos": "30%,,,0%,vertical", 
         "textColor": "red",
-        "isVisible": 0,
+        "isVisible": false,
     };
 
     setPieTemplate(template) {
@@ -271,17 +272,18 @@ export class ScatterGraph {
 
     draggable = !(this.xType === 'string' && this.yType === 'string');
     scatterTemplate = {
-        "id": 123,
-        "name": "lsp",
-        "userId": 123,
-        "point": [],
+        "id": null,
+        "name": "散点图默认模板",
+        "userId": null,
+        "point": null,
         "color": ["blue"],
         "showLine": true,
         "showDigit": true,
         "increase": false, // 点大小是否会随着数值变化而变化，
         "font": 12,
         "legendPos": "30%,,,0%,vertical", 
-        "textColor": "blue"
+        "textColor": "blue",
+        "isVisible": true,
     }
     setScatterTemplate(template) {
         // 直接更换模板
@@ -326,3 +328,4 @@ export class ScatterGraph {
         inputData[name][tempIndex - 1] = updateData;
     }
 }
+

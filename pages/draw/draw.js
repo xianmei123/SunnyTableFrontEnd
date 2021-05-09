@@ -56,7 +56,6 @@ function setLineOption(lineChart) {
     var series = [];
     var count = 0;
     var option;
-    var legendArr = line.lineTemplate.legendPos.split(",");
     for (var i = 0; i < line.inputList.length;) {
         var name = line.indexToName[i];
         var tempJson = {
@@ -77,51 +76,14 @@ function setLineOption(lineChart) {
         grid: {
             right: '18%',
             top: '16%',
-            bottom: '12%',
         },
         toolbox: {
             feature: {
-                mySaveAsImage: {
-                    show: true,
-                    title: '保存为图片',
-                    icon: 'path://M.002 3a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2h-12a2 2 0 0 1-2-2V3zm1 9v1a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V9.5l-3.777-1.947a.5.5 0 0 0-.577.093l-3.71 3.71-2.66-1.772a.5.5 0 0 0-.63.062L1.002 12zm5-6.5a1.5 1.5 0 1 0-3 0 1.5 1.5 0 0 0 3 0z',
-                    onclick: function () {
-                        wx.showModal({
-                            cancelColor: '#9ba8ae',
-                            title: '提示',
-                            content: '你确定要将此图保存到相册中吗？',
-                            success: res => {
-                                if (res.confirm) {
-                                    const ecCompoent = getPage().selectComponent('#' + this.data.value1 + "ChartId");
-                                    //const ecCompoent = this.selectComponent('#pie' + "ChartId");
-                                    ecCompoent.canvasToTempFilePath({
-                                        success: res => {
-                                            console.log("tempFilePath:", res.tempFilePath);
-                                            wx.saveImageToPhotosAlbum({
-                                                filePath: res.tempFilePath || '',
-                                                success: res => {
-                                                    wx.showToast({
-                                                        title: '保存成功'
-
-                                                    })
-                                                }
-                                            })
-                                        }
-                                    });
-                                } else {
-                                    wx.showToast({
-                                        title: '您取消了保存',
-                                        icon: "error"
-                                    });
-                                }
-                            }
-                        });
-                    }
-                }
+                mySaveAsImage: mySaveImage(),
             }
         },
         title: {
-            text: line.title,
+            text: graphName,
             left: "center",
             textStyle: {
                 color: line.lineTemplate.textColor,
@@ -140,7 +102,7 @@ function setLineOption(lineChart) {
         yAxis: {
             name: yName,
             type: line.yType === "string" ? 'category' : 'value',
-            boundaryGap: !(line.xType === "string"),
+            boundaryGap: !(line.yType === "string"),
             axisLine: {
                 onZero: false
             },
@@ -223,7 +185,6 @@ function setBarOption(barChart) {
     var series = [];
     var count = 0;
     var option;
-    var legendArr = bar.barTemplate.legendPos.split(",");
     for (var i = 0; i < bar.inputList.length;) {
         var name = bar.indexToName[i];
         var tempJson = {
@@ -239,31 +200,33 @@ function setBarOption(barChart) {
         count++;
     }
     option = {
-        legend: {
-            top: legendArr[0],
-            bottom: legendArr[1],
-            left: legendArr[2],
-            right: legendArr[3],
-            orient: legendArr[4]
+        grid: {
+            right: '18%',
+            top: '16%',
         },
         title: {
-            text: bar.title,
+            text: graphName,
             left: "center",
             textStyle: {
                 color: bar.barTemplate.textColor,
                 fontSize: bar.barTemplate.font
             }
         },
+        toolbox: {
+            feature: {
+                mySaveAsImage: mySaveImage(),
+            }
+        },
         xAxis: [{
             name: xName,
-            type: 'category',
+            type: xType === "string" ? 'category' : 'value',
             // axisLine: {
             //     onZero: false
             // }
         }],
         yAxis: [{
             name: yName,
-            type: 'value',
+            type: yType === "string" ? 'category' : 'value',
             // axisLine: {
             //     onZero: false
             // }
@@ -348,13 +311,21 @@ function setPieOption(pieChart) {
     };
     series.push(tempJson);
     option = {
+        grid: {
+            right: '18%',
+            top: '16%',
+        },
         title: {
             text: graphName,
-            subtext: '纯属虚构',
             left: 'center',
             textStyle: {
                 color: pie.pieTemplate.textColor,
                 fontSize: pie.pieTemplate.titleFont
+            }
+        },
+        toolbox: {
+            feature: {
+                mySaveAsImage: mySaveImage(),
             }
         },
         tooltip: {
@@ -417,14 +388,42 @@ function initScatterChart(canvas, width, height, dpr) {
 
 function setScatterOption(scatterChart) {
     var legendArr = scatter.scatterTemplate.legendPos.split(",");
+    var series = [];
+    var count = 0;
+    for (var i = 0; i < scatter.inputList.length;) {
+        var name = scatter.indexToName[i];
+        var tempJson = {
+            name: name,
+            type: "scatter",
+            symbolSize: scatter.scatterTemplate.increase ? function (data, params) {
+                return Math.sqrt(data[1]) * 7; // 开方 此函数不能处理负数
+            } : 15,
+            data: scatter.inputList.slice(scatter.nameToIndex[name].minIndex, scatter.nameToIndex[name].maxIndex),
+            lineStyle: {
+                color: scatter.scatterTemplate.color[count],
+            }
+        };
+        i = scatter.nameToIndex[name].maxIndex;
+        series.push(tempJson);
+        count++;
+    }
+
     var option = {
+        grid: {
+            right: '18%',
+            top: '16%',
+        },
         title: {
             text: graphName,
-            subtext: '纯属虚构',
             left: 'center',
             textStyle: {
                 color: scatter.scatterTemplate.textColor,
                 fontSize: scatter.scatterTemplate.font
+            }
+        },
+        toolbox: {
+            feature: {
+                mySaveAsImage: mySaveImage(),
             }
         },
         itemStyle: {
@@ -449,13 +448,7 @@ function setScatterOption(scatterChart) {
             orient: legendArr[4],
             left: scatter.scatterTemplate.legendPos,
         },
-        series: [{
-            symbolSize: scatter.scatterTemplate.increase ? function (data, params) {
-                return Math.sqrt(data[1]) * 7; // 开方 此函数不能处理负数
-            } : 15,
-            type: "scatter",
-            data: scatter.inputList
-        }]
+        series: series,
     };
     setLegendOption(option, scatter.scatterTemplate.legendPos);
     setMinAndMax(option);
@@ -583,10 +576,10 @@ Page({
         y2: 0,
         region: [0, 0]
     },
-    async onLoad(){
+    async onLoad() {
         const eventChannel = this.getOpenerEventChannel()
-        if(eventChannel){
-            eventChannel.on("openData",res=>{
+        if (eventChannel) {
+            eventChannel.on("openData", res => {
                 this.openData(res.data)
             })
         }
@@ -760,25 +753,25 @@ Page({
         }
         return "number";
     },
-    convertPaintData: function() {          //转化所需数据
+    convertPaintData: function () { //转化所需数据
         var ret = {};
         var i;
         var j;
         if (this.data.x1 > this.data.x2) {
             var tmp = this.data.x1;
-            this.setData( {
+            this.setData({
                 x1: this.data.x2
             });
-            this.setData( {
+            this.setData({
                 x2: tmp
             });
         }
         if (this.data.y1 > this.data.y2) {
             var tmp = this.data.y1;
-            this.setData( {
+            this.setData({
                 y1: this.data.y2
             });
-            this.setData( {
+            this.setData({
                 y2: tmp
             });
         }
@@ -846,15 +839,15 @@ Page({
         ret["dataArray"] = dataArray;
         var url = "http://www.jaripon.xyz/data/save";
         wx.request({
-          url: url,
-          data: ret,
-          method: "POST",
-          success: function (res) {
-              console.log(res);
-          },
-          fail: function (res) {
-              console.log("fail");
-          }
+            url: url,
+            data: ret,
+            method: "POST",
+            success: function (res) {
+                console.log(res);
+            },
+            fail: function (res) {
+                console.log("fail");
+            }
         });
         // var x = await this.trans(url, ret);
     },
@@ -909,7 +902,7 @@ Page({
             newGroupName.push(dataArray[i]["name"]);
             newDatas.push(dataArray[i]["lineData"]);
         }
-        console.log('newDatas',newDatas)
+        console.log('newDatas', newDatas)
         this.setData({
             datas: newDatas,
             groupName: newGroupName
@@ -951,8 +944,8 @@ Page({
         ret["yLabel"] = null;
         ret["xId"] = 0;
         ret["yId"] = 0;
-        ret["xBegin"] = (this.data.x1 > this.data.x2 ) ? this.data.x1 : this.data.x2;
-        ret["yBegin"] = (this.data.y1 > this.data.y2 ) ? this.data.y1 : this.data.y2;
+        ret["xBegin"] = (this.data.x1 > this.data.x2) ? this.data.x1 : this.data.x2;
+        ret["yBegin"] = (this.data.y1 > this.data.y2) ? this.data.y1 : this.data.y2;
         ret["barChartTemplate"] = barChart.barChartTemplate;
         var data = {};
         data["id"] = null;
@@ -972,15 +965,15 @@ Page({
         ret["data"] = data;
         var url = "http://www.jaripon.xyz/barchart/save";
         wx.request({
-          url: url,
-          data: ret,
-          method: "POST",
-          success: function (res) {
-              console.log(res);
-          },
-          fail: function (res) {
-              console.log("fail");
-          }
+            url: url,
+            data: ret,
+            method: "POST",
+            success: function (res) {
+                console.log(res);
+            },
+            fail: function (res) {
+                console.log("fail");
+            }
         });
         delete ret.barChartTemplate;
         ret["lineChartTemplate"] = lineChart.lineChartTemplate;
@@ -995,8 +988,8 @@ Page({
             fail: function (res) {
                 console.log("fail");
             }
-          });
-          delete ret.lineChartTemplate;
+        });
+        delete ret.lineChartTemplate;
         ret["fanChartTemplate"] = pieChart.pieTemplate;
         url = "http://www.jaripon.xyz/fanchart/save"
         wx.request({
@@ -1009,8 +1002,8 @@ Page({
             fail: function (res) {
                 console.log("fail");
             }
-          });
-          delete ret.fanChartTemplate;
+        });
+        delete ret.fanChartTemplate;
         ret["scatterPlotTemplate"] = scatter.scatterPlotTemplate;
         url = "http://www.jaripon.xyz/scatterplot/save"
         wx.request({
@@ -1023,7 +1016,7 @@ Page({
             fail: function (res) {
                 console.log("fail");
             }
-          });
+        });
     },
     openChart(chart) {
         lineChart.lineChartTemplate = chart["lineChartTemplate"];
@@ -1038,7 +1031,7 @@ Page({
             newGroupName.push(dataArray[i]["name"]);
             newDatas.push(dataArray[i]["lineData"]);
         }
-        console.log('newDatas',newDatas)
+        console.log('newDatas', newDatas)
         this.setData({
             datas: newDatas,
             groupName: newGroupName
@@ -1131,7 +1124,7 @@ function isShowScatterChart() {
     return (xType === "number" && yType === "number");
 }
 
-function getPage() {
+export function getPage() {
     var pages = getCurrentPages();
     return pages[pages.length - 1];
 }
@@ -1149,7 +1142,7 @@ function updateBarData(inputData) {
     }
 }
 
-function setLegendOption(option, legendPos) {
+export function setLegendOption(option, legendPos) {
     var legendArr = legendPos.split(",");
     var tempJson = {};
     if (legendArr[0] != "") {
@@ -1239,10 +1232,10 @@ function updateScatterTemplate(template) {
 }
 //下面四个方法是保存模板到服务器
 function saveLineTemplate() {
-    line.lineTemplate.visible = 1;
+    line.lineTemplate.visible = "true";
     wx.request({
         url: saveLineTemplateUrl,
-        data: line.lineTemplate,
+        data: converToBackTemplate(line.lineTemplate, "line"),
         method: "POST",
         dataType: "json",
         success: function () {
@@ -1257,7 +1250,7 @@ function saveBarTemplate() {
     bar.barTemplate.visible = 1;
     wx.request({
         url: saveBarTemplateUrl,
-        data: bar.barTemplate,
+        data: converToBackTemplate(bar.barTemplate, "bar"),
         method: "POST",
         dataType: "json",
         success: function () {
@@ -1272,7 +1265,7 @@ function savePieTemplate() {
     pie.pieTemplate.visible = 1;
     wx.request({
         url: savePieTemplateUrl,
-        data: pie.pieTemplate,
+        data: converToBackTemplate(pie.pieTemplate, "pie"),
         method: "POST",
         dataType: "json",
         success: function () {
@@ -1287,7 +1280,7 @@ function saveScatterTemplate() {
     scatter.scatterTemplate.visible = 1;
     wx.request({
         url: saveScatterTemplateUrl,
-        data: scatter.scatterTemplate,
+        data: converToBackTemplate(scatter.scatterTemplate, "scatter"),
         method: "POST",
         dataType: "json",
         success: function () {
@@ -1297,6 +1290,104 @@ function saveScatterTemplate() {
         }
     });
 }
+
+function converToBackTemplate(template, type) {
+    var tempJson = {}
+    switch (type) {
+        case "line":
+            for (var key in template) {
+                if (typeof template[key] == "boolean") {
+                    tempJson[key] = template[key] ? "true" : "false";
+                } else {
+                    tempJson[key] = template[key];
+                }
+            }
+            break;
+        case "bar":
+            for (var key in template) {
+                if (key === "gap" || key === "width") {
+                    tempJson[key] = parseFloat(template[key]) / 100 + "";
+                } else if (typeof template[key] == "boolean") {
+                    tempJson[key] = template[key] ? "true" : "false";
+                } else {
+                    tempJson[key] = template[key];
+                }
+            }
+            break;
+        case "pie":
+            for (var key in template) {
+                if (key === "radius") {
+                    tempJson[key] = parseFloat(template[key]) / 100 + "";
+                } else if (typeof template[key] == "boolean") {
+                    tempJson[key] = template[key] ? "true" : "false";
+                } else {
+                    tempJson[key] = template[key];
+                }
+            }
+            break;
+        case "scatter":
+            for (var key in template) {
+                if (typeof template[key] == "boolean") {
+                    tempJson[key] = template[key] ? "true" : "false";
+                } else {
+                    tempJson[key] = template[key];
+                }
+            }
+            break;
+    }
+    return tempJson;
+}
+
+function convertFromBackTemplate(template, type) {
+    switch (type) {
+        case "line":
+        case "bar":
+        case "pie":
+        case "scatter":
+    }
+}
+
+function mySaveImage() {
+    return {
+        show: true,
+        title: '保存为图片',
+        icon: 'path://M.002 3a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2h-12a2 2 0 0 1-2-2V3zm1 9v1a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V9.5l-3.777-1.947a.5.5 0 0 0-.577.093l-3.71 3.71-2.66-1.772a.5.5 0 0 0-.63.062L1.002 12zm5-6.5a1.5 1.5 0 1 0-3 0 1.5 1.5 0 0 0 3 0z',
+        onclick: function () {
+            wx.showModal({
+                cancelColor: '#9ba8ae',
+                title: '提示',
+                content: '你确定要将此图保存到相册中吗？',
+                success: res => {
+                    var page = getPage();
+                    if (res.confirm) {
+                        const ecCompoent = page.selectComponent('#' + page.data.value1 + "ChartId");
+                        //const ecCompoent = this.selectComponent('#pie' + "ChartId");
+                        ecCompoent.canvasToTempFilePath({
+                            success: res => {
+                                console.log("tempFilePath:", res.tempFilePath);
+                                wx.saveImageToPhotosAlbum({
+                                    filePath: res.tempFilePath || '',
+                                    success: res => {
+                                        wx.showToast({
+                                            title: '保存成功'
+
+                                        })
+                                    }
+                                })
+                            }
+                        });
+                    } else {
+                        wx.showToast({
+                            title: '您取消了保存',
+                            icon: "error"
+                        });
+                    }
+                }
+            });
+        }
+    };
+}
+
 
 function onPointLineDragging(dataIndex) {
     // 这里的 data 就是本文最初的代码块中声明的 data，在这里会被更新。
@@ -1402,7 +1493,8 @@ function showLineTooltip(dataIndex) {
         seriesIndex: count,
         dataIndex: dataIndex - line.nameToIndex[line.indexToName[dataIndex]].minIndex
     });
-}    
+}
+
 function hideLineTooltip(dataIndex) {
     line.lineChart.dispatchAction({
         type: 'hideTip'
@@ -1411,10 +1503,19 @@ function hideLineTooltip(dataIndex) {
 
 
 function showScatterTooltip(dataIndex) {
+    var name = scatter.indexToName[dataIndex];
+    var count = 0;
+    for (var key in inputData) {
+        if (key === name) {
+            break;
+        } else {
+            count++;
+        }
+    }
     scatter.scatterChart.dispatchAction({
         type: 'showTip',
-        seriesIndex: 0,
-        dataIndex: dataIndex
+        seriesIndex: count,
+        dataIndex: dataIndex - scatter.nameToIndex[scatter.indexToName[dataIndex]].minIndex
     });
 }
 

@@ -1,5 +1,17 @@
-<!-- pages/showTemplate/showTemplate.wxml -->
-<text>{{templateName}}</text>
-<view class="container">
-    <ec-canvas id="chart" canvas-id="canvans" ec="{{ chart }}"></ec-canvas>
+
+<view wx:if="{{isShowLine}}" class="container">
+    <ec-canvas id="chart" canvas-id="canvans" ec="{{ lineChart }}"></ec-canvas>
+</view>
+
+<view wx:if="{{isShowBar}}" class="container">
+    <ec-canvas id="chart" canvas-id="canvans" ec="{{ barChart }}"></ec-canvas>
+</view>
+
+
+<view wx:if="{{isShowPie}}" class="container">
+    <ec-canvas id="chart" canvas-id="canvans" ec="{{ pieChart }}"></ec-canvas>
+</view>
+
+<view wx:if="{{isShowScatter}}" class="container">
+    <ec-canvas id="chart" canvas-id="canvans" ec="{{ scatterChart }}"></ec-canvas>
 </view>

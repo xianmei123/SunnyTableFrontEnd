@@ -1,5 +1,5 @@
 // pages/attribute/attribute.js
-// import {pie,line,bar,scatter} from '../draw/draw.js' 
+import {pie,line,bar,scatter} from '../draw/draw.js' 
 var baseUrl = 'http://www.jaripon.xyz/'
 Page({
   /**
