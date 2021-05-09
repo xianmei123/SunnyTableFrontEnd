@@ -1,88 +1,216 @@
 // pages/attribute/attribute.js
-var trans = async function(url,data,method){
-  const res = await new Promise((resolve,reject) =>
-  {
-    wx.request({
-      url: url,
-      data:data,
-      success:function(res){resolve(res)}
-    })
-  })
-  return res
-}
 var baseUrl = 'http://www.jaripon.xyz/'
 Page({
   /**
    * 页面的初始数据
    */
   data: {
-    attributeSet:[{ name:'柱宽'},{name:'图例颜色'}]
+    // 线属性
+    lineRaiuds: null,
+    lineShowDigit: true,
+    lineFont: 17,
+    lineLegendPosTop:null,
+    lineLegendPosBottom:null,
+    lineLegendPosLeft:null,
+    lineLegendPosRight:null,
+    lineTextColor: 'rgb(0,154,97)', //初始值
+    lineTextColorPick: false,
+    // 条属性
+    barWidth: null,
+    barGap:null,
+    barShowDigit: true,
+    barFont:null,
+    barLegendPosTop:null,
+    barLegendPosBottom:null,
+    barLegendPosLeft:null,
+    barLegendPosRight:null,
+    barTextColor: 'rgb(0,154,97)', //初始值
+    barTextColorPick: false,
+    // 扇形图
+    pieRadius: null,
+    piePrecision:null,
+    pieShowPercent: true,
+    pieShowLable:false,
+    pieTitleFont:null,
+    pieLabelFont:null,
+    pieLegendPosTop:null,
+    pieLegendPosBottom:null,
+    pieLegendPosLeft:null,
+    pieLegendPosRight:null,
+    pieTextColor: 'rgb(0,154,97)', //初始值
+    pieTextColorPick: false,
+    // 散点图
+    scatterShowLine: true,
+    scatterShowDigit: true,
+    scatterIncrease: false,
+    scatterFont:null,
+    scatterLegendPosTop:null,
+    scatterLegendPosBottom:null,
+    scatterLegendPosLeft:null,
+    scatterLegendPosRight:null,
+    scatterTextColor: 'rgb(0,154,97)', //初始值
+    scatterTextColorPick: false,
   },
-
-  /**
-   * 生命周期函数--监听页面加载
-   */
+  initLine(){
+    var lineColors = [],
+    lineColorsValue = 0
+    for (var x = 0; x < 10; x++) {
+      lineColors.push({
+        text: `线条${x}`,
+        value: x,
+        rgb: 'rgb(0,154,97)',
+        show: false
+      })
+    }
+    this.setData({
+    lineColors,
+    lineColorsValue
+    })
+  },
+  getlineTemplate(){
+    return {
+      radius: this.data.lineRaiuds,
+      color: this.data.lineColors,
+      showDigit: this.data.lineShowDigit,
+      font:this.data.lineFont,
+      legendPos: [this.data.lineLegendPosTop,this.data.lineLegendPosBottom,this.data.lineLegendPosLeft,this.data.lineLegendPosRight],
+      textColor: this.data.lineTextColor
+    }
+  },
+  initBar(){
+    var barColors = [],
+    barColorsValue = 0
+    for (var x = 0; x < 10; x++) {
+      barColors.push({
+        text: `柱图${x}`,
+        value: x,
+        rgb: 'rgb(0,154,97)',
+        show: false
+      })
+    }
+    this.setData({
+    barColors,
+    barColorsValue
+    })
+  },
+  getBarTemplate(){
+    return {
+      width: this.data.barWidth,
+      gap: this.data.barGap,
+      color: this.data.barColors,
+      showDigit: this.data.barShowDigit,
+      font:this.data.barFont,
+      legendPos: [this.data.barLegendPosTop,this.data.barLegendPosBottom,this.data.barLegendPosLeft,this.data.barLegendPosRight],
+      textColor: this.data.barTextColor
+    }
+  },
+  initPie(){
+    var pieColors = [],
+    pieColorsValue = 0
+    for (var x = 0; x < 10; x++) {
+      pieColors.push({
+        text: `饼图${x}`,
+        value: x,
+        rgb: 'rgb(0,154,97)',
+        show: false
+      })
+    }
+    this.setData({
+    pieColors,
+    pieColorsValue
+    })
+  },
+  getPieTemplate(){
+    return {
+      radius: this.data.pieRadius,
+      precision: this.data.piePrecision,
+      color: this.data.pieColors,
+      showPercent: this.data.pieShowPercent,
+      showLabel: this.data.pieShowLable,
+      titleFont:this.data.pieTitleFont,
+      labelFont:this.data.pieLabelFont,
+      legendPos: [this.data.pieLegendPosTop,this.data.pieLegendPosBottom,this.data.pieLegendPosLeft,this.data.pieLegendPosRight],
+      textColor: this.data.barTextColor
+    }
+  },
+  initSactter(){
+    var scatterColors = [],
+    scatterColorsValue = 0
+    for (var x = 0; x < 10; x++) {
+      scatterColors.push({
+        text: `点图${x}`,
+        value: x,
+        rgb: 'rgb(0,154,97)',
+        show: false
+      })
+    }
+    this.setData({
+    scatterColors,
+    scatterColorsValue
+    })
+  },
+  getScatterTemplate(){
+      return{
+        showLine:this.data.scatterShowLine,
+        increate:this.data.scatterIncrease,
+        color: this.data.scatterColors,
+        showDigit: this.data.scatterShowDigit,
+        font:this.data.scatterFont,
+        legendPos: [this.data.scatterLegendPosTop,this.data.scatterLegendPosBottom,this.data.scatterLegendPosLeft,this.data.scatterLegendPosRight],
+        textColor: this.data.scatterTextColor
+      }
+  },
   onLoad: function (options) {
-
+    this.initLine()
+    this.initBar()
+    this.initPie()
+    this.initSactter()
   },
-
   /**
    * 生命周期函数--监听页面初次渲染完成
    */
   onReady: function () {
 
   },
-
+  toPick: function (event) {
+    var show = event.currentTarget.dataset.show
+    console.log(show)
+    this.setData({
+      [show]: true
+    })
+  },
+  //取色结果回调
+  pickColor(e) {
+    var rgb = e.detail.color;
+    var name = e.currentTarget.dataset.color
+    console.log(name,rgb)
+    this.setData({
+      [name]: rgb
+    })
+  },
   /**
    * 生命周期函数--监听页面显示
    */
   onShow: function () {
-    
-  },
-  getInfo: function(){
-    wx.getUserProfile({
-      desc: '用于完善会员资料', // 声明获取用户个人信息后的用途，后续会展示在弹窗中，请谨慎填写
-      success: (res) => {
-        console.log(res)
-        this.setData({
-          userInfo: res.userInfo,
-          hasUserInfo: true
-        })
-      }
-    })
-  },
-  /**
-   * 生命周期函数--监听页面隐藏
-   */
-  onHide: function () {
 
   },
-
-  /**
-   * 生命周期函数--监听页面卸载
-   */
-  onUnload: function () {
-
+  changeBool(event) {
+    var detail = event.detail
+    var name = event.currentTarget.dataset.name
+    this.setData({[name]:detail});
   },
-
-  /**
-   * 页面相关事件处理函数--监听用户下拉动作
-   */
-  onPullDownRefresh: function () {
-
+  submit(event) {
+    var lineTemplate = this.getlineTemplate()
+    var barTemplate = this.getBarTemplate()
+    var pieTemplate = this.getPieTemplate()
+    var scatterTemplate = this.getScatterTemplate()
+    console.log(lineTemplate)
+    console.log(barTemplate)
+    console.log(pieTemplate)
+    console.log(scatterTemplate)
   },
-
-  /**
-   * 页面上拉触底事件的处理函数
-   */
-  onReachBottom: function () {
-
-  },
-
-  /**
-   * 用户点击右上角分享
-   */
-  onShareAppMessage: function () {
-
+  stepperChange(event){
+    var name = event.currentTarget.dataset.name
+    this.setData({[name]:event.detail})
   }
 })

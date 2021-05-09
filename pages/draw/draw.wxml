@@ -3,7 +3,7 @@
     <van-dropdown-item model:value="{{ value1 }}" options="{{ option1 }}" />
     <van-dropdown-item model:value="{{ value2 }}" options="{{ option2 }}" />
 </van-dropdown-menu>
-<view class="box1" name="图表部分">
+<view  class="box1" name="图表部分">
     <!-- 折线图 -->
     <view wx:if="{{value1=='line'}}">
         <block wx:if="{{showLineChart}}">
@@ -73,12 +73,12 @@
             <block wx:for="{{iterator1}}" wx:for-index="i">
                 <view class="tr bg-g" wx:if="{{i % 2 == 0}}">
                     <view class="td">
-                        <van-field value="{{ value }}" placeholder="横坐标{{ i + 1 }}" border="{{ false }}" bind:change="getXValue" data-a="{{i + 1}}" />
+                        <van-field value="{{ value }}" placeholder="横坐标{{ i + 1 }}" border="{{ true }}" bind:change="getXValue" data-a="{{i + 1}}" />
                     </view>
                     <block wx:for="{{iterator2}}" wx:for-item="j">
                         <view class="td">
                             <block wx:if="{{!chooseRegion}}">
-                                <van-field value="{{ value }}" placeholder="数据{{ j }}" border="{{ false }}" bind:change="getData" data-a="{{j}}" data-b="{{i + 1}}" />
+                                <van-field value="ntmglzcs" placeholder="数据{{ j }}" border="{{ true }}" bind:change="getData" data-a="{{j}}" data-b="{{i + 1}}" />
                             </block>
                             <block wx:if="{{chooseRegion}}">
                                 <button style="width:{{500 / groupNum}}rpx" bindtap="getData" data-a="{{j}}" data-b="{{i + 1}}">

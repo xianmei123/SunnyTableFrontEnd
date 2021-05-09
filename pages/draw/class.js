@@ -22,7 +22,7 @@ export class LineGraph {
         "id": null, //扇形图模版id
         "name": "", //模板名称
         "userId": 123, //用户id
-        "radius": 20, //圆半径
+        "radius": '20', //圆半径
         "point": [], //点样式  
         "color": ['red', '#ba55d3'],
         "showDigit": true, //"true" or "false"，是否显示数值，指图中每个点是否标注数值

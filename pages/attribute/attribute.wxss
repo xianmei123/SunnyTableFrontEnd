@@ -1,1 +1,9 @@
 /* pages/attribute/attribute.wxss */
+.color_picker{
+    width:150rpx;
+    height:24px; 
+    float:right
+}
+.drop_style{
+    width: 80rpx;
+}

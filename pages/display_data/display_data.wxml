@@ -1,0 +1,73 @@
+<view class="table">
+  <view class="tr bg-w">
+    <view class="th"></view>
+    <block wx:for="{{iterator2}}" wx:for-item="j">
+      <view class="th">
+        <van-field value="{{groupName[j-1]}}" placeholder="数据组{{ j }}" border="{{ false }}" bind:change="setGroupName"
+          data-a="{{j}}" />
+      </view>
+    </block>
+  </view>
+  <block wx:for="{{iterator1}}" wx:for-index="i">
+    <view class="tr bg-g" wx:if="{{i % 2 == 0}}">
+      <view class="td">
+        <van-field value="{{ xValues[i] }}" placeholder="横坐标{{ i + 1 }}" border="{{ true }}" bind:change="getXValue"
+          data-a="{{i + 1}}" />
+      </view>
+      <block wx:for="{{iterator2}}" wx:for-item="j">
+        <view class="td">
+          <block wx:if="{{!chooseRegion}}">
+            <van-field value="{{datas[j-1][i]}}" placeholder="数据{{ j }}" border="{{ true }}" bind:change="getData" data-a="{{j}}"
+              data-b="{{i + 1}}" />
+          </block>
+          <block wx:if="{{chooseRegion}}">
+            <button style="width:{{500 / groupNum}}rpx" bindtap="getData" data-a="{{j}}" data-b="{{i + 1}}">
+              选中
+            </button>
+          </block>
+        </view>
+      </block>
+    </view>
+    <view class="tr" wx:else>
+      <view class="td">
+        <van-field value="{{xValues[i]}}" placeholder="横坐标{{ i + 1 }}" border="{{ false }}" bind:change="getXValue"
+          data-a="{{i + 1}}" />
+      </view>
+      <block wx:for="{{iterator2}}" wx:for-item="j">
+        <view class="td">
+          <block wx:if="{{!chooseRegion}}">
+            <van-field value="{{ datas[j-1][i] }}" placeholder="数据{{ j }}" border="{{ false }}" bind:change="getData"
+              data-a="{{j}}" data-b="{{i + 1}}" />
+          </block>
+          <block wx:if="{{chooseRegion}}">
+            <button style="width:{{500 / groupNum}}rpx" bindtap="getData" data-a="{{j}}" data-b="{{i + 1}}">
+              选中
+            </button>
+          </block>
+        </view>
+      </block>
+    </view>
+  </block>
+</view>
+<view>
+  <van-row>
+    <van-col span="8">
+      <button bindtap="addX" data-a="idx" style="width:250rpx">添加横坐标</button>
+    </van-col>
+    <van-col span="8">
+      <button bindtap="addDataGroup" style="width:250rpx">添加数据组</button>
+    </van-col>
+    <van-col span="8">
+      <button bindtap="getData" style="width:250rpx">填写数据</button>
+    </van-col>
+  </van-row>
+  <van-row>
+    <van-col span="8">
+      <button bindtap="delX" style="width:250rpx">删除横坐标</button>
+    </van-col>
+    <van-col span="8">
+      <button bindtap="delGroup" style="width:250rpx">删除数据组</button>
+    </van-col>
+  </van-row>
+</view>
+<text>\n</text>

@@ -1,15 +1,28 @@
 {
   "pages": [
     "pages/index/index",
-    "pages/input/text",
-    "pages/input/photo",
-    "pages/draw/draw",
-    "pages/logs/logs",
-    "pages/mine/mine",
     "pages/storage/storage",
-    "pages/storage/modify/modify",
-    "pages/attribute/attribute"
+    "pages/attribute/attribute",
+    "pages/mine/mine"
   ],
+  "subPackages": [
+    {
+      "root": "packageA",
+      "pages": [
+        "pages/storage/modify/modify",
+        "pages/model_select/model_select"
+      ]
+    }, {
+      "root": "packageB",
+      "pages": [
+        "pages/logs/logs",
+        "pages/input/text",
+        "pages/input/photo",
+        "pages/draw/draw"
+      ]
+    }
+  ],
+
   "window": {
     "backgroundColor": "#D4F2E7",
     "backgroundTextStyle": "light",
