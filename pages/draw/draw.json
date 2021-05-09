@@ -1,11 +1,9 @@
 {
-    "usingComponents": {
-
-      "ec-canvas": "../../ec-canvas/ec-canvas",
-      "van-popup": "@vant/weapp/popup/index",
+  "usingComponents": {
+    "ec-canvas": "../../ec-canvas/ec-canvas",
+    "van-popup": "@vant/weapp/popup/index",
     "mp-icon": "weui-miniprogram/icon/icon",
-    "van-dialog": "@vant/weapp/dialog/index",
-    "pageOrientation": "auto"
-    }
-
+    "van-dialog": "@vant/weapp/dialog/index"
+  },
+  "pageOrientation": "auto"
 }

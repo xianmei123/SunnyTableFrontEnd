@@ -1,0 +1,5 @@
+<!-- pages/showTemplate/showTemplate.wxml -->
+<text>{{templateName}}</text>
+<view class="container">
+    <ec-canvas id="chart" canvas-id="canvans" ec="{{ chart }}"></ec-canvas>
+</view>
