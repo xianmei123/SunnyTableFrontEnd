@@ -81,7 +81,6 @@ Component({
       })
     },
     close: function close(e) {
-      console.log(e)
       if (this.data.maskClosable) {
         this.setData({
           show: false
