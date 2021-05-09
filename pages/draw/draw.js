@@ -947,45 +947,30 @@ Page({
         var ret = {};
         ret["id"] = null;
         ret["name"] = "";
-        ret["userId"] = wx.getStorageSync('uid');
+        ret["xLabel"] = null;
+        ret["yLabel"] = null;
+        ret["xId"] = 0;
+        ret["yId"] = 0;
+        ret["xBegin"] = (this.data.x1 > this.data.x2 ) ? this.data.x1 : this.data.x2;
+        ret["yBegin"] = (this.data.y1 > this.data.y2 ) ? this.data.y1 : this.data.y2;
+        ret["barChartTemplate"] = barChart.barChartTemplate;
+        var data = {};
+        data["id"] = null;
+        data["name"] = "";
+        data["userId"] = wx.getStorageSync('uid');
         var i;
         var dataArray = [];
-        if (this.data.x1 > this.data.x2) {
-            var tmp = this.data.x1;
-            this.setData( {
-                x1: this.data.x2
-            });
-            this.setData( {
-                x2: tmp
-            });
-        }
-        if (this.data.y1 > this.data.y2) {
-            var tmp = this.data.y1;
-            this.setData( {
-                y1: this.data.y2
-            });
-            this.setData( {
-                y2: tmp
-            });
-        }
-        if (this.data.x1 == 0 && this.data.x2 == 0 && this.data.y1 == 0 && this.data.y2 == 0) {
-            this.setData( {
-                x1: 0,
-                x2: groupNum - 1,
-                y1: 0,
-                y2: this.data.xValues.length - 1
-            });
-        }
-        for (i = this.data.x1; i <= this.data.x2; i++) {
+        for (i = 0; i < this.data.groupNum; i++) {
             var obj = {
                 "name": this.data.groupName[i],
                 "cid": null,
-                "lineData": this.data.datas[i].slice(this.data.y1, this.data.y2 + 1)
+                "lineData": this.data.datas[i]
             }
             dataArray.push(obj);
         }
-        ret["dataArray"] = dataArray;
-        var url = "http://www.jaripon.xyz/data/save";
+        data["dataArray"] = dataArray;
+        ret["data"] = data;
+        var url = "http://www.jaripon.xyz/barchart/save";
         wx.request({
           url: url,
           data: ret,
@@ -997,9 +982,67 @@ Page({
               console.log("fail");
           }
         });
+        delete ret.barChartTemplate;
+        ret["lineChartTemplate"] = lineChart.lineChartTemplate;
+        url = "http://www.jaripon.xyz/linechart/save"
+        wx.request({
+            url: url,
+            data: ret,
+            method: "POST",
+            success: function (res) {
+                console.log(res);
+            },
+            fail: function (res) {
+                console.log("fail");
+            }
+          });
+          delete ret.lineChartTemplate;
+        ret["fanChartTemplate"] = pieChart.pieTemplate;
+        url = "http://www.jaripon.xyz/fanchart/save"
+        wx.request({
+            url: url,
+            data: ret,
+            method: "POST",
+            success: function (res) {
+                console.log(res);
+            },
+            fail: function (res) {
+                console.log("fail");
+            }
+          });
+          delete ret.fanChartTemplate;
+        ret["scatterPlotTemplate"] = scatter.scatterPlotTemplate;
+        url = "http://www.jaripon.xyz/scatterplot/save"
+        wx.request({
+            url: url,
+            data: ret,
+            method: "POST",
+            success: function (res) {
+                console.log(res);
+            },
+            fail: function (res) {
+                console.log("fail");
+            }
+          });
     },
     openChart(chart) {
-        
+        lineChart.lineChartTemplate = chart["lineChartTemplate"];
+        barChart.barChartTemplate = chart["barChartTemplate"];
+        pieChart.pieTemplate = chart["fanChartTemplate"];
+        scatter.scatterPlotTemplate = chart["scatterPlotTemplate"];
+        var newGroupName = [];
+        var newDatas = [];
+        var dataArray = data[dataArray];
+        var i;
+        for (i = 0; i < dataArray.length; i++) {
+            newGroupName.push(dataArray[i]["name"]);
+            newDatas.push(dataArray[i]["lineData"]);
+        }
+        console.log('newDatas',newDatas)
+        this.setData({
+            datas: newDatas,
+            groupName: newGroupName
+        })
     },
     // 保存全部模板
     saveModel: function () {
