@@ -850,6 +850,29 @@ Page({
         }
         return ret;
     },
+    resetData: function(newData) {
+        if (this.data.x1 > this.data.x2) {
+            var tmp = this.data.x1;
+            this.data.x1 = this.data.x2;
+            this.data.x2 = tmp;
+        }
+        if (this.data.y1 > this.data.y2) {
+            var tmp = this.data.y1;
+            this.data.y1 = this.data.y2;
+            this.data.y2 = tmp;
+        }
+        for (i = this.data.x1; i <= this.data.x2; i++) {
+            var reset = this.data.datas;
+            for (j = this.data.y1; j <= this.data.y2; j++) {
+                reset[i][j] = newData[this.data.groupName[i]][j][1];
+            }
+        }
+        console.log(reset);
+        this.setData({
+            datas: reset
+        })
+        this.onLoad();
+    },
     repaint: function () {
         inputData = this.convertPaintData();
         xType = this.judgeXType();
@@ -942,6 +965,7 @@ Page({
             }
         });
     },
+    //打开数据
     openData: function (data) {
         var newGroupName = [];
         var newDatas = [];
@@ -957,6 +981,7 @@ Page({
             groupName: newGroupName
         })
     },
+    //导出数据
     exportData() {
         var i;
         var dataArray = [];
@@ -985,6 +1010,7 @@ Page({
             }
         });
     },
+    //保存图表
     saveChart() {
         var ret = {};
         ret["id"] = null;
@@ -1067,6 +1093,7 @@ Page({
             }
         });
     },
+    //打开图表
     openChart(chart) {
         lineChart.lineChartTemplate = chart["lineChartTemplate"];
         barChart.barChartTemplate = chart["barChartTemplate"];
