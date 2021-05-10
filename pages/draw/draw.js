@@ -616,13 +616,14 @@ Page({
             []
         ],
         groupName: ["", ""],
-        chooseRegion: false,
+        chooseRegion: false,        //状态
         firstReady: false,
         groupNum: 2,
-        x1: 0,
-        y1: 0,
+        x1: 0,          //数据组
+        y1: 0,          //横坐标
         x2: 0,
         y2: 0,
+        defaultRegion: true,        //是否选过
         region: [0, 0]
     },
     async onLoad() {
@@ -769,9 +770,10 @@ Page({
     choose: function () {
         var origin = this.data.chooseRegion;
         this.setData({
-            chooseRegion: !origin
+            defaultRegion: false,
+            chooseRegion: !origin,
+            defaultRegion: false
         });
-        console.log("hhh");
         this.onLoad();
     },
     giveData: function (givenData) {
@@ -806,6 +808,12 @@ Page({
         var ret = {};
         var i;
         var j;
+        if (this.data.defaultRegion) {
+            this.data.x1 = 1;
+            this.data.x2 = this.data.groupNum;
+            this.data.y1 = 1;
+            this.data.y2 = this.data.xValues.length;
+        }
         if (this.data.x1 > this.data.x2) {
             var tmp = this.data.x1;
             this.setData({
@@ -824,12 +832,12 @@ Page({
                 y2: tmp
             });
         }
-        if (this.data.x1 == 0 && this.data.x2 == 0 && this.data.y1 == 0 && this.data.y2 == 0) {
+        if (this.data.defaultRegion) {
             return this.convertData();
         }
-        for (i = this.data.x1; i <= this.data.x2; i++) {
+        for (i = this.data.x1 - 1; i < this.data.x2; i++) {
             var tmp = [];
-            for (j = this.data.y1; j <= this.data.y2; j++) {
+            for (j = this.data.y1 - 1; j < this.data.y2; j++) {
                 tmp.push([this.data.xValues[j], this.data.datas[i][j]]);
             }
             ret[this.data.groupName[i]] = tmp;
@@ -851,6 +859,12 @@ Page({
         return ret;
     },
     resetData: function(newData) {
+        if (this.data.defaultRegion) {
+            this.data.x1 = 1;
+            this.data.x2 = this.data.groupNum;
+            this.data.y1 = 1;
+            this.data.y2 = this.data.xValues.length;
+        }
         if (this.data.x1 > this.data.x2) {
             var tmp = this.data.x1;
             this.data.x1 = this.data.x2;
