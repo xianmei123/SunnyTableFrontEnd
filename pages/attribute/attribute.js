@@ -3,7 +3,8 @@ import {
   pie,
   line,
   bar,
-  scatter
+  scatter,
+  updateLineTemplate,
 } from '../draw/draw.js'
 var baseUrl = 'http://www.jaripon.xyz/'
 Page({
@@ -210,6 +211,7 @@ Page({
   },
   //取色结果回调
   pickColor(e) {
+    console.log(e);
     var rgb = e.detail.color;
     var name = e.currentTarget.dataset.color
     console.log(name, rgb)
@@ -239,10 +241,11 @@ Page({
     console.log(barTemplate)
     console.log(pieTemplate)
     console.log(scatterTemplate)
-    // line.updateLineTemplate(lineTemplate)
-    // bar.updateBarTemplate(barTemplate)
-    // pie.updatePieTemplate(pieTemplate)
-    // scatter.updateScatterTemplate(scatterTemplate)
+    //updateLineTemplate(lineTemplate);
+    line.setLineTemplate(lineTemplate)
+    bar.updateBarTemplate(barTemplate)
+    pie.updatePieTemplate(pieTemplate)
+    scatter.updateScatterTemplate(scatterTemplate)
     wx.showToast({
       title: '设置成功',
       complete: function () {

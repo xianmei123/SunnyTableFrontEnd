@@ -861,9 +861,9 @@ Page({
             this.data.y1 = this.data.y2;
             this.data.y2 = tmp;
         }
-        for (i = this.data.x1; i <= this.data.x2; i++) {
+        for (var i = this.data.x1; i <= this.data.x2; i++) {
             var reset = this.data.datas;
-            for (j = this.data.y1; j <= this.data.y2; j++) {
+            for (var j = this.data.y1; j <= this.data.y2; j++) {
                 reset[i][j] = newData[this.data.groupName[i]][j][1];
             }
         }
@@ -1098,7 +1098,7 @@ Page({
         lineChart.lineChartTemplate = chart["lineChartTemplate"];
         barChart.barChartTemplate = chart["barChartTemplate"];
         pieChart.pieTemplate = chart["fanChartTemplate"];
-        scatter.scatterPlotTemplate = chart["scatterPlotTemplate"];
+        scatter.scatterTemplate = chart["scatterPlotTemplate"];
         var newGroupName = [];
         var newDatas = [];
         var dataArray = data[dataArray];
@@ -1171,6 +1171,22 @@ Page({
      */
     onShareAppMessage: function () {
 
+    },
+    onShow(){
+        switch (type) {
+            case "line":
+                setLineOption(line.lineChart);
+                break;
+            case "bar":
+                setBarOption(bar.barChart);
+                break;
+            case "pie":
+                setPieOption(pie.pieChart);
+                break;
+            case "scatter":
+                setScatterOption(scatter.scatterChart);
+                break;
+        }
     },
     onReady: function () {
 
@@ -1598,6 +1614,7 @@ function onPointLineDragging(dataIndex) {
         });
     }, 0);
     line.updateInputData(dataIndex, line.inputList[dataIndex]);
+    getPage().resetData(inputData);
 }
 
 
@@ -1663,6 +1680,7 @@ function onPointScatterDragging(dataIndex) {
         });
     }, 0);
     scatter.updateInputData(dataIndex, scatter.inputList[dataIndex]);
+    getPage().resetData(inputData);
 }
 
 /**
