@@ -875,9 +875,10 @@ Page({
             this.data.y1 = this.data.y2;
             this.data.y2 = tmp;
         }
-        for (var i = this.data.x1; i <= this.data.x2; i++) {
+        for (var i = this.data.x1 - 1; i < this.data.x2; i++) {
             var reset = this.data.datas;
-            for (var j = this.data.y1; j <= this.data.y2; j++) {
+            for (var j = this.data.y1 - 1; j < this.data.y2; j++) {
+                console.log(newData[this.data.groupName[i]]);
                 reset[i][j] = newData[this.data.groupName[i]][j][1];
             }
         }
