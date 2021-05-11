@@ -21,7 +21,7 @@ export class LineGraph {
     lineTemplate = {
         "id": null, //模板id
         "name": "默认折线图模板", //模板名称
-        "userId": null, //用户id
+        "userId": '0', //用户id
         "radius": '20', //圆半径,后端没有
         "point": null, //点样式 
         "line": null,

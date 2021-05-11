@@ -7,6 +7,7 @@ const saveLineTemplateUrl = "http://www.jaripon.xyz/template/linechart/save";
 const saveBarTemplateUrl = "http://www.jaripon.xyz/template/barchart/save";
 const savePieTemplateUrl = "http://www.jaripon.xyz/template/fanchart/save";
 const saveScatterTemplateUrl = "http://www.jaripon.xyz/template/scatterplot/save";
+
 const exportToCSVUrl = "http://www.jaripon.xyz/data/export/1";
 
 const replaceLineTemplateUrl = "http://www.jaripon.xyz/template/linechart/replace";
@@ -1192,48 +1193,21 @@ Page({
         })
     },
     // 保存全部模板
-    saveModel: function () {
-        line.lineTemplate.visible = "true";
-        scatter.scatterTemplate.visible = "true";
-        bar.barTemplate.visible = "true";
-        pie.pieTemplate.visible = "true";
-        var count = 0;
-        wx.request({
-            url: saveLineTemplateUrl,
-            data: converToBackTemplate(line.lineTemplate, "line"),
-            method: "POST",
-            success: function () {
-                count++;
-            }
-        });
-        wx.request({
-            url: saveBarTemplateUrl,
-            data: converToBackTemplate(bar.barTemplate,"bar"),
-            method: "POST",
-            success: function () {
-                count++;
-            }
-        });
-        wx.request({
-            url: savePieTemplateUrl,
-            data: converToBackTemplate(pie.pieTemplate,"pie"),
-            method: "POST",
-            success: function () {
-                count++;
-            }
-        });
-        wx.request({
-            url: saveScatterTemplateUrl,
-            data: converToBackTemplate(scatter.scatterTemplate, "scatter"),
-            method: "POST",
-            success: function () {
-                count++;
-            }
-        });
-        if (count === 4) {
-            wx.showToast({
-                title: '保存成功',
-            });
+    saveTemplate: function () {
+        
+        switch (this.data.value1) {
+            case "line":
+                saveLineTemplate();
+                break;
+            case "bar":
+                saveBarTemplate();
+                break;
+            case "pie":
+                savePieTemplate();
+                break;
+            case "scatter":
+                saveScatterTemplate();
+                break;
         }
     },
     saveLineTemplate: saveLineTemplate,
@@ -1428,10 +1402,11 @@ function saveLineTemplate() {
     line.lineTemplate.visible = "true";
     wx.request({
         url: saveLineTemplateUrl,
-        data: converToBackTemplate(line.lineTemplate, "line"),
+        data: data,
         method: "POST",
         dataType: "json",
-        success: function () {
+        success: function (res) {
+            console.log(res);
             wx.showToast({
                 title: '保存成功',
             });
