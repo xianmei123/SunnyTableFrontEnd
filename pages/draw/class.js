@@ -230,11 +230,11 @@ export class PieGraph {
 
     convertToPieData(tempData) {
         var resultArr = [];
-        var index = xType === "string" ? 1 : 0;
+        var index = this.xType === "string" ? 1 : 0;
         for (var i in tempData) {
             var tempJson = {};
-            tempJson.name = tempData[i][1 - index];
-            tempJson.value = tempData[i][index];
+            tempJson.name = tempData[i][index];
+            tempJson.value = tempData[i][1 - index ];
             if (this.pieTemplate.color[i] != "") {
                 tempJson.itemStyle = {};
                 tempJson.itemStyle['color'] = this.pieTemplate.color[i];
@@ -252,7 +252,12 @@ export class PieGraph {
         }
         this.name = name;
         this.pieData = data;
-        return true;
+        if (data.length == 0) {
+            return false;
+        } else {
+            return true;
+        }
+       
     }
 }
 

@@ -1,9 +1,9 @@
-// import {
-//   updateLineTemplate,
-//   updateBarTemplate,
-//   updatePieTemplate,
-//   updateScatterTemplate
-// } from '../draw/draw.js'
+import {
+  updateLineTemplate,
+  updateBarTemplate,
+  updatePieTemplate,
+  updateScatterTemplate
+} from '../draw/draw.js'
 var baseUrl = 'http://www.jaripon.xyz/'
 Page({
   /**
@@ -193,7 +193,7 @@ Page({
   onLoad: function (options) {
     var init =  [this.initLine,this.initBar,this.initPie,this.initSactter]
     var title = ['折线图属性','柱状图属性','饼状图属性','散点图属性']
-    var index = 1
+    var index = 0;
     init[index]()
     wx.setNavigationBarTitle({title:title[index]})
     this.setData({type:index})

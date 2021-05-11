@@ -16,8 +16,8 @@ const replaceScatterTemplateUrl = "http://www.jaripon.xyz/template/scatterplot/r
 
 export var inputData = {}; // 输入数据
 
-var xType = "number"; // 输入数据x轴类型
-var yType = "number"; // 输入数据y轴类型
+var xType; // 输入数据x轴类型
+var yType; // 输入数据y轴类型
 
 export var bar = new graph.BarGraph();
 export var line = new graph.LineGraph();
@@ -43,6 +43,7 @@ export function getSingleData(tempData, index) {
  * 初始化折线图画图对象
  */
 function initLineChart(canvas, width, height, dpr) {
+    console.log("init1");
     line.init(inputData, xType, yType);
     var lineChart = echarts.init(canvas, null, {
         width: width,
@@ -50,10 +51,17 @@ function initLineChart(canvas, width, height, dpr) {
         devicePixelRatio: dpr // new
     });
     line.lineChart = lineChart;
-    canvas.setChart(lineChart);
-    lineChart = setLineOption(lineChart);
+    canvas.setChart(line.lineChart);
+    if (isShowLineChart()) {
+        console.log("init2");
+        line.lineChart = setLineOption(line.lineChart);
+    } else {
+        getPage().setData({
+            showLineChart: false
+        });
+    }
     console.log("init LineGraph Success!!");
-    return lineChart;
+    return line.lineChart;
 }
 
 /**
@@ -65,6 +73,7 @@ function initLineChart(canvas, width, height, dpr) {
  * @returns 设置option成功后的lineChart
  */
 function setLineOption(lineChart) {
+    lineChart.clear();
     var series = [];
     var count = 0;
     var option;
@@ -104,6 +113,7 @@ function setLineOption(lineChart) {
         },
 
         xAxis: {
+            
             name: xName,
             type: line.xType === "string" ? 'category' : 'value',
             boundaryGap: !(line.xType === "string"),
@@ -121,9 +131,9 @@ function setLineOption(lineChart) {
         },
         series: series
     };
-    option = setMinAndMax(option);
     setLegendOption(option, line.lineTemplate.legendPos);
     lineChart.setOption(option); // 
+    setMinAndMax(lineChart, option);
     if (line.lineTemplate.showDigit) {
         lineChart.setOption({
             tooltip: {
@@ -157,6 +167,9 @@ function setLineOption(lineChart) {
             if (line.yType === 'string') {
                 line.yMap.set(dataIndex, dataItem[1]);
             }
+            if (line.xType === "number" && line.yType === "number") {
+                line.xMap.set(dataIndex, dataItem[0]);
+            }
             return {
                 type: 'circle',
                 position: line.lineChart.convertToPixel('grid', dataItem),
@@ -173,7 +186,7 @@ function setLineOption(lineChart) {
             };
         })
     });
-    console.log("init LineGraph Success!!");
+
     return lineChart;
 }
 
@@ -194,6 +207,10 @@ function initBarChart(canvas, width, height, dpr) {
     canvas.setChart(barChart);
     if (isShowBarChart()) {
         barChart = setBarOption(barChart);
+    } else {
+        getPage().setData({
+            showBarChart: false
+        });
     }
     console.log("init BarGraph Success!!");
     return barChart;
@@ -207,6 +224,7 @@ function initBarChart(canvas, width, height, dpr) {
  * @returns 设置option成功后的barChart
  */
 function setBarOption(barChart) {
+    barChart.clear();
     var series = [];
     var count = 0;
     var option;
@@ -259,8 +277,8 @@ function setBarOption(barChart) {
         series: series
     };
     setLegendOption(option, bar.barTemplate.legendPos);
-    setMinAndMax(option);
     barChart.setOption(option);
+    setMinAndMax(barChart, option);
     if (bar.barTemplate.showDigit) {
         barChart.setOption({
             tooltip: {
@@ -323,7 +341,13 @@ function initPieChart(canvas, width, height, dpr) {
     });
     pie.pieChart = pieChart;
     canvas.setChart(pieChart);
-    pieChart = setPieOption(pieChart, true);
+    if (isShowPieChart()) {
+        pieChart = setPieOption(pieChart, true);
+    } else {
+        getPage().setData({
+            showPieChart: false
+        });
+    }
     console.log("init PieGraph Success!!");
     return pieChart;
 }
@@ -336,6 +360,7 @@ function initPieChart(canvas, width, height, dpr) {
  * @returns 设置option成功后的pieChart
  */
 function setPieOption(pieChart) {
+    pieChart.clear();
     var option;
     var series = [];
     var legendArr = pie.pieTemplate.legendPos.split(",");
@@ -373,9 +398,9 @@ function setPieOption(pieChart) {
             formatter: function (params) {
                 var result;
                 if (pie.pieTemplate.showPercent) {
-                    result = params.name + ": " + params.percent + "%(" + params.value.toFixed(pie.pieTemplate.precision) + ")";
+                    result = params.name + ": " + params.percent + "%(" + parseFloat(params.value).toFixed(pie.pieTemplate.precision) + ")";
                 } else {
-                    result = params.name + ": " + params.value.toFixed(pie.pieTemplate.precision);
+                    result = params.name + ": " + parseFloat(params.value).toFixed(pie.pieTemplate.precision);
                 }
                 return result;
             }
@@ -413,7 +438,7 @@ function initScatterChart(canvas, width, height, dpr) {
     });
     scatter.scatterChart = scatterChart;
     canvas.setChart(scatterChart);
-    if (scatter.xType === "number" && scatter.yType === "number") {
+    if (isShowScatterChart()) {
         getPage().setData({
             showScatterChart: true
         });
@@ -436,6 +461,7 @@ function initScatterChart(canvas, width, height, dpr) {
  * @returns 设置option成功后的scatterChart
  */
 function setScatterOption(scatterChart) {
+    scatterChart.clear();
     var legendArr = scatter.scatterTemplate.legendPos.split(",");
     var series = [];
     var count = 0;
@@ -500,8 +526,9 @@ function setScatterOption(scatterChart) {
         series: series,
     };
     setLegendOption(option, scatter.scatterTemplate.legendPos);
-    setMinAndMax(option);
+    
     scatterChart.setOption(option);
+    setMinAndMax(scatterChart, option);
     if (scatter.scatterTemplate.showLine) {
         scatterChart.setOption({
             tooltip: {
@@ -540,6 +567,9 @@ function setScatterOption(scatterChart) {
             }
             if (scatter.yType === 'string') {
                 scatter.yMap.set(dataIndex, dataItem[1]);
+            }
+            if (scatter.xType === "number" && scatter.yType === "number") {
+                scatter.xMap.set(dataIndex, dataItem[0]);
             }
             return {
                 type: 'circle',
@@ -593,7 +623,7 @@ Page({
         showBarChart: true,
         showPieChart: true,
         showScatterChart: true,
-        errorChart: "你tm是不是傻逼，输入我们画不出来的图，是不是傻逼！！！\n你要是再有下次直接删除账号，永远不允许登录！！！",
+        errorChart: "您当前无法绘制此图，请检查您的数据是否为空或数据的格式是否正确。",
         lineChart: {
             onInit: initLineChart
         },
@@ -616,11 +646,11 @@ Page({
             []
         ],
         groupName: ["", ""],
-        chooseRegion: false,        //状态
+        chooseRegion: false, //状态
         firstReady: false,
         groupNum: 2,
-        x1: 0,          //数据组
-        y1: 0,          //横坐标
+        x1: 0, //数据组
+        y1: 0, //横坐标
         x2: 0,
         y2: 0,
         currentGezi: "",
@@ -907,7 +937,7 @@ Page({
         }
         return ret;
     },
-    resetData: function(newData) {
+    resetData: function (newData) {
         if (this.data.defaultRegion) {
             this.data.x1 = 1;
             this.data.x2 = this.data.groupNum;
@@ -947,6 +977,7 @@ Page({
         xType = this.judgeXType();
         yType = this.judgeYType();
         updateShow();
+        console.log("repaint");
         switch (this.data.value1) {
             case "line":
                 updateLineData(inputData);
@@ -1019,18 +1050,17 @@ Page({
             method: "POST",
             success: function (res) {
                 console.log(res);
-                // wx.downloadFile({
-                //     url: '',
-                //     success: res => {
-                //         wx.saveFile({
-                //             tempFilePath: res.tempFilePath,
-                //             success: res => {
-                //                 console.log(res.savedFilePath);
-                //             }
-                //         })
-                //     }
-
-                // })
+                wx.downloadFile({
+                    url: '',
+                    success: res => {
+                        wx.saveFile({
+                            tempFilePath: res.tempFilePath,
+                            success: res => {
+                                console.log(res.savedFilePath);
+                            }
+                        })
+                    }
+                })
             },
             fail: function () {
                 console.log("error");
@@ -1091,8 +1121,8 @@ Page({
         ret["yLabel"] = null;
         ret["xId"] = 0;
         ret["yId"] = 0;
-        ret["xBegin"] = (this.data.x1 > this.data.x2) ? this.data.x1 : this.data.x2;
-        ret["yBegin"] = (this.data.y1 > this.data.y2) ? this.data.y1 : this.data.y2;
+        ret["xBegin"] = ((this.data.x1 > this.data.x2) ? this.data.x1 : this.data.x2) + "";
+        ret["yBegin"] = ((this.data.y1 > this.data.y2) ? this.data.y1 : this.data.y2) + "";
         var data = {};
         data["id"] = null;
         data["name"] = "";
@@ -1110,21 +1140,22 @@ Page({
         data["dataArray"] = dataArray;
         ret["data"] = data;
         if (this.data.value1 == "bar") {
-            ret["barChartTemplate"] = converToBackTemplate(barChart.barChartTemplate, "bar");
-            var url = "http://www.jaripon.xyz/barchart/save";
+            ret["barChartTemplate"] = converToBackTemplate(bar.barTemplate, "bar");
+            var url = "http://www.jaripon.xyz/chart/barchart/save";
         }
         if (this.data.value1 == "line") {
-            ret["lineChartTemplate"] = converToBackTemplate(lineChart.lineChartTemplate, "line");
-            url = "http://www.jaripon.xyz/linechart/save"
+            ret["lineChartTemplate"] = converToBackTemplate(line.lineTemplate, "line");
+            url = "http://www.jaripon.xyz/chart/linechart/save"
         }
         if (this.data.value1 == "pie") {
-            ret["fanChartTemplate"] = converToBackTemplate(pieChart.pieTemplate, "pie");
-            url = "http://www.jaripon.xyz/fanchart/save"
+            ret["fanChartTemplate"] = converToBackTemplate(pie.pieTemplate, "pie");
+            url = "http://www.jaripon.xyz/chart/fanchart/save"
         }     
         if (this.data.type == "scatter") {
             ret["scatterPlotTemplate"] = converToBackTemplate(scatter.scatterTemplate, "scatter");
-            url = "http://www.jaripon.xyz/scatterplot/save";
+            url = "http://www.jaripon.xyz/chart/scatterplot/save";
         }
+        console.log(ret);
         wx.request({
             url: url,
             data: ret,
@@ -1219,27 +1250,29 @@ Page({
     onShareAppMessage: function () {
 
     },
-    onShow(){
-        switch (type) {
-            case "line":
-                setLineOption(line.lineChart);
-                break;
-            case "bar":
-                setBarOption(bar.barChart);
-                break;
-            case "pie":
-                setPieOption(pie.pieChart);
-                break;
-            case "scatter":
-                setScatterOption(scatter.scatterChart);
-                break;
-        }
+    onShow() {
+        // switch (this.data.value1) {
+        //     case "line":
+        //         setLineOption(line.lineChart);
+        //         break;
+        //     case "bar":
+        //         setBarOption(bar.barChart);
+        //         break;
+        //     case "pie":
+        //         setPieOption(pie.pieChart);
+        //         break;
+        //     case "scatter":
+        //         setScatterOption(scatter.scatterChart);
+        //         break;
+        // }
     },
     onReady: function () {
 
     },
     onUnload: function () {
         inputData = [];
+        xType = undefined;
+        yType = undefined;
     },
 });
 
@@ -1248,17 +1281,23 @@ Page({
  */
 function updateShow() {
     getPage().setData({
+        showLineChart: isShowLineChart(),
         showBarChart: isShowBarChart(),
         showPieChart: isShowPieChart(),
         showScatterChart: isShowScatterChart()
     });
 }
+
+function isShowLineChart() {
+    return Object.keys(inputData).length != 0;
+}
+
 /**
  * 
  * @returns 是否显示条形图
  */
 function isShowBarChart() {
-    return (xType === "string" && yType === "number") || (xType === "string" && yType === "number");
+    return (xType === "string" && yType === "number") || (xType === "string" && yType === "number") || Object.keys(inputData).length != 0; 
 }
 
 /**
@@ -1274,7 +1313,7 @@ function isShowPieChart() {
  * @returns 是否显示散点图
  */
 function isShowScatterChart() {
-    return (xType === "number" && yType === "number");
+    return (xType === "number" && yType === "number") || Object.keys(inputData).length != 0;
 }
 
 /**
@@ -1293,7 +1332,9 @@ export function getPage() {
  */
 function updateLineData(inputData) {
     line.init(inputData, xType, yType);
-    setLineOption(line.lineChart);
+    if (isShowLineChart()) {
+        setLineOption(line.lineChart);
+    }
 }
 
 /**
@@ -1314,7 +1355,7 @@ function updateBarData(inputData) {
  * @param {*} inputData 
  */
 function updatePieData(name, data) {
-    if (!(xType === "string" && yType === "string") || (xType === "number" && yType === "number")) {
+    if (isShowPieChart()) {
         if (pie.setInpuData(name, data)) {
             getPage().setData({
                 showPieChart: true
@@ -1325,10 +1366,6 @@ function updatePieData(name, data) {
                 showPieChart: false
             });
         }
-    } else {
-        getPage().setData({
-            showPieChart: false
-        });
     }
 
 }
@@ -1339,16 +1376,8 @@ function updatePieData(name, data) {
  */
 function updateScatterData(inputData) {
     scatter.init(inputData, xType, yType);
-    var flag = (scatter.xType === "number" && scatter.yType === "number");
-    if (flag) {
-        getPage().setData({
-            showScatterChart: true
-        });
+    if (isShowScatterChart()) {
         setScatterOption(scatter.scatterChart);
-    } else {
-        getPage().setData({
-            showScatterChart: false
-        });
     }
 }
 
@@ -1635,8 +1664,7 @@ function onPointLineDragging(dataIndex) {
     // 这里的 data 就是本文最初的代码块中声明的 data，在这里会被更新。
     // 这里的 this 就是被拖拽的圆点。this.position 就是圆点当前的位置。
     line.inputList[dataIndex] = line.lineChart.convertFromPixel('grid', this.position);
-
-    if (line.xType === "string") {
+    if (line.xType === "string" || (line.xType === "number" && line.yType === "number")) {
         line.inputList[dataIndex][0] = line.xMap.get(dataIndex);
         line.inputList[dataIndex][1] = parseFloat(line.inputList[dataIndex][1]).toFixed(2);
         this.position[0] = line.lineChart.convertToPixel({
@@ -1661,7 +1689,7 @@ function onPointLineDragging(dataIndex) {
         });
     }, 0);
     line.updateInputData(dataIndex, line.inputList[dataIndex]);
-    getPage().resetData(inputData);
+    //getPage().resetData(inputData);
 }
 
 
@@ -1705,7 +1733,7 @@ function onPointBarDragging(dataIndex) {
 
 function onPointScatterDragging(dataIndex) {
     scatter.inputList[dataIndex] = scatter.scatterChart.convertFromPixel('grid', this.position);
-    if (scatter.xType === "string") {
+    if (scatter.xType === "string" || (scatter.xType === "number" && scatter.yType === "number")) {
         scatter.inputList[dataIndex][0] = scatter.xMap.get(dataIndex);
         scatter.inputList[dataIndex][1] = parseFloat(scatter.inputList[dataIndex][1]).toFixed(2);
         this.position[0] = scatter.scatterChart.convertToPixel({
@@ -1831,16 +1859,18 @@ export function setLegendOption(option, legendPos) {
  * @returns 
  */
 
-function setMinAndMax(option) {
+function setMinAndMax(chart, option) {
     if (xType === "number") {
-        option.xAxis['min'] = getMinInInput(0);
-        option.xAxis['max'] = getMaxInInput(0);
+        option.xAxis.min = chart.getModel().getComponent('xAxis', 0).axis.scale._extent[0];
+        option.xAxis.max = chart.getModel().getComponent('xAxis', 0).axis.scale._extent[1];
+        console.log(chart.getModel().getComponent('xAxis', 0));
     }
     if (yType === "number") {
-        option.yAxis['min'] = getMinInInput(1);
-        option.yAxis['max'] = getMaxInInput(1);
+        option.yAxis.min = chart.getModel().getComponent('yAxis', 0).axis.scale._extent[0];
+        option.yAxis.max = chart.getModel().getComponent('yAxis', 0).axis.scale._extent[1];
+        
     }
-    return option;
+    chart.setOption(option);
 }
 
 /**
