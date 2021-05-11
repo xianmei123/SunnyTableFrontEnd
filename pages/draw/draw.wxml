@@ -58,7 +58,9 @@
 </view>
 <view>
     <text>\n</text>
-    <view class="title">物理实验数据</view>
+    <text>当前单元格数据：{{currentGezi}}</text>
+    <text>\n</text>
+    <view class="title">输入数据</view>
     <view class="box1" name="表格部分">
         <!-- 表格 -->
         <view class="table">
@@ -66,19 +68,19 @@
                 <view class="th"></view>
                 <block wx:for="{{iterator2}}" wx:for-item="j">
                     <view class="th">
-                        <van-field value="{{ value }}" placeholder="数据组{{ j }}" border="{{ false }}" bind:change="setGroupName" data-a="{{j}}" />
+                        <van-field value="{{ value }}" placeholder="数据组{{ j }}" border="{{ false }}" bind:change="setGroupName" data-a="{{j}}" bindtap="changeCurrentGroupName"/>
                     </view>
                 </block>
             </view>
             <block wx:for="{{iterator1}}" wx:for-index="i">
                 <view class="tr bg-g" wx:if="{{i % 2 == 0}}">
                     <view class="td">
-                        <van-field value="{{ value }}" placeholder="横坐标{{ i + 1 }}" border="{{ true }}" bind:change="getXValue" data-a="{{i + 1}}" />
+                        <van-field value="{{ value }}" placeholder="横坐标{{ i + 1 }}" border="{{ true }}" bind:change="getXValue" data-a="{{i + 1}}" bindtap="changeCurrentX"/>
                     </view>
                     <block wx:for="{{iterator2}}" wx:for-item="j">
                         <view class="td">
                             <block wx:if="{{!chooseRegion}}">
-                                <van-field value="{{ datas[j-1][i] }}" placeholder="数据{{ j }}" border="{{ true }}" bind:change="getData" data-a="{{j}}" data-b="{{i + 1}}" />
+                                <van-field value="{{ datas[j-1][i] }}" placeholder="数据{{ j }}" border="{{ true }}" bind:change="getData" data-a="{{j}}" data-b="{{i + 1}}" bindtap="changeCurrent"/>
                             </block>
                             <block wx:if="{{chooseRegion}}">
                                 <button style="width:{{500 / groupNum}}rpx" bindtap="getData" data-a="{{j}}" data-b="{{i + 1}}">
@@ -90,12 +92,12 @@
                 </view>
                 <view class="tr" wx:else>
                     <view class="td">
-                        <van-field value="{{ value }}" placeholder="横坐标{{ i + 1 }}" border="{{ false }}" bind:change="getXValue" data-a="{{i + 1}}" />
+                        <van-field value="{{ value }}" placeholder="横坐标{{ i + 1 }}" border="{{ false }}" bind:change="getXValue" data-a="{{i + 1}}" bindtap="changeCurrentX"/>
                     </view>
                     <block wx:for="{{iterator2}}" wx:for-item="j">
                         <view class="td">
                             <block wx:if="{{!chooseRegion}}">
-                                <van-field value="{{ datas[j-1][i] }}" placeholder="数据{{ j }}" border="{{ false }}" bind:change="getData" data-a="{{j}}" data-b="{{i + 1}}" />
+                                <van-field value="{{ datas[j-1][i] }}" placeholder="数据{{ j }}" border="{{ false }}" bind:change="getData" data-a="{{j}}" data-b="{{i + 1}}" bindtap="changeCurrent"/>
                             </block>
                             <block wx:if="{{chooseRegion}}">
                                 <button style="width:{{500 / groupNum}}rpx" bindtap="getData" data-a="{{j}}" data-b="{{i + 1}}">
@@ -145,10 +147,13 @@
         </navigator>
         </van-col>
     </van-row>
+    <text>\n</text>
     <van-button type="primary" size="large" bindtap="repaint">绘制图表</van-button>
 </view>
 <text>\n</text>
-<text>\n</text>
 <van-button type="primary" size="large" bindtap="storeData">保存图表</van-button>
+<text>\n</text>
+<text>\n</text>
+<text>\n</text>
 
 

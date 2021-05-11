@@ -609,8 +609,8 @@ Page({
         iterator1: [1, 2],
         iterator2: [1, 2],
         datas: [
-            [1, 2],
-            [1, 2]
+            ["", ""],
+            ["", ""]
         ],
         xValues: [
             []
@@ -623,6 +623,7 @@ Page({
         y1: 0,          //横坐标
         x2: 0,
         y2: 0,
+        currentGezi: "",
         defaultRegion: true,        //是否选过
         region: [0, 0]
     },
@@ -652,6 +653,43 @@ Page({
         this.setData({
             xValues: newXValue
         })
+        this.changeCurrentX(event);
+    },
+    changeCurrent(event) {
+        if (this.data.chooseRegion) {
+            return;
+        }
+        this.setData ({
+            currentGezi: event.target.detail
+        });
+        var groupId = event.target.dataset.a;
+        var dataId = event.target.dataset.b;
+        var newData = this.data.datas;
+        this.setData({
+            currentGezi: newData[groupId - 1][dataId - 1]
+        });
+        console.log(this.data.currentGezi);
+        this.onLoad();
+    },
+    changeCurrentGroupName(event) {
+        if (this.data.chooseRegion) {
+            return;
+        }
+        var groupId = event.target.dataset.a;
+        this.setData({
+            currentGezi: this.data.groupName[groupId - 1]
+        });
+        this.onLoad();
+    },
+    changeCurrentX(event) {
+        if (this.data.chooseRegion) {
+            return;
+        }
+        var dataId = event.target.dataset.a;
+        this.setData({
+            currentGezi: this.data.xValues[dataId - 1]
+        });
+        this.onLoad();
     },
     getData: function (event) {
         if (this.data.chooseRegion) {
@@ -681,9 +719,16 @@ Page({
             datas: newDatas,
             chooseRegion: false
         });
+        this.changeCurrent(event);
     },
     addDataGroup: function () {
         if (this.data.chooseRegion) {
+            return;
+        }
+        if (this.data.groupNum == 5) {
+            wx.showToast({
+              title: '最多5个数据组',
+            });
             return;
         }
         var newIterator2 = this.data.iterator2;
@@ -712,9 +757,16 @@ Page({
         this.setData({
             groupName: newGroupName
         })
+        this.changeCurrentGroupName(event);
     },
     addX: function () {
         if (this.data.chooseRegion) {
+            return;
+        }
+        if (this.data.xValues.length == 10) {
+            wx.showToast({
+              title: '最多10个横坐标',
+            });
             return;
         }
         var newIterator1 = this.data.iterator1;
