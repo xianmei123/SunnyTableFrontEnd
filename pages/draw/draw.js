@@ -954,11 +954,7 @@ Page({
                 updateBarData(inputData);
                 break;
             case "pie":
-                var tmp = {};
-                console.log(this.data.groupName[this.data.pieChartNo]);
-                tmp[this.data.groupName[this.data.pieChartNo]] = inputData[this.data.groupName[this.data.pieChartNo]];
-                console.log(tmp);
-                updatePieData(tmp);
+                updatePieData(this.data.groupName[this.data.pieChartNo], inputData[this.data.groupName[this.data.pieChartNo]]);
                 break;
             case "scatter":
                 updateScatterData(inputData);
