@@ -1,60 +1,60 @@
-// pages/attribute/attribute.js
-import {
-  pie,
-  line,
-  bar,
-  scatter,
-  updateLineTemplate,
-} from '../draw/draw.js'
+// import {
+//   updateLineTemplate,
+//   updateBarTemplate,
+//   updatePieTemplate,
+//   updateScatterTemplate
+// } from '../draw/draw.js'
 var baseUrl = 'http://www.jaripon.xyz/'
 Page({
   /**
    * 页面的初始数据
    */
   data: {
+    active:1,
+    myshow:true,
     // 线属性
-    lineRaiuds: null,
+    lineRaiuds: 15,
     lineShowDigit: true,
     lineFont: 17,
-    lineLegendPosTop: null,
-    lineLegendPosBottom: null,
-    lineLegendPosLeft: null,
-    lineLegendPosRight: null,
+    lineLegendPosTop: 50,
+    lineLegendPosBottom: 50,
+    lineLegendPosLeft: 50,
+    lineLegendPosRight: 50,
     lineTextColor: 'rgb(0,154,97)', //初始值
     lineTextColorPick: false,
     // 条属性
-    barWidth: null,
-    barGap: null,
+    barWidth: 20,
+    barGap: 20,
     barShowDigit: true,
-    barFont: null,
-    barLegendPosTop: null,
-    barLegendPosBottom: null,
-    barLegendPosLeft: null,
-    barLegendPosRight: null,
+    barFont: 20,
+    barLegendPosTop: 50,
+    barLegendPosBottom: 50,
+    barLegendPosLeft: 50,
+    barLegendPosRight: 50,
     barTextColor: 'rgb(0,154,97)', //初始值
     barTextColorPick: false,
     // 扇形图
-    pieRadius: null,
-    piePrecision: null,
+    pieRadius: 20,
+    piePrecision: 20,
     pieShowPercent: true,
     pieShowLable: false,
-    pieTitleFont: null,
-    pieLabelFont: null,
-    pieLegendPosTop: null,
-    pieLegendPosBottom: null,
-    pieLegendPosLeft: null,
-    pieLegendPosRight: null,
+    pieTitleFont: 20,
+    pieLabelFont: 20,
+    pieLegendPosTop: 50,
+    pieLegendPosBottom: 50,
+    pieLegendPosLeft: 50,
+    pieLegendPosRight: 50,
     pieTextColor: 'rgb(0,154,97)', //初始值
     pieTextColorPick: false,
     // 散点图
     scatterShowLine: true,
     scatterShowDigit: true,
     scatterIncrease: false,
-    scatterFont: null,
-    scatterLegendPosTop: null,
-    scatterLegendPosBottom: null,
-    scatterLegendPosLeft: null,
-    scatterLegendPosRight: null,
+    scatterFont: 20,
+    scatterLegendPosTop: 50,
+    scatterLegendPosBottom: 50,
+    scatterLegendPosLeft: 50,
+    scatterLegendPosRight: 50,
     scatterTextColor: 'rgb(0,154,97)', //初始值
     scatterTextColorPick: false,
   },
@@ -191,10 +191,12 @@ Page({
     }
   },
   onLoad: function (options) {
-    this.initLine()
-    this.initBar()
-    this.initPie()
-    this.initSactter()
+    var init =  [this.initLine,this.initBar,this.initPie,this.initSactter]
+    var title = ['折线图属性','柱状图属性','饼状图属性','散点图属性']
+    var index = 1
+    init[index]()
+    wx.setNavigationBarTitle({title:title[index]})
+    this.setData({type:index})
   },
   /**
    * 生命周期函数--监听页面初次渲染完成
@@ -225,6 +227,20 @@ Page({
   onShow: function () {
 
   },
+  itemColorSelect(e){
+    var name = e.currentTarget.dataset.name
+    var target =  this.data[`${name}`]
+    console.log('colorChange',name)
+    for(var x of target) 
+      x.show = false 
+    this.setData({[name]:target})
+  },
+  tabChange(e){
+    console.log(e)
+    console.log('waht the fuck',this.data.lineTextColorPick)
+    this.setData({active:e.detail.index})
+      console.log(this.data.active)
+  },
   changeBool(event) {
     var detail = event.detail
     var name = event.currentTarget.dataset.name
@@ -233,19 +249,11 @@ Page({
     });
   },
   submit(event) {
-    var lineTemplate = this.getlineTemplate()
-    var barTemplate = this.getBarTemplate()
-    var pieTemplate = this.getPieTemplate()
-    var scatterTemplate = this.getScatterTemplate()
-    console.log(lineTemplate)
-    console.log(barTemplate)
-    console.log(pieTemplate)
-    console.log(scatterTemplate)
-    //updateLineTemplate(lineTemplate);
-    line.setLineTemplate(lineTemplate)
-    bar.updateBarTemplate(barTemplate)
-    pie.updatePieTemplate(pieTemplate)
-    scatter.updateScatterTemplate(scatterTemplate)
+    var tmeplates =  [this.getlineTemplate,this.getBarTemplate,this.getPieTemplate,this.getScatterTemplate]
+    var targets = [updateLineTemplate,updateBarTemplate,updatePieTemplate,updateScatterTemplate]
+    var index = 0
+    var template = tmeplates[index]()  
+    targets[index](template)
     wx.showToast({
       title: '设置成功',
       complete: function () {
