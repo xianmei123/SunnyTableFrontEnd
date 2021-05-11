@@ -139,7 +139,7 @@
             <van-icon name="plus" />
         </van-col>
         <van-col span="8" style="text-align:center" bindtap="exportToCSV">
-            <van-icon name="down" />
+            <van-icon name="down" bindtap="saveData"/>
         </van-col>
         <van-col span="8" style="text-align:center">
         <navigator url='/pages/attribute/attribute'>
@@ -157,7 +157,7 @@
     <van-button type="primary" size="large" bindtap="repaint">绘制图表</van-button>
 </view>
 <text>\n</text>
-<van-button type="primary" size="large" bindtap="storeData">保存图表</van-button>
+<van-button type="primary" size="large" bindtap="saveChart">保存图表</van-button>
 <text>\n</text>
 <text>\n</text>
 <text>\n</text>

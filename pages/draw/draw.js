@@ -702,7 +702,8 @@ Page({
                 this.setData({
                     x2: event.target.dataset.a,
                     y2: event.target.dataset.b,
-                    firstReady: false
+                    firstReady: false,
+                    chooseRegion: false
                 })
                 console.log([this.data.x1, this.data.y1, this.data.x2, this.data.y2]);
                 return;
@@ -989,6 +990,9 @@ Page({
                 console.log("fail");
             }
         });
+        wx.showToast({
+          title: '保存成功',
+        });
         // var x = await this.trans(url, ret);
     },
     //导出csv
@@ -1132,6 +1136,9 @@ Page({
                 console.log("fail");
             }
         });
+        wx.showToast({
+          title: '保存成功',
+        })
     },
     //打开图表
     openChart(chart) {
