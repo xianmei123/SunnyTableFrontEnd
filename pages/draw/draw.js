@@ -1193,43 +1193,39 @@ Page({
     },
     // 保存全部模板
     saveModel: function () {
-        line.lineTemplate.visible = 1;
-        scatter.scatterTemplate.visible = 1;
-        bar.barTemplate.visible = 1;
-        pie.pieTemplate.visible = 1;
+        line.lineTemplate.visible = "true";
+        scatter.scatterTemplate.visible = "true";
+        bar.barTemplate.visible = "true";
+        pie.pieTemplate.visible = "true";
         var count = 0;
         wx.request({
             url: saveLineTemplateUrl,
-            data: line.lineTemplate,
+            data: converToBackTemplate(line.lineTemplate, "line"),
             method: "POST",
-            dataType: "json",
             success: function () {
                 count++;
             }
         });
         wx.request({
             url: saveBarTemplateUrl,
-            data: bar.barTemplate,
+            data: converToBackTemplate(bar.barTemplate,"bar"),
             method: "POST",
-            dataType: "json",
             success: function () {
                 count++;
             }
         });
         wx.request({
             url: savePieTemplateUrl,
-            data: pie.pieTemplate,
+            data: converToBackTemplate(pie.pieTemplate,"pie"),
             method: "POST",
-            dataType: "json",
             success: function () {
                 count++;
             }
         });
         wx.request({
             url: saveScatterTemplateUrl,
-            data: scatter.scatterTemplate,
+            data: converToBackTemplate(scatter.scatterTemplate, "scatter"),
             method: "POST",
-            dataType: "json",
             success: function () {
                 count++;
             }
@@ -1448,7 +1444,7 @@ function saveLineTemplate() {
  * 此方法是将条形图模板上传到服务器
  */
 function saveBarTemplate() {
-    bar.barTemplate.visible = 1;
+    bar.barTemplate.visible = "true";
     wx.request({
         url: saveBarTemplateUrl,
         data: converToBackTemplate(bar.barTemplate, "bar"),
@@ -1467,7 +1463,7 @@ function saveBarTemplate() {
  * 此方法是将饼状图模板上传到服务器
  */
 function savePieTemplate() {
-    pie.pieTemplate.visible = 1;
+    pie.pieTemplate.visible = "true";
     wx.request({
         url: savePieTemplateUrl,
         data: converToBackTemplate(pie.pieTemplate, "pie"),
@@ -1486,7 +1482,7 @@ function savePieTemplate() {
  * 此方法是将散点图模板上传到服务器
  */
 function saveScatterTemplate() {
-    scatter.scatterTemplate.visible = 1;
+    scatter.scatterTemplate.visible = "true";
     wx.request({
         url: saveScatterTemplateUrl,
         data: converToBackTemplate(scatter.scatterTemplate, "scatter"),
