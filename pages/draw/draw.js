@@ -625,7 +625,8 @@ Page({
         y2: 0,
         currentGezi: "",
         defaultRegion: true,        //是否选过
-        region: [0, 0]
+        region: [0, 0],
+        pieChartNo: 0
     },
     async onLoad() {
         const eventChannel = this.getOpenerEventChannel()
@@ -659,9 +660,6 @@ Page({
         if (this.data.chooseRegion) {
             return;
         }
-        this.setData ({
-            currentGezi: event.target.detail
-        });
         var groupId = event.target.dataset.a;
         var dataId = event.target.dataset.b;
         var newData = this.data.datas;
@@ -669,7 +667,7 @@ Page({
             currentGezi: newData[groupId - 1][dataId - 1]
         });
         console.log(this.data.currentGezi);
-        this.onLoad();
+        
     },
     changeCurrentGroupName(event) {
         if (this.data.chooseRegion) {
@@ -679,7 +677,7 @@ Page({
         this.setData({
             currentGezi: this.data.groupName[groupId - 1]
         });
-        this.onLoad();
+        
     },
     changeCurrentX(event) {
         if (this.data.chooseRegion) {
@@ -689,7 +687,7 @@ Page({
         this.setData({
             currentGezi: this.data.xValues[dataId - 1]
         });
-        this.onLoad();
+        
     },
     getData: function (event) {
         if (this.data.chooseRegion) {
@@ -744,7 +742,7 @@ Page({
             groupName: newGroupName,
             groupNum: this.data.groupNum + 1
         })
-        this.onLoad();
+        
     },
     setGroupName: function (event) {
         if (this.data.chooseRegion) {
@@ -778,7 +776,6 @@ Page({
             xValues: newXValues,
             chooseRegion: false
         })
-        this.onLoad();
     },
     delGroup: function () {
         if (this.data.chooseRegion) {
@@ -796,7 +793,6 @@ Page({
             chooseRegion: false,
             groupNum: this.data.groupNum - 1
         })
-        this.onLoad();
     },
     delX: function () {
         if (this.data.chooseRegion) {
@@ -817,7 +813,7 @@ Page({
             chooseRegion: false,
             datas: newDatas
         })
-        this.onLoad();
+        
     },
     choose: function () {
         var origin = this.data.chooseRegion;
@@ -826,13 +822,13 @@ Page({
             chooseRegion: !origin,
             defaultRegion: false
         });
-        this.onLoad();
+        
     },
     giveData: function (givenData) {
         this.setData({
             datas: givenData
         })
-        this.onLoad();
+        
     },
     judgeXType: function () {
         var i;
@@ -938,7 +934,12 @@ Page({
         this.setData({
             datas: reset
         })
-        this.onLoad();
+    },
+    choosePieChart(event) {
+        this.setData ({
+            pieChartNo: event.detail - 1
+        });
+        console.log(this.data.pieChartNo);
     },
     repaint: function () {
         inputData = this.convertPaintData();
@@ -953,7 +954,11 @@ Page({
                 updateBarData(inputData);
                 break;
             case "pie":
-                updatePieData(inputData.keys(), inputData.values());
+                var tmp = {};
+                console.log(this.data.groupName[this.data.pieChartNo]);
+                tmp[this.data.groupName[this.data.pieChartNo]] = inputData[this.data.groupName[this.data.pieChartNo]];
+                console.log(tmp);
+                updatePieData(tmp);
                 break;
             case "scatter":
                 updateScatterData(inputData);

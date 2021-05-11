@@ -147,6 +147,12 @@
         </navigator>
         </van-col>
     </van-row>
+    <block wx:if="{{value1=='pie'}}">
+        <text>\n</text>
+        <text>选择绘制扇形图的数据组编号\n</text>
+        <van-field value= border="{{ false }}" bind:change="getData" data-a="{{j}}" data-b="{{i + 1}}" bind:change="choosePieChart"/>
+        <text>\n</text>
+    </block>
     <text>\n</text>
     <van-button type="primary" size="large" bindtap="repaint">绘制图表</van-button>
 </view>
