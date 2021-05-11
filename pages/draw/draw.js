@@ -1118,11 +1118,11 @@ Page({
             url = "http://www.jaripon.xyz/linechart/save"
         }
         if (this.data.value1 == "pie") {
-            ret["fanChartTemplate"] = pieChart.pieTemplate;
+            ret["fanChartTemplate"] = converToBackTemplate(pieChart.pieTemplate, "pie");
             url = "http://www.jaripon.xyz/fanchart/save"
         }     
         if (this.data.type == "scatter") {
-            ret["scatterPlotTemplate"] = scatter.scatterPlotTemplate;
+            ret["scatterPlotTemplate"] = converToBackTemplate(scatter.scatterTemplate, "scatter");
             url = "http://www.jaripon.xyz/scatterplot/save";
         }
         wx.request({
