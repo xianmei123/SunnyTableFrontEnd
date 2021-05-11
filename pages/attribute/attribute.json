@@ -7,6 +7,7 @@
     "van-picker": "@vant/weapp/picker/index",
     "van-stepper": "@vant/weapp/stepper/index",
     "van-switch": "@vant/weapp/switch/index",
-    "color-picker":"mini-color-picker/color-picker" 
+    "color-picker":"mini-color-picker/color-picker",
+    "mp-tabs": "@miniprogram-component-plus/tabs"
   }
 }

@@ -1,7 +1,7 @@
 <!--pages/attribute/attribute.wxml-->
-<van-tabs active="{{ active }}" bind:change="onChange">
+
 	<!-- 折线图 -->
-	<van-tab title="折线图">
+	<view wx:if="{{type == 0}}" >
 		<van-row>
 			<van-field label="点半径" model:value="{{  lineRaiuds }}" placeholder="请输入数字" border="{{ true }}" />
 		</van-row>
@@ -11,16 +11,16 @@
 		<van-cell title="数值显示">
 			<van-switch model:checked="{{ lineShowDigit }}" bind:change="changeBool" data-name="lineShowDigit" />
 		</van-cell>
-		<van-cell title="字体颜色">
+		<van-cell title="字体颜色" >
 			<view style="background:{{lineTextColor}}" class="color_picker" bindtap="toPick"
 				data-show='lineTextColorPick'></view>
 			<color-picker bindchangeColor="pickColor" initColor="{{lineTextColor}}" show="{{lineTextColorPick}}"
 				data-color="lineTextColor" />
 		</van-cell>
-		<van-row style="overflow:hidden">
-			<van-col span="6" style="overflow:hidden">
+		<van-row  >
+			<van-col span="6" >
 				<van-dropdown-menu>
-					<van-dropdown-item model:value="{{lineColorsValue}}"
+					<van-dropdown-item model:value="{{lineColorsValue}}" bind:change="itemColorSelect"  data-name="lineColors" 
 						popup-style="width:160rpx;font-weight:normal;margin:0;padding:0" options="{{ lineColors }}" />
 				</van-dropdown-menu>
 			</van-col>
@@ -37,9 +37,9 @@
 		<van-field label="图例左边距" model:value="{{  lineLegendPosBottom }}" placeholder="请输入数字" border="{{ true }}" />
 		<van-field label="图例右边距" model:value="{{   lineLegendPosLeft }}" placeholder="请输入数字" border="{{ true }}" />
 		<van-field label="图例下边距" model:value="{{  lineLegendPosRight }}" placeholder="请输入数字" border="{{ true }}" />
-	</van-tab>
+	</view>
 	<!-- 柱状图 -->
-	<van-tab title="柱状图">
+	<view wx:if="{{type == 1}}">
 		<van-row>
 			<van-field label="条宽" model:value="{{  barWidth }}" placeholder="请输入数字(百分比)" border="{{ true }}" />
 		</van-row>
@@ -60,8 +60,8 @@
 		</van-cell>
 		<van-row style="overflow:hidden">
 			<van-col span="6" style="overflow:hidden">
-				<van-dropdown-menu>
-					<van-dropdown-item model:value="{{barColorsValue}}"
+				<van-dropdown-menu  >
+					<van-dropdown-item bind:change="itemColorSelect"  data-name="barColors" model:value="{{barColorsValue}}"
 						popup-style="width:160rpx;font-weight:normal;margin:0;padding:0" options="{{ barColors }}" />
 				</van-dropdown-menu>
 			</van-col>
@@ -78,9 +78,9 @@
 		<van-field label="图例左边距" model:value="{{  barLegendPosBottom }}" placeholder="请输入数字" border="{{ true }}" />
 		<van-field label="图例右边距" model:value="{{  barLegendPosLeft }}" placeholder="请输入数字" border="{{ true }}" />
 		<van-field label="图例下边距" model:value="{{  barLegendPosRight }}" placeholder="请输入数字" border="{{ true }}" />
-	</van-tab>
+	</view>
 	<!-- 扇形图 -->
-	<van-tab title="扇形图">
+	<view wx:if="{{type == 2}}">
 		<van-row>
 			<van-field label="饼宽" model:value="{{  pieRadius }}" placeholder="请输入数字(百分比)" border="{{ true }}" />
 		</van-row>
@@ -102,16 +102,16 @@
 		<van-cell title="图例显示">
 			<van-switch model: checked="{{ pieShowLabel }}" bind:change="changeBool" data-name="pieShowLabel" />
 		</van-cell>
-		<van-cell title="字体颜色">
+		<van-cell  title="字体颜色">
 			<view style="background:{{pieTextColor}}" class="color_picker" bindtap="toPick"
 				data-show='pieTextColorPick'></view>
 			<color-picker bindchangeColor="pickColor" initColor="{{pieTextColor}}" show="{{pieTextColorPick}}"
 				data-color="pieTextColor" />
 		</van-cell>
-		<van-row style="overflow:hidden">
+		<van-row  style="overflow:hidden">
 			<van-col span="6" style="overflow:hidden">
 				<van-dropdown-menu>
-					<van-dropdown-item model:value="{{pieColorsValue}}"
+					<van-dropdown-item model:value="{{pieColorsValue}}" bind:change="itemColorSelect"  data-name="pieColors"
 						popup-style="width:160rpx;font-weight:normal;margin:0;padding:0" options="{{ pieColors }}" />
 				</van-dropdown-menu>
 			</van-col>
@@ -128,9 +128,9 @@
 		<van-field label="图例左边距" model:value="{{  pieLegendPosBottom }}" placeholder="请输入数字" border="{{ true }}" />
 		<van-field label="图例右边距" model:value="{{  pieLegendPosLeft }}" placeholder="请输入数字" border="{{ true }}" />
 		<van-field label="图例下边距" model:value="{{  pieLegendPosRight }}" placeholder="请输入数字" border="{{ true }}" />
-	</van-tab>
+		</view>
 	<!-- 散点图 -->
-	<van-tab title="散点图">
+	<view wx:if="{{type == 3}}">
 		<van-cell title="字体大小">
 			<van-stepper model: value="{{ scatterFont }}" long-press="{{ false }}" min="10" max="30" integer="{{true}}"  bind:change="stepperChange" data-name="scatterFont"/>
 		</van-cell>
@@ -149,10 +149,10 @@
 			<color-picker bindchangeColor="pickColor" initColor="{{scatterTextColor}}" show="{{scatterTextColorPick}}"
 				data-color="scatterTextColor" />
 		</van-cell>
-		<van-row style="overflow:hidden">
+		<van-row  style="overflow:hidden">
 			<van-col span="6" style="overflow:hidden">
 				<van-dropdown-menu>
-					<van-dropdown-item model:value="{{scatterColorsValue}}"
+					<van-dropdown-item model:value="{{scatterColorsValue}}" bind:change="itemColorSelect"  data-name="scatterColors"
 						popup-style="width:160rpx;font-weight:normal;margin:0;padding:0" options="{{ scatterColors }}" />
 				</van-dropdown-menu>
 			</van-col>
@@ -169,7 +169,7 @@
 		<van-field label="图例左边距" model:value="{{  scatterLegendPosBottom }}" placeholder="请输入数字" border="{{ true }}" />
 		<van-field label="图例右边距" model:value="{{  scatterLegendPosLeft }}" placeholder="请输入数字" border="{{ true }}" />
 		<van-field label="图例下边距" model:value="{{  scatterLegendPosRight }}" placeholder="请输入数字" border="{{ true }}" />
-	</van-tab>
-</van-tabs>
-<text>\n </text>
+	</view>
+<!-- </van-tabs> -->
+<text class="duck">\n </text>
 <button bindtap="submit" type="primary"> 提交 </button>

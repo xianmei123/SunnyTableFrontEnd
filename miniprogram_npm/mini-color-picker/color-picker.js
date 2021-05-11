@@ -21,14 +21,17 @@ Component({
 
   },
   lifetimes: {
+    created(){
+      this.properties.show=false
+      this.setData({show:false})
+    },
     attached() {
       let { initColor} = this.data;
       this.setData({
-        hueColor: this.hsv2rgb((this.rgb2hsv(initColor)).h,100,100)
+        hueColor: this.hsv2rgb((this.rgb2hsv(initColor)).h,100,100),
       })
     },
     ready() {
-      
       const $ = this.createSelectorQuery()
       const target = $.select('.target')
       target.boundingClientRect()
@@ -60,6 +63,7 @@ Component({
       })
     },
     changeHue: function (e) {
+
       let hue = e.detail.value;
       this.setData({
         "hsv.h":hue,
