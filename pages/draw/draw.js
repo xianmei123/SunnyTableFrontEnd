@@ -1089,7 +1089,6 @@ Page({
         ret["yId"] = 0;
         ret["xBegin"] = (this.data.x1 > this.data.x2) ? this.data.x1 : this.data.x2;
         ret["yBegin"] = (this.data.y1 > this.data.y2) ? this.data.y1 : this.data.y2;
-        ret["barChartTemplate"] = barChart.barChartTemplate;
         var data = {};
         data["id"] = null;
         data["name"] = "";
@@ -1106,49 +1105,22 @@ Page({
         }
         data["dataArray"] = dataArray;
         ret["data"] = data;
-        var url = "http://www.jaripon.xyz/barchart/save";
-        wx.request({
-            url: url,
-            data: ret,
-            method: "POST",
-            success: function (res) {
-                console.log(res);
-            },
-            fail: function (res) {
-                console.log("fail");
-            }
-        });
-        delete ret.barChartTemplate;
-        ret["lineChartTemplate"] = lineChart.lineChartTemplate;
-        url = "http://www.jaripon.xyz/linechart/save"
-        wx.request({
-            url: url,
-            data: ret,
-            method: "POST",
-            success: function (res) {
-                console.log(res);
-            },
-            fail: function (res) {
-                console.log("fail");
-            }
-        });
-        delete ret.lineChartTemplate;
-        ret["fanChartTemplate"] = pieChart.pieTemplate;
-        url = "http://www.jaripon.xyz/fanchart/save"
-        wx.request({
-            url: url,
-            data: ret,
-            method: "POST",
-            success: function (res) {
-                console.log(res);
-            },
-            fail: function (res) {
-                console.log("fail");
-            }
-        });
-        delete ret.fanChartTemplate;
-        ret["scatterPlotTemplate"] = scatter.scatterPlotTemplate;
-        url = "http://www.jaripon.xyz/scatterplot/save"
+        if (value1 == "bar") {
+            ret["barChartTemplate"] = converToBackTemplate(barChart.barChartTemplate, "bar");
+            var url = "http://www.jaripon.xyz/barchart/save";
+        }
+        if (value1 == "line") {
+            ret["lineChartTemplate"] = lineChart.lineChartTemplate;
+            url = "http://www.jaripon.xyz/linechart/save"
+        }
+        if (value1 == "pie") {
+            ret["fanChartTemplate"] = pieChart.pieTemplate;
+            url = "http://www.jaripon.xyz/fanchart/save"
+        }     
+        if (type == "scatter") {
+            ret["scatterPlotTemplate"] = scatter.scatterPlotTemplate;
+            url = "http://www.jaripon.xyz/scatterplot/save";
+        }
         wx.request({
             url: url,
             data: ret,
