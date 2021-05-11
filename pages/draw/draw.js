@@ -1109,19 +1109,19 @@ Page({
         }
         data["dataArray"] = dataArray;
         ret["data"] = data;
-        if (value1 == "bar") {
+        if (this.data.value1 == "bar") {
             ret["barChartTemplate"] = converToBackTemplate(barChart.barChartTemplate, "bar");
             var url = "http://www.jaripon.xyz/barchart/save";
         }
-        if (value1 == "line") {
-            ret["lineChartTemplate"] = lineChart.lineChartTemplate;
+        if (this.data.value1 == "line") {
+            ret["lineChartTemplate"] = converToBackTemplate(lineChart.lineChartTemplate, "line");
             url = "http://www.jaripon.xyz/linechart/save"
         }
-        if (value1 == "pie") {
+        if (this.data.value1 == "pie") {
             ret["fanChartTemplate"] = pieChart.pieTemplate;
             url = "http://www.jaripon.xyz/fanchart/save"
         }     
-        if (type == "scatter") {
+        if (this.data.type == "scatter") {
             ret["scatterPlotTemplate"] = scatter.scatterPlotTemplate;
             url = "http://www.jaripon.xyz/scatterplot/save";
         }
