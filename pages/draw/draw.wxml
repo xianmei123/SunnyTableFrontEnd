@@ -161,5 +161,7 @@
 <text>\n</text>
 <text>\n</text>
 <text>\n</text>
-
+<van-button type="primary" size="large" bindtap="saveTemplate">保存模板</van-button>
+<text>\n</text>
+<text>\n</text>
 
