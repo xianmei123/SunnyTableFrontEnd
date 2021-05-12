@@ -1,5 +1,5 @@
 
-var draw = require('./draw');
+
  class LineGraph {
     lineChart = null;
     count = 0;
@@ -104,8 +104,7 @@ var draw = require('./draw');
         return dataArray;
     }
 
-    updateInputData(dataIndex, updateData) {
-        var inputData = draw.inputData;
+    updateInputData(inputData, dataIndex, updateData) {
         var name = this.indexToName[dataIndex];
         var length = this.nameToIndex[name].maxIndex - this.nameToIndex[name].minIndex;
         var tempIndex = (dataIndex + 1) % length === 0 ? length : (dataIndex + 1) % length;
@@ -184,8 +183,7 @@ class BarGraph {
         this.yMap.clear();
     }
 
-    updateInputData(dataIndex, updateData) {
-        var inputData = draw.inputData;
+    updateInputData(inputData, dataIndex, updateData) {
         var name = this.indexToName[dataIndex];
         var length = this.nameToIndex[name].maxIndex - this.nameToIndex[name].minIndex;
         var tempIndex = (dataIndex + 1) % length === 0 ? length : (dataIndex + 1) % length;
@@ -326,8 +324,7 @@ class BarGraph {
         this.xMap.clear();
         this.yMap.clear();
     }
-    updateInputData(dataIndex, updateData) {
-        var inputData = draw.inputData;
+    updateInputData(inputData, dataIndex, updateData) {
         var name = this.indexToName[dataIndex];
         var length = this.nameToIndex[name].maxIndex - this.nameToIndex[name].minIndex;
         var tempIndex = (dataIndex + 1) % length === 0 ? length : (dataIndex + 1) % length;

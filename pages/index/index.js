@@ -1,7 +1,7 @@
 // index.js
 // 获取应用实例
 const app = getApp()
-var baseUrl =  'http://www.jaripon.xyz'
+var baseUrl =  'https://www.jaripon.xyz'
 Page({
   data: {
     motto: 'Hello World',
