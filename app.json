@@ -1,9 +1,10 @@
 {
   "pages": [
+    "pages/draw/draw",
+
     "pages/index/index",
     "pages/storage/storage",
     "pages/attribute/attribute",
-    "pages/draw/draw",
     "pages/storage/modify/modify",
     "pages/model_select/model_select",
     "pages/logs/logs",

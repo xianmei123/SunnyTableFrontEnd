@@ -1,6 +1,6 @@
 // pages/storage/storage.js
 import {hasError,trans} from '../helper'
-var baseUrl = 'http://www.jaripon.xyz'
+var baseUrl = 'https://www.jaripon.xyz'
 Page({
   /**
    * 页面的初始数据
