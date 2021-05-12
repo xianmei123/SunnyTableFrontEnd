@@ -1,6 +1,6 @@
 {
   "usingComponents": {
     "van-tree-select": "@vant/weapp/tree-select/index"
-
-  }
+  },
+  "navigationBarTitleText": "模板选择"
 }

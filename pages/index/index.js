@@ -36,6 +36,20 @@ Page({
         canIUseGetUserProfile: true
       })
     }
+    
+  },
+  showTip(){
+    wx.showModal({
+      title: '提示',
+      content: '数据图表，包括折线图，散点图，饼状图和柱状图',
+      success (res) {
+        if (res.confirm) {
+          console.log('用户点击确定')
+        } else if (res.cancel) {
+          console.log('用户点击取消')
+        }
+      }
+    });
   },
   getUserProfile(e) {
     // 推荐使用wx.getUserProfile获取用户信息，开发者每次通过该接口获取用户个人信息均需用户确认，开发者妥善保管用户快速填写的头像昵称，避免重复弹窗
