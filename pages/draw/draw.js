@@ -114,7 +114,7 @@ function setLineOption(lineChart) {
         },
 
         xAxis: {
-            
+
             name: xName,
             type: line.xType === "string" ? 'category' : 'value',
             boundaryGap: !(line.xType === "string"),
@@ -527,7 +527,7 @@ function setScatterOption(scatterChart) {
         series: series,
     };
     setLegendOption(option, scatter.scatterTemplate.legendPos);
-    
+
     scatterChart.setOption(option);
     setMinAndMax(scatterChart, option);
     if (scatter.scatterTemplate.showLine) {
@@ -655,7 +655,7 @@ Page({
         x2: 0,
         y2: 0,
         currentGezi: "",
-        defaultRegion: true,        //是否选过
+        defaultRegion: true, //是否选过
         region: [0, 0],
         pieChartNo: 0
     },
@@ -664,7 +664,7 @@ Page({
         if (eventChannel) {
             eventChannel.on("openData", res => {
                 this.openData(res.data)
-            })
+            });
         }
     },
     changeRegion: function (event) {
@@ -707,7 +707,7 @@ Page({
         this.setData({
             currentGezi: this.data.groupName[groupId - 1]
         });
-        
+
     },
     changeCurrentX(event) {
         if (this.data.chooseRegion) {
@@ -717,7 +717,7 @@ Page({
         this.setData({
             currentGezi: this.data.xValues[dataId - 1]
         });
-        
+
     },
     getData: function (event) {
         if (this.data.chooseRegion) {
@@ -756,7 +756,7 @@ Page({
         }
         if (this.data.groupNum == 5) {
             wx.showToast({
-              title: '最多5个数据组',
+                title: '最多5个数据组',
             });
             return;
         }
@@ -773,7 +773,7 @@ Page({
             groupName: newGroupName,
             groupNum: this.data.groupNum + 1
         })
-        
+
     },
     setGroupName: function (event) {
         if (this.data.chooseRegion) {
@@ -794,7 +794,7 @@ Page({
         }
         if (this.data.xValues.length == 10) {
             wx.showToast({
-              title: '最多10个横坐标',
+                title: '最多10个横坐标',
             });
             return;
         }
@@ -818,8 +818,7 @@ Page({
         if (this.data.defaultRegion) {
             newGroupName.pop();
             newDatas.pop();
-        }
-        else {
+        } else {
             newGroupName.splice(this.data.region[0], 1);
             newDatas.splice(this.data.region[0], 1);
         }
@@ -850,7 +849,7 @@ Page({
             chooseRegion: false,
             datas: newDatas
         })
-        
+
     },
     choose: function () {
         var origin = this.data.chooseRegion;
@@ -859,13 +858,13 @@ Page({
             chooseRegion: !origin,
             defaultRegion: false
         });
-        
+
     },
     giveData: function (givenData) {
         this.setData({
             datas: givenData
         })
-        
+
     },
     judgeXType: function () {
         var i;
@@ -973,7 +972,7 @@ Page({
         })
     },
     choosePieChart(event) {
-        this.setData ({
+        this.setData({
             pieChartNo: event.detail - 1
         });
         console.log(this.data.pieChartNo);
@@ -1028,9 +1027,42 @@ Page({
             }
         });
         wx.showToast({
-          title: '保存成功',
+            title: '保存成功',
         });
         // var x = await this.trans(url, ret);
+    },
+    goAttribute() {
+        var index;
+        switch (this.data.value1) {
+            case "line":
+                index = 0;
+                break;
+            case "bar":
+                index = 1;
+                break;
+            case "pie":
+                index = 2;
+                break;
+            case "scatter":
+                index = 3;
+                break;
+        }
+        wx.navigateTo({
+            url: '../attribute/attribute',
+            events: {
+                back: (backData) => {
+                    console.log(backData);
+                    var targets = [updateLineTemplate, updateBarTemplate, updatePieTemplate, updateScatterTemplate];
+                    targets[index](backData.template);
+                }
+            },
+            success(result) {
+                result.eventChannel.emit("changeTemplate", {
+                    index: index
+                });
+            },
+
+        });
     },
     //导出csv
     exportToCSV() {
@@ -1128,11 +1160,11 @@ Page({
         ret["xid"] = 0;
         ret["yid"] = [0, 0];
         ret["xbegin"] = (this.data.defaultRegion) ? 0 :
-                        (this.data.x1 > this.data.x2) ? this.data.x2 : this.data.x1;
+            (this.data.x1 > this.data.x2) ? this.data.x2 : this.data.x1;
         ret["ybegin"] = (this.data.defaultRegion) ? 0 :
-                        (this.data.y1 > this.data.y2) ? this.data.y2 : this.data.y1;
+            (this.data.y1 > this.data.y2) ? this.data.y2 : this.data.y1;
         ret["length"] = 3;
-        ret["width"] = 4;            
+        ret["width"] = 4;
         var data = {};
         data["id"] = null;
         data["name"] = "";
@@ -1159,7 +1191,7 @@ Page({
         if (this.data.value1 == "pie") {
             ret["fanChartTemplate"] = converToBackTemplate(pie.pieTemplate, "pie");
             url = "http://www.jaripon.xyz/chart/fanchart/save"
-        }     
+        }
         if (this.data.value1 == "scatter") {
             ret["scatterPlotTemplate"] = converToBackTemplate(scatter.scatterTemplate, "scatter");
             url = "http://www.jaripon.xyz/chart/scatterplot/save";
@@ -1177,7 +1209,7 @@ Page({
             }
         });
         wx.showToast({
-          title: '保存成功',
+            title: '保存成功',
         })
     },
     //打开图表
@@ -1202,7 +1234,7 @@ Page({
     },
     // 保存全部模板
     saveTemplate: function () {
-        
+
         switch (this.data.value1) {
             case "line":
                 saveLineTemplate();
@@ -1275,7 +1307,7 @@ function isShowLineChart() {
  * @returns 是否显示条形图
  */
 function isShowBarChart() {
-    return (xType === "string" && yType === "number") || (xType === "string" && yType === "number") || Object.keys(inputData).length != 0; 
+    return (xType === "string" && yType === "number") || (xType === "string" && yType === "number") || Object.keys(inputData).length != 0;
 }
 
 /**
@@ -1847,7 +1879,7 @@ function setMinAndMax(chart, option) {
     if (yType === "number") {
         option.yAxis.min = chart.getModel().getComponent('yAxis', 0).axis.scale._extent[0];
         option.yAxis.max = chart.getModel().getComponent('yAxis', 0).axis.scale._extent[1];
-        
+
     }
     chart.setOption(option);
 }
