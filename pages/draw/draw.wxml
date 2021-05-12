@@ -125,7 +125,7 @@
                     <button bindtap="addDataGroup" style="width:250rpx">添加数据组</button>
                 </van-col>
                 <van-col span="8">
-                    <button bindtap="getData" style="width:250rpx">填写数据</button>
+                    <button bindtap="choose" style="width:250rpx">选中区域</button>
                 </van-col>
             </van-row>
             <van-row>
@@ -134,10 +134,7 @@
                 </van-col>
                 <van-col span="8">
                     <button bindtap="delGroup" style="width:250rpx">删除数据组</button>
-                </van-col>
-                <van-col span="8">
-                    <button bindtap="choose" style="width:250rpx">选中区域</button>
-                </van-col>
+                </van-col>   
             </van-row>
         </view>
     </view>
