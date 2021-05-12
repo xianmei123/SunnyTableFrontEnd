@@ -1,9 +1,4 @@
-// import {
-// 	updateLineTemplate,
-// 	updateBarTemplate,
-// 	updatePieTemplate,
-// 	updateScatterTemplate
-// } from '../draw/draw'
+
 var baseUrl = 'http://www.jaripon.xyz/'
 Page({
 	/**

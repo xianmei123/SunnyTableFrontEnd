@@ -1,10 +1,5 @@
 // const { getCurrentPage } = require("../../miniprogram_npm/@vant/weapp/common/utils")
-import {setShowTemplate} from '../showTemplate/showTemplate'
-import {convertFromBackTemplate} from '../draw/draw'
-import {
-  trans,
-  hasError
-} from './helper'
+var helper;
 var baseUrl = 'http://www.jaripon.xyz'
 var checks = (fileList, name) => {
   for (var x of fileList) {
@@ -71,6 +66,7 @@ Page({
    * 生命周期函数--监听页面加载
    */
   async onLoad(options) {
+    helper = require('./helper');
     var root = {
       name: 'root',
       id: wx.getStorageSync('rootId'),
@@ -190,8 +186,8 @@ Page({
   async createObj(name) {
     var faFid = this.data.dirStack[this.data.dirStack.length - 1].id
     var url = baseUrl + '/file/dir/create' + '/' + wx.getStorageSync('uid') + '/' + faFid + '/' + name
-    var res = await trans(url)
-    if (hasError(res)) return false
+    var res = await helper.trans(url)
+    if (helper.hasError(res)) return false
     var item = res.data
     var dirStack = this.data.dirStack
     this.data.fileList.push(item)
@@ -202,9 +198,9 @@ Page({
   },
   async changeDir(item) {
     var url = baseUrl + "/file/dir/open" + '/' + wx.getStorageSync('uid') + '/' + item.id
-    var res = await trans(url);
+    var res = await helper.trans(url);
     this.data.fileList = res.data
-    if (hasError(res)) return false
+    if (helper.hasError(res)) return false
     this.setData({
       fileList: this.data.fileList
     })
@@ -220,15 +216,15 @@ Page({
     })
   },
   async openGraph(item) {
-    var urls = [' chart/barchart/open','/chart/linechart/open','chart/fanchart/open','chart/scatterplot/open']
-    var url = baseUrl + '/'+ urls[item.templateType] +'/'+ item.id
-    var res  =  trans(url)
+    var urls = [' chart/barchart/open', '/chart/linechart/open', 'chart/fanchart/open', 'chart/scatterplot/open']
+    var url = baseUrl + '/' + urls[item.templateType] + '/' + item.id
+    var res = helper.trans(url)
     console.log(res)
     wx.navigateTo({
       url: '../showTemplate/showTemplate',
-      success(result){
-        result.eventChannel.emit("openChart",{
-            data: res
+      success(result) {
+        result.eventChannel.emit("openChart", {
+          data: res
         })
       }
     })
@@ -236,7 +232,7 @@ Page({
   async openData(item) {
     console.log(item)
     var url = baseUrl + '/' + 'data/open' + '/' + item.id
-    // var res = await trans(url)
+    // var res = await helper.trans(url)
     wx.request({
       url: url,
       complete: (res) => {
@@ -253,39 +249,41 @@ Page({
     })
   },
   async openTemplate(item) {
-    var urls = ['template/barchart/open','template/linechart/open','template/fanchart/open','template/scatterplot/open']
-    var type = ['bar','line','pie','scatter']
-    var url = baseUrl + '/'+ urls[item.templateType] +'/'+ item.id
-    var res = trans(url)
-    setShowTemplate(this.data.showData, convertFromBackTemplate(res), 'string', 'number')
-      wx.navigateTo({
-        url: '../showTemplate/showTemplate',
-        success(result){
-          result.eventChannel.emit("openTemplate", {
-            type: type[item.templateType],
-            xName: "x", 
-            yName: "y", 
-            name: item.name,
-            showTemplate: res,
-            showData: this.data.showData
-          });
-        }
-      })
+    var urls = ['template/barchart/open', 'template/linechart/open', 'template/fanchart/open', 'template/scatterplot/open']
+    var type = ['bar', 'line', 'pie', 'scatter']
+    var url = baseUrl + '/' + urls[item.templateType] + '/' + item.id
+    var res = helper.trans(url)
+    var draw = require('../draw/draw');
+    var showTemplate = require('../showTemplate/showTemplate');
+    showTemplate.setShowTemplate(this.data.showData, draw.convertFromBackTemplate(res, type[item.templateType]), 'string', 'number')
+    wx.navigateTo({
+      url: '../showTemplate/showTemplate',
+      success(result) {
+        result.eventChannel.emit("openTemplate", {
+          type: type[item.templateType],
+          xName: "x",
+          yName: "y",
+          name: item.name,
+          showTemplate: res,
+          showData: this.data.showData
+        });
+      }
+    })
   },
   async openObj(event) {
     var item = event.currentTarget.dataset.item
-    if(item.type == 1)
+    if (item.type == 1)
       this.openGraph(item)
-    else if(item.type==2)
+    else if (item.type == 2)
       this.openData(item)
-    else 
+    else
       this.openTemplate(item)
   },
   async delObj(event) {
     var srcfid = this.data.activeObj.id
     var url = baseUrl + "/file/dir/remove" + '/' + srcfid
-    var res = await trans(url)
-    if (hasError(res)) return false
+    var res = await helper.trans(url)
+    if (helper.hasError(res)) return false
     var fileList = this.data.fileList
     for (var i = 0; i < fileList.length; i++) {
       if (fileList[i].id == this.data.activeObj.id) {
@@ -302,8 +300,8 @@ Page({
   async renameObj(name) {
     var fid = this.data.activeObj.id
     var url = baseUrl + '/file/dir/rename' + '/' + fid + '/' + name
-    var res = await trans(url)
-    if (hasError(res)) return false
+    var res = await helper.trans(url)
+    if (helper.hasError(res)) return false
     for (var x of this.data.fileList) {
       if (x.id == this.data.activeObj.id)
         x.name = name

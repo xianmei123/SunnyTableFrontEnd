@@ -1,10 +1,5 @@
 // pages/showTemplate/showTemplate.js
 import * as echarts from '../../ec-canvas/echarts';
-import {
-    setLegendOption,
-    getPage,
-    convertFromBackTemplate
-} from '../draw/draw';
 export var inputData = [
     ['product', 'Matcha Latte', 'Milk Tea','Cheese Cocoa'],
     ['2012', 41.1, 86.5, 24.1],
@@ -26,7 +21,7 @@ export var template = {
 };
 export var xType = "string";
 export var yType = "value";
-
+var draw;
 
 function initLineChart(canvas, width, height, dpr) {
     var tempChart = echarts.init(canvas, null, {
@@ -39,7 +34,7 @@ function initLineChart(canvas, width, height, dpr) {
 }
 
 function setLineOption(lineChart) {
-    var pageData = getPage().data;
+    var pageData = draw.getPage().data;
     var series = [];
     for (var i = 1; i < inputData.length; i++) {
         var name = inputData[i][0];
@@ -101,7 +96,7 @@ function setLineOption(lineChart) {
         },
         series: series
     };
-    setLegendOption(option, template.legendPos);
+    draw.setLegendOption(option, template.legendPos);
     lineChart.setOption(option); // 
     if (template.showDigit) {
         lineChart.setOption({
@@ -142,7 +137,7 @@ function initBarChart(canvas, width, height, dpr) {
 }
 
 function setBarOption(barChart) {
-    var pageData = getPage().data;
+    var pageData = draw.getPage().data;
     var series = [];
     for (var i = 1; i < inputData.length; i++) {
         var name = inputData[i][0];
@@ -247,7 +242,7 @@ function setPieOption() {
     series.push(tempJson);
     var option = {
         title: {
-            text: getPage().getData('templateName'),
+            text: draw.getPage().getData('templateName'),
             left: 'center',
             textStyle: {
                 color: template.textColor,
@@ -275,7 +270,7 @@ function setPieOption() {
         },
         series: series
     };
-    setLegendOption(option, template.legendPos);
+    draw.setLegendOption(option, template.legendPos);
     pieChart.setOption(option);
     return pieChart;
 }
@@ -291,7 +286,7 @@ function initScatterChart(canvas, width, height, dpr) {
 }
 
 function setScatterOption(scatterChart) {
-    var pageData = getPage().data;
+    var pageData = draw.getPage().data;
     var series = [];
     var count = 0;
     for (var i = 1; i < inputData.length; i++) {
@@ -336,7 +331,7 @@ function setScatterOption(scatterChart) {
         },
         series: series
     };
-    setLegendOption(option, template.legendPos);
+    draw.setLegendOption(option, template.legendPos);
     scatterChart.setOption(option);
     if (template.showLine) {
         scatterChart.setOption({
@@ -411,6 +406,7 @@ Page({
     },
     //生命周期函数--监听页面加载
     onLoad: function (options) {
+        draw = require('../draw/draw');
         const eventChannel = this.getOpenerEventChannel();
         eventChannel.on('openTemplate', (data) => {
             switch (data.type) {
@@ -465,3 +461,9 @@ export function setShowTemplate(showData, showTemplate, showXType, showYType) {
     xType = showXType;
     yType = showYType;
 }
+
+module.exports.setShowTemplate = setShowTemplate;
+module.exports.xType = xType;;
+module.exports.inputData = inputData;
+module.exports.yType = yType;
+module.exports.template = template;

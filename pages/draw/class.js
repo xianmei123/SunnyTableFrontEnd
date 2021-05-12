@@ -1,7 +1,5 @@
-import {
-    inputData,
-    getSingleData
-} from './draw'
+
+var draw = require('./draw');
 export class LineGraph {
     lineChart = null;
     count = 0;
@@ -107,6 +105,7 @@ export class LineGraph {
     }
 
     updateInputData(dataIndex, updateData) {
+        var inputData = draw.inputData;
         var name = this.indexToName[dataIndex];
         var length = this.nameToIndex[name].maxIndex - this.nameToIndex[name].minIndex;
         var tempIndex = (dataIndex + 1) % length === 0 ? length : (dataIndex + 1) % length;
@@ -186,6 +185,7 @@ export class BarGraph {
     }
 
     updateInputData(dataIndex, updateData) {
+        var inputData = draw.inputData;
         var name = this.indexToName[dataIndex];
         var length = this.nameToIndex[name].maxIndex - this.nameToIndex[name].minIndex;
         var tempIndex = (dataIndex + 1) % length === 0 ? length : (dataIndex + 1) % length;
@@ -327,6 +327,7 @@ export class ScatterGraph {
         this.yMap.clear();
     }
     updateInputData(dataIndex, updateData) {
+        var inputData = draw.inputData;
         var name = this.indexToName[dataIndex];
         var length = this.nameToIndex[name].maxIndex - this.nameToIndex[name].minIndex;
         var tempIndex = (dataIndex + 1) % length === 0 ? length : (dataIndex + 1) % length;
@@ -334,3 +335,15 @@ export class ScatterGraph {
     }
 }
 
+function getSingleData(tempData, index) {
+    var result = [];
+    for (var i = 0; i < tempData.length; i++) {
+        result.push(tempData[i][index]);
+    }
+    return result;
+}
+
+module.exports.LineGraph = LineGraph;
+module.exports.BarGraph = BarGraph;
+module.exports.PieGraph = PieGraph;
+module.exports.ScatterGraph = ScatterGraph;

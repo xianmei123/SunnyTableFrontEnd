@@ -30,6 +30,11 @@ Page({
       url: '../draw/draw',
     })
   },
+  goSelectModel(){
+    wx.navigateTo({
+      url: '../model_select/model_select'
+    })
+  },
   onLoad() {
     if (wx.getUserProfile) {
       this.setData({

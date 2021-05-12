@@ -1,14 +1,5 @@
-import {
-  trans,
-  hasError
-} from '../storage/helper'
+var helper;
 var baseUrl = 'http://www.jaripon.xyz/template/chart/display'
-import {
-  pie,
-  line,
-  bar,
-  scatter
-} from '../draw/draw.js'
 Page({
   data: {
     mainActiveIndex: 0,
@@ -37,10 +28,11 @@ Page({
     console.log('fuck')
   },
   async onLoad() {
+    helper = require('../storage/helper');
     //1--bar,2--line,3--pie,4-scatter
     var map = [1, 0, 2, 3]
     var url = baseUrl + '/' + 'evigel' + '/' + this.data.maxnum
-    var res = await trans(url)
+    var res = await helper.trans(url)
     // var bars = this.data.items[1], line= this.data.items[0],pie=this.data.items[2],scatter=this.data.items[3]
     for (var x of res.data) {
       var cata = this.data.items[map[x.type - 1]].children
@@ -61,12 +53,14 @@ Page({
     });
   },
   async goDraw(event) {
-    var funcs = [line.setLineTemplate, bar.setBarTemplate, pie.setPieTemplate, scatter.setScatterTemplate]
+    var draw = require('../draw/draw');
+    console.log(draw.line);
+    var funcs = [draw.line.setLineTemplate, draw.bar.setBarTemplate, draw.pie.setPieTemplate, draw.scatter.setScatterTemplate]
     var urls = ['/template/linechart/open/', '/template/barchart/open/', '/template/fanchart/open/', '/template/scatterplot/open/']
     console.log(this.data.activeId)
     for (var x = 0; x < 4; x++) {
-      var res = await trans('http://www.jaripon.xyz' + urls[x] + this.data.activeId[x])
-      if (hasError(res))
+      var res = await helper.trans('http://www.jaripon.xyz' + urls[x] + this.data.activeId[x])
+      if (helper.hasError(res))
         return false
       funcs[x](res.data)
     }

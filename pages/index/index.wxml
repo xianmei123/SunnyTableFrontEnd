@@ -1,21 +1,13 @@
 <van-tabs active="{{ active }}" bind:change="onChange">
   <van-tab name="staticData" title="数据图表" style="margin:20rpx">
-      <van-grid column-num="3">
-        <!-- 图片上显示字体 -->
-        <van-grid-item use-slot wx:for="{{barlist }}" bindtap="showTip">
-            <image
-             style="width: 100%; height: 100rpx;"
-              src="/lib/image/graph/{{item[1]}}.png"
-            />
-        </van-grid-item>
-      </van-grid>
-      <text>\n\n\n\n</text>
-  <navigator url="/pages/model_select/model_select">
-    <button bindtap="submit" type="primary"> 创建图表 </button>
-  </navigator>
-  <navigator url='../attribute/attribute' style="margin-top:20rpx">
-    <button bindtap="submit" type="primary"> 属性页面 </button>
-  </navigator>
+    <van-grid column-num="3">
+      <!-- 图片上显示字体 -->
+      <van-grid-item use-slot wx:for="{{barlist }}" bindtap="showTip">
+        <image style="width: 100%; height: 100rpx;" src="/lib/image/graph/{{item[1]}}.png" />
+      </van-grid-item>
+    </van-grid>
+    <text>\n\n\n\n</text>
+    <button bindtap="goSelectModel" type="primary">创建图表</button>
   </van-tab>
   <van-tab name="timeData" title="时间图表">
     <!-- 时间图表类似 -->

@@ -1,7 +1,7 @@
 // pages/draw/draw.js
 
 import * as echarts from '../../ec-canvas/echarts';
-import * as graph from './class';
+
 
 const saveLineTemplateUrl = "http://www.jaripon.xyz/template/linechart/save";
 const saveBarTemplateUrl = "http://www.jaripon.xyz/template/barchart/save";
@@ -16,7 +16,7 @@ const replacePieTemplateUrl = "http://www.jaripon.xyz/template/fanchart/replace"
 const replaceScatterTemplateUrl = "http://www.jaripon.xyz/template/scatterplot/replace";
 
 export var inputData = {}; // 输入数据
-
+var graph = require('./class');
 var xType; // 输入数据x轴类型
 var yType; // 输入数据y轴类型
 
@@ -30,13 +30,7 @@ var graphId = null; //图的id 是否应该存在内存中？
 var xName = "x";
 var yName = "y";
 
-export function getSingleData(tempData, index) {
-    var result = [];
-    for (var i = 0; i < tempData.length; i++) {
-        result.push(tempData[i][index]);
-    }
-    return result;
-}
+
 
 /**
  * 初始化折线图
@@ -659,7 +653,7 @@ Page({
         region: [0, 0],
         pieChartNo: 0
     },
-    async onLoad() {
+    onLoad() {
         const eventChannel = this.getOpenerEventChannel()
         if (eventChannel) {
             eventChannel.on("openData", res => {
@@ -1909,14 +1903,10 @@ function getMaxInInput(index) {
 }
 // module.exports.getSingleData = getSingleData;
 // module.exports.inputData = inputData;
-// module.exports.bar = bar;
-// module.exports.line = line;
-// module.exports.pie = pie;
-// module.exports.scatter = scatter;
-// module.exports.updateLineTemplate = updateLineTemplate;
-// module.exports.updateBarTemplate = updateBarTemplate;
-// module.exports.updatePieTemplate = updatePieTemplate;
-// module.exports.updateScatterTemplate = updateScatterTemplate;
+module.exports.bar = bar;
+module.exports.line = line;
+module.exports.pie = pie;
+module.exports.scatter = scatter;
 // module.exports.getPage = getPage;
 // module.exports.convertFromBackTemplate = convertFromBackTemplate;
 // module.exports.setLegendOption = setLegendOption;
