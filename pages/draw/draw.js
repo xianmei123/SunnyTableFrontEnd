@@ -667,7 +667,6 @@ Page({
             currentGezi: newData[groupId - 1][dataId - 1]
         });
         console.log(this.data.currentGezi);
-        
     },
     changeCurrentGroupName(event) {
         if (this.data.chooseRegion) {
@@ -785,8 +784,14 @@ Page({
         var newIterator2 = this.data.iterator2;
         var newDatas = this.data.datas;
         var newGroupName = this.data.groupName;
-        newGroupName.splice(this.data.region[0], 1);
-        newDatas.splice(this.data.region[0], 1);
+        if (this.data.defaultRegion) {
+            newGroupName.pop();
+            newDatas.pop();
+        }
+        else {
+            newGroupName.splice(this.data.region[0], 1);
+            newDatas.splice(this.data.region[0], 1);
+        }
         newIterator2.pop();
         this.setData({
             datas: newDatas,
@@ -1087,16 +1092,19 @@ Page({
         var ret = {};
         ret["id"] = null;
         ret["name"] = "";
-        ret["xLabel"] = null;
-        ret["yLabel"] = null;
-        ret["xId"] = 0;
-        ret["yId"] = 0;
-        ret["xBegin"] = (this.data.x1 > this.data.x2) ? this.data.x1 : this.data.x2;
-        ret["yBegin"] = (this.data.y1 > this.data.y2) ? this.data.y1 : this.data.y2;
+        ret["xlabel"] = null;
+        ret["ylabel"] = null;
+        ret["xid"] = 0;
+        ret["yid"] = [0, 0];
+        ret["xbegin"] = (this.data.defaultRegion) ? 0 :
+                        (this.data.x1 > this.data.x2) ? this.data.x2 : this.data.x1;
+        ret["ybegin"] = (this.data.defaultRegion) ? 0 :
+                        (this.data.y1 > this.data.y2) ? this.data.y2 : this.data.y1;
+        ret["length"] = 3;
+        ret["width"] = 4;            
         var data = {};
         data["id"] = null;
         data["name"] = "";
-        data["userId"] = wx.getStorageSync('uid');
         var i;
         var dataArray = [];
         for (i = 0; i < this.data.groupNum; i++) {
@@ -1110,21 +1118,22 @@ Page({
         data["dataArray"] = dataArray;
         ret["data"] = data;
         if (this.data.value1 == "bar") {
-            ret["barChartTemplate"] = converToBackTemplate(barChart.barChartTemplate, "bar");
-            var url = "http://www.jaripon.xyz/barchart/save";
+            ret["barChartTemplate"] = converToBackTemplate(bar.barChartTemplate, "bar");
+            var url = "http://www.jaripon.xyz/chart/barchart/save";
         }
         if (this.data.value1 == "line") {
-            ret["lineChartTemplate"] = converToBackTemplate(lineChart.lineChartTemplate, "line");
-            url = "http://www.jaripon.xyz/linechart/save"
+            ret["lineChartTemplate"] = converToBackTemplate(line.lineChartTemplate, "line");
+            url = "http://www.jaripon.xyz/chart/linechart/save"
         }
         if (this.data.value1 == "pie") {
-            ret["fanChartTemplate"] = converToBackTemplate(pieChart.pieTemplate, "pie");
-            url = "http://www.jaripon.xyz/fanchart/save"
+            ret["fanChartTemplate"] = converToBackTemplate(pie.pieTemplate, "pie");
+            url = "http://www.jaripon.xyz/chart/fanchart/save"
         }     
         if (this.data.type == "scatter") {
             ret["scatterPlotTemplate"] = converToBackTemplate(scatter.scatterTemplate, "scatter");
-            url = "http://www.jaripon.xyz/scatterplot/save";
+            url = "http://www.jaripon.xyz/chart/scatterplot/save";
         }
+        console.log(ret);
         wx.request({
             url: url,
             data: ret,
