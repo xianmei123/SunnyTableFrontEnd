@@ -9,7 +9,8 @@
         <block wx:if="{{showLineChart}}">
             <scroll-view scroll-y="true" scroll-x="true">
                 <view class="container">
-                    <ec-canvas id="lineChartId" canvas-id="line-canvas" ec="{{ lineChart }}"></ec-canvas>
+                    <!-- <ec-canvas id="lineChartId" canvas-id="line-canvas" ec="{{ lineChart }}" force-use-old-canvas="true"></ec-canvas> -->
+                    <ec-canvas id="lineChartId" canvas-id="line-canvas" ec="{{ lineChart }}" ></ec-canvas>
                 </view>
             </scroll-view>
         </block>
@@ -35,7 +36,7 @@
         <block wx:if="{{showPieChart}}">
             <scroll-view scroll-y="true" scroll-x="true">
                 <view class="container">
-                    <ec-canvas id="pieChartId" canvas-id="pie-canvas" ec="{{ pieChart }}"></ec-canvas>
+                    <ec-canvas id="pieChartId" canvas-id="pie-canvas" ec="{{ pieChart }}" ></ec-canvas>
                 </view>
             </scroll-view>
         </block>

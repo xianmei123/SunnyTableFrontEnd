@@ -55,7 +55,7 @@ Page({
   async goDraw(event) {
     var draw = require('../draw/draw');
     console.log(draw.line);
-    var funcs = [draw.line.setLineTemplate, draw.bar.setBarTemplate, draw.pie.setPieTemplate, draw.scatter.setScatterTemplate]
+    var funcs = [draw.line.setTemplate, draw.bar.setTemplate, draw.pie.setTemplate, draw.scatter.setTemplate]
     var urls = ['/template/linechart/open/', '/template/barchart/open/', '/template/fanchart/open/', '/template/scatterplot/open/']
     console.log(this.data.activeId)
     for (var x = 0; x < 4; x++) {

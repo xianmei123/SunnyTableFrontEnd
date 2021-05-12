@@ -8,6 +8,8 @@ export var trans = async function (url, data, method) {
         resolve(res)
       }
     })
+  }).catch((err) => {
+    console.log(err)
   })
   return res
 }

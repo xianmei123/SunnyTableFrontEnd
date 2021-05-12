@@ -1,8 +1,6 @@
 // pages/draw/draw.js
 
 import * as echarts from '../../ec-canvas/echarts';
-
-
 const saveLineTemplateUrl = "http://www.jaripon.xyz/template/linechart/save";
 const saveBarTemplateUrl = "http://www.jaripon.xyz/template/barchart/save";
 const savePieTemplateUrl = "http://www.jaripon.xyz/template/fanchart/save";
@@ -15,15 +13,15 @@ const replaceBarTemplateUrl = "http://www.jaripon.xyz/template/barchart/replace"
 const replacePieTemplateUrl = "http://www.jaripon.xyz/template/fanchart/replace";
 const replaceScatterTemplateUrl = "http://www.jaripon.xyz/template/scatterplot/replace";
 
-export var inputData = {}; // 输入数据
+var inputData = {}; // 输入数据
 var graph = require('./class');
 var xType; // 输入数据x轴类型
 var yType; // 输入数据y轴类型
 
-export var bar = new graph.BarGraph();
-export var line = new graph.LineGraph();
-export var pie = new graph.PieGraph();
-export var scatter = new graph.ScatterGraph();
+var bar = new graph.BarGraph();
+var line = new graph.LineGraph();
+var pie = new graph.PieGraph();
+var scatter = new graph.ScatterGraph();
 
 var graphName = "sb"; // 在图的最上方显示的标题
 var graphId = null; //图的id 是否应该存在内存中？
@@ -1175,18 +1173,26 @@ Page({
         data["dataArray"] = dataArray;
         ret["data"] = data;
         if (this.data.value1 == "bar") {
+            bar.barTemplate.isVisible = "false";
+            bar.barTemplate.userId = wx.getStorage('uid');
             ret["barChartTemplate"] = converToBackTemplate(bar.barTemplate, "bar");
             var url = "http://www.jaripon.xyz/chart/barchart/save";
         }
         if (this.data.value1 == "line") {
+            line.lineTemplate.isVisible = "false";
+            line.lineTemplate.userId = wx.getStorage('uid');
             ret["lineChartTemplate"] = converToBackTemplate(line.lineTemplate, "line");
             url = "http://www.jaripon.xyz/chart/linechart/save"
         }
         if (this.data.value1 == "pie") {
+            pie.pieTemplate.isVisible = "false";
+            pie.pieTemplate.userId = wx.getStorage('uid');
             ret["fanChartTemplate"] = converToBackTemplate(pie.pieTemplate, "pie");
             url = "http://www.jaripon.xyz/chart/fanchart/save"
         }
         if (this.data.value1 == "scatter") {
+            scatter.scatterTemplate.isVisible = "false";
+            scatter.scatterTemplate.userId = wx.getStorage('uid');
             ret["scatterPlotTemplate"] = converToBackTemplate(scatter.scatterTemplate, "scatter");
             url = "http://www.jaripon.xyz/chart/scatterplot/save";
         }
@@ -1324,7 +1330,7 @@ function isShowScatterChart() {
  * 
  * @returns 当前页面对象
  */
-export function getPage() {
+function getPage() {
     var pages = getCurrentPages();
     return pages[pages.length - 1];
 }
@@ -1391,8 +1397,8 @@ function updateScatterData(inputData) {
  * 用来修改和更换折线图模板，并重新画图
  * @param {*} template 
  */
-export function updateLineTemplate(template) {
-    line.setLineTemplate(template);
+function updateLineTemplate(template) {
+    line.setTemplate(template);
     setLineOption(line.lineChart);
 }
 
@@ -1402,8 +1408,8 @@ export function updateLineTemplate(template) {
  * 用来修改和更换条形图模板，并重新画图
  * @param {*} template 
  */
-export function updateBarTemplate(template) {
-    bar.setLineTemplate(template);
+function updateBarTemplate(template) {
+    bar.setTemplate(template);
     setBarOption(bar.barChart);
 }
 
@@ -1413,8 +1419,8 @@ export function updateBarTemplate(template) {
  * 用来修改和更换饼状图模板，并重新画图
  * @param {*} template 
  */
-export function updatePieTemplate(template) {
-    pie.setLineTemplate(template);
+function updatePieTemplate(template) {
+    pie.setTemplate(template);
     setPieOption(pie.pieChart);
 }
 
@@ -1424,8 +1430,8 @@ export function updatePieTemplate(template) {
  * 用来修改和更换散点图模板，并重新画图
  * @param {*} template 
  */
-export function updateScatterTemplate(template) {
-    scatter.setLineTemplate(template);
+function updateScatterTemplate(template) {
+    scatter.setTemplate(template);
     setScatterOption(scatter.scatterChart);
 }
 /**
@@ -1433,7 +1439,8 @@ export function updateScatterTemplate(template) {
  * 此方法是将折线图模板上传到服务器
  */
 function saveLineTemplate() {
-    line.lineTemplate.visible = "true";
+    line.lineTemplate.isVisible = "true";
+    line.lineTemplate.userId = wx.getStorage('uid');
     wx.request({
         url: saveLineTemplateUrl,
         data: converToBackTemplate(line.lineTemplate, "line"),
@@ -1453,7 +1460,8 @@ function saveLineTemplate() {
  * 此方法是将条形图模板上传到服务器
  */
 function saveBarTemplate() {
-    bar.barTemplate.visible = "true";
+    bar.barTemplate.isVisible = "true";
+    bar.barTemplate.userId = wx.getStorage('uid');
     wx.request({
         url: saveBarTemplateUrl,
         data: converToBackTemplate(bar.barTemplate, "bar"),
@@ -1472,7 +1480,8 @@ function saveBarTemplate() {
  * 此方法是将饼状图模板上传到服务器
  */
 function savePieTemplate() {
-    pie.pieTemplate.visible = "true";
+    pie.pieTemplate.isVisible = "true";
+    pie.pieTemplate.userId = wx.getStorage('uid');
     wx.request({
         url: savePieTemplateUrl,
         data: converToBackTemplate(pie.pieTemplate, "pie"),
@@ -1491,7 +1500,8 @@ function savePieTemplate() {
  * 此方法是将散点图模板上传到服务器
  */
 function saveScatterTemplate() {
-    scatter.scatterTemplate.visible = "true";
+    scatter.scatterTemplate.isVisible = "true";
+    scatter.scatterTemplate.userId = wx.getStorage('uid');
     wx.request({
         url: saveScatterTemplateUrl,
         data: converToBackTemplate(scatter.scatterTemplate, "scatter"),
@@ -1566,7 +1576,7 @@ function converToBackTemplate(template, type) {
  * @param {*} type 
  * @returns 
  */
-export function convertFromBackTemplate(template, type) {
+function convertFromBackTemplate(template, type) {
     var tempJson = {};
     switch (type) {
         case "line":
@@ -1834,7 +1844,7 @@ function hideScatterTooltip(dataIndex) {
  * @param {*} option 
  * @param {*} legendPos 
  */
-export function setLegendOption(option, legendPos) {
+function setLegendOption(option, legendPos) {
     var legendArr = legendPos.split(",");
     var tempJson = {};
     if (legendArr[0] != "") {
@@ -1901,12 +1911,11 @@ function getMaxInInput(index) {
     // index 表示 是 哪一个轴上的最大值
     return "90";
 }
-// module.exports.getSingleData = getSingleData;
-// module.exports.inputData = inputData;
+module.exports.inputData = inputData;
 module.exports.bar = bar;
 module.exports.line = line;
 module.exports.pie = pie;
 module.exports.scatter = scatter;
-// module.exports.getPage = getPage;
+module.exports.getPage = getPage;
 // module.exports.convertFromBackTemplate = convertFromBackTemplate;
-// module.exports.setLegendOption = setLegendOption;
+module.exports.setLegendOption = setLegendOption;

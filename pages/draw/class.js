@@ -1,6 +1,6 @@
 
 var draw = require('./draw');
-export class LineGraph {
+ class LineGraph {
     lineChart = null;
     count = 0;
     title = "默认标题"; 
@@ -35,7 +35,7 @@ export class LineGraph {
         console.log("lingraph!!");
     }
 
-    setLineTemplate(template) {
+    setTemplate(template) {
         // 直接更换模板
         this.lineTemplate = template;
     }
@@ -113,7 +113,7 @@ export class LineGraph {
     }
 }
 
-export class BarGraph {
+class BarGraph {
     barChart = null;
     count = 0;
     title = "柱状图默认标题";
@@ -144,7 +144,7 @@ export class BarGraph {
         "isVisible": false
     };
 
-    setBarTemplate(template) {
+    setTemplate(template) {
         // 直接更换模板
         this.barTemplate = template;
     }
@@ -194,7 +194,7 @@ export class BarGraph {
 
 }
 
-export class PieGraph {
+ class PieGraph {
     pieChart = null;
     name; // 由于暂时只允许在扇形图上一次性展示一个图，在有组数据时，需要首先进行选择并调用setInputData方法来进行设置PieGraph的对象中的数据
     pieData;
@@ -218,7 +218,7 @@ export class PieGraph {
         "isVisible": false,
     };
 
-    setPieTemplate(template) {
+    setTemplate(template) {
         // 直接更换模板
         this.pieTemplate = template;
     }
@@ -261,7 +261,7 @@ export class PieGraph {
     }
 }
 
-export class ScatterGraph {
+ class ScatterGraph {
     scatterChart = null;
     constructor() {
 
@@ -290,7 +290,7 @@ export class ScatterGraph {
         "textColor": "blue",
         "isVisible": true,
     }
-    setScatterTemplate(template) {
+    setTemplate(template) {
         // 直接更换模板
         this.scatterTemplate = template;
     }
