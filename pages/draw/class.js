@@ -23,8 +23,8 @@ export class LineGraph {
         "name": "默认折线图模板", //模板名称
         "userId": '0', //用户id
         "radius": '20', //圆半径,后端没有
-        "point": null, //点样式 
-        "line": null,
+        "point": [], //点样式 
+        "line": [],
         "color": ['red', '#ba55d3'],
         "showDigit": true, //"true" or "false"，是否显示数值，指图中每个点是否标注数值
         "font": 14, //字体大小

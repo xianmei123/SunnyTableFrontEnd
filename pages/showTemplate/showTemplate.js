@@ -5,13 +5,13 @@ import {
     getPage,
     convertFromBackTemplate
 } from '../draw/draw';
-var inputData = [
+export var inputData = [
     ['product', 'Matcha Latte', 'Milk Tea','Cheese Cocoa'],
     ['2012', 41.1, 86.5, 24.1],
     ['2013', 30.4, 92.1, 24.1],
 ];
 
-var template = {
+export var template = {
     "id": null, //扇形图模版id
     "name": "", //模板名称
     "userId": 123, //用户id
@@ -24,8 +24,8 @@ var template = {
     "textColor": "#1e90ff", //字体颜色
     "isVisible": 0,
 };
-var xType = "string";
-var yType = "value";
+export var xType = "string";
+export var yType = "value";
 
 
 function initLineChart(canvas, width, height, dpr) {
