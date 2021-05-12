@@ -1160,7 +1160,7 @@ Page({
             ret["fanChartTemplate"] = converToBackTemplate(pie.pieTemplate, "pie");
             url = "http://www.jaripon.xyz/chart/fanchart/save"
         }     
-        if (this.data.type == "scatter") {
+        if (this.data.value1 == "scatter") {
             ret["scatterPlotTemplate"] = converToBackTemplate(scatter.scatterTemplate, "scatter");
             url = "http://www.jaripon.xyz/chart/scatterplot/save";
         }
@@ -1410,7 +1410,7 @@ function saveLineTemplate() {
     line.lineTemplate.visible = "true";
     wx.request({
         url: saveLineTemplateUrl,
-        data: data,
+        data: converToBackTemplate(line.lineTemplate, "line"),
         method: "POST",
         dataType: "json",
         success: function (res) {
@@ -1875,3 +1875,16 @@ function getMaxInInput(index) {
     // index 表示 是 哪一个轴上的最大值
     return "90";
 }
+// module.exports.getSingleData = getSingleData;
+// module.exports.inputData = inputData;
+// module.exports.bar = bar;
+// module.exports.line = line;
+// module.exports.pie = pie;
+// module.exports.scatter = scatter;
+// module.exports.updateLineTemplate = updateLineTemplate;
+// module.exports.updateBarTemplate = updateBarTemplate;
+// module.exports.updatePieTemplate = updatePieTemplate;
+// module.exports.updateScatterTemplate = updateScatterTemplate;
+// module.exports.getPage = getPage;
+// module.exports.convertFromBackTemplate = convertFromBackTemplate;
+// module.exports.setLegendOption = setLegendOption;
