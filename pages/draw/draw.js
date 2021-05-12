@@ -1532,7 +1532,7 @@ function converToBackTemplate(template, type) {
  * @param {*} type 
  * @returns 
  */
-function convertFromBackTemplate(template, type) {
+export function convertFromBackTemplate(template, type) {
     var tempJson = {};
     switch (type) {
         case "line":

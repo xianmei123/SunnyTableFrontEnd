@@ -2,7 +2,8 @@
 import * as echarts from '../../ec-canvas/echarts';
 import {
     setLegendOption,
-    getPage
+    getPage,
+    convertFromBackTemplate
 } from '../draw/draw';
 var inputData = [
     ['product', 'Matcha Latte', 'Milk Tea','Cheese Cocoa'],
@@ -439,7 +440,7 @@ Page({
             this.setData({
                 templateName: data.name,
                 xName: data.xName,
-                yName: data.yName
+                yName: data.yName,
             });
         });
     },
