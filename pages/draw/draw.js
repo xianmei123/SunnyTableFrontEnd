@@ -1,8 +1,6 @@
 // pages/draw/draw.js
 
 import * as echarts from '../../ec-canvas/echarts';
-
-
 const saveLineTemplateUrl = "http://www.jaripon.xyz/template/linechart/save";
 const saveBarTemplateUrl = "http://www.jaripon.xyz/template/barchart/save";
 const savePieTemplateUrl = "http://www.jaripon.xyz/template/fanchart/save";
@@ -15,15 +13,15 @@ const replaceBarTemplateUrl = "http://www.jaripon.xyz/template/barchart/replace"
 const replacePieTemplateUrl = "http://www.jaripon.xyz/template/fanchart/replace";
 const replaceScatterTemplateUrl = "http://www.jaripon.xyz/template/scatterplot/replace";
 
-export var inputData = {}; // 输入数据
+var inputData = {}; // 输入数据
 var graph = require('./class');
 var xType; // 输入数据x轴类型
 var yType; // 输入数据y轴类型
 
-export var bar = new graph.BarGraph();
-export var line = new graph.LineGraph();
-export var pie = new graph.PieGraph();
-export var scatter = new graph.ScatterGraph();
+var bar = new graph.BarGraph();
+var line = new graph.LineGraph();
+var pie = new graph.PieGraph();
+var scatter = new graph.ScatterGraph();
 
 var graphName = "sb"; // 在图的最上方显示的标题
 var graphId = null; //图的id 是否应该存在内存中？
@@ -1332,7 +1330,7 @@ function isShowScatterChart() {
  * 
  * @returns 当前页面对象
  */
-export function getPage() {
+function getPage() {
     var pages = getCurrentPages();
     return pages[pages.length - 1];
 }
@@ -1399,8 +1397,8 @@ function updateScatterData(inputData) {
  * 用来修改和更换折线图模板，并重新画图
  * @param {*} template 
  */
-export function updateLineTemplate(template) {
-    line.setLineTemplate(template);
+function updateLineTemplate(template) {
+    line.setTemplate(template);
     setLineOption(line.lineChart);
 }
 
@@ -1410,8 +1408,8 @@ export function updateLineTemplate(template) {
  * 用来修改和更换条形图模板，并重新画图
  * @param {*} template 
  */
-export function updateBarTemplate(template) {
-    bar.setLineTemplate(template);
+function updateBarTemplate(template) {
+    bar.setTemplate(template);
     setBarOption(bar.barChart);
 }
 
@@ -1421,8 +1419,8 @@ export function updateBarTemplate(template) {
  * 用来修改和更换饼状图模板，并重新画图
  * @param {*} template 
  */
-export function updatePieTemplate(template) {
-    pie.setLineTemplate(template);
+function updatePieTemplate(template) {
+    pie.setTemplate(template);
     setPieOption(pie.pieChart);
 }
 
@@ -1432,8 +1430,8 @@ export function updatePieTemplate(template) {
  * 用来修改和更换散点图模板，并重新画图
  * @param {*} template 
  */
-export function updateScatterTemplate(template) {
-    scatter.setLineTemplate(template);
+function updateScatterTemplate(template) {
+    scatter.setTemplate(template);
     setScatterOption(scatter.scatterChart);
 }
 /**
@@ -1578,7 +1576,7 @@ function converToBackTemplate(template, type) {
  * @param {*} type 
  * @returns 
  */
-export function convertFromBackTemplate(template, type) {
+function convertFromBackTemplate(template, type) {
     var tempJson = {};
     switch (type) {
         case "line":
@@ -1846,7 +1844,7 @@ function hideScatterTooltip(dataIndex) {
  * @param {*} option 
  * @param {*} legendPos 
  */
-export function setLegendOption(option, legendPos) {
+function setLegendOption(option, legendPos) {
     var legendArr = legendPos.split(",");
     var tempJson = {};
     if (legendArr[0] != "") {
@@ -1913,12 +1911,11 @@ function getMaxInInput(index) {
     // index 表示 是 哪一个轴上的最大值
     return "90";
 }
-// module.exports.getSingleData = getSingleData;
-// module.exports.inputData = inputData;
+module.exports.inputData = inputData;
 module.exports.bar = bar;
 module.exports.line = line;
 module.exports.pie = pie;
 module.exports.scatter = scatter;
 module.exports.getPage = getPage;
 // module.exports.convertFromBackTemplate = convertFromBackTemplate;
-// module.exports.setLegendOption = setLegendOption;
+module.exports.setLegendOption = setLegendOption;
