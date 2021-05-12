@@ -1175,18 +1175,26 @@ Page({
         data["dataArray"] = dataArray;
         ret["data"] = data;
         if (this.data.value1 == "bar") {
+            bar.barTemplate.isVisible = "false";
+            bar.barTemplate.userId = wx.getStorage('uid');
             ret["barChartTemplate"] = converToBackTemplate(bar.barTemplate, "bar");
             var url = "http://www.jaripon.xyz/chart/barchart/save";
         }
         if (this.data.value1 == "line") {
+            line.lineTemplate.isVisible = "false";
+            line.lineTemplate.userId = wx.getStorage('uid');
             ret["lineChartTemplate"] = converToBackTemplate(line.lineTemplate, "line");
             url = "http://www.jaripon.xyz/chart/linechart/save"
         }
         if (this.data.value1 == "pie") {
+            pie.pieTemplate.isVisible = "false";
+            pie.pieTemplate.userId = wx.getStorage('uid');
             ret["fanChartTemplate"] = converToBackTemplate(pie.pieTemplate, "pie");
             url = "http://www.jaripon.xyz/chart/fanchart/save"
         }
         if (this.data.value1 == "scatter") {
+            scatter.scatterTemplate.isVisible = "false";
+            scatter.scatterTemplate.userId = wx.getStorage('uid');
             ret["scatterPlotTemplate"] = converToBackTemplate(scatter.scatterTemplate, "scatter");
             url = "http://www.jaripon.xyz/chart/scatterplot/save";
         }
@@ -1433,7 +1441,8 @@ export function updateScatterTemplate(template) {
  * 此方法是将折线图模板上传到服务器
  */
 function saveLineTemplate() {
-    line.lineTemplate.visible = "true";
+    line.lineTemplate.isVisible = "true";
+    line.lineTemplate.userId = wx.getStorage('uid');
     wx.request({
         url: saveLineTemplateUrl,
         data: converToBackTemplate(line.lineTemplate, "line"),
@@ -1453,7 +1462,8 @@ function saveLineTemplate() {
  * 此方法是将条形图模板上传到服务器
  */
 function saveBarTemplate() {
-    bar.barTemplate.visible = "true";
+    bar.barTemplate.isVisible = "true";
+    bar.barTemplate.userId = wx.getStorage('uid');
     wx.request({
         url: saveBarTemplateUrl,
         data: converToBackTemplate(bar.barTemplate, "bar"),
@@ -1472,7 +1482,8 @@ function saveBarTemplate() {
  * 此方法是将饼状图模板上传到服务器
  */
 function savePieTemplate() {
-    pie.pieTemplate.visible = "true";
+    pie.pieTemplate.isVisible = "true";
+    pie.pieTemplate.userId = wx.getStorage('uid');
     wx.request({
         url: savePieTemplateUrl,
         data: converToBackTemplate(pie.pieTemplate, "pie"),
@@ -1491,7 +1502,8 @@ function savePieTemplate() {
  * 此方法是将散点图模板上传到服务器
  */
 function saveScatterTemplate() {
-    scatter.scatterTemplate.visible = "true";
+    scatter.scatterTemplate.isVisible = "true";
+    scatter.scatterTemplate.userId = wx.getStorage('uid');
     wx.request({
         url: saveScatterTemplateUrl,
         data: converToBackTemplate(scatter.scatterTemplate, "scatter"),
@@ -1907,6 +1919,6 @@ module.exports.bar = bar;
 module.exports.line = line;
 module.exports.pie = pie;
 module.exports.scatter = scatter;
-// module.exports.getPage = getPage;
+module.exports.getPage = getPage;
 // module.exports.convertFromBackTemplate = convertFromBackTemplate;
 // module.exports.setLegendOption = setLegendOption;
