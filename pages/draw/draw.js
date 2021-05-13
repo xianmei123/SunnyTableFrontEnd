@@ -1214,8 +1214,8 @@ Page({
     },
     //打开图表
     openChart(chart) {
-        lineChart.lineChartTemplate = chart["lineChartTemplate"];
-        barChart.barChartTemplate = chart["barChartTemplate"];
+        lineChart.lineTemplate = chart["lineChartTemplate"];
+        barChart.barTemplate = chart["barChartTemplate"];
         pieChart.pieTemplate = chart["fanChartTemplate"];
         scatter.scatterTemplate = chart["scatterPlotTemplate"];
         var newGroupName = [];
@@ -1226,7 +1226,8 @@ Page({
             newGroupName.push(dataArray[i]["name"]);
             newDatas.push(dataArray[i]["lineData"]);
         }
-        console.log('newDatas', newDatas)
+        console.log('newDatas', newDatas);
+        inputData = this.convertData();
         this.setData({
             datas: newDatas,
             groupName: newGroupName
