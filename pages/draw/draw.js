@@ -466,8 +466,9 @@ function setScatterOption(scatterChart) {
             symbolSize: scatter.scatterTemplate.increase ? function (data, params) {
                 return Math.sqrt(data[1]) * 7; // 开方 此函数不能处理负数
             } : 15,
+            symbolSize: 15,
             data: scatter.inputList.slice(scatter.nameToIndex[name].minIndex, scatter.nameToIndex[name].maxIndex),
-            lineStyle: {
+            itemStyle: {
                 color: scatter.scatterTemplate.color[count],
             }
         };
@@ -475,7 +476,6 @@ function setScatterOption(scatterChart) {
         series.push(tempJson);
         count++;
     }
-
     var option = {
         grid: {
             right: '18%',
@@ -522,28 +522,29 @@ function setScatterOption(scatterChart) {
 
     scatterChart.setOption(option);
     setMinAndMax(scatterChart, option);
-    if (scatter.scatterTemplate.showLine) {
-        scatterChart.setOption({
-            tooltip: {
-                trigger: "axis",
-                formatter: function (params) {
-                    var xstr = scatter.xType === "string" ? params[0].data[0] : parseFloat(params[0].data[0]).toFixed(2);
-                    var ystr = scatter.yType === "string" ? params[0].data[1] : parseFloat(params[0].data[1]).toFixed(2);
-                    return 'X: ' + xstr + '\nY: ' + ystr;
-                },
-                axisPointer: {
-                    type: "line",
-                }
+    console.log("scatter: ", option);
+    // if (scatter.scatterTemplate.showLine) {
+    //     scatterChart.setOption({
+    //         tooltip: {
+    //             trigger: "axis",
+    //             // formatter: function (params) {
+    //             //     var xstr = scatter.xType === "string" ? params[0].data[0] : parseFloat(params[0].data[0]).toFixed(2);
+    //             //     var ystr = scatter.yType === "string" ? params[0].data[1] : parseFloat(params[0].data[1]).toFixed(2);
+    //             //     return 'X: ' + xstr + '\nY: ' + ystr;
+    //             // },
+    //             axisPointer: {
+    //                 type: "line",
+    //             }
 
-            },
-        });
-    } else {
+    //         },
+    //     });
+    // } else {
         scatterChart.setOption({
             tooltip: {
                 triggerOn: 'none',
                 formatter: function (params) {
-                    var xstr = scatter.xType === "string" ? params.data[0] : params.data[0].toFixed(2);
-                    var ystr = scatter.yType === "string" ? params.data[1] : params.data[1].toFixed(2);
+                    var xstr = scatter.xType === "string" ? params.data[0] : parseFloat(params.data[0]).toFixed(2);
+                    var ystr = scatter.yType === "string" ? params.data[1] : parseFloat(params.data[1]).toFixed(2);
                     return 'X: ' +
                         xstr +
                         '\nY: ' +
@@ -551,7 +552,7 @@ function setScatterOption(scatterChart) {
                 }
             },
         });
-    }
+    // }
     scatterChart.setOption({
         graphic: echarts.util.map(scatter.inputList, function (dataItem, dataIndex) {
             var position = scatterChart.convertToPixel('grid', dataItem);
@@ -568,7 +569,10 @@ function setScatterOption(scatterChart) {
                 type: 'circle',
                 position: position,
                 shape: {
-                    r: Math.sqrt(dataItem[1]) * 7,
+                    // r: Math.sqrt(dataItem[1]) * 7,
+                    r:  scatter.scatterTemplate.increase ? function (data, params) {
+                        return Math.sqrt(data[1]) * 7; // 开方 此函数不能处理负数
+                    } : 15,
                 },
                 invisible: true,
                 draggable: !(xType === 'string' && yType === 'string'),
@@ -1078,10 +1082,20 @@ Page({
     //导出csv
     exportToCSV() {
         var i;
-        var dataArray = (this.data.value1 == "line") ? line.convertToSend() : 
-                        (this.data.value1 == "bar") ? bar.convertToSend() :
-                        (this.data.value1 == "pie") ? pie.convertToSend() : 
-                        (this.data.value1 == "scatter") ? scatter.convertToSend() : null;
+        var dataArray = [];
+        dataArray.push({
+            "name": "xLabel",
+            "cid": null,
+            "lineData": this.data.xValues,
+        });
+        for (i = 0; i < this.data.groupNum; i++) {
+            var obj = {
+                "name": this.data.groupName[i],
+                "cid": null,
+                "lineData": this.data.datas[i]
+            }
+            dataArray.push(obj);
+        }
         console.log(dataArray);
         wx.request({
             url: "https://www.jaripon.xyz/data/export/" + wx.getStorageSync('uid') + "/" + this.data.value1,
@@ -1800,10 +1814,12 @@ function onPointScatterDragging(dataIndex) {
             yAxisIndex: 0
         }, scatter.yMap.get(dataIndex));
     }
+    var name = scatter.indexToName[dataIndex];
     setTimeout(function () {
         scatter.scatterChart.setOption({
             series: [{
-                data: scatter.inputList
+                name: name,
+                data:scatter.inputList.slice(scatter.nameToIndex[name].minIndex, scatter.nameToIndex[name].maxIndex)
             }]
         });
     }, 0);

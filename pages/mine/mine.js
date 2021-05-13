@@ -27,20 +27,16 @@ Page({
    * 生命周期函数--监听页面显示
    */
   onShow: function () {
-
   },
-  showTips: function(event){
-    console.log(event)
-    // wx.showModal({
-    //   title: '提示',
-    //   content: 'test test',
-    //   success (res) {
-    //     if (res.confirm) {
-    //       console.log('用户点击确定')
-    //     } else if (res.cancel) {
-    //       console.log('用户点击取消')
-    //     }
-    //   }
-    // });
+  aboutUs: function(event){
+    wx.showModal({
+    title: 'Sunny',
+    content: 'duck! 当然是BUAA Sunny团队啦~',
+    })
+  },
+  prefer(){
+    wx.showToast({
+      title: '敬请期待鸭~',
+    })
   }
 })
