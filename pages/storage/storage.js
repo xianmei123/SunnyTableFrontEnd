@@ -230,10 +230,10 @@ Page({
   async openGraph(item) {
     var urls = [' chart/barchart/open', '/chart/linechart/open', 'chart/fanchart/open', 'chart/scatterplot/open']
     var url = baseUrl + '/' + urls[item.templateType-1] + '/' + item.id
-    var res = helper.trans(url)
+    var res = await helper.trans(url)
     console.log(res)
     wx.navigateTo({
-      url: '../showTemplate/showTemplate',
+      url: '../draw/draw',
       success(result) {
         result.eventChannel.emit("openChart", {
           data: res

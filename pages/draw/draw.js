@@ -660,6 +660,9 @@ Page({
             eventChannel.on("openData", res => {
                 this.openData(res.data)
             });
+            eventChannel.on("openChart", res => {
+                this.openChart(res.chart)
+            })
         }
     },
     setChartName(event) {
@@ -1222,6 +1225,7 @@ Page({
     },
     //打开图表
     openChart(chart) {
+        console.log(chart);
         xName = chart.xlabel;
         yName = chart.ylabel;
         graphName = chart.name;
