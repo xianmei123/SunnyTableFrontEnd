@@ -9,6 +9,8 @@
 }
 .bottom_button{
   text-align: center;
-  position: fixed; bottom: 80rpx;
-  margin-left: 20%;
+  font-size: 25px;
+  margin-top: 10%;
+  margin-left: auto;
+  margin-right: auto;
 }

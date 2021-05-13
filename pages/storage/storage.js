@@ -2,64 +2,64 @@
 var helper;
 var baseUrl = 'https://www.jaripon.xyz'
 var checks = (fileList, name) => {
-  for (var x of fileList) {
-    if (x.name == name) return false
-  }
-  return true
+	for (var x of fileList) {
+		if (x.name == name) return false
+	}
+	return true
 }
 var dateTrans = function formatDate(time, format = 'YY-MM-DD hh:mm:ss') {
-  var date = new Date(time);
-  var year = date.getFullYear(),
-    month = date.getMonth() + 1, //月份是从0开始的
-    day = date.getDate(),
-    hour = date.getHours(),
-    min = date.getMinutes(),
-    sec = date.getSeconds();
-  var preArr = Array.apply(null, Array(10)).map(function (elem, index) {
-    return '0' + index;
-  }); //开个长度为10的数组 格式为 ["00", "01", "02", "03", "04", "05", "06", "07", "08", "09"]
+	var date = new Date(time);
+	var year = date.getFullYear(),
+		month = date.getMonth() + 1, //月份是从0开始的
+		day = date.getDate(),
+		hour = date.getHours(),
+		min = date.getMinutes(),
+		sec = date.getSeconds();
+	var preArr = Array.apply(null, Array(10)).map(function (elem, index) {
+		return '0' + index;
+	}); //开个长度为10的数组 格式为 ["00", "01", "02", "03", "04", "05", "06", "07", "08", "09"]
 
-  var newTime = format.replace(/YY/g, year)
-    .replace(/MM/g, preArr[month] || month)
-    .replace(/DD/g, preArr[day] || day)
-    .replace(/hh/g, preArr[hour] || hour)
-    .replace(/mm/g, preArr[min] || min)
-    .replace(/ss/g, preArr[sec] || sec);
-  return newTime;
+	var newTime = format.replace(/YY/g, year)
+		.replace(/MM/g, preArr[month] || month)
+		.replace(/DD/g, preArr[day] || day)
+		.replace(/hh/g, preArr[hour] || hour)
+		.replace(/mm/g, preArr[min] || min)
+		.replace(/ss/g, preArr[sec] || sec);
+	return newTime;
 }
 Page({
-  /**
-   * 页面的初始数据
-   */
-  data: {
-    dropOption: [{
-        text: '按名称排序',
-        value: 0
-      },
-      {
-        text: '按时间排序',
-        value: 1
-      },
-    ],
-    dropValue: 0,
-    fileList: [],
-    dirStack: [],
-    // activeObj,
-    popShow: false,
-    dialogShow: false,
-    dialogButton: [{
-      text: '取消'
-    }, {
-      text: '确定'
-    }],
-    newDir: "",
-    baseUrl: "",
-    id: 5,
-    popTitleList: ["新建文件夹", "文件夹重命名"],
-    showData: [
-      ["x", 'a', 'b', 'c', 'd', 'e'],
-      ["y", 1, 2, 3, 4, 5]
-    ]
+	/**
+	 * 页面的初始数据
+	 */
+	data: {
+		dropOption: [{
+				text: '按名称排序',
+				value: 0
+			},
+			{
+				text: '按时间排序',
+				value: 1
+			},
+		],
+		dropValue: 0,
+		fileList: [],
+		dirStack: [],
+		// activeObj,
+		popShow: false,
+		dialogShow: false,
+		dialogButton: [{
+			text: '取消'
+		}, {
+			text: '确定'
+		}],
+		newDir: "",
+		baseUrl: "",
+		id: 5,
+		popTitleList: ["新建文件夹", "文件夹重命名"],
+		showData: [
+			["x", 'a', 'b', 'c', 'd', 'e'],
+			["y", 1, 2, 3, 4, 5]
+		]
 
   },
   /**
@@ -228,9 +228,9 @@ Page({
     })
   },
   async openGraph(item) {
-    var urls = [' chart/barchart/open', '/chart/linechart/open', 'chart/fanchart/open', 'chart/scatterplot/open']
+	var urls = [' chart/barchart/open', '/chart/linechart/open', 'chart/fanchart/open', 'chart/scatterplot/open']
     var url = baseUrl + '/' + urls[item.templateType-1] + '/' + item.id
-    var res = helper.trans(url)
+    var res = await helper.trans(url)
     console.log(res)
     wx.navigateTo({
       url: '../showTemplate/showTemplate',
@@ -261,18 +261,19 @@ Page({
     })
   },
   async openTemplate(item) {
-    var urls = ['template/barchart/open', 'template/linechart/open', 'template/fanchart/open', 'template/scatterplot/open']
+	var urls = ['template/barchart/open', 'template/linechart/open', 'template/fanchart/open', 'template/scatterplot/open']
     var type = ['bar', 'line', 'pie', 'scatter']
     var url = baseUrl + '/' + urls[item.templateType-1] + '/' + item.id
-    var res = helper.trans(url)
+    var res = await helper.trans(url)
     var draw = require('../draw/draw');
     var showTemplate = require('../showTemplate/showTemplate');
-    showTemplate.setShowTemplate(this.data.showData, draw.convertFromBackTemplate(res, type[item.templateType-1]), 'string', 'number')
+	console.log(res);
+    showTemplate.setShowTemplate(this.data.showData, draw.convertFromBackTemplate(res.data, type[item.templateType-1]), 'string', 'number');
     wx.navigateTo({
       url: '../showTemplate/showTemplate',
-      success(result) {
+      success: (result) => {
         result.eventChannel.emit("openTemplate", {
-          type: type[item.templateType],
+          type: type[item.templateType - 1],
           xName: "x",
           yName: "y",
           name: item.name,

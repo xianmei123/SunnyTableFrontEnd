@@ -1845,25 +1845,29 @@ function hideScatterTooltip(dataIndex) {
 function setLegendOption(option, legendPos) {
     var legendArr = legendPos.split(",");
     var tempJson = {};
-    if (legendArr[0] != "") {
+    if (legendArr[0] == "null") {
+        tempJson.top = null;
+    } else {
         tempJson.top = legendArr[0];
     }
-    if (legendArr[1] != "") {
+    if (legendArr[1] == "null") {
+        tempJson.bottom = null;
+    } else {
         tempJson.bottom = legendArr[1];
     }
-    if (legendArr[2] != "") {
+    if (legendArr[2] == "null") {
+        tempJson.left = null;
+    } else {
         tempJson.left = legendArr[2];
     }
-    if (legendArr[3] != "") {
+    if (legendArr[3] == "null") {
+        tempJson.right = null;
+    } else {
         tempJson.right = legendArr[3];
     }
-    if (legendArr[4] != "") {
-        tempJson.orient = legendArr[4];
-    } else {
-        tempJson.orient = 'horizontal';
-    }
+    tempJson.orient = legendArr[4];
     option.legend = tempJson;
-    console.log(option);
+    return option;
 }
 
 /**
