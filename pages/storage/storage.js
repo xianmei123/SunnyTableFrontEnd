@@ -1,12 +1,13 @@
 // const { getCurrentPage } = require("../../miniprogram_npm/@vant/weapp/common/utils")
+import {checks} from 'helper'
 var helper;
 var baseUrl = 'https://www.jaripon.xyz'
-var checks = (fileList, name) => {
-	for (var x of fileList) {
-		if (x.name == name) return false
-	}
-	return true
-}
+// var checks = (fileList, name) => {
+//   for (var x of fileList) {
+//     if (x.name == name) return false
+//   }
+//   return true
+// }
 var dateTrans = function formatDate(time, format = 'YY-MM-DD hh:mm:ss') {
 	var date = new Date(time);
 	var year = date.getFullYear(),
@@ -165,7 +166,7 @@ Page({
   flush(show) {
     var dirStack = this.data.dirStack
     this.changeDir(dirStack[dirStack.length - 1])
-    if(show)
+    if (show)
       wx.showToast({
         title: '刷新成功',
       })
@@ -191,7 +192,7 @@ Page({
     var faFid = this.data.dirStack[this.data.dirStack.length - 1].id
     var url = baseUrl + '/file/dir/create' + '/' + wx.getStorageSync('uid') + '/' + faFid + '/' + name
     var res = await helper.trans(url)
-    if (helper.hasError(res)) return false
+    if (await helper.hasError(res)) return false
     var item = res.data
     var dirStack = this.data.dirStack
     this.data.fileList.push(item)
@@ -206,8 +207,8 @@ Page({
     var res = await helper.trans(url);
     console.log(res)
     this.data.fileList = res.data
-    if (helper.hasError(res)) {
-      console.log('errors!:',res)
+    if (await helper.hasError(res)) {
+      console.log('errors!:', res)
       return false
     }
     this.setData({
@@ -215,14 +216,13 @@ Page({
     })
     return true
   },
- async openDir(event) {
-   var check = await this.changeDir(event.currentTarget.dataset.item)
-    if (!check) {
+  async openDir(event) {
+    if (!await this.changeDir(event.currentTarget.dataset.item)) {
       return false;
     }
     var dirStack = this.data.dirStack
-    if(dirStack.length==0||dirStack[dirStack.length-1].id != event.currentTarget.dataset.item.id) 
-        this.data.dirStack.push(event.currentTarget.dataset.item)
+    if (dirStack.length == 0 || dirStack[dirStack.length - 1].id != event.currentTarget.dataset.item.id)
+      this.data.dirStack.push(event.currentTarget.dataset.item)
     this.setData({
       dirStack: this.data.dirStack
     })
@@ -233,7 +233,7 @@ Page({
     var res = await helper.trans(url)
     console.log(res)
     wx.navigateTo({
-      url: '../showTemplate/showTemplate',
+      url: '../draw/draw',
       success(result) {
         result.eventChannel.emit("openChart", {
           data: res
@@ -242,9 +242,7 @@ Page({
     })
   },
   async openData(item) {
-    console.log(item)
     var url = baseUrl + '/' + 'data/open' + '/' + item.id
-    // var res = await helper.trans(url)
     wx.request({
       url: url,
       complete: (res) => {
@@ -296,7 +294,7 @@ Page({
     var srcfid = this.data.activeObj.id
     var url = baseUrl + "/file/dir/remove" + '/' + srcfid
     var res = await helper.trans(url)
-    if (helper.hasError(res)) return false
+    if (await helper.hasError(res)) return false
     var fileList = this.data.fileList
     for (var i = 0; i < fileList.length; i++) {
       if (fileList[i].id == this.data.activeObj.id) {
@@ -314,7 +312,7 @@ Page({
     var fid = this.data.activeObj.id
     var url = baseUrl + '/file/dir/rename' + '/' + fid + '/' + name
     var res = await helper.trans(url)
-    if (helper.hasError(res)) return false
+    if (await helper.hasError(res)) return false
     for (var x of this.data.fileList) {
       if (x.id == this.data.activeObj.id)
         x.name = name

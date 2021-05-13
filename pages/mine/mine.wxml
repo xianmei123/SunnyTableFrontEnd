@@ -26,7 +26,7 @@
         </view>
         <image src=''></image>
       </view>
-      <view class='menu-line' bindtap="{{foo.duck}}" data-hi ="0" hi="1">
+      <view class='menu-line' bindtap="prefer"  hi="1">
         <view class='menu-name'>
           <image src=''></image>
         <view>偏好设置</view>
@@ -34,7 +34,7 @@
         <image src=''></image>
       </view>
 
-      <view class='menu-line' bindtap='about_us'>
+      <view class='menu-line' bindtap='aboutUs'>
         <view class='menu-name'>
           <image src=''></image>
         <view>关于我们</view>
@@ -43,11 +43,4 @@
       </view>
     </view>
   </block>
-
 </view>
-<van-cell-group>
-  <van-cell title="单元格" value="内容" bindtap="{{foo.duck}}" data-hi ="0" hi="1" >
-
-    </van-cell>
-
-</van-cell-group>

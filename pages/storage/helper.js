@@ -23,6 +23,13 @@ export var hasError = function (res) {
   }
   return false
 }
+export var checks = (fileList, name) => {
+  for (var x of fileList) {
+    if (x.name == name) return false
+  }
+  return true
+}
 
 module.exports.trans = trans;
 module.exports.hasError = hasError;
+module.exports.checks = checks
