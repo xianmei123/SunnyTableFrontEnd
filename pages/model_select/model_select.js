@@ -1,5 +1,6 @@
 var helper;
-var baseUrl = 'https://www.jaripon.xyz/template/chart/display'
+var draw;
+var baseUrl = 'https://www.jaripon.xyz'
 Page({
 	data: {
 		mainActiveIndex: 0,
@@ -29,6 +30,7 @@ Page({
 	},
 	async onLoad() {
 		helper = require('../storage/helper');
+		draw = require('../draw/draw');
 		//1--bar,2--line,3--pie,4-scatter
 		var map = [1, 0, 2, 3]
 		var url = baseUrl + '/template/chart/display/' + wx.getStorageSync('uid') + '/' + 10
@@ -53,17 +55,18 @@ Page({
 		});
 	},
 	async goDraw(event) {
-		var draw = require('../draw/draw');
-		console.log(draw.line);
-		var funcs = [draw.line.setTemplate, draw.bar.setTemplate, draw.pie.setTemplate, draw.scatter.setTemplate]
+		var templates = [];
 		var urls = ['/template/linechart/open/', '/template/barchart/open/', '/template/fanchart/open/', '/template/scatterplot/open/']
-		console.log(this.data.activeId)
 		for (var x = 0; x < 4; x++) {
 			var res = await helper.trans('https://www.jaripon.xyz' + urls[x] + this.data.activeId[x])
 			if (helper.hasError(res))
 				return false
-			funcs[x](res.data)
+			templates.push(res.data)
 		}
+		draw.line.setTemplate(templates[0]);
+		draw.bar.setTemplate(templates[1]);
+		draw.pie.setTemplate(templates[2]);
+		draw.scatter.setTemplate(templates[3]);
 		wx.navigateTo({
 			url: '/pages/draw/draw',
 		})

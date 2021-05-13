@@ -954,11 +954,9 @@ Page({
         for (var i = this.data.x1 - 1; i < this.data.x2; i++) {
             var reset = this.data.datas;
             for (var j = this.data.y1 - 1; j < this.data.y2; j++) {
-                console.log(newData[this.data.groupName[i]]);
                 reset[i][j] = newData[this.data.groupName[i]][j][1];
             }
         }
-        console.log(reset);
         this.setData({
             datas: reset
         })
@@ -1025,32 +1023,37 @@ Page({
     },
     goAttribute() {
         var index;
+        var template;
         switch (this.data.value1) {
             case "line":
                 index = 0;
+                template = line.lineTemplate;
                 break;
             case "bar":
                 index = 1;
+                template = bar.barTemplate;
                 break;
             case "pie":
                 index = 2;
+                template = pie.pieTemplate;
                 break;
             case "scatter":
                 index = 3;
+                template = scatter.scatterTemplate;
                 break;
         }
         wx.navigateTo({
             url: '../attribute/attribute',
             events: {
                 back: (backData) => {
-                    console.log(backData);
                     var targets = [updateLineTemplate, updateBarTemplate, updatePieTemplate, updateScatterTemplate];
                     targets[index](backData.template);
                 }
             },
             success(result) {
                 result.eventChannel.emit("changeTemplate", {
-                    index: index
+                    index: index,
+                    template: template
                 });
             },
 
@@ -1284,6 +1287,7 @@ Page({
         inputData = [];
         xType = undefined;
         yType = undefined;
+
     },
 });
 
@@ -1866,6 +1870,7 @@ function setLegendOption(option, legendPos) {
         tempJson.orient = 'horizontal';
     }
     option.legend = tempJson;
+    console.log(option);
 }
 
 /**

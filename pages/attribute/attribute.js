@@ -88,7 +88,7 @@ Page({
 	transColors(item) {
 		return this.transColor(item.rgb)
 	},
-	getlineTemplate() {
+	getLineTemplate() {
 		var lengendPosList = [
 			this.data.lineLegendPosTop||50 + '%', this.data.lineLegendPosBottom||50 + '%', this.data.lineLegendPosLeft||50 + '%', this.data.lineLegendPosRight||50 + '%'].join(',')
 		return {
@@ -204,13 +204,12 @@ Page({
 
 	},
 	onUnload() {
-		var tmeplates = [this.getlineTemplate, this.getBarTemplate, this.getPieTemplate, this.getScatterTemplate]
+		var tmeplates = [this.getLineTemplate, this.getBarTemplate, this.getPieTemplate, this.getScatterTemplate]
 		var index = this.data.type
 		var template = tmeplates[index]()
 		console.log(template)
 		const eventChannel = this.getOpenerEventChannel()
 		eventChannel.emit('back', {
-			index: "sbsbsb",
 			template: template
 		});
 	},
@@ -270,7 +269,7 @@ Page({
 		});
 	},
 	submit(event) {
-		// var tmeplates = [this.getlineTemplate, this.getBarTemplate, this.getPieTemplate, this.getScatterTemplate]
+		// var tmeplates = [this.getLineTemplate, this.getBarTemplate, this.getPieTemplate, this.getScatterTemplate]
 		// var targets = [updateLineTemplate, updateBarTemplate, updatePieTemplate, updateScatterTemplate]
 		// var index = this.data.type
 		// var template = tmeplates[index]()
