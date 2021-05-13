@@ -59,7 +59,7 @@
 </view>
 <text>\n</text>
 <view>
-    <van-field placeholder="输入图表标题" border="{{ true }}" bind:change="setChartName"/>
+    <van-field placeholder="输入图表名称" border="{{ true }}" bind:change="setChartName"/>
     <van-row>
         <van-col span="12">
             <van-field placeholder="输入横轴名称" border="{{ true }}" bind:change="setXName"/>
@@ -154,8 +154,8 @@
         <van-col span="8" style="text-align:center">
             <van-icon name="plus" />
         </van-col>
-        <van-col span="8" style="text-align:center" bindtap="exportToCSV">
-            <van-icon name="down" bindtap="saveData" />
+        <van-col span="8" style="text-align:center">
+            <van-icon name="down" bindtap="exportToCSV" />
         </van-col>
         <van-col span="8" style="text-align:center">
             <van-icon name="apps-o" bindtap="goAttribute" />

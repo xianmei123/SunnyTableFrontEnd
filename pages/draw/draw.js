@@ -762,7 +762,7 @@ Page({
                 }
                 console.log([this.data.x1, this.data.y1, this.data.x2, this.data.y2]);
                 wx.showToast({
-                  title: '选中区域成功'
+                    title: '选中区域成功'
                 })
                 return;
             }
@@ -1055,6 +1055,7 @@ Page({
             events: {
                 back: (backData) => {
                     var targets = [updateLineTemplate, updateBarTemplate, updatePieTemplate, updateScatterTemplate];
+
                     targets[index](backData.template);
                 }
             },
@@ -1070,13 +1071,18 @@ Page({
     //导出csv
     exportToCSV() {
         var i;
-        var dataArray = (this.data.value1 == "line") ? line.convertToSend() : 
-                        (this.data.value1 == "bar") ? bar.convertToSend() :
-                        (this.data.value1 == "pie") ? pie.convertToSend() : 
-                        (this.data.value1 == "scatter") ? scatter.convertToSend() : null;
+        var dataArray = [];
+        for (i = 0; i < this.data.groupNum; i++) {
+            var obj = {
+                "name": this.data.groupName[i],
+                "cid": null,
+                "lineData": this.data.datas[i]
+            }
+            dataArray.push(obj);
+        }
         console.log(dataArray);
         wx.request({
-            url: "https://www.jaripon.xyz/data/export/" + wx.getStorageSync('uid') + "/" + this.data.value1,
+            url: "https://www.jaripon.xyz/data/export/" + wx.getStorageSync('uid') + "/" + "1",
             data: {
                 "id": null,
                 "name": graphName,
@@ -1087,16 +1093,42 @@ Page({
             method: "POST",
             success: function (res) {
                 console.log(res);
+                // wx.downloadFile({
+                //     url: that.data.url,
+                //     filePath: wx.env.USER_DATA_PATH + '/123.jpg',
+                //     success: function (res) {
+                //         var filePath = res.filePath
+                //         wx.openDocument({
+                //               filePath: filePath,
+                //               success: function (res) {
+                //                   wx.hideLoading();
+                //               }
+                //         })
+                //     }
+                //   })
                 wx.downloadFile({
-                    url: res.tempFilePath,
-                    success: res => {
-                        wx.saveFile({
-                            tempFilePath: res.tempFilePath,
-                            success: res => {
-                                console.log(res.savedFilePath);
-                            }
+                    url: "https://www.jaripon.xyz/data/getFile/" + wx.getStorageSync('uid') + "/" + "1",
+                    filePath: wx.env.USER_DATA_PATH + '/table.csv',
+                    success: function (res) {
+                        var filePath = res.filePath
+                        wx.openDocument({
+                            filePath: filePath,
+                            showMenu: true  //表示右上角是否有转发按钮
                         })
                     }
+                    // success: res => {
+                    //     console.log(res);
+                    //     wx.saveFile({
+                    //         tempFilePath: res.tempFilePath,
+                    //         success: res => {
+                    //             console.log("saveSuccess");
+                    //             console.log(res.savedFilePath);
+                    //             wx.showToast({
+                    //                 title: res.savedFilePath
+                    //             });
+                    //         }
+                    //     })
+                    // }
                 })
             },
             fail: function () {
