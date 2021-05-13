@@ -1,6 +1,6 @@
 // const { getCurrentPage } = require("../../miniprogram_npm/@vant/weapp/common/utils")
 var helper;
-var baseUrl = 'http://www.jaripon.xyz'
+var baseUrl = 'https://www.jaripon.xyz'
 var checks = (fileList, name) => {
   for (var x of fileList) {
     if (x.name == name) return false

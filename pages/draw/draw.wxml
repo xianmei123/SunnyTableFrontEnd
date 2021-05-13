@@ -157,13 +157,11 @@
         <text>\n</text>
     </block>
     <text>\n</text>
-    <van-button type="primary" size="large" bindtap="repaint">绘制图表</van-button>
+    <button type="primary" size="large" bindtap="repaint">绘制图表</button>
 </view>
 <text>\n</text>
-<van-button type="primary" size="large" bindtap="saveChart">保存图表</van-button>
+<button type="primary" size="large" bindtap="saveChart">保存图表</button>
 <text>\n</text>
-<text>\n</text>
-<text>\n</text>
-<van-button type="primary" size="large" bindtap="saveTemplate">保存模板</van-button>
+<button type="primary" size="large" bindtap="saveTemplate">保存模板</button>
 <text>\n</text>
 <text>\n</text>

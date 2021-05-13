@@ -1,17 +1,17 @@
 // pages/draw/draw.js
 
 import * as echarts from '../../ec-canvas/echarts';
-const saveLineTemplateUrl = "http://www.jaripon.xyz/template/linechart/save";
-const saveBarTemplateUrl = "http://www.jaripon.xyz/template/barchart/save";
-const savePieTemplateUrl = "http://www.jaripon.xyz/template/fanchart/save";
-const saveScatterTemplateUrl = "http://www.jaripon.xyz/template/scatterplot/save";
+const saveLineTemplateUrl = "https://www.jaripon.xyz/template/linechart/save";
+const saveBarTemplateUrl = "https://www.jaripon.xyz/template/barchart/save";
+const savePieTemplateUrl = "https://www.jaripon.xyz/template/fanchart/save";
+const saveScatterTemplateUrl = "https://www.jaripon.xyz/template/scatterplot/save";
 
-const exportToCSVUrl = "http://www.jaripon.xyz/data/export/1";
+const exportToCSVUrl = "https://www.jaripon.xyz/data/export/1";
 
-const replaceLineTemplateUrl = "http://www.jaripon.xyz/template/linechart/replace";
-const replaceBarTemplateUrl = "http://www.jaripon.xyz/template/barchart/replace";
-const replacePieTemplateUrl = "http://www.jaripon.xyz/template/fanchart/replace";
-const replaceScatterTemplateUrl = "http://www.jaripon.xyz/template/scatterplot/replace";
+const replaceLineTemplateUrl = "https://www.jaripon.xyz/template/linechart/replace";
+const replaceBarTemplateUrl = "https://www.jaripon.xyz/template/barchart/replace";
+const replacePieTemplateUrl = "https://www.jaripon.xyz/template/fanchart/replace";
+const replaceScatterTemplateUrl = "https://www.jaripon.xyz/template/scatterplot/replace";
 
 var inputData = {}; // 输入数据
 var graph = require('./class');
@@ -1006,7 +1006,7 @@ Page({
             dataArray.push(obj);
         }
         ret["dataArray"] = dataArray;
-        var url = "http://www.jaripon.xyz/data/save";
+        var url = "https://www.jaripon.xyz/data/save";
         wx.request({
             url: url,
             data: ret,
@@ -1126,7 +1126,7 @@ Page({
             dataArray.push(obj);
         }
         wx.request({
-            url: "http://www.jaripon.xyz/data/export/" + this.judgeXType(),
+            url: "https://www.jaripon.xyz/data/export/" + this.judgeXType(),
             data: {
                 "id": null,
                 "name": null,
@@ -1176,25 +1176,25 @@ Page({
             bar.barTemplate.isVisible = "false";
             bar.barTemplate.userId = wx.getStorage('uid');
             ret["barChartTemplate"] = converToBackTemplate(bar.barTemplate, "bar");
-            var url = "http://www.jaripon.xyz/chart/barchart/save";
+            var url = "https://www.jaripon.xyz/chart/barchart/save";
         }
         if (this.data.value1 == "line") {
             line.lineTemplate.isVisible = "false";
             line.lineTemplate.userId = wx.getStorage('uid');
             ret["lineChartTemplate"] = converToBackTemplate(line.lineTemplate, "line");
-            url = "http://www.jaripon.xyz/chart/linechart/save"
+            url = "https://www.jaripon.xyz/chart/linechart/save"
         }
         if (this.data.value1 == "pie") {
             pie.pieTemplate.isVisible = "false";
             pie.pieTemplate.userId = wx.getStorage('uid');
             ret["fanChartTemplate"] = converToBackTemplate(pie.pieTemplate, "pie");
-            url = "http://www.jaripon.xyz/chart/fanchart/save"
+            url = "https://www.jaripon.xyz/chart/fanchart/save"
         }
         if (this.data.value1 == "scatter") {
             scatter.scatterTemplate.isVisible = "false";
             scatter.scatterTemplate.userId = wx.getStorage('uid');
             ret["scatterPlotTemplate"] = converToBackTemplate(scatter.scatterTemplate, "scatter");
-            url = "http://www.jaripon.xyz/chart/scatterplot/save";
+            url = "https://www.jaripon.xyz/chart/scatterplot/save";
         }
         console.log(ret);
         wx.request({
@@ -1704,8 +1704,8 @@ function onPointLineDragging(dataIndex) {
             }]
         });
     }, 0);
-    line.updateInputData(dataIndex, line.inputList[dataIndex]);
-    //getPage().resetData(inputData);
+    line.updateInputData(inputData, dataIndex, line.inputList[dataIndex]);
+    getPage().resetData(inputData);
 }
 
 
@@ -1739,7 +1739,7 @@ function onPointBarDragging(dataIndex) {
             }]
         });
     }, 0);
-    bar.updateInputData(dataIndex, bar.inputList[dataIndex]);
+    bar.updateInputData(inputData, dataIndex, bar.inputList[dataIndex]);
 }
 
 /**
@@ -1770,7 +1770,7 @@ function onPointScatterDragging(dataIndex) {
             }]
         });
     }, 0);
-    scatter.updateInputData(dataIndex, scatter.inputList[dataIndex]);
+    scatter.updateInputData(inputData, dataIndex, scatter.inputList[dataIndex]);
     getPage().resetData(inputData);
 }
 

@@ -1,5 +1,5 @@
 
-var baseUrl = 'http://www.jaripon.xyz/'
+var baseUrl = 'https://www.jaripon.xyz/'
 Page({
 	/**
 	 * 页面的初始数据
@@ -30,7 +30,7 @@ Page({
 		barTextColorPick: false,
 		// 扇形图
 		pieRadius: 20,
-		piePrecision: 20,
+		piePrecision: 5,
 		pieShowPercent: true,
 		pieShowLable: false,
 		pieTitleFont: 20,
@@ -89,12 +89,13 @@ Page({
 		return this.transColor(item.rgb)
 	},
 	getlineTemplate() {
-		var lengendPosList = [this.data.lineLegendPosTop + '%', this.data.lineLegendPosBottom + '%', this.data.lineLegendPosLeft + '%', this.data.lineLegendPosRight + '%'].join(',')
+		var lengendPosList = [
+			this.data.lineLegendPosTop||50 + '%', this.data.lineLegendPosBottom||50 + '%', this.data.lineLegendPosLeft||50 + '%', this.data.lineLegendPosRight||50 + '%'].join(',')
 		return {
-			radius: this.data.lineRaiuds.toString(),
+			radius: (this.data.lineRaiuds||20).toString(),
 			color: this.data.lineColors.map(this.transColors),
 			showDigit: this.data.lineShowDigit,
-			font: this.data.lineFont,
+			font: this.data.lineFont||20,
 			legendPos: lengendPosList,
 			textColor: this.transColor(this.data.lineTextColor)
 		}
@@ -116,13 +117,13 @@ Page({
 		})
 	},
 	getBarTemplate() {
-		var lengendPosList = [this.data.barLegendPosTop + '%', this.data.barLegendPosBottom + '%', this.data.barLegendPosLeft + '%', this.data.barLegendPosRight + '%'].join(',')
+		var lengendPosList = [this.data.barLegendPosTop||50 + '%', this.data.barLegendPosBottom||50 + '%', this.data.barLegendPosLeft||50 + '%', this.data.barLegendPosRight||50 + '%'].join(',')
 		return {
-			width: this.data.barWidth + '%',
-			gap: this.data.barGap + '%',
+			width: this.data.barWidth||20 + '%',
+			gap: this.data.barGap||20 + '%',
 			color: this.data.barColors.map(this.transColors),
 			showDigit: this.data.barShowDigit,
-			font: this.data.barFont,
+			font: this.data.barFont||20,
 			legendPos: lengendPosList,
 			textColor: this.transColor(this.data.barTextColor)
 		}
@@ -144,15 +145,15 @@ Page({
 		})
 	},
 	getPieTemplate() {
-		var lengendPosList = [this.data.pieLegendPosTop + '%', this.data.pieLegendPosBottom + '%', this.data.pieLegendPosLeft + '%', this.data.pieLegendPosRight + '%'].join(',')
+		var lengendPosList = [this.data.pieLegendPosTop||50 + '%', this.data.pieLegendPosBottom||50 + '%', this.data.pieLegendPosLeft||50 + '%', this.data.pieLegendPosRight||50 + '%'].join(',')
 		return {
-			radius: this.data.pieRadius + "%",
-			precision: this.data.piePrecision,
+			radius: this.data.pieRadius||20 + "%",
+			precision: this.data.piePrecision||5,
 			color: this.data.pieColors.map(this.transColors),
 			showPercent: this.data.pieShowPercent,
 			showLabel: this.data.pieShowLable,
-			titleFont: this.data.pieTitleFont,
-			labelFont: this.data.pieLabelFont,
+			titleFont: this.data.pieTitleFont||20,
+			labelFont: this.data.pieLabelFont||20,
 			legendPos: lengendPosList,
 			textColor: this.transColor(this.data.barTextColor)
 		}
@@ -174,13 +175,13 @@ Page({
 		})
 	},
 	getScatterTemplate() {
-		var lengendPosList = [this.data.scatterLegendPosTop + '%', this.data.scatterLegendPosBottom + '%', this.data.scatterLegendPosLeft + '%', this.data.scatterLegendPosRight + '%'].join(',')
+		var lengendPosList = [this.data.scatterLegendPosTop||50 + '%', this.data.scatterLegendPosBottom||50 + '%', this.data.scatterLegendPosLeft||50 + '%', this.data.scatterLegendPosRight||50 + '%'].join(',')
 		return {
 			showLine: this.data.scatterShowLine,
 			increate: this.data.scatterIncrease,
 			color: this.data.scatterColors.map(this.transColors),
 			showDigit: this.data.scatterShowDigit,
-			font: this.data.scatterFont,
+			font: this.data.scatterFont||20,
 			legendPos: lengendPosList,
 			textColor: this.transColor(this.data.scatterTextColor)
 		}
@@ -206,6 +207,7 @@ Page({
 		var tmeplates = [this.getlineTemplate, this.getBarTemplate, this.getPieTemplate, this.getScatterTemplate]
 		var index = this.data.type
 		var template = tmeplates[index]()
+		console.log(template)
 		const eventChannel = this.getOpenerEventChannel()
 		eventChannel.emit('back', {
 			index: "sbsbsb",
@@ -279,7 +281,6 @@ Page({
 				// wx.navigateBack({delta: 1})
 			}
 		})
-
 	},
 	stepperChange(event) {
 		var name = event.currentTarget.dataset.name

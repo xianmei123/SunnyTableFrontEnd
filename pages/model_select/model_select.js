@@ -1,5 +1,5 @@
 var helper;
-var baseUrl = 'http://www.jaripon.xyz/template/chart/display'
+var baseUrl = 'https://www.jaripon.xyz/template/chart/display'
 Page({
   data: {
     mainActiveIndex: 0,
@@ -59,7 +59,7 @@ Page({
     var urls = ['/template/linechart/open/', '/template/barchart/open/', '/template/fanchart/open/', '/template/scatterplot/open/']
     console.log(this.data.activeId)
     for (var x = 0; x < 4; x++) {
-      var res = await helper.trans('http://www.jaripon.xyz' + urls[x] + this.data.activeId[x])
+      var res = await helper.trans('https://www.jaripon.xyz' + urls[x] + this.data.activeId[x])
       if (helper.hasError(res))
         return false
       funcs[x](res.data)
