@@ -727,7 +727,28 @@ Page({
                     firstReady: false,
                     chooseRegion: false
                 })
+                if (this.data.x1 > this.data.x2) {
+                    var tmp = this.data.x1;
+                    this.setData({
+                        x1: this.data.x2
+                    });
+                    this.setData({
+                        x2: tmp
+                    });
+                }
+                if (this.data.y1 > this.data.y2) {
+                    var tmp = this.data.y1;
+                    this.setData({
+                        y1: this.data.y2
+                    });
+                    this.setData({
+                        y2: tmp
+                    });
+                }
                 console.log([this.data.x1, this.data.y1, this.data.x2, this.data.y2]);
+                wx.showToast({
+                  title: '选中区域成功'
+                })
                 return;
             }
         }
@@ -890,24 +911,6 @@ Page({
             this.data.y1 = 1;
             this.data.y2 = this.data.xValues.length;
         }
-        if (this.data.x1 > this.data.x2) {
-            var tmp = this.data.x1;
-            this.setData({
-                x1: this.data.x2
-            });
-            this.setData({
-                x2: tmp
-            });
-        }
-        if (this.data.y1 > this.data.y2) {
-            var tmp = this.data.y1;
-            this.setData({
-                y1: this.data.y2
-            });
-            this.setData({
-                y2: tmp
-            });
-        }
         if (this.data.defaultRegion) {
             return this.convertData();
         }
@@ -940,16 +943,6 @@ Page({
             this.data.x2 = this.data.groupNum;
             this.data.y1 = 1;
             this.data.y2 = this.data.xValues.length;
-        }
-        if (this.data.x1 > this.data.x2) {
-            var tmp = this.data.x1;
-            this.data.x1 = this.data.x2;
-            this.data.x2 = tmp;
-        }
-        if (this.data.y1 > this.data.y2) {
-            var tmp = this.data.y1;
-            this.data.y1 = this.data.y2;
-            this.data.y2 = tmp;
         }
         for (var i = this.data.x1 - 1; i < this.data.x2; i++) {
             var reset = this.data.datas;
@@ -1104,7 +1097,8 @@ Page({
     openData: function (data) {
         var newGroupName = [];
         var newDatas = [];
-        var dataArray = data[dataArray];
+        var dataArray = data["dataArray"];
+        xName = data
         var i;
         for (i = 0; i < dataArray.length; i++) {
             newGroupName.push(dataArray[i]["name"]);
@@ -1115,6 +1109,7 @@ Page({
             datas: newDatas,
             groupName: newGroupName
         })
+        inputData = this.convertData()
     },
     //导出数据
     exportData() {
@@ -1227,7 +1222,7 @@ Page({
         // scatter.scatterTemplate = converToBackTemplate(chart["scatterPlot"]);
         var newGroupName = [];
         var newDatas = [];
-        var dataArray = data[dataArray];
+        var dataArray = data["dataArray"];
         var i;
         for (i = 0; i < dataArray.length; i++) {
             newGroupName.push(dataArray[i]["name"]);
@@ -1238,7 +1233,7 @@ Page({
         this.setData({
             datas: newDatas,
             groupName: newGroupName
-        })
+        });
     },
     // 保存全部模板
     saveTemplate: function () {
