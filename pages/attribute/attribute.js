@@ -1,4 +1,3 @@
-
 var baseUrl = 'https://www.jaripon.xyz/'
 Page({
 	/**
@@ -8,7 +7,6 @@ Page({
 		isChangeTemplate: false,
 		active: 1,
 		myshow: true,
-		// 线属性
 		lineRaiuds: 15,
 		lineShowDigit: true,
 		lineFont: 17,
@@ -53,22 +51,44 @@ Page({
 		scatterLegendPosRight: 50,
 		scatterTextColor: 'rgb(0,154,97)', //初始值
 		scatterTextColorPick: false,
+		defaulteTemplate:[] //传入的默认template
 	},
-	initLine() {
-		var lineColors = [],
-			lineColorsValue = 0
-		for (var x = 0; x < 10; x++) {
-			lineColors.push({
-				text: `线条${x}`,
+	getTotAttribute(template,name){
+		var legendPos = template.legendPos.split(',').slice(0,4).map(
+			(res)=>{
+				var x = parseInt(res.split('%')[0])
+				return isNaN(x)?null:x
+			}
+		)
+		var colors = []
+		for (var x = 0; x<template.color.length; x++) {
+			console.log(x)
+			colors.push({
+				text: name+`${x}`,
 				value: x,
-				rgb: 'rgb(0,154,97)',
+				rgb: this.hex2rgb(template.color[x]),
 				show: false
 			})
 		}
+		return [legendPos,colors]
+	},
+	initLine() {
+		var template = this.data.defaulteTemplate
+		var [legendPos,lineColors] = this.getTotAttribute(template,'线图')
+		var [lineLegendPosTop,lineLegendPosBottom,lineLegendPosLeft,lineLegendPosRight] = legendPos
+		var lineColorsValue = 0
 		this.setData({
+			lineRaiuds: template.radius,
+			lineShowDigit: template.showDigit,
+			lineFont: template.font,
+			lineTextColor: this.hex2rgb(template.textColor), //初始值
+			lineTextColorPick: false,
+			lineLegendPosTop,lineLegendPosBottom,lineLegendPosLeft,lineLegendPosRight,
 			lineColors,
 			lineColorsValue
 		})
+		console.log('colors',this.data.lineTextColor,this.data.lineColors)
+		console.log(this.data.lineColors)
 	},
 	fillZero(str) {
 		if (parseInt(str, 16) < 16) {
@@ -76,8 +96,13 @@ Page({
 		}
 		return str
 	},
-	transColor(str) {
-
+	hex2rgb(str){
+		if(str=='red') return 'rgb(50,50,50)'
+		var ans = 'rgb' + '(' + parseInt(str.substr(1,2),16) +','
+		+ parseInt(str.substr(3,2),16) + ','+ parseInt(str.substr(5,2),16) +')' 
+		return ans
+	},
+	rgb2hex(str) {
 		const newstr = str.replace(/(rgb\()|(\))/g, '')
 		const arr = newstr.split(',')
 		let res = '#'
@@ -87,120 +112,142 @@ Page({
 		return res
 	},
 	transColors(item) {
-		return this.transColor(item.rgb)
+		return this.rgb2hex(item.rgb)
 	},
 	getLineTemplate() {
+		var template = this.data.defaulteTemplate
+		var [legendPos,lineColors] = this.getTotAttribute(template,'线图')
+		var [lineLegendPosTop,lineLegendPosBottom,lineLegendPosLeft,lineLegendPosRight] = legendPos
+		// console.log(lineLegendPosTop,this.data.lineLegendPosTop,this.data.lineLegendPosTop||lineLegendPosTop + '%')
 		var lengendPosList = [
-			this.data.lineLegendPosTop||50 + '%', this.data.lineLegendPosBottom||50 + '%', this.data.lineLegendPosLeft||50 + '%', this.data.lineLegendPosRight||50 + '%'].join(',')
+			(this.data.lineLegendPosTop||lineLegendPosTop) + '%', (this.data.lineLegendPosBottom||lineLegendPosBottom) + '%', (this.data.lineLegendPosLeft||lineLegendPosLeft) + '%', (this.data.lineLegendPosRight||lineLegendPosRight) + '%'].join(',')
+			console.log(lengendPosList)
 		return {
-			radius: (this.data.lineRaiuds||20).toString(),
+			radius: (this.data.lineRaiuds||template.radius).toString(),
 			color: this.data.lineColors.map(this.transColors),
 			showDigit: this.data.lineShowDigit,
-			font: this.data.lineFont||20,
+			font: this.data.lineFont||template.font,
 			legendPos: lengendPosList,
-			textColor: this.transColor(this.data.lineTextColor)
+			textColor: this.rgb2hex(this.data.lineTextColor)
 		}
 	},
 	initBar() {
-		var barColors = [],
-			barColorsValue = 0
-		for (var x = 0; x < 10; x++) {
-			barColors.push({
-				text: `柱图${x}`,
-				value: x,
-				rgb: 'rgb(0,154,97)',
-				show: false
-			})
-		}
+		var template = this.data.defaulteTemplate
+		var [legendPos,barColors] = this.getTotAttribute(template,'柱图')
+		var [barLegendPosTop,barLegendPosBottom,barLegendPosLeft,barLegendPosRight] = legendPos
+		var barColorsValue = 0
 		this.setData({
+			barWidth: template.width,
+			barGap: template.gap,
+			barFont: template.font,
+			barLegendPosTop,barLegendPosBottom,barLegendPosLeft,barLegendPosRight,
+			barTextColor: this.hex2rgb(template.textColor), //初始值
+			barTextColorPick: false,
 			barColors,
 			barColorsValue
 		})
 	},
 	getBarTemplate() {
-		var lengendPosList = [this.data.barLegendPosTop||50 + '%', this.data.barLegendPosBottom||50 + '%', this.data.barLegendPosLeft||50 + '%', this.data.barLegendPosRight||50 + '%'].join(',')
+		var template = this.data.defaulteTemplate
+		var [legendPos,barColors] = this.getTotAttribute(template,'柱图')
+		var [barLegendPosTop,barLegendPosBottom,barLegendPosLeft,barLegendPosRight] = legendPos
+		var lengendPosList = [(this.data.barLegendPosTop||barLegendPosTop )+ '%', (this.data.barLegendPosBottom||barLegendPosBottom )+ '%', (this.data.barLegendPosLeft||barLegendPosLeft )+ '%', (this.data.barLegendPosRight||barLegendPosRight )+ '%'].join(',')
 		return {
-			width: this.data.barWidth||20 + '%',
-			gap: this.data.barGap||20 + '%',
+			width: this.data.barWidth||template.width + '%',
+			gap: this.data.barGap||template.gap + '%',
 			color: this.data.barColors.map(this.transColors),
 			showDigit: this.data.barShowDigit,
-			font: this.data.barFont||20,
+			font: this.data.barFont||template.font,
 			legendPos: lengendPosList,
-			textColor: this.transColor(this.data.barTextColor)
+			textColor: this.rgb2hex(this.data.barTextColor)
 		}
 	},
 	initPie() {
-		var pieColors = [],
-			pieColorsValue = 0
-		for (var x = 0; x < 10; x++) {
-			pieColors.push({
-				text: `饼图${x}`,
-				value: x,
-				rgb: 'rgb(0,154,97)',
-				show: false
-			})
-		}
+		var template = this.data.defaulteTemplate
+		console.log(template)
+		var [legendPos,pieColors] = this.getTotAttribute(template,'饼图')
+		var [pieLegendPosTop,pieLegendPosBottom,pieLegendPosLeft,pieLegendPosRight] = legendPos
+		var pieColorsValue = 0
 		this.setData({
+			pieRadius: template.radius,
+			piePrecision: template.precision,
+			pieShowPercent: template.showPercent,
+			pieShowLable: template.showLabel,
+			pieTitleFont: template.titleFont,
+			pieLabelFont: template.pieLabelFont,
+			pieLegendPosTop,pieLegendPosBottom,pieLegendPosLeft,pieLegendPosRight,
+			pieTextColor: this.hex2rgb(template.textColor), //初始值
+			pieTextColorPick: false,
 			pieColors,
 			pieColorsValue
 		})
+		console.log(this.data.pieTextColor)
 	},
 	getPieTemplate() {
-		var lengendPosList = [this.data.pieLegendPosTop||50 + '%', this.data.pieLegendPosBottom||50 + '%', this.data.pieLegendPosLeft||50 + '%', this.data.pieLegendPosRight||50 + '%'].join(',')
+		var template = this.data.defaulteTemplate
+		var [legendPos,pieColors] = this.getTotAttribute(template,'饼图')
+		var [pieLegendPosTop,pieLegendPosBottom,pieLegendPosLeft,pieLegendPosRight] = legendPos
+		var lengendPosList = [(this.data.pieLegendPosTop||pieLegendPosTop )+ '%', (this.data.pieLegendPosBottom||pieLegendPosBottom )+ '%', (this.data.pieLegendPosLeft||pieLegendPosLeft )+ '%', (this.data.pieLegendPosRight||pieLegendPosRight )+ '%'].join(',')
 		return {
-			radius: this.data.pieRadius||20 + "%",
-			precision: this.data.piePrecision||5,
+			radius: this.data.pieRadius||template.radius + "%",
+			precision: this.data.piePrecision||template.precision,
 			color: this.data.pieColors.map(this.transColors),
 			showPercent: this.data.pieShowPercent,
 			showLabel: this.data.pieShowLable,
-			titleFont: this.data.pieTitleFont||20,
-			labelFont: this.data.pieLabelFont||20,
+			titleFont: this.data.pieTitleFont||template.titleFont,
+			labelFont: this.data.pieLabelFont||template.labelFont,
 			legendPos: lengendPosList,
-			textColor: this.transColor(this.data.barTextColor)
+			textColor: this.rgb2hex(this.data.barTextColor)
 		}
 	},
-	initSactter() {
-		var scatterColors = [],
-			scatterColorsValue = 0
-		for (var x = 0; x < 10; x++) {
-			scatterColors.push({
-				text: `点图${x}`,
-				value: x,
-				rgb: 'rgb(0,154,97)',
-				show: false
-			})
-		}
+	initScatter() {
+		var template = this.data.defaulteTemplate
+		console.log(template)
+		var [legendPos,scatterColors] = this.getTotAttribute(template,'散图')
+		var [scatterLegendPosTop,scatterLegendPosBottom,scatterLegendPosLeft,scatterLegendPosRight] = legendPos
+		var scatterColorsValue = 0
 		this.setData({
+			scatterShowLine: template.showLine,
+			scatterShowDigit: template.showDigit,
+			scatterIncrease: template.increase,
+			scatterFont: template.font,
+			scatterLegendPosTop,scatterLegendPosBottom,scatterLegendPosLeft,scatterLegendPosRight,
+			scatterTextColor: this.hex2rgb(template.textColor), //初始值
+			scatterTextColorPick: false,
 			scatterColors,
 			scatterColorsValue
 		})
 	},
 	getScatterTemplate() {
-		var lengendPosList = [this.data.scatterLegendPosTop||50 + '%', this.data.scatterLegendPosBottom||50 + '%', this.data.scatterLegendPosLeft||50 + '%', this.data.scatterLegendPosRight||50 + '%'].join(',')
+		var template = this.data.defaulteTemplate
+		var [legendPos,scatterColors] = this.getTotAttribute(template,'散点图')
+		var [scatterLegendPosTop,scatterLegendPosBottom,scatterLegendPosLeft,scatterLegendPosRight] = legendPos
+		var lengendPosList = [this.data.scatterLegendPosTop||scatterLegendPosTop + '%', this.data.scatterLegendPosBottom||scatterLegendPosBottom + '%', this.data.scatterLegendPosLeft||scatterLegendPosLeft + '%', this.data.scatterLegendPosRight||scatterLegendPosRight + '%'].join(',')
 		return {
 			showLine: this.data.scatterShowLine,
 			increate: this.data.scatterIncrease,
 			color: this.data.scatterColors.map(this.transColors),
 			showDigit: this.data.scatterShowDigit,
-			font: this.data.scatterFont||20,
+			font: this.data.scatterFont||tmeplate.font,
 			legendPos: lengendPosList,
-			textColor: this.transColor(this.data.scatterTextColor)
+			textColor: this.rgb2hex(this.data.scatterTextColor)
 		}
 	},
 	onLoad: function (options) {
-		var init = [this.initLine, this.initBar, this.initPie, this.initSactter]
+		var init = [this.initLine, this.initBar, this.initPie, this.initScatter]
 		var title = ['折线图属性', '柱状图属性', '饼状图属性', '散点图属性']
 		const eventChannel = this.getOpenerEventChannel()
 		eventChannel.on("changeTemplate", data => {
-			console.log(data);
+			console.log('data~',data);
 			var index = data.index;
-			init[index]()
 			wx.setNavigationBarTitle({
 				title: title[index]
 			})
 			this.setData({
-				type: index
+				type: index,
+				defaulteTemplate:data.template
 			})
+			init[index]()
 		})
 
 	},

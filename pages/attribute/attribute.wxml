@@ -34,9 +34,9 @@
 			</van-col>
 		</van-row>
 		<van-field label="图例上边距" model:value="{{  lineLegendPosTop }}" placeholder="请输入数字" border="{{ true }}" />
-		<van-field label="图例左边距" model:value="{{  lineLegendPosBottom }}" placeholder="请输入数字" border="{{ true }}" />
-		<van-field label="图例右边距" model:value="{{   lineLegendPosLeft }}" placeholder="请输入数字" border="{{ true }}" />
-		<van-field label="图例下边距" model:value="{{  lineLegendPosRight }}" placeholder="请输入数字" border="{{ true }}" />
+		<!-- <van-field label="图例下边距" model:value="{{  lineLegendPosBottom }}" placeholder="请输入数字" border="{{ true }}" /> -->
+		<!-- <van-field label="图例左边距" model:value="{{   lineLegendPosLeft }}" placeholder="请输入数字" border="{{ true }}" /> -->
+		<van-field label="图例右边距" model:value="{{  lineLegendPosRight }}" placeholder="请输入数字" border="{{ true }}" />
 	</view>
 	<!-- 柱状图 -->
 	<view wx:if="{{type == 1}}">
@@ -75,9 +75,9 @@
 			</van-col>
 		</van-row>
 		<van-field label="图例上边距" model:value="{{  barLegendPosTop }}" placeholder="请输入数字" border="{{ true }}" />
-		<van-field label="图例左边距" model:value="{{  barLegendPosBottom }}" placeholder="请输入数字" border="{{ true }}" />
-		<van-field label="图例右边距" model:value="{{  barLegendPosLeft }}" placeholder="请输入数字" border="{{ true }}" />
-		<van-field label="图例下边距" model:value="{{  barLegendPosRight }}" placeholder="请输入数字" border="{{ true }}" />
+		<!-- <van-field label="图例下边距" model:value="{{  barLegendPosBottom }}" placeholder="请输入数字" border="{{ true }}" /> -->
+		<!-- <van-field label="图例左边距" model:value="{{  barLegendPosLeft }}" placeholder="请输入数字" border="{{ true }}" /> -->
+		<van-field label="图例右边距" model:value="{{  barLegendPosRight }}" placeholder="请输入数字" border="{{ true }}" />
 	</view>
 	<!-- 扇形图 -->
 	<view wx:if="{{type == 2}}">
@@ -125,9 +125,9 @@
 			</van-col>
 		</van-row>
 		<van-field label="图例上边距" model:value="{{  pieLegendPosTop }}" placeholder="请输入数字" border="{{ true }}" />
-		<van-field label="图例左边距" model:value="{{  pieLegendPosBottom }}" placeholder="请输入数字" border="{{ true }}" />
-		<van-field label="图例右边距" model:value="{{  pieLegendPosLeft }}" placeholder="请输入数字" border="{{ true }}" />
-		<van-field label="图例下边距" model:value="{{  pieLegendPosRight }}" placeholder="请输入数字" border="{{ true }}" />
+		<!-- <van-field label="图例下边距" model:value="{{  pieLegendPosBottom }}" placeholder="请输入数字" border="{{ true }}" /> -->
+		<!-- <van-field label="图例左边距" model:value="{{  pieLegendPosLeft }}" placeholder="请输入数字" border="{{ true }}" /> -->
+		<van-field label="图例右边距" model:value="{{  pieLegendPosRight }}" placeholder="请输入数字" border="{{ true }}" />
 		</view>
 	<!-- 散点图 -->
 	<view wx:if="{{type == 3}}">
@@ -166,9 +166,9 @@
 			</van-col>
 		</van-row>
 		<van-field label="图例上边距" model:value="{{  scatterLegendPosTop }}" placeholder="请输入数字" border="{{ true }}" />
-		<van-field label="图例左边距" model:value="{{  scatterLegendPosBottom }}" placeholder="请输入数字" border="{{ true }}" />
-		<van-field label="图例右边距" model:value="{{  scatterLegendPosLeft }}" placeholder="请输入数字" border="{{ true }}" />
-		<van-field label="图例下边距" model:value="{{  scatterLegendPosRight }}" placeholder="请输入数字" border="{{ true }}" />
+		<!-- <van-field label="图例下边距" model:value="{{  scatterLegendPosBottom }}" placeholder="请输入数字" border="{{ true }}" /> -->
+		<!-- <van-field label="图例左边距" model:value="{{  scatterLegendPosLeft }}" placeholder="请输入数字" border="{{ true }}" /> -->
+		<van-field label="图例右边距" model:value="{{  scatterLegendPosRight }}" placeholder="请输入数字" border="{{ true }}" />
 	</view>
 <!-- </van-tabs> -->
 <text class="duck">\n </text>
