@@ -59,13 +59,13 @@
 </view>
 <text>\n</text>
 <view>
-    <van-field placeholder="输入图表名称" border="{{ true }}" bind:change="setChartName"/>
+    <van-field value="{{graphName}}" placeholder="输入图表名称" border="{{ true }}" bind:change="setChartName"/>
     <van-row>
         <van-col span="12">
-            <van-field placeholder="输入横轴名称" border="{{ true }}" bind:change="setXName"/>
+            <van-field value="{{xName}}" placeholder="输入横轴名称" border="{{ true }}" bind:change="setXName"/>
         </van-col>
         <van-col span="12">
-            <van-field placeholder="输入纵轴名称" border="{{ true }}" bind:change="setYName"/>
+            <van-field value="{{yName}}" placeholder="输入纵轴名称" border="{{ true }}" bind:change="setYName"/>
         </van-col>
     </van-row>
 </view>
@@ -80,7 +80,7 @@
                 <view class="th"></view>
                 <block wx:for="{{iterator2}}" wx:for-item="j">
                     <view class="th">
-                        <van-field value="{{ value }}" placeholder="数据组{{ j }}" border="{{ false }}"
+                        <van-field value="{{ groupName[j-1] }}" placeholder="数据组{{ j }}" border="{{ false }}"
                             bind:change="setGroupName" data-a="{{j}}" bindtap="changeCurrentGroupName" />
                     </view>
                 </block>
@@ -88,7 +88,7 @@
             <block wx:for="{{iterator1}}" wx:for-index="i">
                 <view class="tr bg-g" wx:if="{{i % 2 == 0}}">
                     <view class="td">
-                        <van-field value="{{ value }}" placeholder="横坐标{{ i + 1 }}" border="{{ true }}"
+                        <van-field value="{{ xValues[i] }}" placeholder="横坐标{{ i + 1 }}" border="{{ true }}"
                             bind:change="getXValue" data-a="{{i + 1}}" bindtap="changeCurrentX" />
                     </view>
                     <block wx:for="{{iterator2}}" wx:for-item="j">
@@ -108,7 +108,7 @@
                 </view>
                 <view class="tr" wx:else>
                     <view class="td">
-                        <van-field value="{{ value }}" placeholder="横坐标{{ i + 1 }}" border="{{ false }}"
+                        <van-field value="{{ xValues[i] }}" placeholder="横坐标{{ i + 1 }}" border="{{ false }}"
                             bind:change="getXValue" data-a="{{i + 1}}" bindtap="changeCurrentX" />
                     </view>
                     <block wx:for="{{iterator2}}" wx:for-item="j">

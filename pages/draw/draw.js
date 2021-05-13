@@ -661,7 +661,7 @@ Page({
                 this.openData(res.data)
             });
             eventChannel.on("openChart", res => {
-                this.openChart(res.chart)
+                this.openChart(res.data)
             })
         }
     },
@@ -765,7 +765,7 @@ Page({
                 }
                 console.log([this.data.x1, this.data.y1, this.data.x2, this.data.y2]);
                 wx.showToast({
-                    title: '选中区域成功'
+                  title: '选中区域成功'
                 })
                 return;
             }
@@ -1006,6 +1006,11 @@ Page({
         ret["userId"] = wx.getStorageSync('uid');
         var i;
         var dataArray = [];
+        dataArray.push({
+            "name": "xLabel",
+            "cid": null,
+            "lineData": this.data.xValues
+        });
         for (i = 0; i < this.data.groupNum; i++) {
             var obj = {
                 "name": this.data.groupName[i],
@@ -1058,7 +1063,6 @@ Page({
             events: {
                 back: (backData) => {
                     var targets = [updateLineTemplate, updateBarTemplate, updatePieTemplate, updateScatterTemplate];
-
                     targets[index](backData.template);
                 }
             },
@@ -1074,18 +1078,13 @@ Page({
     //导出csv
     exportToCSV() {
         var i;
-        var dataArray = [];
-        for (i = 0; i < this.data.groupNum; i++) {
-            var obj = {
-                "name": this.data.groupName[i],
-                "cid": null,
-                "lineData": this.data.datas[i]
-            }
-            dataArray.push(obj);
-        }
+        var dataArray = (this.data.value1 == "line") ? line.convertToSend() : 
+                        (this.data.value1 == "bar") ? bar.convertToSend() :
+                        (this.data.value1 == "pie") ? pie.convertToSend() : 
+                        (this.data.value1 == "scatter") ? scatter.convertToSend() : null;
         console.log(dataArray);
         wx.request({
-            url: "https://www.jaripon.xyz/data/export/" + wx.getStorageSync('uid') + "/" + "1",
+            url: "https://www.jaripon.xyz/data/export/" + wx.getStorageSync('uid') + "/" + this.data.value1,
             data: {
                 "id": null,
                 "name": graphName,
@@ -1096,42 +1095,16 @@ Page({
             method: "POST",
             success: function (res) {
                 console.log(res);
-                // wx.downloadFile({
-                //     url: that.data.url,
-                //     filePath: wx.env.USER_DATA_PATH + '/123.jpg',
-                //     success: function (res) {
-                //         var filePath = res.filePath
-                //         wx.openDocument({
-                //               filePath: filePath,
-                //               success: function (res) {
-                //                   wx.hideLoading();
-                //               }
-                //         })
-                //     }
-                //   })
                 wx.downloadFile({
-                    url: "https://www.jaripon.xyz/data/getFile/" + wx.getStorageSync('uid') + "/" + "1",
-                    filePath: wx.env.USER_DATA_PATH + '/table.csv',
-                    success: function (res) {
-                        var filePath = res.filePath
-                        wx.openDocument({
-                            filePath: filePath,
-                            showMenu: true  //表示右上角是否有转发按钮
+                    url: res.tempFilePath,
+                    success: res => {
+                        wx.saveFile({
+                            tempFilePath: res.tempFilePath,
+                            success: res => {
+                                console.log(res.savedFilePath);
+                            }
                         })
                     }
-                    // success: res => {
-                    //     console.log(res);
-                    //     wx.saveFile({
-                    //         tempFilePath: res.tempFilePath,
-                    //         success: res => {
-                    //             console.log("saveSuccess");
-                    //             console.log(res.savedFilePath);
-                    //             wx.showToast({
-                    //                 title: res.savedFilePath
-                    //             });
-                    //         }
-                    //     })
-                    // }
                 })
             },
             fail: function () {
@@ -1145,12 +1118,13 @@ Page({
         var newDatas = [];
         var dataArray = data["dataArray"];
         var i;
-        for (i = 0; i < dataArray.length; i++) {
+        for (i = 1; i < dataArray.length; i++) {
             newGroupName.push(dataArray[i]["name"]);
             newDatas.push(dataArray[i]["lineData"]);
         }
         console.log('newDatas', newDatas)
         this.setData({
+            xValues: dataArray[0]["lineData"],
             datas: newDatas,
             groupName: newGroupName
         })
@@ -1188,9 +1162,10 @@ Page({
     saveChart() {
         var ret = {};
         ret["id"] = null;
-        ret["name"] = "";
-        ret["xlabel"] = "";
-        ret["ylabel"] = "";
+        console.log(graphName);
+        ret["name"] = graphName;
+        ret["xlabel"] = xName;
+        ret["ylabel"] = yName;
         ret["xid"] = 0;
         ret["yid"] = [0, 0];
         ret["xbegin"] = (this.data.defaultRegion) ? 0 :
@@ -1201,10 +1176,15 @@ Page({
         ret["width"] = 4;
         var data = {};
         data["id"] = null;
-        data["name"] = "";
+        data["name"] = graphName;
         data['userId'] = wx.getStorageSync('uid');
         var i;
         var dataArray = [];
+        dataArray.push({
+            "name": "xLabel",
+            "cid": null,
+            "lineData": this.data.xValues
+        });
         for (i = 0; i < this.data.groupNum; i++) {
             var obj = {
                 "name": this.data.groupName[i],
@@ -1257,32 +1237,41 @@ Page({
     },
     //打开图表
     openChart(chart) {
-        console.log(chart);
-        xName = chart.xlabel;
-        yName = chart.ylabel;
-        graphName = chart.name;
-        line.lineTemplate = converFromBackTemplate(chart["lineChart"]);
-        bar.barTemplate = converFromBackTemplate(chart["barChart"]);
-        pie.pieTemplate = converFromBackTemplate(chart["fanChart"]);
-        scatter.scatterTemplate = converFromBackTemplate(chart["scatterPlot"]);
+        xName = chart["data"]["xlabel"];
+        yName = chart["data"]["ylabel"];
+        graphName = chart["data"]["name"];
+        if (this.data.value1 == "line") {
+            line.lineTemplate = convertFromBackTemplate(chart["data"]["lineChart"]);
+        }
+        if (this.data.value1 == "bar") {
+            bar.barTemplate = convertFromBackTemplate(chart["data"]["barChart"]);
+        }
+        if (this.data.value1 == "pie") {
+            pie.pieTemplate = convertFromBackTemplate(chart["data"]["pieChart"]);
+        }
+        if (this.data.value1 == "scatter") {
+            scatter.scatterTemplate = convertFromBackTemplate(chart["data"]["scatterChart"]);
+        }
         var newGroupName = [];
         var newDatas = [];
-        var dataArray = data["dataArray"];
+        var dataArray = chart["data"]["data"]["dataArray"];
+        console.log(dataArray);
         var i;
-        for (i = 0; i < dataArray.length; i++) {
+        for (i = 1; i < dataArray.length; i++) {
             newGroupName.push(dataArray[i]["name"]);
             newDatas.push(dataArray[i]["lineData"]);
         }
-        console.log('newDatas', newDatas);
         inputData = this.convertData();
         this.setData({
+            xValues: dataArray[0]["lineData"],
             datas: newDatas,
-            groupName: newGroupName
+            groupName: newGroupName,
+            graphName: chart["data"]["name"]
         });
+        console.log(this.data);
     },
     // 保存全部模板
     saveTemplate: function () {
-
         switch (this.data.value1) {
             case "line":
                 saveLineTemplate();
@@ -1896,29 +1885,25 @@ function hideScatterTooltip(dataIndex) {
 function setLegendOption(option, legendPos) {
     var legendArr = legendPos.split(",");
     var tempJson = {};
-    if (legendArr[0] == "null") {
-        tempJson.top = null;
-    } else {
+    if (legendArr[0] != "") {
         tempJson.top = legendArr[0];
     }
-    if (legendArr[1] == "null") {
-        tempJson.bottom = null;
-    } else {
+    if (legendArr[1] != "") {
         tempJson.bottom = legendArr[1];
     }
-    if (legendArr[2] == "null") {
-        tempJson.left = null;
-    } else {
+    if (legendArr[2] != "") {
         tempJson.left = legendArr[2];
     }
-    if (legendArr[3] == "null") {
-        tempJson.right = null;
-    } else {
+    if (legendArr[3] != "") {
         tempJson.right = legendArr[3];
     }
-    tempJson.orient = legendArr[4];
+    if (legendArr[4] != "") {
+        tempJson.orient = legendArr[4];
+    } else {
+        tempJson.orient = 'horizontal';
+    }
     option.legend = tempJson;
-    return option;
+    console.log(option);
 }
 
 /**
