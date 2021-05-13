@@ -1055,29 +1055,25 @@ Page({
     //导出csv
     exportToCSV() {
         var i;
-        var dataArray = [];
-        for (i = 0; i < this.data.groupNum; i++) {
-            var obj = {
-                "name": this.data.groupName[i],
-                "cid": null,
-                "lineData": this.data.datas[i]
-            }
-            dataArray.push(obj);
-        }
+        var dataArray = (this.data.value1 == "line") ? line.convertToSend() : 
+                        (this.data.value1 == "bar") ? bar.convertToSend() :
+                        (this.data.value1 == "pie") ? pie.convertToSend() : 
+                        (this.data.value1 == "scatter") ? scatter.convertToSend() : null;
+        console.log(dataArray);
         wx.request({
-            url: exportToCSVUrl,
+            url: "https://www.jaripon.xyz/data/export/" + wx.getStorageSync('uid') + "/" + this.data.value1,
             data: {
                 "id": null,
-                "name": null,
-                "userId": wx.getStorageSync('uid'),
-                // "dataArray": line.convertToSend() //将当前绘图的数据进行导出csv
+                "name": graphName,
+                // "userId": wx.getStorageSync('uid'),
+                "type": "csv",
                 "dataArray": dataArray
             },
             method: "POST",
             success: function (res) {
                 console.log(res);
                 wx.downloadFile({
-                    url: '',
+                    url: res.tempFilePath,
                     success: res => {
                         wx.saveFile({
                             tempFilePath: res.tempFilePath,
@@ -1098,7 +1094,6 @@ Page({
         var newGroupName = [];
         var newDatas = [];
         var dataArray = data["dataArray"];
-        xName = data
         var i;
         for (i = 0; i < dataArray.length; i++) {
             newGroupName.push(dataArray[i]["name"]);
@@ -1109,7 +1104,6 @@ Page({
             datas: newDatas,
             groupName: newGroupName
         })
-        inputData = this.convertData()
     },
     //导出数据
     exportData() {
@@ -1213,13 +1207,13 @@ Page({
     },
     //打开图表
     openChart(chart) {
-        // xName = chart.xlabel;
-        // yName = chart.ylabel;
-        // graphName = chart.name;
-        // line.lineTemplate = converToBackTemplate(chart["lineChart"]);
-        // bar.barTemplate = converToBackTemplate(chart["barChart"]);
-        // pie.pieTemplate = converToBackTemplate(chart["fanChart"]);
-        // scatter.scatterTemplate = converToBackTemplate(chart["scatterPlot"]);
+        xName = chart.xlabel;
+        yName = chart.ylabel;
+        graphName = chart.name;
+        line.lineTemplate = converFromBackTemplate(chart["lineChart"]);
+        bar.barTemplate = converFromBackTemplate(chart["barChart"]);
+        pie.pieTemplate = converFromBackTemplate(chart["fanChart"]);
+        scatter.scatterTemplate = converFromBackTemplate(chart["scatterPlot"]);
         var newGroupName = [];
         var newDatas = [];
         var dataArray = data["dataArray"];
