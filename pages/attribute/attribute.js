@@ -5,6 +5,7 @@ Page({
 	 * 页面的初始数据
 	 */
 	data: {
+		isChangeTemplate: false,
 		active: 1,
 		myshow: true,
 		// 线属性
@@ -204,14 +205,16 @@ Page({
 
 	},
 	onUnload() {
-		var tmeplates = [this.getLineTemplate, this.getBarTemplate, this.getPieTemplate, this.getScatterTemplate]
-		var index = this.data.type
-		var template = tmeplates[index]()
-		console.log(template)
-		const eventChannel = this.getOpenerEventChannel()
-		eventChannel.emit('back', {
-			template: template
-		});
+		if (this.data.isChangeTemplate) {
+			var tmeplates = [this.getLineTemplate, this.getBarTemplate, this.getPieTemplate, this.getScatterTemplate]
+			var index = this.data.type
+			var template = tmeplates[index]()
+			console.log(template)
+			const eventChannel = this.getOpenerEventChannel()
+			eventChannel.emit('back', {
+				template: template
+			});
+		}
 	},
 	/**
 	 * 生命周期函数--监听页面初次渲染完成
@@ -274,6 +277,9 @@ Page({
 		// var index = this.data.type
 		// var template = tmeplates[index]()
 		// targets[index](template)
+		this.setData({
+			isChangeTemplate: true
+		});
 		wx.showToast({
 			title: '设置成功',
 			complete: function () {

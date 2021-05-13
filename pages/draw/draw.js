@@ -1150,8 +1150,8 @@ Page({
         var ret = {};
         ret["id"] = null;
         ret["name"] = "";
-        ret["xlabel"] = null;
-        ret["ylabel"] = null;
+        ret["xlabel"] = "";
+        ret["ylabel"] = "";
         ret["xid"] = 0;
         ret["yid"] = [0, 0];
         ret["xbegin"] = (this.data.defaultRegion) ? 0 :
@@ -1163,6 +1163,7 @@ Page({
         var data = {};
         data["id"] = null;
         data["name"] = "";
+        data['userId'] = wx.getStorageSync('uid');
         var i;
         var dataArray = [];
         for (i = 0; i < this.data.groupNum; i++) {
@@ -1177,26 +1178,26 @@ Page({
         ret["data"] = data;
         if (this.data.value1 == "bar") {
             bar.barTemplate.isVisible = "false";
-            bar.barTemplate.userId = wx.getStorage('uid');
-            ret["barChartTemplate"] = converToBackTemplate(bar.barTemplate, "bar");
+            bar.barTemplate.userId = wx.getStorageSync('uid');
+            ret["barChart"] = converToBackTemplate(bar.barTemplate, "bar");
             var url = "https://www.jaripon.xyz/chart/barchart/save";
         }
         if (this.data.value1 == "line") {
             line.lineTemplate.isVisible = "false";
-            line.lineTemplate.userId = wx.getStorage('uid');
-            ret["lineChartTemplate"] = converToBackTemplate(line.lineTemplate, "line");
+            line.lineTemplate.userId = wx.getStorageSync('uid');
+            ret["lineChart"] = converToBackTemplate(line.lineTemplate, "line");
             url = "https://www.jaripon.xyz/chart/linechart/save"
         }
         if (this.data.value1 == "pie") {
             pie.pieTemplate.isVisible = "false";
-            pie.pieTemplate.userId = wx.getStorage('uid');
-            ret["fanChartTemplate"] = converToBackTemplate(pie.pieTemplate, "pie");
+            pie.pieTemplate.userId = wx.getStorageSync('uid');
+            ret["fanChart"] = converToBackTemplate(pie.pieTemplate, "pie");
             url = "https://www.jaripon.xyz/chart/fanchart/save"
         }
         if (this.data.value1 == "scatter") {
             scatter.scatterTemplate.isVisible = "false";
-            scatter.scatterTemplate.userId = wx.getStorage('uid');
-            ret["scatterPlotTemplate"] = converToBackTemplate(scatter.scatterTemplate, "scatter");
+            scatter.scatterTemplate.userId = wx.getStorageSync('uid');
+            ret["scatterPlot"] = converToBackTemplate(scatter.scatterTemplate, "scatter");
             url = "https://www.jaripon.xyz/chart/scatterplot/save";
         }
         console.log(ret);
@@ -1217,10 +1218,13 @@ Page({
     },
     //打开图表
     openChart(chart) {
-        line.lineTemplate = chart["lineChartTemplate"];
-        bar.barTemplate = chart["barChartTemplate"];
-        pie.pieTemplate = chart["fanChartTemplate"];
-        scatter.scatterTemplate = chart["scatterPlotTemplate"];
+        // xName = chart.xlabel;
+        // yName = chart.ylabel;
+        // graphName = chart.name;
+        // line.lineTemplate = converToBackTemplate(chart["lineChart"]);
+        // bar.barTemplate = converToBackTemplate(chart["barChart"]);
+        // pie.pieTemplate = converToBackTemplate(chart["fanChart"]);
+        // scatter.scatterTemplate = converToBackTemplate(chart["scatterPlot"]);
         var newGroupName = [];
         var newDatas = [];
         var dataArray = data[dataArray];
