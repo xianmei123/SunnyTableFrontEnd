@@ -34,8 +34,9 @@ Page({
 		//1--bar,2--line,3--pie,4-scatter
 		var map = [1, 0, 2, 3]
 		var url = baseUrl + '/template/chart/display/' + wx.getStorageSync('uid') + '/' + 10
+		console.log(url)
 		var res = await helper.trans(url)
-		// var bars = this.data.items[1], line= this.data.items[0],pie=this.data.items[2],scatter=this.data.items[3]
+		console.log('返回',res)
 		for (var x of res.data) {
 			var cata = this.data.items[map[x.type - 1]].children
 			cata.push({

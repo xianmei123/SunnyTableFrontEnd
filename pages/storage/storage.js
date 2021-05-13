@@ -254,6 +254,7 @@ Page({
     var url = baseUrl + '/' + urls[item.templateType] + '/' + item.id
     var res = helper.trans(url)
     var draw = require('../draw/draw');
+    
     var showTemplate = require('../showTemplate/showTemplate');
     showTemplate.setShowTemplate(this.data.showData, draw.convertFromBackTemplate(res, type[item.templateType]), 'string', 'number')
     wx.navigateTo({

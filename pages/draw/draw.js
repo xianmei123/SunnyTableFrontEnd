@@ -1916,5 +1916,5 @@ module.exports.line = line;
 module.exports.pie = pie;
 module.exports.scatter = scatter;
 module.exports.getPage = getPage;
-// module.exports.convertFromBackTemplate = convertFromBackTemplate;
+module.exports.convertFromBackTemplate = convertFromBackTemplate;
 module.exports.setLegendOption = setLegendOption;
