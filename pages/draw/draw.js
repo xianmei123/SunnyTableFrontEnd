@@ -23,7 +23,7 @@ var line = new graph.LineGraph();
 var pie = new graph.PieGraph();
 var scatter = new graph.ScatterGraph();
 
-var graphName = "sb"; // 在图的最上方显示的标题
+var graphName = "默认标题"; // 在图的最上方显示的标题
 var graphId = null; //图的id 是否应该存在内存中？
 var xName = "x";
 var yName = "y";
@@ -1214,9 +1214,9 @@ Page({
     },
     //打开图表
     openChart(chart) {
-        lineChart.lineChartTemplate = chart["lineChartTemplate"];
-        barChart.barChartTemplate = chart["barChartTemplate"];
-        pieChart.pieTemplate = chart["fanChartTemplate"];
+        line.lineTemplate = chart["lineChartTemplate"];
+        bar.barTemplate = chart["barChartTemplate"];
+        pie.pieTemplate = chart["fanChartTemplate"];
         scatter.scatterTemplate = chart["scatterPlotTemplate"];
         var newGroupName = [];
         var newDatas = [];

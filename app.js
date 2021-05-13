@@ -22,16 +22,17 @@ App({
     var baseUrl = 'https://www.jaripon.xyz'
     wx.login({
       success: async function(res){
-        res = await trans(baseUrl + '/',
-          {'code': res}
+        console.log(res);
+        res = await trans(baseUrl + '/wechat/login/' + res.code,""
         )
+        console.log(res);
         //res.data.openid = '0' //此处暂时用0标识
-        wx.setStorageSync('uid',res.openid)
+        wx.setStorageSync('uid',res.data.openid)
         // var url = baseUrl + '/user/login/'+res.data.openid
         //res = await trans(url)
         //console.log(res)
-        wx.setStorageSync('rootId',res.fid)
-        url = baseUrl + '/file/dir/open/' + res.openid + '/' + wx.getStorageSync('rootId')
+        wx.setStorageSync('rootId',res.data.fid)
+        var url = baseUrl + '/file/dir/open/' + res.data.openid + '/' + wx.getStorageSync('rootId')
         res = await trans(url)
         console.log(res.data)
       }
