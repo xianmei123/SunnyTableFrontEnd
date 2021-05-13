@@ -64,10 +64,10 @@ Page({
 				return false
 			templates.push(res.data)
 		}
-		draw.line.setTemplate(templates[0]);
-		draw.bar.setTemplate(templates[1]);
-		draw.pie.setTemplate(templates[2]);
-		draw.scatter.setTemplate(templates[3]);
+		draw.line.setTemplate(draw.convertFromBackTemplate(templates[0], "line"));
+		draw.bar.setTemplate(draw.convertFromBackTemplate(templates[1], "bar"));
+		draw.pie.setTemplate(draw.convertFromBackTemplate(templates[2],"pie"));
+		draw.scatter.setTemplate(draw.convertFromBackTemplate(templates[3], "scatter"));
 		wx.navigateTo({
 			url: '/pages/draw/draw',
 		})
