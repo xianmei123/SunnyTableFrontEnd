@@ -871,8 +871,8 @@ Page({
     judgeYType: function () {
         var i, j;
         var regex = /^[0-9]+.?[0-9]*/;
-        for (i = 0; i < this.data.xValues.length; i++) {
-            for (j = 0; j < this.data.groupNum; j++) {
+        for (i = 0; i < this.data.groupNum; i++) {
+            for (j = 0; j < this.data.xValues.length; j++) {
                 if (!regex.test(this.data.datas[i][j])) {
                     return "string";
                 }
@@ -1226,7 +1226,8 @@ Page({
             newGroupName.push(dataArray[i]["name"]);
             newDatas.push(dataArray[i]["lineData"]);
         }
-        console.log('newDatas', newDatas)
+        console.log('newDatas', newDatas);
+        inputData = this.convertData();
         this.setData({
             datas: newDatas,
             groupName: newGroupName
