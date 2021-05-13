@@ -275,8 +275,11 @@ Page({
 		if (this.data.isChangeTemplate) {
 			var tmeplates = [this.getLineTemplate, this.getBarTemplate, this.getPieTemplate, this.getScatterTemplate]
 			var index = this.data.type
-			var template = tmeplates[index]()
-			console.log(template)
+			var template = this.data.defaulteTemplate
+			var mtemplate = tmeplates[index]()
+			Object.assign(template,mtemplate)
+			console.log('fuck')
+			console.log('template is ',template)
 			const eventChannel = this.getOpenerEventChannel()
 			eventChannel.emit('back', {
 				template: template
