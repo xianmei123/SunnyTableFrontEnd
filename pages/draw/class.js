@@ -26,7 +26,7 @@
         "color": ['red', '#ba55d3'],
         "showDigit": true, //"true" or "false"，是否显示数值，指图中每个点是否标注数值
         "font": 14, //字体大小
-        "legendPos": "30%,,,0%,vertical", //图例位置 top bottom left right
+        "legendPos": "30%,null,null,0%,vertical", //图例位置 top bottom left right
         "textColor": "#1e90ff", //字体颜色
         "isVisible": false,
     };

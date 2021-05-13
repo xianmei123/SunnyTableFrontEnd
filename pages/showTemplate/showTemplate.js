@@ -1,7 +1,7 @@
 // pages/showTemplate/showTemplate.js
 import * as echarts from '../../ec-canvas/echarts';
 export var inputData = [
-    ['product', 'Matcha Latte', 'Milk Tea','Cheese Cocoa'],
+    ['product', 'Matcha Latte', 'Milk Tea', 'Cheese Cocoa'],
     ['2012', 41.1, 86.5, 24.1],
     ['2013', 30.4, 92.1, 24.1],
 ];
@@ -194,7 +194,7 @@ function setBarOption(barChart) {
         }],
         series: series
     };
-    //setLegendOption(option, template.legendPos);
+    setLegendOption(option, template.legendPos);
     console.log(option);
     barChart.setOption(option);
     if (template.showDigit) {
@@ -230,19 +230,19 @@ function initPieChart(canvas, width, height, dpr) {
 }
 
 
-function setPieOption() {
+function setPieOption(pieChart) {
     var series = [];
     var tempJson = {
         name: inputData[0][0],
         type: 'pie',
         radius: template.radius,
         avoidLabelOverlap: true,
-        data: convertToPieData(inputData[0].slice(1, inputData[0].length))
+        data: convertToPieData(inputData)
     };
     series.push(tempJson);
     var option = {
         title: {
-            text: draw.getPage().getData('templateName'),
+            text: draw.getPage().data.templateName,
             left: 'center',
             textStyle: {
                 color: template.textColor,
@@ -282,13 +282,13 @@ function initScatterChart(canvas, width, height, dpr) {
         devicePixelRatio: dpr
     });
     canvas.setChart(tempChart);
-    return setScatterOption(tempChart);
+    setScatterOption(tempChart);
+    return tempChart;
 }
 
 function setScatterOption(scatterChart) {
     var pageData = draw.getPage().data;
     var series = [];
-    var count = 0;
     for (var i = 1; i < inputData.length; i++) {
         var name = inputData[i][0];
         var tempJson = {
@@ -298,15 +298,11 @@ function setScatterOption(scatterChart) {
             symbolSize: template.increase ? function (data, params) {
                 return Math.sqrt(data[1]) * 7; // 开方 此函数不能处理负数
             } : 15,
-            lineStyle: {
-                color: template.color[count],
-            }
+            data: convertToScatterData(inputData)
         };
         series.push(tempJson);
-        count++;
     }
     var option = {
-        dataset: inputData,
         title: {
             text: pageData.templateName,
             left: 'center',
@@ -351,10 +347,9 @@ function setScatterOption(scatterChart) {
     } else {
         scatterChart.setOption({
             tooltip: {
-                triggerOn: 'none',
                 formatter: function (params) {
-                    var xstr = xType === "string" ? params.data[0] : params.data[0].toFixed(2);
-                    var ystr = yType === "string" ? params.data[1] : params.data[1].toFixed(2);
+                    var xstr = xType === "string" ? params.data[0] : parseFloat(params.data[0]).toFixed(2);
+                    var ystr = yType === "string" ? params.data[1] : parseFloat(params.data[1]).toFixed(2);
                     return 'X: ' +
                         xstr +
                         '\nY: ' +
@@ -369,17 +364,25 @@ function setScatterOption(scatterChart) {
 function convertToPieData(tempData) {
     var resultArr = [];
     var index = xType === "string" ? 1 : 0;
-    for (var i in tempData) {
+    for (var i = 1; i < tempData[0].length; i++) {
         var tempJson = {};
-        tempJson.name = tempData[i][1 - index];
-        tempJson.value = tempData[i][index];
-        if (this.pieTemplate.color[i] != "") {
+        tempJson.name = tempData[1 - index][i];
+        tempJson.value = tempData[index][i];
+        if (template.color[i] != "") {
             tempJson.itemStyle = {};
             tempJson.itemStyle['color'] = template.color[i];
         }
         resultArr.push(tempJson);
     }
     return resultArr;
+}
+
+function convertToScatterData(tempData) {
+    var tempArr = [];
+    for (var i = 1; i < tempData[0].length; i++) {
+        tempArr.push([tempData[0][i], tempData[1][i]]);
+    }
+    return tempArr;
 }
 
 Page({
@@ -399,7 +402,7 @@ Page({
         },
         xName: "x",
         yName: "y",
-        isShowLine: true,
+        isShowLine: false,
         isShowBar: false,
         isShowPie: false,
         isShowScatter: false
@@ -409,6 +412,7 @@ Page({
         draw = require('../draw/draw');
         const eventChannel = this.getOpenerEventChannel();
         eventChannel.on('openTemplate', (data) => {
+            console.log(data);
             switch (data.type) {
                 case "line":
                     this.setData({
@@ -458,7 +462,7 @@ Page({
 export function setShowTemplate(showData, showTemplate, showXType, showYType) {
     inputData = showData;
     template = showTemplate,
-    xType = showXType;
+        xType = showXType;
     yType = showYType;
 }
 
