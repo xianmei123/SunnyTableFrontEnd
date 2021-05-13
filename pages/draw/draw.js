@@ -584,6 +584,9 @@ function setScatterOption(scatterChart) {
 
 Page({
     data: {
+        graphName: "默认标题", // 在图的最上方显示的标题
+        xName: "x",
+        yName: "y",
         option1: [{
                 text: '折线图',
                 value: 'line'
@@ -658,6 +661,18 @@ Page({
                 this.openData(res.data)
             });
         }
+    },
+    setChartName(event) {
+        this.data.graphName = event.detail;
+        graphName = event.detail;
+    },
+    setXName(event) {
+        this.data.xName = event.detail;
+        xName = event.detail;
+    },
+    setYName(event) {
+        this.data.yName = event.detail;
+        yName = event.detail;
     },
     changeRegion: function (event) {
         var newRegion = [event.target.dataset.a, event.target.dataset.b];

@@ -57,8 +57,19 @@
         </block>
     </view>
 </view>
+<text>\n</text>
 <view>
-    <text>\n</text>
+    <van-field placeholder="输入图表标题" border="{{ true }}" bind:change="setChartName"/>
+    <van-row>
+        <van-col span="12">
+            <van-field placeholder="输入横轴名称" border="{{ true }}" bind:change="setXName"/>
+        </van-col>
+        <van-col span="12">
+            <van-field placeholder="输入纵轴名称" border="{{ true }}" bind:change="setYName"/>
+        </van-col>
+    </van-row>
+</view>
+<view>
     <text>当前单元格数据：{{currentGezi}}</text>
     <text>\n</text>
     <view class="title">输入数据</view>
