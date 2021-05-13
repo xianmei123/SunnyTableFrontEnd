@@ -162,9 +162,13 @@ Page({
       dirStack
     })
   },
-  flush() {
+  flush(show) {
     var dirStack = this.data.dirStack
     this.changeDir(dirStack[dirStack.length - 1])
+    if(show)
+      wx.showToast({
+        title: '刷新成功',
+      })
     // var fileList = JSON.parse(JSON.stringify(server.bfs(dirStack[dirStack.length-1].id)[1].fileList))
     // this.setData({fileList})
   },
@@ -198,26 +202,34 @@ Page({
   },
   async changeDir(item) {
     var url = baseUrl + "/file/dir/open" + '/' + wx.getStorageSync('uid') + '/' + item.id
+    console.log(url)
     var res = await helper.trans(url);
+    console.log(res)
     this.data.fileList = res.data
-    if (helper.hasError(res)) return false
+    if (helper.hasError(res)) {
+      console.log('errors!:',res)
+      return false
+    }
     this.setData({
       fileList: this.data.fileList
     })
     return true
   },
-  openDir(event) {
-    if (!this.changeDir(event.currentTarget.dataset.item)) {
+ async openDir(event) {
+   var check = await this.changeDir(event.currentTarget.dataset.item)
+    if (!check) {
       return false;
     }
-    this.data.dirStack.push(event.currentTarget.dataset.item)
+    var dirStack = this.data.dirStack
+    if(dirStack.length==0||dirStack[dirStack.length-1].id != event.currentTarget.dataset.item.id) 
+        this.data.dirStack.push(event.currentTarget.dataset.item)
     this.setData({
       dirStack: this.data.dirStack
     })
   },
   async openGraph(item) {
     var urls = [' chart/barchart/open', '/chart/linechart/open', 'chart/fanchart/open', 'chart/scatterplot/open']
-    var url = baseUrl + '/' + urls[item.templateType] + '/' + item.id
+    var url = baseUrl + '/' + urls[item.templateType-1] + '/' + item.id
     var res = helper.trans(url)
     console.log(res)
     wx.navigateTo({
@@ -251,12 +263,11 @@ Page({
   async openTemplate(item) {
     var urls = ['template/barchart/open', 'template/linechart/open', 'template/fanchart/open', 'template/scatterplot/open']
     var type = ['bar', 'line', 'pie', 'scatter']
-    var url = baseUrl + '/' + urls[item.templateType] + '/' + item.id
+    var url = baseUrl + '/' + urls[item.templateType-1] + '/' + item.id
     var res = helper.trans(url)
     var draw = require('../draw/draw');
-    
     var showTemplate = require('../showTemplate/showTemplate');
-    showTemplate.setShowTemplate(this.data.showData, draw.convertFromBackTemplate(res, type[item.templateType]), 'string', 'number')
+    showTemplate.setShowTemplate(this.data.showData, draw.convertFromBackTemplate(res, type[item.templateType-1]), 'string', 'number')
     wx.navigateTo({
       url: '../showTemplate/showTemplate',
       success(result) {

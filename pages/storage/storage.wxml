@@ -59,6 +59,3 @@
   <van-cell  title="移动"  clickable="true" bindtap="moveObj"/>
 </van-popup>
 
-
-<button bindtap="duck"> test
-</button>
