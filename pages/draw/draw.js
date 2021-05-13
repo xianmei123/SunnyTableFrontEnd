@@ -1255,16 +1255,16 @@ Page({
         yName = chart["data"]["ylabel"];
         graphName = chart["data"]["name"];
         if (this.data.value1 == "line") {
-            line.lineTemplate = convertFromBackTemplate(chart["data"]["lineChart"]);
+            line.lineTemplate = convertFromBackTemplate(chart["data"]["lineChart"], "line");
         }
         if (this.data.value1 == "bar") {
-            bar.barTemplate = convertFromBackTemplate(chart["data"]["barChart"]);
+            bar.barTemplate = convertFromBackTemplate(chart["data"]["barChart"], "bar");
         }
         if (this.data.value1 == "pie") {
-            pie.pieTemplate = convertFromBackTemplate(chart["data"]["pieChart"]);
+            pie.pieTemplate = convertFromBackTemplate(chart["data"]["pieChart"], "pie");
         }
         if (this.data.value1 == "scatter") {
-            scatter.scatterTemplate = convertFromBackTemplate(chart["data"]["scatterChart"]);
+            scatter.scatterTemplate = convertFromBackTemplate(chart["data"]["scatterChart"], "scatter");
         }
         var newGroupName = [];
         var newDatas = [];
@@ -1283,6 +1283,7 @@ Page({
             graphName: chart["data"]["name"]
         });
         console.log(this.data);
+        this.repaint();
     },
     // 保存全部模板
     saveTemplate: function () {
