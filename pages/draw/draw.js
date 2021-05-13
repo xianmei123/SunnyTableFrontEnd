@@ -1282,7 +1282,6 @@ Page({
             groupName: newGroupName,
             graphName: chart["data"]["name"]
         });
-        console.log(this.data);
         this.repaint();
     },
     // 保存全部模板
@@ -1335,7 +1334,7 @@ Page({
         inputData = [];
         xType = undefined;
         yType = undefined;
-
+        
     },
 });
 
@@ -1493,7 +1492,7 @@ function updateScatterTemplate(template) {
  */
 function saveLineTemplate() {
     line.lineTemplate.isVisible = "true";
-    line.lineTemplate.userId = wx.getStorage('uid');
+    line.lineTemplate.userId = wx.getStorageSync('uid');
     wx.request({
         url: saveLineTemplateUrl,
         data: converToBackTemplate(line.lineTemplate, "line"),
@@ -1514,7 +1513,7 @@ function saveLineTemplate() {
  */
 function saveBarTemplate() {
     bar.barTemplate.isVisible = "true";
-    bar.barTemplate.userId = wx.getStorage('uid');
+    bar.barTemplate.userId = wx.getStorageSync('uid');
     wx.request({
         url: saveBarTemplateUrl,
         data: converToBackTemplate(bar.barTemplate, "bar"),
@@ -1534,7 +1533,7 @@ function saveBarTemplate() {
  */
 function savePieTemplate() {
     pie.pieTemplate.isVisible = "true";
-    pie.pieTemplate.userId = wx.getStorage('uid');
+    pie.pieTemplate.userId =  wx.getStorageSync('uid');
     wx.request({
         url: savePieTemplateUrl,
         data: converToBackTemplate(pie.pieTemplate, "pie"),
@@ -1554,7 +1553,7 @@ function savePieTemplate() {
  */
 function saveScatterTemplate() {
     scatter.scatterTemplate.isVisible = "true";
-    scatter.scatterTemplate.userId = wx.getStorage('uid');
+    scatter.scatterTemplate.userId =  wx.getStorageSync('uid');
     wx.request({
         url: saveScatterTemplateUrl,
         data: converToBackTemplate(scatter.scatterTemplate, "scatter"),
