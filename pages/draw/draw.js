@@ -873,10 +873,18 @@ Page({
         var newXValues = this.data.xValues;
         var newDatas = this.data.datas;
         newIterator1.pop();
-        newXValues.splice(this.data.region[1], 1);
-        var i;
-        for (i = 0; i < newDatas.length; i++) {
-            newDatas[i].splice(this.data.region[1], 1);
+        if (this.data.defaultRegion) {
+            newXValues.pop();
+            for (i = 0; i < newDatas.length; i++) {
+                newDatas[i].pop();
+            }
+        }
+        else {
+            newXValues.splice(this.data.region[1], 1);
+            var i;
+            for (i = 0; i < newDatas.length; i++) {
+                newDatas[i].splice(this.data.region[1], 1);
+            }
         }
         this.setData({
             iterator1: newIterator1,
@@ -932,9 +940,6 @@ Page({
             this.data.x2 = this.data.groupNum;
             this.data.y1 = 1;
             this.data.y2 = this.data.xValues.length;
-        }
-        if (this.data.defaultRegion) {
-            return this.convertData();
         }
         for (i = this.data.x1 - 1; i < this.data.x2; i++) {
             var tmp = [];
