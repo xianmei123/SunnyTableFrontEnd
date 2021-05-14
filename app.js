@@ -1,4 +1,23 @@
 // app.js
+!function(){
+  var PageTmp = Page;
+ 
+  Page =function (pageConfig) {
+     
+    // 设置全局默认分享
+    pageConfig = Object.assign({
+      onShareAppMessage:function () {
+        return {
+          title:'Sunny图表',
+          path:'/pages/index/index',
+          imageUrl:'',
+        };
+      }
+    },pageConfig);
+ 
+    PageTmp(pageConfig);
+  };
+}();
 var trans = async function(url,data,method){
   const res = await new Promise((resolve,reject) =>
   {
@@ -40,5 +59,14 @@ App({
   },
   globalData: {
     userInfo: null
-  }
+  },
+  onShareAppMessage() {
+		return {
+			title: "Sunny图表",
+			path: '/pages/index/index?id=12',
+			success: (res) => {
+				console.log("ye");
+			}
+		}
+	}
 })

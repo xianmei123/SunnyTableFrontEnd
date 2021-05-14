@@ -25,9 +25,6 @@ Page({
 		id: 0,
 		maxnum: 10,
 	},
-	onload: function () {
-		console.log('fuck')
-	},
 	async onLoad() {
 		helper = require('../storage/helper');
 		draw = require('../draw/draw');
@@ -43,9 +40,11 @@ Page({
 				text: x.name,
 				id: x.fid
 			})
+			this.data.activeId[map[x.type-1]] =  x.fid
 		}
 		this.setData({
-			items: this.data.items
+			items: this.data.items,
+			activeId:this.data.activeId
 		})
 	},
 	onClickNav({

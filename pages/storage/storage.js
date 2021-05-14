@@ -298,6 +298,13 @@ Page({
     var fileList = this.data.fileList
     for (var i = 0; i < fileList.length; i++) {
       if (fileList[i].id == this.data.activeObj.id) {
+        if(fileList[i].type==4&&fileList[i].templateType!=0){
+          wx.showToast({
+            title: '无法删默认目录',
+            icon:'error'
+          })
+          return false
+        }
         fileList.splice(i, 1)
         break
       }
