@@ -1082,6 +1082,9 @@ Page({
     },
     //导出csv
     exportToCSV() {
+        wx.showLoading({
+            title: '保存中',
+        })
         var i;
         var dataArray = [];
         dataArray.push({
@@ -1125,12 +1128,33 @@ Page({
                 //   })
                 wx.downloadFile({
                     url: "https://www.jaripon.xyz/data/getFile/" + wx.getStorageSync('uid') + "/" + "1",
-                    filePath: wx.env.USER_DATA_PATH + '/table.csv',
+                    filePath: wx.env.USER_DATA_PATH + '/table.xls',
                     success: function (res) {
-                        var filePath = res.filePath
-                        wx.openDocument({
-                            filePath: filePath,
-                            showMenu: true //表示右上角是否有转发按钮
+                        wx.hideLoading()
+                        wx.showToast({
+                            title: "保存成功",
+                            duration: 500
+                        })
+                        setTimeout(function () {
+                            wx.showLoading({
+                                title: '正在打开',
+                            })
+                        }, 500)
+                        setTimeout(function () {
+                            wx.hideLoading()
+                            var filePath = res.filePath
+                            wx.openDocument({
+                                filePath: filePath,
+                                showMenu: true //表示右上角是否有转发按钮
+                            })
+                        }, 1000)
+
+                    }, 
+                    fail: function() {
+                        wx.hideLoading()
+                        wx.showToast({
+                            title: "保存失败",
+                            icon: "error"
                         })
                     }
                     // success: res => {
@@ -1149,7 +1173,11 @@ Page({
                 })
             },
             fail: function () {
-                console.log("error");
+                wx.hideLoading()
+                wx.showToast({
+                    title: "保存失败",
+                    icon: "error"
+                })
             }
         });
     },
