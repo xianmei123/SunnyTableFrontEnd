@@ -194,7 +194,7 @@ function setBarOption(barChart) {
         }],
         series: series
     };
-    setLegendOption(option, template.legendPos);
+    draw.setLegendOption(option, template.legendPos);
     console.log(option);
     barChart.setOption(option);
     if (template.showDigit) {

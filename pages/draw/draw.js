@@ -539,19 +539,19 @@ function setScatterOption(scatterChart) {
     //         },
     //     });
     // } else {
-        scatterChart.setOption({
-            tooltip: {
-                triggerOn: 'none',
-                formatter: function (params) {
-                    var xstr = scatter.xType === "string" ? params.data[0] : parseFloat(params.data[0]).toFixed(2);
-                    var ystr = scatter.yType === "string" ? params.data[1] : parseFloat(params.data[1]).toFixed(2);
-                    return 'X: ' +
-                        xstr +
-                        '\nY: ' +
-                        ystr;
-                }
-            },
-        });
+    scatterChart.setOption({
+        tooltip: {
+            triggerOn: 'none',
+            formatter: function (params) {
+                var xstr = scatter.xType === "string" ? params.data[0] : parseFloat(params.data[0]).toFixed(2);
+                var ystr = scatter.yType === "string" ? params.data[1] : parseFloat(params.data[1]).toFixed(2);
+                return 'X: ' +
+                    xstr +
+                    '\nY: ' +
+                    ystr;
+            }
+        },
+    });
     // }
     scatterChart.setOption({
         graphic: echarts.util.map(scatter.inputList, function (dataItem, dataIndex) {
@@ -570,7 +570,7 @@ function setScatterOption(scatterChart) {
                 position: position,
                 shape: {
                     // r: Math.sqrt(dataItem[1]) * 7,
-                    r:  scatter.scatterTemplate.increase ? function (data, params) {
+                    r: scatter.scatterTemplate.increase ? function (data, params) {
                         return Math.sqrt(data[1]) * 7; // 开方 此函数不能处理负数
                     } : 15,
                 },
@@ -769,7 +769,7 @@ Page({
                 }
                 console.log([this.data.x1, this.data.y1, this.data.x2, this.data.y2]);
                 wx.showToast({
-                  title: '选中区域成功'
+                    title: '选中区域成功'
                 })
                 return;
             }
@@ -1068,6 +1068,7 @@ Page({
                 back: (backData) => {
                     var targets = [updateLineTemplate, updateBarTemplate, updatePieTemplate, updateScatterTemplate];
                     targets[index](backData.template);
+
                 }
             },
             success(result) {
@@ -1098,7 +1099,7 @@ Page({
         }
         console.log(dataArray);
         wx.request({
-            url: "https://www.jaripon.xyz/data/export/" + wx.getStorageSync('uid') + "/" + this.data.value1,
+            url: "https://www.jaripon.xyz/data/export/" + wx.getStorageSync('uid') + "/" + "1",
             data: {
                 "id": null,
                 "name": graphName,
@@ -1109,16 +1110,42 @@ Page({
             method: "POST",
             success: function (res) {
                 console.log(res);
+                // wx.downloadFile({
+                //     url: that.data.url,
+                //     filePath: wx.env.USER_DATA_PATH + '/123.jpg',
+                //     success: function (res) {
+                //         var filePath = res.filePath
+                //         wx.openDocument({
+                //               filePath: filePath,
+                //               success: function (res) {
+                //                   wx.hideLoading();
+                //               }
+                //         })
+                //     }
+                //   })
                 wx.downloadFile({
-                    url: res.tempFilePath,
-                    success: res => {
-                        wx.saveFile({
-                            tempFilePath: res.tempFilePath,
-                            success: res => {
-                                console.log(res.savedFilePath);
-                            }
+                    url: "https://www.jaripon.xyz/data/getFile/" + wx.getStorageSync('uid') + "/" + "1",
+                    filePath: wx.env.USER_DATA_PATH + '/table.csv',
+                    success: function (res) {
+                        var filePath = res.filePath
+                        wx.openDocument({
+                            filePath: filePath,
+                            showMenu: true //表示右上角是否有转发按钮
                         })
                     }
+                    // success: res => {
+                    //     console.log(res);
+                    //     wx.saveFile({
+                    //         tempFilePath: res.tempFilePath,
+                    //         success: res => {
+                    //             console.log("saveSuccess");
+                    //             console.log(res.savedFilePath);
+                    //             wx.showToast({
+                    //                 title: res.savedFilePath
+                    //             });
+                    //         }
+                    //     })
+                    // }
                 })
             },
             fail: function () {
@@ -1334,7 +1361,7 @@ Page({
         inputData = [];
         xType = undefined;
         yType = undefined;
-        
+
     },
 });
 
@@ -1493,6 +1520,7 @@ function updateScatterTemplate(template) {
 function saveLineTemplate() {
     line.lineTemplate.isVisible = "true";
     line.lineTemplate.userId = wx.getStorageSync('uid');
+    console.log(line.lineTemplate);
     wx.request({
         url: saveLineTemplateUrl,
         data: converToBackTemplate(line.lineTemplate, "line"),
@@ -1533,7 +1561,7 @@ function saveBarTemplate() {
  */
 function savePieTemplate() {
     pie.pieTemplate.isVisible = "true";
-    pie.pieTemplate.userId =  wx.getStorageSync('uid');
+    pie.pieTemplate.userId = wx.getStorageSync('uid');
     wx.request({
         url: savePieTemplateUrl,
         data: converToBackTemplate(pie.pieTemplate, "pie"),
@@ -1553,7 +1581,7 @@ function savePieTemplate() {
  */
 function saveScatterTemplate() {
     scatter.scatterTemplate.isVisible = "true";
-    scatter.scatterTemplate.userId =  wx.getStorageSync('uid');
+    scatter.scatterTemplate.userId = wx.getStorageSync('uid');
     wx.request({
         url: saveScatterTemplateUrl,
         data: converToBackTemplate(scatter.scatterTemplate, "scatter"),
@@ -1819,7 +1847,7 @@ function onPointScatterDragging(dataIndex) {
         scatter.scatterChart.setOption({
             series: [{
                 name: name,
-                data:scatter.inputList.slice(scatter.nameToIndex[name].minIndex, scatter.nameToIndex[name].maxIndex)
+                data: scatter.inputList.slice(scatter.nameToIndex[name].minIndex, scatter.nameToIndex[name].maxIndex)
             }]
         });
     }, 0);
