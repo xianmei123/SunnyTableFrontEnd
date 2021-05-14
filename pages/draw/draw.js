@@ -1361,7 +1361,7 @@ Page({
         inputData = [];
         xType = undefined;
         yType = undefined;
-
+        pie.pieData = null;
     },
 });
 
