@@ -624,6 +624,8 @@ Page({
         showPieChart: true,
         showScatterChart: true,
         errorChart: "您当前无法绘制此图，请检查您的数据是否为空或数据的格式是否正确。",
+        showInputTemplateName: false,
+        inputTemplateName: "",
         lineChart: {
             onInit: initLineChart
         },
@@ -657,6 +659,21 @@ Page({
         defaultRegion: true, //是否选过
         region: [0, 0],
         pieChartNo: 0
+    },
+    onClose(){
+        this.setData({
+            showInputTemplateName: false
+        });
+    },
+    isSaveTemplate() {
+        this.setData({
+            showInputTemplateName: true
+        })
+    },
+    onInputName(event) {
+        this.setData({
+            inputTemplateName: event.detail
+        });
     },
     onLoad() {
         const eventChannel = this.getOpenerEventChannel()
@@ -1346,18 +1363,19 @@ Page({
     },
     // 保存全部模板
     saveTemplate: function () {
+        console.log("begin");
         switch (this.data.value1) {
             case "line":
-                saveLineTemplate();
+                saveLineTemplate(this.data.inputTemplateName);
                 break;
             case "bar":
-                saveBarTemplate();
+                saveBarTemplate(this.data.inputTemplateName);
                 break;
             case "pie":
-                savePieTemplate();
+                savePieTemplate(this.data.inputTemplateName);
                 break;
             case "scatter":
-                saveScatterTemplate();
+                saveScatterTemplate(this.data.inputTemplateName);
                 break;
         }
     },
@@ -1550,9 +1568,10 @@ function updateScatterTemplate(template) {
  * 折线图模板上传
  * 此方法是将折线图模板上传到服务器
  */
-function saveLineTemplate() {
+function saveLineTemplate(name) {
     line.lineTemplate.isVisible = "true";
     line.lineTemplate.userId = wx.getStorageSync('uid');
+    line.lineTemplate.name = name;
     console.log(line.lineTemplate);
     wx.request({
         url: saveLineTemplateUrl,
@@ -1572,9 +1591,10 @@ function saveLineTemplate() {
  * 条形图模板上传
  * 此方法是将条形图模板上传到服务器
  */
-function saveBarTemplate() {
+function saveBarTemplate(name) {
     bar.barTemplate.isVisible = "true";
     bar.barTemplate.userId = wx.getStorageSync('uid');
+    bar.barTemplate.name = name;
     wx.request({
         url: saveBarTemplateUrl,
         data: converToBackTemplate(bar.barTemplate, "bar"),
@@ -1592,9 +1612,10 @@ function saveBarTemplate() {
  * 饼状图模板上传
  * 此方法是将饼状图模板上传到服务器
  */
-function savePieTemplate() {
+function savePieTemplate(name) {
     pie.pieTemplate.isVisible = "true";
     pie.pieTemplate.userId = wx.getStorageSync('uid');
+    pie.pieTemplate.name = name;
     wx.request({
         url: savePieTemplateUrl,
         data: converToBackTemplate(pie.pieTemplate, "pie"),
@@ -1612,9 +1633,10 @@ function savePieTemplate() {
  * 散点图模板上传
  * 此方法是将散点图模板上传到服务器
  */
-function saveScatterTemplate() {
+function saveScatterTemplate(name) {
     scatter.scatterTemplate.isVisible = "true";
     scatter.scatterTemplate.userId = wx.getStorageSync('uid');
+    scatter.scatterTemplate.name = name;
     wx.request({
         url: saveScatterTemplateUrl,
         data: converToBackTemplate(scatter.scatterTemplate, "scatter"),
