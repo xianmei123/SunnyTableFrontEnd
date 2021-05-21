@@ -1,9 +1,7 @@
-
-
- class LineGraph {
+class LineGraph {
     lineChart = null;
     count = 0;
-    title = "默认标题"; 
+    title = "默认标题";
     inputList = []; // 输入数据 坐标列表 
     indexToName = []; // <index, name>
     nameToIndex = {};
@@ -81,14 +79,16 @@
             'dataArray': [{
                 'name': "lsp",
                 'cid': null,
-                'lineData':[[]]
+                'lineData': [
+                    []
+                ]
             }]
         }
         var dataArray = [];
         var tempJson = {};
         tempJson.name = 'xlabel';
         tempJson.cid = null;
-        tempJson.lineData =  getSingleData(this.inputList.slice(this.nameToIndex[this.indexToName[0]].minIndex, this.nameToIndex[this.indexToName[0]].maxIndex), 0);
+        tempJson.lineData = getSingleData(this.inputList.slice(this.nameToIndex[this.indexToName[0]].minIndex, this.nameToIndex[this.indexToName[0]].maxIndex), 0);
         dataArray.push(tempJson);
         for (var i = 0; i < this.inputList.length;) {
             var name = this.indexToName[i];
@@ -192,7 +192,7 @@ class BarGraph {
 
 }
 
- class PieGraph {
+class PieGraph {
     pieChart = null;
     name; // 由于暂时只允许在扇形图上一次性展示一个图，在有组数据时，需要首先进行选择并调用setInputData方法来进行设置PieGraph的对象中的数据
     pieData;
@@ -211,7 +211,7 @@ class BarGraph {
         "showPercent": true,
         "titleFont": 20,
         "labelFont": 10,
-        "legendPos": "30%,,,0%,vertical", 
+        "legendPos": "30%,,,0%,vertical",
         "textColor": "red",
         "isVisible": false,
     };
@@ -232,7 +232,7 @@ class BarGraph {
         for (var i in tempData) {
             var tempJson = {};
             tempJson.name = tempData[i][index];
-            tempJson.value = tempData[i][1 - index ];
+            tempJson.value = tempData[i][1 - index];
             if (this.pieTemplate.color[i] != "") {
                 tempJson.itemStyle = {};
                 tempJson.itemStyle['color'] = this.pieTemplate.color[i];
@@ -255,11 +255,11 @@ class BarGraph {
         } else {
             return true;
         }
-       
+
     }
 }
 
- class ScatterGraph {
+class ScatterGraph {
     scatterChart = null;
     constructor() {
 
@@ -284,7 +284,7 @@ class BarGraph {
         "showDigit": true,
         "increase": false, // 点大小是否会随着数值变化而变化，
         "font": 12,
-        "legendPos": "30%,,,0%,vertical", 
+        "legendPos": "30%,,,0%,vertical",
         "textColor": "blue",
         "isVisible": true,
     }

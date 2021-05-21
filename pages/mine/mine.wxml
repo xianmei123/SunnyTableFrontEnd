@@ -1,4 +1,4 @@
-<!--pages/personal/personal.wxml-->
+<!-- pages/personal/personal.wxml -->
 <wxs module="foo">
   var test = "sfdsdsf";
   var duck = function(event, ownerInstance){
@@ -16,31 +16,30 @@
   <block>
     <image class="logo" src='{{userLogo}}'></image>
     <view class='title'>hi~ {{userName}}</view>
-  
     <text>\n\n\n\n\n\n\n\n</text>
     <view class="content">
       <view class='menu-line' bindtap="login">
-        <view class='menu-name' >
-          <image src=''></image>
-          <view >微信授权</view>
-        </view>
-        <image src=''></image>
-      </view>
-      <view class='menu-line' bindtap="prefer"  hi="1">
         <view class='menu-name'>
-          <image src=''></image>
-        <view>偏好设置</view>
+         
+          <view>微信授权</view>
         </view>
-        <image src=''></image>
+        
       </view>
-
+      <view class='menu-line' bindtap="prefer" hi="1">
+        <view class='menu-name'>
+          
+          <view>偏好设置</view>
+        </view>
+        
+      </view>
       <view class='menu-line' bindtap='aboutUs'>
         <view class='menu-name'>
-          <image src=''></image>
+         
         <view>关于我们</view>
         </view>
-        <image src=''></image>
+        
       </view>
+      <button open-type="feedback" style="background-color: white;margin-top: 10px">意见反馈</button>
     </view>
   </block>
 </view>
