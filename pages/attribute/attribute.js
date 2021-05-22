@@ -278,8 +278,6 @@ Page({
 			var template = this.data.defaulteTemplate
 			var mtemplate = tmeplates[index]()
 			Object.assign(template,mtemplate)
-			console.log('fuck')
-			console.log('template is ',template)
 			const eventChannel = this.getOpenerEventChannel()
 			eventChannel.emit('back', {
 				template: template

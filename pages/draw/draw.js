@@ -1,33 +1,27 @@
 // pages/draw/draw.js
 
 import * as echarts from '../../ec-canvas/echarts';
-const saveLineTemplateUrl = "https://www.jaripon.xyz/template/linechart/save";
-const saveBarTemplateUrl = "https://www.jaripon.xyz/template/barchart/save";
-const savePieTemplateUrl = "https://www.jaripon.xyz/template/fanchart/save";
-const saveScatterTemplateUrl = "https://www.jaripon.xyz/template/scatterplot/save";
-
-const exportToCSVUrl = "https://www.jaripon.xyz/data/export/1";
-
-const replaceLineTemplateUrl = "https://www.jaripon.xyz/template/linechart/replace";
-const replaceBarTemplateUrl = "https://www.jaripon.xyz/template/barchart/replace";
-const replacePieTemplateUrl = "https://www.jaripon.xyz/template/fanchart/replace";
-const replaceScatterTemplateUrl = "https://www.jaripon.xyz/template/scatterplot/replace";
-
 var inputData = {}; // 输入数据
 var graph = require('./class');
 var xType; // 输入数据x轴类型
 var yType; // 输入数据y轴类型
 
-var bar = new graph.BarGraph();
-var line = new graph.LineGraph();
-var pie = new graph.PieGraph();
-var scatter = new graph.ScatterGraph();
+var line = new graph.LineGraph("line");
+var bar = new graph.BarGraph("bar");
+var pie = new graph.PieGraph("pie");
+var scatter = new graph.ScatterGraph("scatter");
 
 var graphName = "默认标题"; // 在图的最上方显示的标题
 var graphId = null; //图的id 是否应该存在内存中？
 var xName = "x";
 var yName = "y";
-
+var indexToGraph = [line, bar, pie, scatter];
+var typeToIndex = new Map([
+    ["line", 0],
+    ["bar", 1],
+    ["pie", 2],
+    ["scatter", 3]
+]);
 
 
 /**
@@ -43,18 +37,19 @@ function initLineChart(canvas, width, height, dpr) {
         height: height,
         devicePixelRatio: dpr // new
     });
-    line.lineChart = lineChart;
-    canvas.setChart(line.lineChart);
+    line.chart = lineChart;
+    canvas.setChart(lineChart);
+    console.log(typeof line);
     if (isShowLineChart()) {
         console.log("init2");
-        line.lineChart = setLineOption(line.lineChart);
+        line.chart = setLineOption(line.chart, line.template);
     } else {
         getPage().setData({
             showLineChart: false
         });
     }
     console.log("init LineGraph Success!!");
-    return line.lineChart;
+    return lineChart;
 }
 
 /**
@@ -65,20 +60,21 @@ function initLineChart(canvas, width, height, dpr) {
  * @param {*} lineChart 
  * @returns 设置option成功后的lineChart
  */
-function setLineOption(lineChart) {
+function setLineOption(lineChart, template) {
     lineChart.clear();
     var series = [];
     var count = 0;
     var option;
+    console.log(template);
     for (var i = 0; i < line.inputList.length;) {
         var name = line.indexToName[i];
         var tempJson = {
             name: name,
             type: "line",
-            symbolSize: line.lineTemplate.radius,
+            symbolSize: template.radius,
             data: line.inputList.slice(line.nameToIndex[name].minIndex, line.nameToIndex[name].maxIndex),
             lineStyle: {
-                color: line.lineTemplate.color[count],
+                color: template.color[count],
             }
         };
         i = line.nameToIndex[name].maxIndex;
@@ -100,13 +96,12 @@ function setLineOption(lineChart) {
             text: graphName,
             left: "center",
             textStyle: {
-                color: line.lineTemplate.textColor,
-                fontSize: line.lineTemplate.font
+                color: template.textColor,
+                fontSize: template.font
             }
         },
 
         xAxis: {
-
             name: xName,
             type: line.xType === "string" ? 'category' : 'value',
             boundaryGap: !(line.xType === "string"),
@@ -124,10 +119,10 @@ function setLineOption(lineChart) {
         },
         series: series
     };
-    setLegendOption(option, line.lineTemplate.legendPos);
+    setLegendOption(option, template.legendPos);
     lineChart.setOption(option); // 
     setMinAndMax(lineChart, option);
-    if (line.lineTemplate.showDigit) {
+    if (template.showDigit) {
         lineChart.setOption({
             tooltip: {
                 triggerOn: 'none',
@@ -165,12 +160,12 @@ function setLineOption(lineChart) {
             }
             return {
                 type: 'circle',
-                position: line.lineChart.convertToPixel('grid', dataItem),
+                position: line.chart.convertToPixel('grid', dataItem),
                 shape: {
-                    r: line.lineTemplate.radius / 2
+                    r: template.radius / 2
                     // r : 20 / 2
                 },
-                invisible: true,
+                invisible: false,
                 draggable: !(xType === 'string' && yType === 'string'),
                 ondrag: echarts.util.curry(onPointLineDragging, dataIndex),
                 z: 100,
@@ -179,7 +174,7 @@ function setLineOption(lineChart) {
             };
         })
     });
-
+    console.log()
     return lineChart;
 }
 
@@ -196,10 +191,10 @@ function initBarChart(canvas, width, height, dpr) {
         height: height,
         devicePixelRatio: dpr // new
     });
-    bar.barChart = barChart;
+    bar.chart = barChart;
     canvas.setChart(barChart);
     if (isShowBarChart()) {
-        barChart = setBarOption(barChart);
+        barChart = setBarOption(barChart, bar.template);
     } else {
         getPage().setData({
             showBarChart: false
@@ -216,7 +211,7 @@ function initBarChart(canvas, width, height, dpr) {
  * @param {} barChart 
  * @returns 设置option成功后的barChart
  */
-function setBarOption(barChart) {
+function setBarOption(barChart, template) {
     barChart.clear();
     var series = [];
     var count = 0;
@@ -227,9 +222,9 @@ function setBarOption(barChart) {
             name: name,
             type: "bar",
             data: bar.inputList.slice(bar.nameToIndex[name].minIndex, bar.nameToIndex[name].maxIndex),
-            barWidth: bar.barTemplate.width,
-            barGap: bar.barTemplate.gap,
-            color: bar.barTemplate.color[count]
+            barWidth: template.width,
+            barGap: template.gap,
+            color: template.color[count]
         };
         i = bar.nameToIndex[name].maxIndex;
         series.push(tempJson);
@@ -244,8 +239,8 @@ function setBarOption(barChart) {
             text: graphName,
             left: "center",
             textStyle: {
-                color: bar.barTemplate.textColor,
-                fontSize: bar.barTemplate.font
+                color: template.textColor,
+                fontSize: template.font
             }
         },
         toolbox: {
@@ -269,10 +264,10 @@ function setBarOption(barChart) {
         }],
         series: series
     };
-    setLegendOption(option, bar.barTemplate.legendPos);
+    setLegendOption(option, template.legendPos);
     barChart.setOption(option);
     setMinAndMax(barChart, option);
-    if (bar.barTemplate.showDigit) {
+    if (template.showDigit) {
         barChart.setOption({
             tooltip: {
                 trigger: 'axis',
@@ -302,9 +297,9 @@ function setBarOption(barChart) {
     //         }
     //         return {
     //             type: 'rect',
-    //             position: [position[0] - bar.barTemplate.width / 2, position[1]],
+    //             position: [position[0] - template.width / 2, position[1]],
     //             shape: {
-    //                 width: bar.barTemplate.width,
+    //                 width: template.width,
     //                 height: 10
     //                 // r : 20 / 2
     //             },
@@ -332,10 +327,10 @@ function initPieChart(canvas, width, height, dpr) {
         height: height,
         devicePixelRatio: dpr // new
     });
-    pie.pieChart = pieChart;
+    pie.chart = pieChart;
     canvas.setChart(pieChart);
     if (isShowPieChart()) {
-        pieChart = setPieOption(pieChart, true);
+        pieChart = setPieOption(pieChart, pie.template);
     } else {
         getPage().setData({
             showPieChart: false
@@ -352,15 +347,15 @@ function initPieChart(canvas, width, height, dpr) {
  * @param {} pieChart 
  * @returns 设置option成功后的pieChart
  */
-function setPieOption(pieChart) {
+function setPieOption(pieChart, template) {
     pieChart.clear();
     var option;
     var series = [];
-    var legendArr = pie.pieTemplate.legendPos.split(",");
+    var legendArr = template.legendPos.split(",");
     var tempJson = {
         name: pie.name,
         type: 'pie',
-        radius: pie.pieTemplate.radius,
+        radius: template.radius,
         avoidLabelOverlap: true,
         data: pie.convertToPieData(pie.pieData)
     };
@@ -374,8 +369,8 @@ function setPieOption(pieChart) {
             text: graphName,
             left: 'center',
             textStyle: {
-                color: pie.pieTemplate.textColor,
-                fontSize: pie.pieTemplate.titleFont
+                color: template.textColor,
+                fontSize: template.titleFont
             }
         },
         toolbox: {
@@ -386,14 +381,14 @@ function setPieOption(pieChart) {
         tooltip: {
             trigger: 'item',
             textStyle: {
-                fontSize: pie.pieTemplate.labelFont
+                fontSize: template.labelFont
             },
             formatter: function (params) {
                 var result;
-                if (pie.pieTemplate.showPercent) {
-                    result = params.name + ": " + params.percent + "%(" + parseFloat(params.value).toFixed(pie.pieTemplate.precision) + ")";
+                if (template.showPercent) {
+                    result = params.name + ": " + params.percent + "%(" + parseFloat(params.value).toFixed(template.precision) + ")";
                 } else {
-                    result = params.name + ": " + parseFloat(params.value).toFixed(pie.pieTemplate.precision);
+                    result = params.name + ": " + parseFloat(params.value).toFixed(template.precision);
                 }
                 return result;
             }
@@ -404,15 +399,15 @@ function setPieOption(pieChart) {
             left: legendArr[2],
             right: legendArr[3],
             orient: legendArr[4],
-            left: pie.pieTemplate.legendPos,
+            left: template.legendPos,
         },
         label: {
-            show: pie.pieTemplate.showLabel,
-            fontSize: pie.pieTemplate.labelFont
+            show: template.showLabel,
+            fontSize: template.labelFont
         },
         series: series
     };
-    setLegendOption(option, pie.pieTemplate.legendPos);
+    setLegendOption(option, template.legendPos);
     pieChart.setOption(option);
     return pieChart;
 }
@@ -429,13 +424,13 @@ function initScatterChart(canvas, width, height, dpr) {
         height: height,
         devicePixelRatio: dpr
     });
-    scatter.scatterChart = scatterChart;
+    scatter.chart = scatterChart;
     canvas.setChart(scatterChart);
     if (isShowScatterChart()) {
         getPage().setData({
             showScatterChart: true
         });
-        scatterChart = setScatterOption(scatterChart);
+        scatterChart = setScatterOption(scatterChart, scatter.template);
     } else {
         getPage().setData({
             showScatterChart: false
@@ -453,9 +448,9 @@ function initScatterChart(canvas, width, height, dpr) {
  * @param {} scatterChart 
  * @returns 设置option成功后的scatterChart
  */
-function setScatterOption(scatterChart) {
+function setScatterOption(scatterChart, template) {
     scatterChart.clear();
-    var legendArr = scatter.scatterTemplate.legendPos.split(",");
+    var legendArr = template.legendPos.split(",");
     var series = [];
     var count = 0;
     for (var i = 0; i < scatter.inputList.length;) {
@@ -463,13 +458,13 @@ function setScatterOption(scatterChart) {
         var tempJson = {
             name: name,
             type: "scatter",
-            symbolSize: scatter.scatterTemplate.increase ? function (data, params) {
+            symbolSize: template.increase ? function (data, params) {
                 return Math.sqrt(data[1]) * 7; // 开方 此函数不能处理负数
             } : 15,
             symbolSize: 15,
             data: scatter.inputList.slice(scatter.nameToIndex[name].minIndex, scatter.nameToIndex[name].maxIndex),
             itemStyle: {
-                color: scatter.scatterTemplate.color[count],
+                color: template.color[count],
             }
         };
         i = scatter.nameToIndex[name].maxIndex;
@@ -485,8 +480,8 @@ function setScatterOption(scatterChart) {
             text: graphName,
             left: 'center',
             textStyle: {
-                color: scatter.scatterTemplate.textColor,
-                fontSize: scatter.scatterTemplate.font
+                color: template.textColor,
+                fontSize: template.font
             }
         },
         toolbox: {
@@ -495,7 +490,7 @@ function setScatterOption(scatterChart) {
             }
         },
         itemStyle: {
-            color: scatter.scatterTemplate.color[0]
+            color: template.color[0]
         },
         xAxis: {
             name: xName,
@@ -514,31 +509,15 @@ function setScatterOption(scatterChart) {
             left: legendArr[2],
             right: legendArr[3],
             orient: legendArr[4],
-            left: scatter.scatterTemplate.legendPos,
+            left: template.legendPos,
         },
         series: series,
     };
-    setLegendOption(option, scatter.scatterTemplate.legendPos);
+    setLegendOption(option, template.legendPos);
 
     scatterChart.setOption(option);
     setMinAndMax(scatterChart, option);
     console.log("scatter: ", option);
-    // if (scatter.scatterTemplate.showLine) {
-    //     scatterChart.setOption({
-    //         tooltip: {
-    //             trigger: "axis",
-    //             // formatter: function (params) {
-    //             //     var xstr = scatter.xType === "string" ? params[0].data[0] : parseFloat(params[0].data[0]).toFixed(2);
-    //             //     var ystr = scatter.yType === "string" ? params[0].data[1] : parseFloat(params[0].data[1]).toFixed(2);
-    //             //     return 'X: ' + xstr + '\nY: ' + ystr;
-    //             // },
-    //             axisPointer: {
-    //                 type: "line",
-    //             }
-
-    //         },
-    //     });
-    // } else {
     scatterChart.setOption({
         tooltip: {
             triggerOn: 'none',
@@ -552,7 +531,6 @@ function setScatterOption(scatterChart) {
             }
         },
     });
-    // }
     scatterChart.setOption({
         graphic: echarts.util.map(scatter.inputList, function (dataItem, dataIndex) {
             var position = scatterChart.convertToPixel('grid', dataItem);
@@ -570,7 +548,7 @@ function setScatterOption(scatterChart) {
                 position: position,
                 shape: {
                     // r: Math.sqrt(dataItem[1]) * 7,
-                    r: scatter.scatterTemplate.increase ? function (data, params) {
+                    r: scatter.template.increase ? function (data, params) {
                         return Math.sqrt(data[1]) * 7; // 开方 此函数不能处理负数
                     } : 15,
                 },
@@ -660,9 +638,10 @@ Page({
         region: [0, 0],
         pieChartNo: 0
     },
-    onClose(){
+    onClose() {
         this.setData({
-            showInputTemplateName: false
+            showInputTemplateName: false,
+            inputTemplateNameL: ""
         });
     },
     isSaveTemplate() {
@@ -895,8 +874,7 @@ Page({
             for (i = 0; i < newDatas.length; i++) {
                 newDatas[i].pop();
             }
-        }
-        else {
+        } else {
             newXValues.splice(this.data.region[1], 1);
             var i;
             for (i = 0; i < newDatas.length; i++) {
@@ -1002,14 +980,12 @@ Page({
         this.setData({
             pieChartNo: event.detail - 1
         });
-        console.log(this.data.pieChartNo);
     },
     repaint: function () {
         inputData = this.convertPaintData();
         xType = this.judgeXType();
         yType = this.judgeYType();
         updateShow();
-        console.log("repaint");
         switch (this.data.value1) {
             case "line":
                 updateLineData(inputData);
@@ -1069,28 +1045,23 @@ Page({
         switch (this.data.value1) {
             case "line":
                 index = 0;
-                template = line.lineTemplate;
                 break;
             case "bar":
                 index = 1;
-                template = bar.barTemplate;
                 break;
             case "pie":
                 index = 2;
-                template = pie.pieTemplate;
                 break;
             case "scatter":
                 index = 3;
-                template = scatter.scatterTemplate;
                 break;
         }
+        template = indexToGraph[index].template;
         wx.navigateTo({
             url: '../attribute/attribute',
             events: {
                 back: (backData) => {
-                    var targets = [updateLineTemplate, updateBarTemplate, updatePieTemplate, updateScatterTemplate];
-                    targets[index](backData.template);
-
+                    updateTemplate(index, backData.template);
                 }
             },
             success(result) {
@@ -1122,7 +1093,6 @@ Page({
             }
             dataArray.push(obj);
         }
-        console.log(dataArray);
         wx.request({
             url: "https://www.jaripon.xyz/data/export/" + wx.getStorageSync('uid') + "/" + "1",
             data: {
@@ -1135,19 +1105,6 @@ Page({
             method: "POST",
             success: function (res) {
                 console.log(res);
-                // wx.downloadFile({
-                //     url: that.data.url,
-                //     filePath: wx.env.USER_DATA_PATH + '/123.jpg',
-                //     success: function (res) {
-                //         var filePath = res.filePath
-                //         wx.openDocument({
-                //               filePath: filePath,
-                //               success: function (res) {
-                //                   wx.hideLoading();
-                //               }
-                //         })
-                //     }
-                //   })
                 wx.downloadFile({
                     url: "https://www.jaripon.xyz/data/getFile/" + wx.getStorageSync('uid') + "/" + "1",
                     filePath: wx.env.USER_DATA_PATH + '/table.xls',
@@ -1171,27 +1128,14 @@ Page({
                             })
                         }, 1000)
 
-                    }, 
-                    fail: function() {
+                    },
+                    fail: function () {
                         wx.hideLoading()
                         wx.showToast({
                             title: "保存失败",
                             icon: "error"
                         })
                     }
-                    // success: res => {
-                    //     console.log(res);
-                    //     wx.saveFile({
-                    //         tempFilePath: res.tempFilePath,
-                    //         success: res => {
-                    //             console.log("saveSuccess");
-                    //             console.log(res.savedFilePath);
-                    //             wx.showToast({
-                    //                 title: res.savedFilePath
-                    //             });
-                    //         }
-                    //     })
-                    // }
                 })
             },
             fail: function () {
@@ -1286,28 +1230,29 @@ Page({
         }
         data["dataArray"] = dataArray;
         ret["data"] = data;
+        var url;
         if (this.data.value1 == "bar") {
-            bar.barTemplate.isVisible = "false";
-            bar.barTemplate.userId = wx.getStorageSync('uid');
-            ret["barChart"] = converToBackTemplate(bar.barTemplate, "bar");
-            var url = "https://www.jaripon.xyz/chart/barchart/save";
+            bar.template.isVisible = "false";
+            bar.template.userId = wx.getStorageSync('uid');
+            ret["barChart"] = converToBackTemplate(bar.template, "bar");
+            url = "https://www.jaripon.xyz/chart/barchart/save";
         }
         if (this.data.value1 == "line") {
-            line.lineTemplate.isVisible = "false";
-            line.lineTemplate.userId = wx.getStorageSync('uid');
-            ret["lineChart"] = converToBackTemplate(line.lineTemplate, "line");
+            line.template.isVisible = "false";
+            line.template.userId = wx.getStorageSync('uid');
+            ret["lineChart"] = converToBackTemplate(line.template, "line");
             url = "https://www.jaripon.xyz/chart/linechart/save"
         }
         if (this.data.value1 == "pie") {
-            pie.pieTemplate.isVisible = "false";
-            pie.pieTemplate.userId = wx.getStorageSync('uid');
-            ret["fanChart"] = converToBackTemplate(pie.pieTemplate, "pie");
+            pie.template.isVisible = "false";
+            pie.template.userId = wx.getStorageSync('uid');
+            ret["fanChart"] = converToBackTemplate(pie.template, "pie");
             url = "https://www.jaripon.xyz/chart/fanchart/save"
         }
         if (this.data.value1 == "scatter") {
-            scatter.scatterTemplate.isVisible = "false";
-            scatter.scatterTemplate.userId = wx.getStorageSync('uid');
-            ret["scatterPlot"] = converToBackTemplate(scatter.scatterTemplate, "scatter");
+            scatter.template.isVisible = "false";
+            scatter.template.userId = wx.getStorageSync('uid');
+            ret["scatterPlot"] = converToBackTemplate(scatter.template, "scatter");
             url = "https://www.jaripon.xyz/chart/scatterplot/save";
         }
         console.log(ret);
@@ -1332,16 +1277,16 @@ Page({
         yName = chart["data"]["ylabel"];
         graphName = chart["data"]["name"];
         if (this.data.value1 == "line") {
-            line.lineTemplate = convertFromBackTemplate(chart["data"]["lineChart"], "line");
+            line.template = convertFromBackTemplate(chart["data"]["lineChart"], "line");
         }
         if (this.data.value1 == "bar") {
-            bar.barTemplate = convertFromBackTemplate(chart["data"]["barChart"], "bar");
+            bar.template = convertFromBackTemplate(chart["data"]["barChart"], "bar");
         }
         if (this.data.value1 == "pie") {
-            pie.pieTemplate = convertFromBackTemplate(chart["data"]["pieChart"], "pie");
+            pie.template = convertFromBackTemplate(chart["data"]["pieChart"], "pie");
         }
         if (this.data.value1 == "scatter") {
-            scatter.scatterTemplate = convertFromBackTemplate(chart["data"]["scatterChart"], "scatter");
+            scatter.template = convertFromBackTemplate(chart["data"]["scatterChart"], "scatter");
         }
         var newGroupName = [];
         var newDatas = [];
@@ -1361,28 +1306,11 @@ Page({
         });
         this.repaint();
     },
-    // 保存全部模板
+    // 保存模板
     saveTemplate: function () {
-        console.log("begin");
-        switch (this.data.value1) {
-            case "line":
-                saveLineTemplate(this.data.inputTemplateName);
-                break;
-            case "bar":
-                saveBarTemplate(this.data.inputTemplateName);
-                break;
-            case "pie":
-                savePieTemplate(this.data.inputTemplateName);
-                break;
-            case "scatter":
-                saveScatterTemplate(this.data.inputTemplateName);
-                break;
-        }
+        var index = typeToIndex.get(this.data.value1);
+        saveTemplate(indexToGraph[index].template, this.data.value1, this.data.inputTemplateName);
     },
-    saveLineTemplate: saveLineTemplate,
-    saveBarTemplate: saveBarTemplate,
-    savePieTemplate: savePieTemplate,
-    saveScatterTemplate: saveScatterTemplate,
     /**
      * 用户点击右上角分享
      */
@@ -1390,20 +1318,6 @@ Page({
 
     },
     onShow() {
-        // switch (this.data.value1) {
-        //     case "line":
-        //         setLineOption(line.lineChart);
-        //         break;
-        //     case "bar":
-        //         setBarOption(bar.barChart);
-        //         break;
-        //     case "pie":
-        //         setPieOption(pie.pieChart);
-        //         break;
-        //     case "scatter":
-        //         setScatterOption(scatter.scatterChart);
-        //         break;
-        // }
     },
     onReady: function () {
 
@@ -1473,7 +1387,8 @@ function getPage() {
 function updateLineData(inputData) {
     line.init(inputData, xType, yType);
     if (isShowLineChart()) {
-        setLineOption(line.lineChart);
+        console.log(line);
+        setLineOption(line.chart, line.template);
     }
 }
 
@@ -1485,7 +1400,7 @@ function updateLineData(inputData) {
 function updateBarData(inputData) {
     bar.init(inputData, xType, yType);
     if (isShowBarChart()) {
-        setBarOption(bar.barChart);
+        setBarOption(bar.chart, bar.template);
     }
 }
 
@@ -1500,7 +1415,7 @@ function updatePieData(name, data) {
             getPage().setData({
                 showPieChart: true
             });
-            setPieOption(pie.pieChart);
+            setPieOption(pie.chart, pie.template);
         } else {
             getPage().setData({
                 showPieChart: false
@@ -1517,132 +1432,46 @@ function updatePieData(name, data) {
 function updateScatterData(inputData) {
     scatter.init(inputData, xType, yType);
     if (isShowScatterChart()) {
-        setScatterOption(scatter.scatterChart);
+        setScatterOption(scatter.chart, scatter.template);
     }
 }
 
 /**
- * 折线图模板
- * 此方法需要传入修改后或更换后的模板json对象
- * 用来修改和更换折线图模板，并重新画图
- * @param {*} template 
+ * 更新模板数据并重新画图
+ * @param {int} updateGraphIndex 需要更新模板的类型，可以为 0,1,2,3...等，具体对应请参考全局变量indexToGraph
+ * @param {json} template 需要更新的模板数据格式
  */
-function updateLineTemplate(template) {
-    line.setTemplate(template);
-    setLineOption(line.lineChart);
-}
+function updateTemplate(updateGraphIndex, template) {
+    indexToGraph[updateGraphIndex].setTemplate(template);
+    if (updateGraphIndex == 0) {
+        setLineOption(indexToGraph[updateGraphIndex].chart, template);
+    } else if (updateGraphIndex == 1) {
+        setBarOption(indexToGraph[updateGraphIndex].chart, template);
+    } else if (updateGraphIndex == 2) {
+        setPieOption(indexToGraph[updateGraphIndex].chart, template);
+    } else if (updateGraphIndex == 3) {
+        setScatterOption(indexToGraph[updateGraphIndex].chart, template);
+    }
 
-/**
- * 条形图模板
- * 此方法需要传入修改后或更换后的模板json对象
- * 用来修改和更换条形图模板，并重新画图
- * @param {*} template 
- */
-function updateBarTemplate(template) {
-    bar.setTemplate(template);
-    setBarOption(bar.barChart);
 }
+/**
+ * 保存模板到后端数据库中
+ * @param {json} template 被保存的模板
+ * @param {string} type 被保存模板的类型，可以为 "line", "bar", "pie", "scatter"
+ * @param {string} name 被保存模板的类型
+ */
 
-/**
- * 饼状图模板
- * 此方法需要传入修改后或更换后的模板json对象
- * 用来修改和更换饼状图模板，并重新画图
- * @param {*} template 
- */
-function updatePieTemplate(template) {
-    pie.setTemplate(template);
-    setPieOption(pie.pieChart);
-}
-
-/**
- * 散点图模板
- * 此方法需要传入修改后或更换后的模板json对象
- * 用来修改和更换散点图模板，并重新画图
- * @param {*} template 
- */
-function updateScatterTemplate(template) {
-    scatter.setTemplate(template);
-    setScatterOption(scatter.scatterChart);
-}
-/**
- * 折线图模板上传
- * 此方法是将折线图模板上传到服务器
- */
-function saveLineTemplate(name) {
-    line.lineTemplate.isVisible = "true";
-    line.lineTemplate.userId = wx.getStorageSync('uid');
-    line.lineTemplate.name = name;
-    console.log(line.lineTemplate);
+function saveTemplate(template, type, name) {
+    template.isVisible = "true";
+    template.userId = wx.getStorageSync('uid');
+    template.name = name;
     wx.request({
-        url: saveLineTemplateUrl,
-        data: converToBackTemplate(line.lineTemplate, "line"),
+        url: "https://www.jaripon.xyz/template/" + (type === "pie" ? "fanchart" : type === "scatter" ? type + "plot" : type + "chart") + "/save",
+        data: converToBackTemplate(template, type),
         method: "POST",
         dataType: "json",
         success: function (res) {
             console.log(res);
-            wx.showToast({
-                title: '保存成功',
-            });
-        }
-    });
-}
-
-/**
- * 条形图模板上传
- * 此方法是将条形图模板上传到服务器
- */
-function saveBarTemplate(name) {
-    bar.barTemplate.isVisible = "true";
-    bar.barTemplate.userId = wx.getStorageSync('uid');
-    bar.barTemplate.name = name;
-    wx.request({
-        url: saveBarTemplateUrl,
-        data: converToBackTemplate(bar.barTemplate, "bar"),
-        method: "POST",
-        dataType: "json",
-        success: function () {
-            wx.showToast({
-                title: '保存成功',
-            });
-        }
-    });
-}
-
-/**
- * 饼状图模板上传
- * 此方法是将饼状图模板上传到服务器
- */
-function savePieTemplate(name) {
-    pie.pieTemplate.isVisible = "true";
-    pie.pieTemplate.userId = wx.getStorageSync('uid');
-    pie.pieTemplate.name = name;
-    wx.request({
-        url: savePieTemplateUrl,
-        data: converToBackTemplate(pie.pieTemplate, "pie"),
-        method: "POST",
-        dataType: "json",
-        success: function () {
-            wx.showToast({
-                title: '保存成功',
-            });
-        }
-    });
-}
-
-/**
- * 散点图模板上传
- * 此方法是将散点图模板上传到服务器
- */
-function saveScatterTemplate(name) {
-    scatter.scatterTemplate.isVisible = "true";
-    scatter.scatterTemplate.userId = wx.getStorageSync('uid');
-    scatter.scatterTemplate.name = name;
-    wx.request({
-        url: saveScatterTemplateUrl,
-        data: converToBackTemplate(scatter.scatterTemplate, "scatter"),
-        method: "POST",
-        dataType: "json",
-        success: function () {
             wx.showToast({
                 title: '保存成功',
             });
@@ -1813,11 +1642,11 @@ function mySaveImage() {
 function onPointLineDragging(dataIndex) {
     // 这里的 data 就是本文最初的代码块中声明的 data，在这里会被更新。
     // 这里的 this 就是被拖拽的圆点。this.position 就是圆点当前的位置。
-    line.inputList[dataIndex] = line.lineChart.convertFromPixel('grid', this.position);
+    line.inputList[dataIndex] = line.chart.convertFromPixel('grid', this.position);
     if (line.xType === "string" || (line.xType === "number" && line.yType === "number")) {
         line.inputList[dataIndex][0] = line.xMap.get(dataIndex);
         line.inputList[dataIndex][1] = parseFloat(line.inputList[dataIndex][1]).toFixed(2);
-        this.position[0] = line.lineChart.convertToPixel({
+        this.position[0] = line.chart.convertToPixel({
             xAxisIndex: 0
         }, line.xMap.get(dataIndex));
     }
@@ -1825,13 +1654,13 @@ function onPointLineDragging(dataIndex) {
     if (line.yType === "string") {
         line.inputList[dataIndex][1] = line.yMap.get(dataIndex);
         line.inputList[dataIndex][0] = parseFloat(line.inputList[dataIndex][0]).toFixed(2);
-        this.position[1] = line.lineChart.convertToPixel({
+        this.position[1] = line.chart.convertToPixel({
             yAxisIndex: 0
         }, line.yMap.get(dataIndex));
     }
     var name = line.indexToName[dataIndex];
     setTimeout(function () {
-        line.lineChart.setOption({
+        line.chart.setOption({
             series: [{
                 name: name,
                 data: line.inputList.slice(line.nameToIndex[name].minIndex, line.nameToIndex[name].maxIndex)
@@ -1844,62 +1673,29 @@ function onPointLineDragging(dataIndex) {
 
 
 /**
- * 此方法是柱状图图中点被拖拽时触发的更新位置方法
- * @param {*} dataIndex 
- */
-
-function onPointBarDragging(dataIndex) {
-    // 这里的 data 就是本文最初的代码块中声明的 data，在这里会被更新。
-    // 这里的 this 就是被拖拽的圆点。this.position 就是圆点当前的位置。
-    bar.inputList[dataIndex] = bar.barChart.convertFromPixel('grid', this.position);
-    if (bar.xType === "string") {
-        bar.inputList[dataIndex][0] = bar.xMap.get(dataIndex);
-        this.position[0] = bar.barChart.convertToPixel({
-            xAxisIndex: 0
-        }, bar.xMap.get(dataIndex)) - bar.barTemplate.width / 2;
-    }
-    if (bar.yType === "string") {
-        bar.inputList[dataIndex][1] = bar.yMap.get(dataIndex);
-        this.position[1] = bar.barChart.convertToPixel({
-            yAxisIndex: 0
-        }, bar.yMap.get(dataIndex)) - bar.barTemplate.width / 2;
-    }
-    var name = bar.indexToName[dataIndex];
-    setTimeout(function () {
-        bar.barChart.setOption({
-            series: [{
-                name: name,
-                data: bar.inputList.slice(bar.nameToIndex[name].minIndex, bar.nameToIndex[name].maxIndex)
-            }]
-        });
-    }, 0);
-    bar.updateInputData(inputData, dataIndex, bar.inputList[dataIndex]);
-}
-
-/**
  * 此方法是散点图中点被拖拽时触发的更新位置方法
  * @param {*} dataIndex 
  */
 
 function onPointScatterDragging(dataIndex) {
-    scatter.inputList[dataIndex] = scatter.scatterChart.convertFromPixel('grid', this.position);
+    scatter.inputList[dataIndex] = scatter.chart.convertFromPixel('grid', this.position);
     if (scatter.xType === "string" || (scatter.xType === "number" && scatter.yType === "number")) {
         scatter.inputList[dataIndex][0] = scatter.xMap.get(dataIndex);
         scatter.inputList[dataIndex][1] = parseFloat(scatter.inputList[dataIndex][1]).toFixed(2);
-        this.position[0] = scatter.scatterChart.convertToPixel({
+        this.position[0] = scatter.chart.convertToPixel({
             xAxisIndex: 0
         }, scatter.xMap.get(dataIndex));
     }
     if (scatter.yType === "string") {
         scatter.inputList[dataIndex][1] = scatter.yMap.get(dataIndex);
         scatter.inputList[dataIndex][0] = parseFloat(scatter.inputList[dataIndex][0]).toFixed(2);
-        this.position[1] = scatter.scatterChart.convertToPixel({
+        this.position[1] = scatter.chart.convertToPixel({
             yAxisIndex: 0
         }, scatter.yMap.get(dataIndex));
     }
     var name = scatter.indexToName[dataIndex];
     setTimeout(function () {
-        scatter.scatterChart.setOption({
+        scatter.chart.setOption({
             series: [{
                 name: name,
                 data: scatter.inputList.slice(scatter.nameToIndex[name].minIndex, scatter.nameToIndex[name].maxIndex)
@@ -1925,7 +1721,7 @@ function showLineTooltip(dataIndex) {
         }
     }
 
-    line.lineChart.dispatchAction({
+    line.chart.dispatchAction({
         type: 'showTip',
         seriesIndex: count,
         dataIndex: dataIndex - line.nameToIndex[line.indexToName[dataIndex]].minIndex
@@ -1938,7 +1734,7 @@ function showLineTooltip(dataIndex) {
  */
 
 function hideLineTooltip(dataIndex) {
-    line.lineChart.dispatchAction({
+    line.chart.dispatchAction({
         type: 'hideTip'
     });
 }
@@ -1958,7 +1754,7 @@ function showScatterTooltip(dataIndex) {
             count++;
         }
     }
-    scatter.scatterChart.dispatchAction({
+    scatter.chart.dispatchAction({
         type: 'showTip',
         seriesIndex: count,
         dataIndex: dataIndex - scatter.nameToIndex[scatter.indexToName[dataIndex]].minIndex
@@ -1970,7 +1766,7 @@ function showScatterTooltip(dataIndex) {
  * @param {*} dataIndex 
  */
 function hideScatterTooltip(dataIndex) {
-    scatter.scatterChart.dispatchAction({
+    scatter.chart.dispatchAction({
         type: 'hideTip'
     });
 }
@@ -2026,29 +1822,6 @@ function setMinAndMax(chart, option) {
     chart.setOption(option);
 }
 
-/**
- * 此方法传入一个index，0表示x轴，1表示y轴
- * 为传入的轴创建最小值
- * @param {} index 
- * @returns 
- */
-
-function getMinInInput(index) {
-    // index 表示 是 哪一个轴上的最小值
-    return "-90";
-}
-
-/**
- * 此方法传入一个index，0表示x轴，1表示y轴
- * 为传入的轴创建最大值
- * @param {} index 
- * @returns 
- */
-
-function getMaxInInput(index) {
-    // index 表示 是 哪一个轴上的最大值
-    return "90";
-}
 module.exports.inputData = inputData;
 module.exports.bar = bar;
 module.exports.line = line;

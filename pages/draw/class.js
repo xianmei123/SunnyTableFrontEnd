@@ -1,5 +1,6 @@
-class LineGraph {
-    lineChart = null;
+class Graph {
+    graphType;
+    chart;
     count = 0;
     title = "默认标题";
     inputList = []; // 输入数据 坐标列表 
@@ -8,36 +9,22 @@ class LineGraph {
 
     xMap = new Map(); // <data.index, data.index.x> // data中每一个数组在data中下标-> 该下标对应的两个元素的x坐标
     yMap = new Map(); // 同上。
-
     xType = "string"; // 暂定于为 两个值 'string' 和 'number', xAxis 和 yAxix 中的 boundaryGap、type均以此变量决定。
     yType = "number"; // 暂定于上面两个值。
-
+    template;
     draggable = !(this.xType === 'string' && this.yType === 'string');
-
-    lineTemplate = {
-        "id": null, //模板id
-        "name": "默认折线图模板", //模板名称
-        "userId": '0', //用户id
-        "radius": '20', //圆半径,后端没有
-        "point": [], //点样式 
-        "line": [],
-        "color": ['red', '#ba55d3'],
-        "showDigit": true, //"true" or "false"，是否显示数值，指图中每个点是否标注数值
-        "font": 14, //字体大小
-        "legendPos": "30%,null,null,0%,vertical", //图例位置 top bottom left right
-        "textColor": "#1e90ff", //字体颜色
-        "isVisible": false,
-    };
-
-    constructor() {
-        console.log("lingraph!!");
+    constructor(type){
+        this.graphType = type;
     }
-
     setTemplate(template) {
-        // 直接更换模板
-        this.lineTemplate = template;
+        this.template = template;
     }
+}
 
+class LineGraph extends Graph {
+    constructor(type) {
+        super(type);
+    }
     updateLineTemplate(key, value) {
         // 对模板修改时调用的方法
         this.lineTemplate[key] = value;
@@ -112,47 +99,15 @@ class LineGraph {
     }
 }
 
-class BarGraph {
-    barChart = null;
-    count = 0;
-    title = "柱状图默认标题";
-    inputList = []; // 输入数据 坐标列表 
-    indexToName = []; // <index, name>
-    nameToIndex = {};
-
-    xMap = new Map(); // <data.index, data.index.x> // data中每一个数组在data中下标-> 该下标对应的两个元素的x坐标
-    yMap = new Map(); // 同上。
-
-    xType = "string"; // 暂定于为 两个值 'string' 和 'number', xAxis 和 yAxix 中的 boundaryGap、type均以此变量决定。
-    yType = "number"; // 暂定于上面两个值。
-
-    draggable = !(this.xType === 'string' && this.yType === 'string');
-
-    barTemplate = {
-        "id": null, //扇形图模版id
-        "name": "条形图默认模板", //模板名称
-        "userId": null, //用户id
-        "width": "25%", //条宽度 需要为了后端转换为double！！！
-        "gap": '0%', //条间隔 需要为了后端转换为double！！！
-        "color": ['red', '#ba55d3'],
-        "showDigit": true, //"true" or "false"，是否显示数值，指图中每个点是否标注数值
-        "transpose": true, // 完全用不到
-        "font": 14, //字体大小
-        "legendPos": "30%,,,0%,vertical", //图例位置
-        "textColor": "#1e90ff", //字体颜色
-        "isVisible": false
-    };
-
-    setTemplate(template) {
-        // 直接更换模板
-        this.barTemplate = template;
-    }
-
-    updateBarTemplate(key, value) {
+class BarGraph extends Graph{
+    updateBarTemplate(key, value) { 
         // 对模板修改时调用的方法
         this.barTemplate[key] = value;
     }
-    constructor() {}
+    constructor(type) {
+        super(type);
+        
+    }
     setInputList(inputData) {
         this.count = 0;
         this.inputList = [];
@@ -192,50 +147,30 @@ class BarGraph {
 
 }
 
-class PieGraph {
+class PieGraph extends Graph{
     pieChart = null;
     name; // 由于暂时只允许在扇形图上一次性展示一个图，在有组数据时，需要首先进行选择并调用setInputData方法来进行设置PieGraph的对象中的数据
     pieData;
-    xType;
-    yType;
-    constructor() {}
-
-    pieTemplate = {
-        "id": null,
-        "name": "饼状图默认模板",
-        "userId": null,
-        "radius": "50%", //需要为了后端转换为小数
-        "precision": 2,
-        "color": ['red', "purple", "", "", ""], //默认为每一个数据组指定颜色，如果使用默认则其值为""
-        "showLabel": true,
-        "showPercent": true,
-        "titleFont": 20,
-        "labelFont": 10,
-        "legendPos": "30%,,,0%,vertical",
-        "textColor": "red",
-        "isVisible": false,
-    };
-
-    setTemplate(template) {
-        // 直接更换模板
-        this.pieTemplate = template;
+    constructor(type) {
+        super(type);
+        
     }
-
     updatePieTemplate(key, value) {
         // 对模板修改时调用的方法
         this.pieTemplate[key] = value;
     }
 
     convertToPieData(tempData) {
+        console.log(this.template);
         var resultArr = [];
-        var index = this.xType === "string" ? 1 : 0;
+        var index = this.xType === "string" ? 0 : 1;
         for (var i in tempData) {
             var tempJson = {};
             tempJson.name = tempData[i][index];
             tempJson.value = tempData[i][1 - index];
-            if (this.pieTemplate.color[i] != "") {
+            if (this.template.color[i] != "") {
                 tempJson.itemStyle = {};
-                tempJson.itemStyle['color'] = this.pieTemplate.color[i];
+                tempJson.itemStyle['color'] = this.template.color[i];
             }
             resultArr.push(tempJson);
         }
@@ -259,40 +194,10 @@ class PieGraph {
     }
 }
 
-class ScatterGraph {
-    scatterChart = null;
-    constructor() {
-
+class ScatterGraph extends Graph{
+    constructor(type) {
+        super(type);
     }
-    xType = "string";
-    yType = "value";
-    inputList = []; // 输入数据 坐标列表 
-    indexToName = []; // <index, name>
-    nameToIndex = {};
-
-    xMap = new Map(); // <data.index, data.index.x> // data中每一个数组在data中下标-> 该下标对应的两个元素的x坐标
-    yMap = new Map(); // 同上。
-
-    draggable = !(this.xType === 'string' && this.yType === 'string');
-    scatterTemplate = {
-        "id": null,
-        "name": "散点图默认模板",
-        "userId": null,
-        "point": null,
-        "color": ["blue"],
-        "showLine": true,
-        "showDigit": true,
-        "increase": false, // 点大小是否会随着数值变化而变化，
-        "font": 12,
-        "legendPos": "30%,,,0%,vertical",
-        "textColor": "blue",
-        "isVisible": true,
-    }
-    setTemplate(template) {
-        // 直接更换模板
-        this.scatterTemplate = template;
-    }
-
     updateScatterTemplate(key, value) {
         // 对模板修改时调用的方法
         this.scatterTemplate[key] = value;
@@ -340,6 +245,7 @@ function getSingleData(tempData, index) {
     return result;
 }
 
+module.exports.Graph = Graph;
 module.exports.LineGraph = LineGraph;
 module.exports.BarGraph = BarGraph;
 module.exports.PieGraph = PieGraph;

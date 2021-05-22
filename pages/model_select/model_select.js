@@ -67,6 +67,7 @@ Page({
 		draw.bar.setTemplate(draw.convertFromBackTemplate(templates[1], "bar"));
 		draw.pie.setTemplate(draw.convertFromBackTemplate(templates[2],"pie"));
 		draw.scatter.setTemplate(draw.convertFromBackTemplate(templates[3], "scatter"));
+		console.log(templates[0]);
 		wx.navigateTo({
 			url: '/pages/draw/draw',
 		})
