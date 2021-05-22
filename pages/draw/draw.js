@@ -174,7 +174,6 @@ function setLineOption(lineChart, template) {
             };
         })
     });
-    console.log()
     return lineChart;
 }
 
