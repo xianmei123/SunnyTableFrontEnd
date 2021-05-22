@@ -228,7 +228,7 @@ function initPieChart(canvas, width, height, dpr) {
     canvas.setChart(tempChart);
     return setPieOption(tempChart);
 }
-
+ 
 
 function setPieOption(pieChart) {
     var series = [];

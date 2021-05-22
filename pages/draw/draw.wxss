@@ -4,6 +4,7 @@
 
 .container {
 	height: 700rpx;
+	width: 150%;
 }
 
 #lineChartId {

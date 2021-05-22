@@ -3,12 +3,9 @@ class Graph {
     chart;
     count = 0;
     title = "默认标题";
-    inputList = []; // 输入数据 坐标列表 
-    indexToName = []; // <index, name>
-    nameToIndex = {};
-
-    xMap = new Map(); // <data.index, data.index.x> // data中每一个数组在data中下标-> 该下标对应的两个元素的x坐标
-    yMap = new Map(); // 同上。
+    // inputList = []; // 输入数据 坐标列表 
+    // indexToName = []; // <index, name>
+    // nameToIndex = {};
     xType = "string"; // 暂定于为 两个值 'string' 和 'number', xAxis 和 yAxix 中的 boundaryGap、type均以此变量决定。
     yType = "number"; // 暂定于上面两个值。
     template;
@@ -18,6 +15,10 @@ class Graph {
     }
     setTemplate(template) {
         this.template = template;
+    }
+    init(xType, yType) {
+        this.xType = xType;
+        this.yType = yType;
     }
 }
 
@@ -30,73 +31,6 @@ class LineGraph extends Graph {
         this.lineTemplate[key] = value;
     }
 
-    setInputList(inputData) {
-        this.nameToIndex = {};
-        this.indexToName = [];
-        this.inputList = [];
-        this.count = 0;
-        for (var tempKey in inputData) {
-            var name = tempKey;
-            var data = inputData[tempKey];
-            this.nameToIndex[name] = {
-                "minIndex": this.inputList.length,
-                "maxIndex": this.inputList.length + data.length
-            };
-            for (var i = 0; i < data.length; i++) {
-                this.indexToName.push(name);
-            }
-            for (var i in data) {
-                this.inputList.push(data[i]);
-            }
-            this.count++;
-        }
-    }
-
-    init(inputData, xType, yType) {
-        this.setInputList(inputData);
-        this.xType = xType;
-        this.yType = yType;
-        this.xMap.clear();
-        this.yMap.clear();
-    }
-
-
-    convertToSend() {
-        var kk = {
-            'dataArray': [{
-                'name': "lsp",
-                'cid': null,
-                'lineData': [
-                    []
-                ]
-            }]
-        }
-        var dataArray = [];
-        var tempJson = {};
-        tempJson.name = 'xlabel';
-        tempJson.cid = null;
-        tempJson.lineData = getSingleData(this.inputList.slice(this.nameToIndex[this.indexToName[0]].minIndex, this.nameToIndex[this.indexToName[0]].maxIndex), 0);
-        dataArray.push(tempJson);
-        for (var i = 0; i < this.inputList.length;) {
-            var name = this.indexToName[i];
-            var tempArr = getSingleData(this.inputList.slice(this.nameToIndex[name].minIndex, this.nameToIndex[name].maxIndex), 1);
-            tempJson = {};
-            tempJson.name = name;
-            tempJson.cid = null;
-            tempJson.lineData = tempArr;
-            dataArray.push(tempJson);
-            i = this.nameToIndex[name].maxIndex;
-        }
-        console.log(dataArray);
-        return dataArray;
-    }
-
-    updateInputData(inputData, dataIndex, updateData) {
-        var name = this.indexToName[dataIndex];
-        var length = this.nameToIndex[name].maxIndex - this.nameToIndex[name].minIndex;
-        var tempIndex = (dataIndex + 1) % length === 0 ? length : (dataIndex + 1) % length;
-        inputData[name][tempIndex - 1] = updateData;
-    }
 }
 
 class BarGraph extends Graph{
@@ -108,43 +42,6 @@ class BarGraph extends Graph{
         super(type);
         
     }
-    setInputList(inputData) {
-        this.count = 0;
-        this.inputList = [];
-        this.nameToIndex = {};
-        this.indexToName = [];
-        for (var tempKey in inputData) {
-            var name = tempKey;
-            var data = inputData[tempKey];
-            this.nameToIndex[name] = {
-                "minIndex": this.inputList.length,
-                "maxIndex": this.inputList.length + data.length
-            };
-            for (var i = 0; i < data.length; i++) {
-                this.indexToName.push(name);
-            }
-            for (var i in data) {
-                this.inputList.push(data[i]);
-            }
-            this.count++;
-        }
-    }
-
-    init(inputData, xType, yType) {
-        this.setInputList(inputData);
-        this.xType = xType;
-        this.yType = yType;
-        this.xMap.clear();
-        this.yMap.clear();
-    }
-
-    updateInputData(inputData, dataIndex, updateData) {
-        var name = this.indexToName[dataIndex];
-        var length = this.nameToIndex[name].maxIndex - this.nameToIndex[name].minIndex;
-        var tempIndex = (dataIndex + 1) % length === 0 ? length : (dataIndex + 1) % length;
-        inputData[name][tempIndex - 1] = updateData;
-    }
-
 }
 
 class PieGraph extends Graph{
@@ -221,19 +118,6 @@ class ScatterGraph extends Graph{
                 this.inputList.push(data[i]);
             }
         }
-    }
-    init(inputData, xType, yType) {
-        this.setInputList(inputData);
-        this.xType = xType;
-        this.yType = yType;
-        this.xMap.clear();
-        this.yMap.clear();
-    }
-    updateInputData(inputData, dataIndex, updateData) {
-        var name = this.indexToName[dataIndex];
-        var length = this.nameToIndex[name].maxIndex - this.nameToIndex[name].minIndex;
-        var tempIndex = (dataIndex + 1) % length === 0 ? length : (dataIndex + 1) % length;
-        inputData[name][tempIndex - 1] = updateData;
     }
 }
 

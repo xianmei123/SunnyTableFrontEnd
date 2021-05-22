@@ -7,7 +7,7 @@
     <!-- 折线图 -->
     <view wx:if="{{value1=='line'}}">
         <block wx:if="{{showLineChart}}">
-            <scroll-view scroll-y="true" scroll-x="true">
+            <scroll-view scroll-y="false" scroll-x="false">
                 <view class="container">
                     <!-- <ec-canvas id="lineChartId" canvas-id="line-canvas" ec="{{ lineChart }}" force-use-old-canvas="true"></ec-canvas> -->
                     <ec-canvas id="lineChartId" canvas-id="line-canvas" ec="{{ lineChart }}" ></ec-canvas>
