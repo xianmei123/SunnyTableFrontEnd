@@ -13,33 +13,18 @@
   } 
 </wxs>
 <view class="container">
-  <block>
+  <block style="background-color:#00BFFF">
     <image class="logo" src='{{userLogo}}'></image>
     <view class='title'>hi~ {{userName}}</view>
     <text>\n\n\n\n\n\n\n\n</text>
-    <view class="content">
-      <view class='menu-line' bindtap="login">
-        <view class='menu-name'>
-         
-          <view>微信授权</view>
-        </view>
-        
-      </view>
-      <view class='menu-line' bindtap="prefer" hi="1">
-        <view class='menu-name'>
-          
-          <view>偏好设置</view>
-        </view>
-        
-      </view>
-      <view class='menu-line' bindtap='aboutUs'>
-        <view class='menu-name'>
-         
-        <view>关于我们</view>
-        </view>
-        
-      </view>
-      <button open-type="feedback" style="background-color: white;margin-top: 10px">意见反馈</button>
-    </view>
   </block>
+</view>
+<view class="item  font-weight-bold"  bindtap="login">
+  微信授权
+</view>
+<view class="item  font-weight-bold" bindtap='aboutUs'>
+  关于我们
+</view>
+<view class="item  font-weight-bold" bindtap='aboutUs'>
+  意见反馈
 </view>

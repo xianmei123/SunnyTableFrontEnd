@@ -13,18 +13,20 @@
   </van-row>
   <!-- 添加排序搜索 -->
   <van-row >
-  <van-col span = "2"  offset="1">
-  <mp-icon  icon="download" color="black" size="{{25}}" style="bottom:10rpx!important"
-  bindtap="saveObj"></mp-icon>
+  <van-col span = "2"  offset="1" custom-class="icon-col">
+    <van-icon name="orders-o" size="28" bindtap="saveObj"/>
+  <!-- <mp-icon  icon="download" color="black" size="{{25}}" style="bottom:10rpx!important"
+  bindtap="saveObj"></mp-icon> -->
  </van-col>
   <van-col span="16" offset="1">
         <van-dropdown-menu >
           <van-dropdown-item model:value="{{ dropValue }}" options="{{ dropOption }}" 
-          bind:change="sortObj"/>
+          bind:change="sortObj" />
         </van-dropdown-menu >
   </van-col>
 <van-col span = "2" offset="1" >
-  <mp-icon  icon="refresh" color="black" size="{{25}}" bindtap="flush" style="bottom:10rpx!important"></mp-icon>
+  <!-- <mp-icon  icon="refresh" color="black" size="{{25}}" bindtap="flush" style="bottom:10rpx!important"></mp-icon> -->
+  <van-icon name="replay"  size="30" bindtap="flush" />
  </van-col>
 </van-row>
 </view>

@@ -54,6 +54,7 @@ App({
         var url = baseUrl + '/file/dir/open/' + res.data.openid + '/' + wx.getStorageSync('rootId')
         res = await trans(url)
         console.log(res.data)
+        console.log(wx.getStorageSync('uid'))
       }
     })
   },

@@ -64,3 +64,18 @@
   margin-top: 10px;
   margin-right: 10px;
 }
+.item{
+  background-color: #fff;
+  margin: 5px 5px 5px 5px; 
+  padding: 5rpx;
+  position:relative;
+  overflow: scroll;
+  top:10px;
+  height: 40px;
+  border-radius: 8px;
+  /* vertical-align: middle; */
+  display: flex;
+  align-items:center;
+  justify-content:center;
+  /* box-shadow: 1px 1px 3px #aaaaaa;  */
+}

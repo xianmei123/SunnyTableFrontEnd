@@ -7,3 +7,6 @@
   font-size: 40rpx;
   color:red
 }
+.van-dropdown-menu{
+  --dropdown-menu-height: 40px ;
+}

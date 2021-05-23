@@ -25,8 +25,9 @@
   <!-- 添加排序搜索 -->
   <van-row >
   <van-col span = "2"  offset="1">
-  <mp-icon  icon="add" color="black" size="{{25}}" style="bottom:50rpx!important"
-  bindtap="showDialog" data-index="{{0}}"></mp-icon>
+    <van-icon name="plus"  size="30" bindtap="showDialog" data-index="{{0}}"/>
+  <!-- <mp-icon  icon="add" color="black" size="{{25}}" style="bottom:50rpx!important"
+  bindtap="showDialog" data-index="{{0}}"></mp-icon> -->
  </van-col>
   <van-col span="16" offset="1">
         <van-dropdown-menu >
@@ -35,7 +36,8 @@
         </van-dropdown-menu >
   </van-col>
 <van-col span = "2" offset="1" >
-  <mp-icon  icon="refresh" color="black" size="{{25}}" bindtap="flush" style="bottom:10rpx!important"></mp-icon>
+  <van-icon name="replay"  size="30" bindtap="flush" />
+  <!-- <mp-icon  icon="refresh" color="black" size="{{25}}" bindtap="flush" style="bottom:10rpx!important"></mp-icon> -->
  </van-col>
 </van-row>
 </view>
