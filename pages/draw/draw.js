@@ -582,7 +582,7 @@ Page({
             ["", ""]
         ],
         xValues: [
-            []
+            "", ""
         ],
         groupName: ["", ""],
         chooseRegion: false, //状态
@@ -791,7 +791,7 @@ Page({
         var newIterator1 = this.data.iterator1;
         var newXValues = this.data.xValues;
         newIterator1.push(newIterator1.length + 1);
-        newXValues.push(newXValues.length + 1);
+        newXValues.push("");
         this.setData({
             iterator1: newIterator1,
             xValues: newXValues,
