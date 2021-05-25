@@ -16,15 +16,15 @@
   <block style="background-color:#00BFFF">
     <image class="logo" src='{{userLogo}}'></image>
     <view class='title'>hi~ {{userName}}</view>
-    <text>\n\n\n\n\n\n\n\n</text>
   </block>
 </view>
+<view style="margin-top:500rpx"> </view>
 <view class="item  font-weight-bold"  bindtap="login">
   微信授权
 </view>
 <view class="item  font-weight-bold" bindtap='aboutUs'>
   关于我们
 </view>
-<view class="item  font-weight-bold" bindtap='aboutUs'>
-  意见反馈
+<view class="item  " >
+<button open-type="feedback" class="button"> <text class="font-weight-bold">意见反馈</text> </button>
 </view>
