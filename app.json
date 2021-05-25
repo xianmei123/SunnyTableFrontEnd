@@ -82,6 +82,7 @@
     "van-cell-group": "@vant/weapp/cell-group/index",
     "van-search": "@vant/weapp/search/index",
     "van-sticky": "@vant/weapp/sticky/index",
-    "ec-canvas": "ec-canvas/ec-canvas"
+    "ec-canvas": "ec-canvas/ec-canvas",
+    "van-action-sheet": "@vant/weapp/action-sheet/index"
   }
 }

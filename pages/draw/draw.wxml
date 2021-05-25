@@ -10,7 +10,7 @@
             <scroll-view scroll-y="false" scroll-x="false">
                 <view class="container">
                     <!-- <ec-canvas id="lineChartId" canvas-id="line-canvas" ec="{{ lineChart }}" force-use-old-canvas="true"></ec-canvas> -->
-                    <ec-canvas id="lineChartId" canvas-id="line-canvas" ec="{{ lineChart }}" ></ec-canvas>
+                    <ec-canvas id="lineChartId" canvas-id="line-canvas" ec="{{ lineChart }}"></ec-canvas>
                 </view>
             </scroll-view>
         </block>
@@ -36,7 +36,7 @@
         <block wx:if="{{showPieChart}}">
             <scroll-view scroll-y="true" scroll-x="true">
                 <view class="container">
-                    <ec-canvas id="pieChartId" canvas-id="pie-canvas" ec="{{ pieChart }}" ></ec-canvas>
+                    <ec-canvas id="pieChartId" canvas-id="pie-canvas" ec="{{ pieChart }}"></ec-canvas>
                 </view>
             </scroll-view>
         </block>
@@ -59,13 +59,13 @@
 </view>
 <text>\n</text>
 <view>
-    <van-field value="{{graphName}}" placeholder="输入图表名称" border="{{ true }}" bind:change="setChartName"/>
+    <van-field value="{{graphName}}" placeholder="输入图表名称" border="{{ true }}" bind:change="setChartName" />
     <van-row>
         <van-col span="12">
-            <van-field value="{{xName}}" placeholder="输入横轴名称" border="{{ true }}" bind:change="setXName"/>
+            <van-field value="{{xName}}" placeholder="输入横轴名称" border="{{ true }}" bind:change="setXName" />
         </van-col>
         <van-col span="12">
-            <van-field value="{{yName}}" placeholder="输入纵轴名称" border="{{ true }}" bind:change="setYName"/>
+            <van-field value="{{yName}}" placeholder="输入纵轴名称" border="{{ true }}" bind:change="setYName" />
         </van-col>
     </van-row>
 </view>
@@ -151,41 +151,39 @@
         </view>
     </view>
     <van-row class="bottom_box">
-        <van-col span="8" style="text-align:center">
-            <van-icon name="plus" />
+        <van-col span="8" style="text-align:center; padding-top: 2px">
+            <view style="padding-top:4px">
+                <text class="icon-new icon"></text>
+            </view>
+            <view style="font-size: 12px;margin-top: -6px; color:balck">创建</view>
         </van-col>
-        <van-col span="8" style="text-align:center">
-            <van-icon name="down" bindtap="exportToCSV" />
+       
+        <van-col span="8" style="text-align:center;padding-top: 2px;font-weight:normal">
+            <view style="padding-top:4px">
+                <text class="icon-save icon" bindtap="beginShowSaveSheet"></text>
+            </view>
+            <view style="font-size: 12px;margin-top: -6px; color:balck">保存</view>
+            <van-action-sheet show="{{ showSaveSheet }}" actions="{{ saveSheetOptions }}" cancel-text="取消" bind:close="onCloseSaveSheet" bind:select="onSelectSaveOption" bind:cancel="onCloseSaveSheet"/>
         </van-col>
-        <van-col span="8" style="text-align:center">
-            <van-icon name="apps-o" bindtap="goAttribute" />
+        <van-col span="8" style="text-align:center;">
+            <view style="padding-top:4px">
+                <text class="icon-modify icon" bindtap="goAttribute"></text>
+            </view>
+            <view style="font-size: 12px;margin-top: -6px; color:balck">修改</view>
         </van-col>
     </van-row>
     <block wx:if="{{value1=='pie'}}">
         <text>\n</text>
         <text>请输入想要绘制的数据组序号\n</text>
-        <van-field border="{{ false }}" bind:change="getData" data-a="{{j}}" data-b="{{i + 1}}" bind:change="choosePieChart"/>
+        <van-field border="{{ false }}" bind:change="getData" data-a="{{j}}" data-b="{{i + 1}}" bind:change="choosePieChart" />
         <text>\n</text>
     </block>
     <text>\n</text>
     <button type="primary" size="large" bindtap="repaint">绘制图表</button>
 </view>
 <text>\n</text>
-<button type="primary" size="large" bindtap="saveChart">保存图表</button>
-<text>\n</text>
-<button type="primary" size="large" bindtap="isSaveTemplate">保存模板</button>
-<van-dialog
-  use-slot
-  title="请输入保存模板的名称"
-  show="{{ showInputTemplateName }}"
-  show-cancel-button
-  bind:close="onClose"
-  bind:confirm="saveTemplate">
-  <van-field
-    value="{{ inputTempateName }}"
-    placeholder="请输入模板名称"
-    bind:change="onInputName"
-  />
+<van-dialog use-slot title="请输入保存模板的名称" show="{{ showInputTemplateName }}" show-cancel-button bind:close="onCloseInputTempName" bind:confirm="saveTemplate">
+    <van-field value="{{ inputTempateName }}" placeholder="请输入模板名称" bind:change="onInputName" />
 </van-dialog>
 <text>\n</text>
 <text>\n</text>
