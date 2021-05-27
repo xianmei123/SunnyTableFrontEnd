@@ -1,4 +1,8 @@
 {
-  "usingComponents": {"van-dialog": "@vant/weapp/dialog/index"},
+  "usingComponents": {
+    "van-dialog": "@vant/weapp/dialog/index",
+    "van-row": "@vant/weapp/row/index",
+    "van-col": "@vant/weapp/col/index"
+  },
   "navigationBarTitleText": "主页"
 }

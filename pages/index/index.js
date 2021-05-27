@@ -11,11 +11,24 @@ Page({
 		canIUseGetUserProfile: false,
 		active: 'staticData',
 		canIUseOpenData: wx.canIUse('open-data.type.userAvatarUrl') && wx.canIUse('open-data.type.userNickName'), // 如需尝试获取用户信息可改为false
-		barlist: [
-			['柱状图', 'bar'],
-			['折线图', 'line'],
-			['饼状图', 'pie']
+		pics: [{
+				name: '折线图',
+				pic: ["line1.png", "line2.png", "line3.png"]
+			},
+			{
+				name: '柱状图',
+				pic: ['bar1.png', 'bar2.png', 'bar3.png']
+			},
+			{
+				name: '饼状图',
+				pic: ['pie1.png', 'pie2.png', 'pie3.png']
+			},
+			{
+				name: '散点图',
+				pic: ['scatter1.png', 'scatter2.png', 'scatter3.png']
+			}
 		]
+
 	},
 	onshow: function () {
 
