@@ -86,28 +86,27 @@ function setLineOption(lineChart, template) {
         dataset: {
             source: inputData,
         },
-        dataZoom: [
-        {
-            type: "inside",
-            xAxisIndex: 0,
-            filterMode: 'none'
-        }, 
-        {
-            type: "inside",
-            yAxisIndex: 0,
-            filterMode: 'none'
-        }, 
-        {
-            type: "slider",
-            xAxisIndex: 0,
-            filterMode: 'none'
-        },
-        {
-            type: "slider",
-            yAxisIndex: 0,
-            filterMode: 'none'
-        }
-    ],
+        dataZoom: [{
+                type: "inside",
+                xAxisIndex: 0,
+                filterMode: 'none'
+            },
+            {
+                type: "inside",
+                yAxisIndex: 0,
+                filterMode: 'none'
+            },
+            {
+                type: "slider",
+                xAxisIndex: 0,
+                filterMode: 'none'
+            },
+            {
+                type: "slider",
+                yAxisIndex: 0,
+                filterMode: 'none'
+            }
+        ],
         grid: {
             right: '18%',
             top: '16%',
@@ -221,12 +220,11 @@ function setBarOption(barChart, template) {
             right: '18%',
             top: '16%',
         },
-        dataZoom: [
-            {
+        dataZoom: [{
                 type: "inside",
                 xAxisIndex: 0,
                 filterMode: 'none'
-            }, 
+            },
             {
                 type: "slider",
                 xAxisIndex: 0,
@@ -442,17 +440,16 @@ function setScatterOption(scatterChart, template) {
         dataset: {
             source: inputData
         },
-        dataZoom: [
-            {
+        dataZoom: [{
                 type: "inside",
                 xAxisIndex: 0,
                 filterMode: 'none'
-            }, 
+            },
             {
                 type: "inside",
                 yAxisIndex: 0,
                 filterMode: 'none'
-            }, 
+            },
             {
                 type: "slider",
                 xAxisIndex: 0,
@@ -525,6 +522,24 @@ function setScatterOption(scatterChart, template) {
 
 Page({
     data: {
+        actionSheetHidden: true,
+        actionSheetItems: [{
+                bindtap: 'Menu1',
+                txt: '添加横坐标'
+            },
+            {
+                bindtap: 'Menu2',
+                txt: '添加数据组'
+            },
+            {
+                bindtap: 'Menu3',
+                txt: '删除横坐标'
+            },
+            {
+                bindtap: 'Menu4',
+                txt: '删除数据组'
+            }
+        ],
         graphName: "默认标题", // 在图的最上方显示的标题
         xName: "x",
         yName: "y",
@@ -585,17 +600,49 @@ Page({
             "", ""
         ],
         groupName: ["", ""],
-        chooseRegion: false, //状态
-        firstReady: false,
         groupNum: 2,
         x1: 0, //数据组
         y1: 0, //横坐标
         x2: 0,
         y2: 0,
-        currentGezi: "",
+        currentCell: "",
         defaultRegion: true, //是否选过
         region: [0, 0],
         pieChartNo: 0
+    },
+    actionSheetTap() {
+        this.setData({
+            actionSheetHidden: !this.data.actionSheetHidden
+        })
+    },
+    actionSheetbindchange() {
+        this.setData({
+            actionSheetHidden: !this.data.actionSheetHidden
+        })
+    },
+    bindMenu1() {
+        this.setData({
+            actionSheetHidden: !this.data.actionSheetHidden
+        })
+        this.addX();
+    },
+    bindMenu2() {
+        this.setData({
+            actionSheetHidden: !this.data.actionSheetHidden
+        })
+        this.addDataGroup();
+    },
+    bindMenu3() {
+        this.setData({
+            actionSheetHidden: !this.data.actionSheetHidden
+        })
+        this.delX();
+    },
+    bindMenu4() {
+        this.setData({
+            actionSheetHidden: !this.data.actionSheetHidden
+        })
+        this.delGroup();
     },
     onClose() {
         this.setData({
@@ -644,9 +691,6 @@ Page({
         });
     },
     getXValue: function (event) {
-        if (this.data.chooseRegion) {
-            return;
-        }
         var index = event.target.dataset.a;
         var newXValue = this.data.xValues;
         newXValue[index - 1] = event.detail;
@@ -657,78 +701,29 @@ Page({
         this.changeCurrentX(event);
     },
     changeCurrent(event) {
-        if (this.data.chooseRegion) {
-            return;
-        }
         var groupId = event.target.dataset.a;
         var dataId = event.target.dataset.b;
         var newData = this.data.datas;
         this.setData({
-            currentGezi: newData[groupId - 1][dataId - 1]
+            currentCell: newData[groupId - 1][dataId - 1]
         });
-        console.log(this.data.currentGezi);
+        console.log(this.data.currentCell);
     },
     changeCurrentGroupName(event) {
-        if (this.data.chooseRegion) {
-            return;
-        }
-        var groupId = event.target.dataset.a;
+        var groupId = event.target.dataset.a + 1;
         this.setData({
-            currentGezi: this.data.groupName[groupId - 1]
+            currentCell: this.data.groupName[groupId - 1]
         });
 
     },
     changeCurrentX(event) {
-        if (this.data.chooseRegion) {
-            return;
-        }
         var dataId = event.target.dataset.a;
         this.setData({
-            currentGezi: this.data.xValues[dataId - 1]
+            currentCell: this.data.xValues[dataId - 1]
         });
 
     },
     getData: function (event) {
-        if (this.data.chooseRegion) {
-            if (!this.data.firstReady) {
-                this.setData({
-                    x1: event.target.dataset.a,
-                    y1: event.target.dataset.b,
-                    firstReady: true
-                })
-                return;
-            } else {
-                this.setData({
-                    x2: event.target.dataset.a,
-                    y2: event.target.dataset.b,
-                    firstReady: false,
-                    chooseRegion: false
-                })
-                if (this.data.x1 > this.data.x2) {
-                    var tmp = this.data.x1;
-                    this.setData({
-                        x1: this.data.x2
-                    });
-                    this.setData({
-                        x2: tmp
-                    });
-                }
-                if (this.data.y1 > this.data.y2) {
-                    var tmp = this.data.y1;
-                    this.setData({
-                        y1: this.data.y2
-                    });
-                    this.setData({
-                        y2: tmp
-                    });
-                }
-                console.log([this.data.x1, this.data.y1, this.data.x2, this.data.y2]);
-                wx.showToast({
-                    title: '选中区域成功'
-                })
-                return;
-            }
-        }
         console.log(event.target);
         var groupId = event.target.dataset.a;
         var dataId = event.target.dataset.b;
@@ -736,14 +731,10 @@ Page({
         newDatas[groupId - 1][dataId - 1] = event.detail;
         this.setData({
             datas: newDatas,
-            chooseRegion: false
         });
         this.changeCurrent(event);
     },
     addDataGroup: function () {
-        if (this.data.chooseRegion) {
-            return;
-        }
         if (this.data.groupNum == 5) {
             wx.showToast({
                 title: '最多5个数据组',
@@ -759,29 +750,22 @@ Page({
         this.setData({
             datas: newDatas,
             iterator2: newIterator2,
-            chooseRegion: false,
             groupName: newGroupName,
             groupNum: this.data.groupNum + 1
         })
 
     },
     setGroupName: function (event) {
-        if (this.data.chooseRegion) {
-            return;
-        }
         var index = event.target.dataset.a;
         var newGroupName = this.data.groupName;
-        newGroupName[index - 1] = event.detail;
-        console.log(newGroupName[index - 1]);
+        newGroupName[index] = event.detail;
         this.setData({
             groupName: newGroupName
         })
+        console.log(this.data.groupName);
         this.changeCurrentGroupName(event);
     },
     addX: function () {
-        if (this.data.chooseRegion) {
-            return;
-        }
         if (this.data.xValues.length == 10) {
             wx.showToast({
                 title: '最多10个横坐标',
@@ -794,67 +778,38 @@ Page({
         newXValues.push("");
         this.setData({
             iterator1: newIterator1,
-            xValues: newXValues,
-            chooseRegion: false
+            xValues: newXValues
         })
     },
     delGroup: function () {
-        if (this.data.chooseRegion) {
-            return;
-        }
         var newIterator2 = this.data.iterator2;
         var newDatas = this.data.datas;
         var newGroupName = this.data.groupName;
-        if (this.data.defaultRegion) {
-            newGroupName.pop();
-            newDatas.pop();
-        } else {
-            newGroupName.splice(this.data.region[0], 1);
-            newDatas.splice(this.data.region[0], 1);
-        }
+        newGroupName.splice(this.data.region[0], 1);
+        newDatas.splice(this.data.region[0], 1);
         newIterator2.pop();
         this.setData({
             datas: newDatas,
             iterator2: newIterator2,
-            chooseRegion: false,
             groupNum: this.data.groupNum - 1
         })
+        console.log(this.data.xValues);
     },
     delX: function () {
-        if (this.data.chooseRegion) {
-            return;
-        }
         var newIterator1 = this.data.iterator1;
         var newXValues = this.data.xValues;
         var newDatas = this.data.datas;
         newIterator1.pop();
-        if (this.data.defaultRegion) {
-            newXValues.pop();
-            for (i = 0; i < newDatas.length; i++) {
-                newDatas[i].pop();
-            }
-        } else {
-            newXValues.splice(this.data.region[1], 1);
-            var i;
-            for (i = 0; i < newDatas.length; i++) {
-                newDatas[i].splice(this.data.region[1], 1);
-            }
+        newXValues.splice(this.data.region[1], 1);
+        var i;
+        for (i = 0; i < newDatas.length; i++) {
+            newDatas[i].splice(this.data.region[1], 1);
         }
         this.setData({
             iterator1: newIterator1,
             xValues: newXValues,
-            chooseRegion: false,
             datas: newDatas
         })
-
-    },
-    choose: function () {
-        var origin = this.data.chooseRegion;
-        this.setData({
-            defaultRegion: false,
-            chooseRegion: !origin,
-            defaultRegion: false
-        });
 
     },
     giveData: function (givenData) {

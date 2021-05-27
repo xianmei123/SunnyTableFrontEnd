@@ -1,0 +1,80 @@
+<!-- <scroll-view scroll-x="{{ true }}">
+    <view class="table">
+        <view class="tr bg-w">
+            <van-cell style="width:40%" title="表头" />
+            <block wx:for="{{iterator2}}" wx:for-item="j">
+                <view class="td">
+                    <van-field style="width:40%" value="{{ groupName[j-1] }}" placeholder="数据组{{ j }}" border="{{ tr }}"
+                        bind:change="setGroupName" data-a="{{j}}" bindtap="changeCurrentGroupName" />
+                </view>
+            </block>
+        </view>
+        <block wx:for="{{iterator1}}" wx:for-index="i">
+            <view class="tr bg-g" wx:if="{{i % 2 == 0}}">
+                <view class="td">
+                    <van-field value="{{ xValues[i] }}" placeholder="横坐标{{ i + 1 }}" border="{{ true }}"
+                        bind:change="getXValue" data-a="{{i + 1}}" bindtap="changeCurrentX" />
+                </view>
+                <block wx:for="{{iterator2}}" wx:for-item="j">
+                    <view class="td">
+                        <block wx:if="{{!chooseRegion}}">
+                            <van-field value="{{ datas[j-1][i] }}" placeholder="数据{{ j }}" border="{{ true }}"
+                                bind:change="getData" data-a="{{j}}" data-b="{{i + 1}}" bindtap="changeCurrent" />
+                        </block>
+                        <block wx:if="{{chooseRegion}}">
+                            <button style="width:{{500 / groupNum}}rpx" bindtap="getData" data-a="{{j}}"
+                                data-b="{{i + 1}}">
+                                选中
+                            </button>
+                        </block>
+                    </view>
+                </block>
+            </view>
+            <view class="tr" wx:else>
+                <view class="td">
+                    <van-field value="{{ xValues[i] }}" placeholder="横坐标{{ i + 1 }}" border="{{ false }}"
+                        bind:change="getXValue" data-a="{{i + 1}}" bindtap="changeCurrentX" />
+                </view>
+                <block wx:for="{{iterator2}}" wx:for-item="j">
+                    <view class="td">
+                        <block wx:if="{{!chooseRegion}}">
+                            <van-field value="{{ datas[j-1][i] }}" placeholder="数据{{ j }}" border="{{ false }}"
+                                bind:change="getData" data-a="{{j}}" data-b="{{i + 1}}" bindtap="changeCurrent" />
+                        </block>
+                        <block wx:if="{{chooseRegion}}">
+                            <button style="width:{{500 / groupNum}}rpx" bindtap="getData" data-a="{{j}}"
+                                data-b="{{i + 1}}">
+                                选中
+                            </button>
+                        </block>
+                    </view>
+                </block>
+            </view>
+        </block>
+    </view>
+</scroll-view> -->
+
+
+<scroll-view class="scroll-view_H" scroll-x="true" style="width: 100%">
+    <block wx:for="{{iterator1}}" wx:for-index="i">
+        <view class="text-item">
+            <van-field placeholder="横坐标{{ i + 1 }}" border="{{ true }}" bind:change="getXValue" data-a="{{i + 1}}"
+                bindtap="changeCurrentX" />
+        </view>
+        <block wx:for="{{iterator2}}" wx:for-item="j">
+            <view class="text-item">
+                <van-field value="{{ datas[j-1][i] }}" placeholder="数据{{ j }}" border="{{ true }}" bind:change="getData"
+                    data-a="{{j}}" data-b="{{i + 1}}" bindtap="changeCurrent" />
+            </view>
+        </block>
+        <view class="divide_H"></view>
+    </block>
+</scroll-view>
+<view class="divide_H"></view>
+<van-button type="default" bindtap="actionSheetTap">编辑表格</van-button>
+<action-sheet hidden="{{actionSheetHidden}}" bindchange="actionSheetbindchange">
+    <block wx:for-items="{{actionSheetItems}}">
+        <action-sheet-item bindtap="bind{{item.bindtap}}">{{item.txt}}</action-sheet-item>
+    </block>
+    <action-sheet-cancel class="cancel">取消</action-sheet-cancel>
+</action-sheet>
