@@ -111,14 +111,25 @@
         </action-sheet>
     </view>
     <van-row class="bottom_box">
-        <van-col span="8" style="text-align:center">
-            <van-icon name="plus" />
+        <van-col span="8" style="text-align:center; padding-top: 2px">
+            <view style="padding-top:4px">
+                <text class="icon-new icon"></text>
+            </view>
+            <view style="font-size: 12px;margin-top: -6px; color:balck">创建</view>
         </van-col>
-        <van-col span="8" style="text-align:center">
-            <van-icon name="down" bindtap="exportToCSV" />
+       
+        <van-col span="8" style="text-align:center;padding-top: 2px;font-weight:normal">
+            <view style="padding-top:4px">
+                <text class="icon-save icon" bindtap="beginShowSaveSheet"></text>
+            </view>
+            <view style="font-size: 12px;margin-top: -6px; color:balck">保存</view>
+            <van-action-sheet show="{{ showSaveSheet }}" actions="{{ saveSheetOptions }}" cancel-text="取消" bind:close="onCloseSaveSheet" bind:select="onSelectSaveOption" bind:cancel="onCloseSaveSheet"/>
         </van-col>
-        <van-col span="8" style="text-align:center">
-            <van-icon name="apps-o" bindtap="goAttribute" />
+        <van-col span="8" style="text-align:center;">
+            <view style="padding-top:4px">
+                <text class="icon-modify icon" bindtap="goAttribute"></text>
+            </view>
+            <view style="font-size: 12px;margin-top: -6px; color:balck">修改</view>
         </van-col>
     </van-row>
     <block wx:if="{{value1=='pie'}}">
@@ -132,11 +143,7 @@
     <button type="primary" size="large" bindtap="repaint">绘制图表</button>
 </view>
 <text>\n</text>
-<button type="primary" size="large" bindtap="saveChart">保存图表</button>
-<text>\n</text>
-<button type="primary" size="large" bindtap="isSaveTemplate">保存模板</button>
-<van-dialog use-slot title="请输入保存模板的名称" show="{{ showInputTemplateName }}" show-cancel-button bind:close="onClose"
-    bind:confirm="saveTemplate">
+<van-dialog use-slot title="请输入保存模板的名称" show="{{ showInputTemplateName }}" show-cancel-button bind:close="onCloseInputTempName" bind:confirm="saveTemplate">
     <van-field value="{{ inputTempateName }}" placeholder="请输入模板名称" bind:change="onInputName" />
 </van-dialog>
 <text>\n</text>

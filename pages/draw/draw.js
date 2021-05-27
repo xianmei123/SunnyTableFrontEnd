@@ -440,7 +440,9 @@ function setScatterOption(scatterChart, template) {
         dataset: {
             source: inputData
         },
-        dataZoom: [{
+        
+        dataZoom: [
+            {
                 type: "inside",
                 xAxisIndex: 0,
                 filterMode: 'none'
@@ -578,6 +580,8 @@ Page({
         errorChart: "您当前无法绘制此图，请检查您的数据是否为空或数据的格式是否正确。",
         showInputTemplateName: false,
         inputTemplateName: "",
+        showSaveSheet: false,
+        saveSheetOptions: [{name: "保存模板", value: 0},{name: "保存图表",value: 1},{name: "导出到.csv文件",value: 2}],
         lineChart: {
             onInit: initLineChart
         },
@@ -644,7 +648,7 @@ Page({
         })
         this.delGroup();
     },
-    onClose() {
+    onCloseInputTempName() {
         this.setData({
             showInputTemplateName: false,
             inputTemplateNameL: ""
@@ -659,6 +663,21 @@ Page({
         this.setData({
             inputTemplateName: event.detail
         });
+    },
+    onCloseSaveSheet(){
+        this.setData({
+            showSaveSheet: false
+        });
+    },
+    onSelectSaveOption(event) {
+        console.log(event.detail)
+        var funs = [this.isSaveTemplate, this.saveChart, this.exportToCSV];
+        funs[event.detail.value]();
+    },
+    beginShowSaveSheet(){
+        this.setData({
+            showSaveSheet: true
+        })
     },
     onLoad() {
         const eventChannel = this.getOpenerEventChannel()

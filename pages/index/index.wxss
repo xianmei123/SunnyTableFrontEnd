@@ -1,44 +1,70 @@
 /**index.wxss**/
 /* @import "../../template/popUp/popUp.wxss"; */
 .userinfo {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  color: #aaa;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	color: #aaa;
 }
 
 .userinfo-avatar {
-  overflow: hidden;
-  width: 128rpx;
-  height: 128rpx;
-  margin: 20rpx;
-  border-radius: 50%;
+	overflow: hidden;
+	width: 128rpx;
+	height: 128rpx;
+	margin: 20rpx;
+	border-radius: 50%;
 }
 
 .usermotto {
-  margin-top: 200px;
+	margin-top: 200px;
 }
 
 .test {
-  --button-border-radius: 10px;
-  --button-default-color: #f2f3f5;
+	--button-border-radius: 10px;
+	--button-default-color: #f2f3f5;
 }
+
 .container {
-  height: 10%;
-  border-color: white;
-  /* display: flex; */
-  /* flex-direction: column; */
-  /* align-items: center; */
-  /* justify-content: space-between; */
-  padding: 20rpx 0;
-  border-radius: 20rpx;
-  /* box-sizing: border-box; */
-} 
+	height: 10%;
+	border-color: white;
+	/* display: flex; */
+	/* flex-direction: column; */
+	/* align-items: center; */
+	/* justify-content: space-between; */
+	padding: 20rpx 0;
+	border-radius: 20rpx;
+	/* box-sizing: border-box; */
+}
 
 
-.van-grid_box{
-  background-color: white;
-  margin: 20px 10px; 
-  border-radius: 8px;
-  box-shadow: 1px 1px 3px #aaaaaa; 
+.van-grid_box {
+	background-color: white;
+	margin: 20px 10px;
+	border-radius: 8px;
+	box-shadow: 1px 1px 3px #aaaaaa;
+}
+
+.scroll-view_H {
+	white-space: nowrap
+}
+
+.scroll-view-item_H {
+	display: inline-block;
+	width: 100%;
+	height: 250rpx;
+}
+
+.side_item {
+	/* 字体设置 */
+	font-weight: bold; 
+	font-size: 60rpx;
+	color: white;
+	/* 背景颜色设置 */
+	background-color:#1abc9c;
+	height: 250rpx; 
+	/* flex布局 */
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
 }

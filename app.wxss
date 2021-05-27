@@ -3,13 +3,13 @@
 /* 常用盒子 */
 .box1{
   background-color: #fff;
-  margin: 0px 15px 0px 15px; 
+  margin: 0px 5px 0px 5px; 
   padding: 5px;
   position:relative;
   overflow: scroll;
   top:10rpx;
   border-radius: 8px;
-  box-shadow: 1px 1px 3px #aaaaaa; 
+  /* box-shadow: 1px 1px 3px #aaaaaa;  */
 }
 .bottom_box{
   overflow:scroll;

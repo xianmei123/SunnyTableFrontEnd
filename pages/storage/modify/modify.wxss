@@ -1,2 +1,8 @@
 /* pages/storage/modify/modify.wxss */
 @import '/pages/storage/storage.wxss';
+.icon-col{
+   position: relative; 
+}
+.van-dropdown-menu{
+    --dropdown-menu-height: 40px ;
+}

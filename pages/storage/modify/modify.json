@@ -4,7 +4,8 @@
     "van-popup": "@vant/weapp/popup/index",
     "mp-icon": "weui-miniprogram/icon/icon",
     "van-dialog": "@vant/weapp/dialog/index",
-    "van-toast": "@vant/weapp/toast/index"
+    "van-toast": "@vant/weapp/toast/index",
+    "van-icon": "@vant/weapp/icon/index"
   },
   "navigationBarTitleText": "路径选择"
 }

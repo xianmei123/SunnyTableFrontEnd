@@ -1,87 +1,89 @@
 {
-  "pages": [
-    "pages/index/index",
-    "pages/draw/draw",
-    "pages/storage/storage",
-    "pages/attribute/attribute",
-    "pages/storage/modify/modify",
-    "pages/model_select/model_select",
-    "pages/logs/logs",
-    "pages/input/text",
-    "pages/input/photo",
-    "pages/mine/mine"
-  ],
-  "subPackages": [
-    {
-      "root": "packageA",
-      "pages": []
+    "pages": [
+        "pages/index/index",
+        "pages/draw/draw",
+        "pages/storage/storage",
+        "pages/attribute/attribute",
+        "pages/storage/modify/modify",
+        "pages/model_select/model_select",
+        "pages/logs/logs",
+        "pages/input/text",
+        "pages/input/photo",
+        "pages/mine/mine",
+        "pages/bill/bill"
+    ],
+    "subPackages": [
+        {
+            "root": "packageA",
+            "pages": []
+        },
+        {
+            "root": "packageB",
+            "pages": []
+        }
+    ],
+    "window": {
+        "backgroundColor": "#D4F2E7",
+        "backgroundTextStyle": "light",
+        "navigationBarBackgroundColor": "#fff",
+        "navigationBarTitleText": "Weixin",
+        "navigationBarTextStyle": "black"
     },
-    {
-      "root": "packageB",
-      "pages": []
+    "style": "v2",
+    "sitemapLocation": "sitemap.json",
+    "useExtendedLib": {
+        "weui": true
+    },
+    "tabBar": {
+        "color": "#bdc3c7",
+        "borderStyle": "black",
+        "selectedColor": "#2980b9",
+        "list": [
+            {
+                "pagePath": "pages/index/index",
+                "iconPath": "lib/image/icon/home.png",
+                "selectedIconPath": "lib/image/icon/home.png",
+                "text": "首页"
+            },
+            {
+                "pagePath": "pages/storage/storage",
+                "iconPath": "lib/image/icon/storage.png",
+                "selectedIconPath": "lib/image/icon/storage.png",
+                "text": "存储"
+            },
+            {
+                "pagePath": "pages/mine/mine",
+                "iconPath": "lib/image/icon/mine.png",
+                "selectedIconPath": "lib/image/icon/mine.png",
+                "text": "我的"
+            }
+        ]
+    },
+    "usingComponents": {
+        "mp-dialog": "weui-miniprogram/dialog/dialog",
+        "mp-badge": "weui-miniprogram/badge/badge",
+        "mp-cells": "weui-miniprogram/cells/cells",
+        "mp-cell": "weui-miniprogram/cell/cell",
+        "mp-col": "@miniprogram-component-plus/col",
+        "mp-row": "@miniprogram-component-plus/row",
+        "van-row": "@vant/weapp/row/index",
+        "van-col": "@vant/weapp/col/index",
+        "van-tab": "@vant/weapp/tab/index",
+        "van-tabs": "@vant/weapp/tabs/index",
+        "van-grid": "@vant/weapp/grid/index",
+        "van-grid-item": "@vant/weapp/grid-item/index",
+        "van-button": "@vant/weapp/button/index",
+        "van-dropdown-menu": "@vant/weapp/dropdown-menu/index",
+        "van-dropdown-item": "@vant/weapp/dropdown-item/index",
+        "van-field": "@vant/weapp/field/index",
+        "van-tabbar": "@vant/weapp/tabbar/index",
+        "van-tabbar-item": "@vant/weapp/tabbar-item/index",
+        "van-icon": "@vant/weapp/icon/index",
+        "van-cell": "@vant/weapp/cell/index",
+        "van-cell-group": "@vant/weapp/cell-group/index",
+        "van-search": "@vant/weapp/search/index",
+        "van-sticky": "@vant/weapp/sticky/index",
+        "ec-canvas": "ec-canvas/ec-canvas",
+        "van-action-sheet": "@vant/weapp/action-sheet/index"
     }
-  ],
-  "window": {
-    "backgroundColor": "#D4F2E7",
-    "backgroundTextStyle": "light",
-    "navigationBarBackgroundColor": "#fff",
-    "navigationBarTitleText": "Weixin",
-    "navigationBarTextStyle": "black"
-  },
-  "style": "v2",
-  "sitemapLocation": "sitemap.json",
-  "useExtendedLib": {
-    "weui": true
-  },
-  "tabBar": {
-    "color": "#bdc3c7",
-    "borderStyle": "black",
-    "selectedColor": "#2980b9",
-    "list": [
-      {
-        "pagePath": "pages/index/index",
-        "iconPath": "lib/image/icon/home.png",
-        "selectedIconPath": "lib/image/icon/home.png",
-        "text": "首页"
-      },
-      {
-        "pagePath": "pages/storage/storage",
-        "iconPath": "lib/image/icon/storage.png",
-        "selectedIconPath": "lib/image/icon/storage.png",
-        "text": "存储"
-      },
-      {
-        "pagePath": "pages/mine/mine",
-        "iconPath": "lib/image/icon/mine.png",
-        "selectedIconPath": "lib/image/icon/mine.png",
-        "text": "我的"
-      }
-    ]
-  },
-  "usingComponents": {
-    "mp-dialog": "weui-miniprogram/dialog/dialog",
-    "mp-badge": "weui-miniprogram/badge/badge",
-    "mp-cells": "weui-miniprogram/cells/cells",
-    "mp-cell": "weui-miniprogram/cell/cell",
-    "mp-col": "@miniprogram-component-plus/col",
-    "mp-row": "@miniprogram-component-plus/row",
-    "van-row": "@vant/weapp/row/index",
-    "van-col": "@vant/weapp/col/index",
-    "van-tab": "@vant/weapp/tab/index",
-    "van-tabs": "@vant/weapp/tabs/index",
-    "van-grid": "@vant/weapp/grid/index",
-    "van-grid-item": "@vant/weapp/grid-item/index",
-    "van-button": "@vant/weapp/button/index",
-    "van-dropdown-menu": "@vant/weapp/dropdown-menu/index",
-    "van-dropdown-item": "@vant/weapp/dropdown-item/index",
-    "van-field": "@vant/weapp/field/index",
-    "van-tabbar": "@vant/weapp/tabbar/index",
-    "van-tabbar-item": "@vant/weapp/tabbar-item/index",
-    "van-icon": "@vant/weapp/icon/index",
-    "van-cell": "@vant/weapp/cell/index",
-    "van-cell-group": "@vant/weapp/cell-group/index",
-    "van-search": "@vant/weapp/search/index",
-    "van-sticky": "@vant/weapp/sticky/index",
-    "ec-canvas": "ec-canvas/ec-canvas"
-  }
 }
