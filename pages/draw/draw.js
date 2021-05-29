@@ -891,7 +891,7 @@ Page({
         for (i = 0; i < this.data.groupNum; i++) {
             var tmp = [];
             tmp.push(this.data.groupName[i]);
-            for (j = 0; j < xValues.length; j++) {
+            for (j = 0; j < this.data.xValues.length; j++) {
                 tmp.push(this.data.datas[i][j]);
             }
             ret.push(tmp);
@@ -907,7 +907,7 @@ Page({
         for (i = 0; i < this.data.groupNum; i++) {
             var tmp = [];
             tmp.push(this.data.groupName[i]);
-            for (j = 0; j < xValues.length; j++) {
+            for (j = 0; j < this.data.xValues.length; j++) {
                 tmp.push(this.data.datas[i][j]);
             }
             ret.push(tmp);
