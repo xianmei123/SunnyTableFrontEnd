@@ -7,12 +7,11 @@
     <!-- 折线图 -->
     <view wx:if="{{value1=='line'}}">
         <block wx:if="{{showLineChart}}">
-            <scroll-view scroll-y="false" scroll-x="false">
-                <view class="container">
-                    <!-- <ec-canvas id="lineChartId" canvas-id="line-canvas" ec="{{ lineChart }}" force-use-old-canvas="true"></ec-canvas> -->
-                    <ec-canvas id="lineChartId" canvas-id="line-canvas" ec="{{ lineChart }}"></ec-canvas>
-                </view>
-            </scroll-view>
+            <view class="{{screenDirection == 0 ? isHideTabel === 'block' ? 'container' : 'container_hide' : isHideTabel === 'block' ? 'container_row' : 'container_row_hide'}}">
+                <!-- <view class="container"> -->
+                <!-- <ec-canvas id="lineChartId" canvas-id="line-canvas" ec="{{ lineChart }}" force-use-old-canvas="true"></ec-canvas> -->
+                <ec-canvas id="lineChartId" canvas-id="line-canvas" ec="{{ lineChart }}"></ec-canvas>
+            </view>
         </block>
         <block wx:if="{{showLineChart ? false : true}}">
             <view>{{errorChart}}</view>
@@ -21,11 +20,10 @@
     <!-- 柱状图 -->
     <view wx:if="{{value1=='bar'}}">
         <block wx:if="{{showBarChart}}">
-            <scroll-view scroll-y="true" scroll-x="true">
-                <view class="container">
-                    <ec-canvas id="barChartId" canvas-id="bar-canvas" ec="{{ barChart }}"></ec-canvas>
-                </view>
-            </scroll-view>
+            <view class="{{screenDirection == 0 ? isHideTabel === 'block' ? 'container' : 'container_hide' : isHideTabel === 'block' ? 'container_row' : 'container_row_hide'}}">
+                <!-- <view class="container"> -->
+                <ec-canvas id="barChartId" canvas-id="bar-canvas" ec="{{ barChart }}"></ec-canvas>
+            </view>
         </block>
         <block wx:if="{{showBarChart ? false : true}}">
             <view>{{errorChart}}</view>
@@ -34,11 +32,10 @@
     <!-- 饼状图 -->
     <view wx:if="{{value1=='pie'}}">
         <block wx:if="{{showPieChart}}">
-            <scroll-view scroll-y="true" scroll-x="true">
-                <view class="container">
-                    <ec-canvas id="pieChartId" canvas-id="pie-canvas" ec="{{ pieChart }}"></ec-canvas>
-                </view>
-            </scroll-view>
+            <view class="{{screenDirection == 0 ? isHideTabel === 'block' ? 'container' : 'container_hide' : isHideTabel === 'block' ? 'container_row' : 'container_row_hide'}}">
+                <!-- <view class="container"> -->
+                <ec-canvas id="pieChartId" canvas-id="pie-canvas" ec="{{ pieChart }}"></ec-canvas>
+            </view>
         </block>
         <block wx:if="{{showPieChart ? false : true}}">
             <view>{{errorChart}}</view>
@@ -46,11 +43,10 @@
     </view>
     <view wx:if="{{value1=='scatter'}}">
         <block wx:if="{{showScatterChart}}">
-            <scroll-view scroll-y="true" scroll-x="true">
-                <view class="container">
-                    <ec-canvas id="scatterChartId" canvas-id="scatter-canvas" ec="{{ scatterChart }}"></ec-canvas>
-                </view>
-            </scroll-view>
+            <view class="{{screenDirection == 0 ? isHideTabel === 'block' ? 'container' : 'container_hide' : isHideTabel === 'block' ? 'container_row' : 'container_row_hide'}}">
+                <!-- <view class="container"> -->
+                <ec-canvas id="scatterChartId" canvas-id="scatter-canvas" ec="{{ scatterChart }}"></ec-canvas>
+            </view>
         </block>
         <block wx:if="{{showScatterChart ? false : true}}">
             <view>{{errorChart}}</view>
@@ -58,18 +54,20 @@
     </view>
 </view>
 <text>\n</text>
-<view>
-    <van-field value="{{graphName}}" placeholder="输入图表名称" border="{{ true }}" bind:change="setChartName" />
-    <van-row>
-        <van-col span="12">
-            <van-field value="{{xName}}" placeholder="输入横轴名称" border="{{ true }}" bind:change="setXName" />
-        </van-col>
-        <van-col span="12">
-            <van-field value="{{yName}}" placeholder="输入纵轴名称" border="{{ true }}" bind:change="setYName" />
-        </van-col>
-    </van-row>
-</view>
-<view>
+<button type="primary" size="large" bindtap="hideTabel">隐藏数据表格</button>
+<text>\n</text>
+<view style="display:{{isHideTabel}}">
+    <view>
+        <van-field value="{{graphName}}" placeholder="输入图表名称" border="{{ true }}" bind:change="setChartName" />
+        <van-row>
+            <van-col span="12">
+                <van-field value="{{xName}}" placeholder="输入横轴名称" border="{{ true }}" bind:change="setXName" />
+            </van-col>
+            <van-col span="12">
+                <van-field value="{{yName}}" placeholder="输入纵轴名称" border="{{ true }}" bind:change="setYName" />
+            </van-col>
+        </van-row>
+    </view>
     <text>当前单元格数据：{{currentCell}}</text>
     <text>\n</text>
     <view class="title">输入数据</view>
@@ -77,25 +75,21 @@
         <!-- 表格 -->
         <scroll-view class="scroll-view_H" scroll-x="true" style="width: 100%">
             <view class="text-item">
-                <van-field value="数据组" disabled
-                    bindtap="changeCurrentX" />
+                <van-field value="数据组" disabled bindtap="changeCurrentX" />
             </view>
             <block wx:for="{{iterator2}}" wx:for-index="i">
                 <view class="text-item">
-                    <van-field value="{{ groupName[i] }}" placeholder="数据组{{ i + 1 }}"
-                            bind:change="setGroupName" data-a="{{i}}" bindtap="changeCurrentGroupName" />
+                    <van-field value="{{ groupName[i] }}" placeholder="数据组{{ i + 1 }}" bind:change="setGroupName" data-a="{{i}}" bindtap="changeCurrentGroupName" />
                 </view>
             </block>
             <view class="divide-H"></view>
             <block wx:for="{{iterator1}}" wx:for-index="i">
                 <view class="text-item">
-                    <van-field placeholder="横坐标{{ i + 1 }}" border="{{ true }}" bind:change="getXValue"
-                        data-a="{{i + 1}}" bindtap="changeCurrentX" />
+                    <van-field placeholder="横坐标{{ i + 1 }}" border="{{ true }}" bind:change="getXValue" data-a="{{i + 1}}" bindtap="changeCurrentX" />
                 </view>
                 <block wx:for="{{iterator2}}" wx:for-item="j">
                     <view class="text-item">
-                        <van-field value="{{ datas[j-1][i] }}" placeholder="数据{{ j }}" border="{{ true }}"
-                            bind:change="getData" data-a="{{j}}" data-b="{{i + 1}}" bindtap="changeCurrent" />
+                        <van-field value="{{ datas[j-1][i] }}" placeholder="数据{{ j }}" border="{{ true }}" bind:change="getData" data-a="{{j}}" data-b="{{i + 1}}" bindtap="changeCurrent" />
                     </view>
                 </block>
                 <view class="divide_H"></view>
@@ -110,39 +104,38 @@
             <action-sheet-cancel class="cancel">取消</action-sheet-cancel>
         </action-sheet>
     </view>
-    <van-row class="bottom_box">
-        <van-col span="8" style="text-align:center; padding-top: 2px">
-            <view style="padding-top:4px">
-                <text class="icon-new icon"></text>
-            </view>
-            <view style="font-size: 12px;margin-top: -6px; color:balck">创建</view>
-        </van-col>
-       
-        <van-col span="8" style="text-align:center;padding-top: 2px;font-weight:normal">
-            <view style="padding-top:4px">
-                <text class="icon-save icon" bindtap="beginShowSaveSheet"></text>
-            </view>
-            <view style="font-size: 12px;margin-top: -6px; color:balck">保存</view>
-            <van-action-sheet show="{{ showSaveSheet }}" actions="{{ saveSheetOptions }}" cancel-text="取消" bind:close="onCloseSaveSheet" bind:select="onSelectSaveOption" bind:cancel="onCloseSaveSheet"/>
-        </van-col>
-        <van-col span="8" style="text-align:center;">
-            <view style="padding-top:4px">
-                <text class="icon-modify icon" bindtap="goAttribute"></text>
-            </view>
-            <view style="font-size: 12px;margin-top: -6px; color:balck">修改</view>
-        </van-col>
-    </van-row>
     <block wx:if="{{value1=='pie'}}">
         <text>\n</text>
         <text>请输入想要绘制的数据组序号\n</text>
-        <van-field border="{{ false }}" bind:change="getData" data-a="{{j}}" data-b="{{i + 1}}"
-            bind:change="choosePieChart" />
+        <van-field border="{{ false }}" bind:change="getData" data-a="{{j}}" data-b="{{i + 1}}" bind:change="choosePieChart" />
         <text>\n</text>
     </block>
     <text>\n</text>
     <button type="primary" size="large" bindtap="repaint">绘制图表</button>
 </view>
+<van-row class="bottom_box">
+    <van-col span="8" style="text-align:center; padding-top: 2px">
+        <view style="padding-top:4px">
+            <text class="icon-new {{screenDirection == 0 ? 'icon' : 'icon_row'}}"></text>
+        </view>
+        <view style="font-size: 12px;margin-top: -6px; color:balck">创建</view>
+    </van-col>
+    <van-col span="8" style="text-align:center;padding-top: 2px;font-weight:normal">
+        <view style="padding-top:4px">
+            <text class="icon-save {{screenDirection == 0 ? 'icon' : 'icon_row'}}" bindtap="beginShowSaveSheet"></text>
+        </view>
+        <view style="font-size: 12px;margin-top: -6px; color:balck">保存</view>
+        <van-action-sheet show="{{ showSaveSheet }}" actions="{{ saveSheetOptions }}" cancel-text="取消" bind:close="onCloseSaveSheet" bind:select="onSelectSaveOption" bind:cancel="onCloseSaveSheet" />
+    </van-col>
+    <van-col span="8" style="text-align:center;">
+        <view style="padding-top:4px">
+            <text class="icon-modify {{screenDirection == 0 ? 'icon' : 'icon_row'}}" bindtap="goAttribute"></text>
+        </view>
+        <view style="font-size: 12px;margin-top: -6px; color:balck">修改</view>
+    </van-col>
+</van-row>
 <text>\n</text>
+
 <van-dialog use-slot title="请输入保存模板的名称" show="{{ showInputTemplateName }}" show-cancel-button bind:close="onCloseInputTempName" bind:confirm="saveTemplate">
     <van-field value="{{ inputTempateName }}" placeholder="请输入模板名称" bind:change="onInputName" />
 </van-dialog>

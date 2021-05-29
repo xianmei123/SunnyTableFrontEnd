@@ -99,12 +99,14 @@ function setLineOption(lineChart, template) {
             {
                 type: "slider",
                 xAxisIndex: 0,
-                filterMode: 'none'
+                filterMode: 'none',
+                height: 15
             },
             {
                 type: "slider",
                 yAxisIndex: 0,
-                filterMode: 'none'
+                filterMode: 'none',
+                width: 15
             }
         ],
         grid: {
@@ -233,7 +235,8 @@ function setBarOption(barChart, template) {
             {
                 type: "slider",
                 yAxisIndex: 0,
-                filterMode: 'none'
+                filterMode: 'none',
+                width: 15
             }
         ],
         title: {
@@ -267,7 +270,6 @@ function setBarOption(barChart, template) {
     };
     setLegendOption(option, template.legendPos);
     barChart.setOption(option);
-
     if (template.showDigit) {
         barChart.setOption({
             tooltip: {
@@ -440,9 +442,8 @@ function setScatterOption(scatterChart, template) {
         dataset: {
             source: inputData
         },
-        
-        dataZoom: [
-            {
+
+        dataZoom: [{
                 type: "inside",
                 xAxisIndex: 0,
                 filterMode: 'none'
@@ -455,12 +456,14 @@ function setScatterOption(scatterChart, template) {
             {
                 type: "slider",
                 xAxisIndex: 0,
-                filterMode: 'none'
+                filterMode: 'none',
+                height: 15
             },
             {
                 type: "slider",
                 yAxisIndex: 0,
-                filterMode: 'none'
+                filterMode: 'none',
+                width: 15
             }
         ],
         grid: {
@@ -524,6 +527,8 @@ function setScatterOption(scatterChart, template) {
 
 Page({
     data: {
+        /**0 表示 为竖屏，1表示为横屏*/
+        screenDirection: 0,
         actionSheetHidden: true,
         actionSheetItems: [{
                 bindtap: 'Menu1',
@@ -578,10 +583,23 @@ Page({
         showPieChart: true,
         showScatterChart: true,
         errorChart: "您当前无法绘制此图，请检查您的数据是否为空或数据的格式是否正确。",
+        /**是否战术输入模板名字 */
         showInputTemplateName: false,
         inputTemplateName: "",
+        /**是否展示底部保存的上拉列表 */
         showSaveSheet: false,
-        saveSheetOptions: [{name: "保存模板", value: 0},{name: "保存图表",value: 1},{name: "导出到.csv文件",value: 2}],
+        saveSheetOptions: [{
+            name: "保存模板",
+            value: 0
+        }, {
+            name: "保存图表",
+            value: 1
+        }, {
+            name: "导出到.csv文件",
+            value: 2
+        }],
+        /**是否展示表格 */
+        isHideTabel: "block",
         lineChart: {
             onInit: initLineChart
         },
@@ -664,7 +682,7 @@ Page({
             inputTemplateName: event.detail
         });
     },
-    onCloseSaveSheet(){
+    onCloseSaveSheet() {
         this.setData({
             showSaveSheet: false
         });
@@ -674,7 +692,7 @@ Page({
         var funs = [this.isSaveTemplate, this.saveChart, this.exportToCSV];
         funs[event.detail.value]();
     },
-    beginShowSaveSheet(){
+    beginShowSaveSheet() {
         this.setData({
             showSaveSheet: true
         })
@@ -689,6 +707,12 @@ Page({
                 this.openChart(res.data)
             })
         }
+    },
+    hideTabel() {
+        this.setData({
+            isHideTabel: this.data.isHideTabel === "none" ? "block" : "none"
+        });
+        resetCharts(this.data.value1);
     },
     setChartName(event) {
         this.data.graphName = event.detail;
@@ -1249,6 +1273,12 @@ Page({
     onShareAppMessage: function () {
 
     },
+    onResize: function () {
+        this.setData({
+            screenDirection: this.data.screenDirection == 0 ? 1 : 0
+        });
+        resetCharts(this.data.value1);
+    },
     onShow() {},
     onReady: function () {
 
@@ -1260,6 +1290,36 @@ Page({
         pie.pieData = null;
     },
 });
+
+function resetCharts(value) {
+    var thisPage = getPage();
+    switch (value) {
+        case "line":
+            thisPage.selectComponent('#lineChartId').init((canvas, width, height, dpr) => {
+                return initLineChart(canvas, width, height, dpr);
+            });
+            break;
+        case "bar":
+            thisPage.selectComponent('#barChartId').init((canvas, width, height, dpr) => {
+                return initBarChart(canvas, width, height, dpr);
+            });
+            break;
+        case "pie":
+            thisPage.selectComponent('#pieChartId').init((canvas, width, height, dpr) => {
+
+                return initPieChart(canvas, width, height, dpr);
+
+            });
+            break;
+        case "scatter":
+            thisPage.selectComponent('#scatterChartId').init((canvas, width, height, dpr) => {
+
+                return initScatterChart(canvas, width, height, dpr);
+
+            });
+            break;
+    }
+}
 
 /**
  * 此方法用来在重画图表（repaint）时设置图的可见性

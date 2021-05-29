@@ -3,13 +3,23 @@
 }
 
 .container {
-	height: 700rpx;
-	width: 150%;
+	height: 60vh;
+	width: 100%;
 }
 
-#lineChartId {
-	width: 500rpx;
-	height: 400rpx;
+.container_hide {
+	height: 80vh;
+	width: 100%;
+}
+
+.container_row{
+	height: 50vh;
+	width: 100%;
+}
+
+.container_row_hide{
+	height: 70vh;
+	width: 100%;
 }
 
 .text-item {
@@ -80,8 +90,13 @@
 	background-size: cover;
 }
 .icon {
-	
 	display: inline-block;
-	width: 54rpx;
-	height: 54rpx;
+	width: 48rpx;
+	height: 48rpx;
+}
+
+.icon_row{
+	display: inline-block;
+	width: 22rpx;
+	height: 22rpx;
 }
