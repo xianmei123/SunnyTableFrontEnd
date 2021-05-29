@@ -887,12 +887,12 @@ Page({
         var ret = [];
         var i;
         var j;
-        ret.push(this.data.xValues)
-        for (i = 0; i < this.data.groupNum; i++) {
+        ret.push(this.data.groupName)
+        for (i = 0; i < this.data.xValues.length; i++) {
             var tmp = [];
-            tmp.push(this.data.groupName[i]);
-            for (j = 0; j < this.data.xValues.length; j++) {
-                tmp.push(this.data.datas[i][j]);
+            tmp.push(this.data.xValues[i]);
+            for (j = 0; j < this.data.groupNum; j++) {
+                tmp.push(this.data.datas[j][i]);
             }
             ret.push(tmp);
         }
@@ -903,12 +903,12 @@ Page({
         var ret = [];
         var i;
         var j;
-        ret.push(this.data.xValues)
-        for (i = 0; i < this.data.groupNum; i++) {
+        ret.push(this.data.groupName)
+        for (i = 0; i < this.data.xValues.length; i++) {
             var tmp = [];
-            tmp.push(this.data.groupName[i]);
-            for (j = 0; j < this.data.xValues.length; j++) {
-                tmp.push(this.data.datas[i][j]);
+            tmp.push(this.data.xValues[i]);
+            for (j = 0; j < this.data.groupNum; j++) {
+                tmp.push(this.data.datas[j][i]);
             }
             ret.push(tmp);
         }
