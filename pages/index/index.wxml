@@ -8,7 +8,8 @@
     </view>
   </van-col>
   <van-col span="16">
-   <scroll-view scroll-x="true" bindscroll="scroll"  style="width: 100%" class="scroll-view_H" >
+   <!-- <scroll-view scroll-x="true" bindscroll="scroll"  style="width: 100%" class="scroll-view_H" > -->
+   <scroll-view scroll-x="true" style="width: 100%" class="scroll-view_H" >
     <image src="/lib/image/graph/{{item}}" class="scroll-view-item_H" wx:for="{{item.pic}}"></image>
    </scroll-view> 
   </van-col>
