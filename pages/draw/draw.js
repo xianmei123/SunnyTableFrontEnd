@@ -617,7 +617,7 @@ Page({
         datas: [
             ["", ""],
             ["", ""]
-        ],
+        ],                      //每一行是同一数据组
         xValues: [
             "", ""
         ],
@@ -887,23 +887,8 @@ Page({
         var ret = [];
         var i;
         var j;
-        ret.push(this.data.groupName)
-        for (i = 0; i < this.data.xValues.length; i++) {
-            var tmp = [];
-            tmp.push(this.data.xValues[i]);
-            for (j = 0; j < this.data.groupNum; j++) {
-                tmp.push(this.data.datas[j][i]);
-            }
-            ret.push(tmp);
-        }
-        console.log(ret);
-        return ret;
-    },
-    convertData: function () {
-        var ret = [];
-        var i;
-        var j;
-        ret.push(this.data.groupName)
+        ret.push(this.data.groupName);
+        ret[0].unshift("虽然啥都没有，但是还是要传");
         for (i = 0; i < this.data.xValues.length; i++) {
             var tmp = [];
             tmp.push(this.data.xValues[i]);
@@ -1253,7 +1238,7 @@ Page({
             newGroupName.push(dataArray[i]["name"]);
             newDatas.push(dataArray[i]["lineData"]);
         }
-        inputData = this.convertData();
+        inputData = this.convertPaintData();
         this.setData({
             xValues: dataArray[0]["lineData"],
             datas: newDatas,
