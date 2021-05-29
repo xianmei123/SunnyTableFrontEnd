@@ -860,36 +860,35 @@ Page({
         return "number";
     },
     convertPaintData: function () { //转化所需数据
-        var ret = {};
+        var ret = [];
         var i;
         var j;
-        if (this.data.defaultRegion) {
-            this.data.x1 = 1;
-            this.data.x2 = this.data.groupNum;
-            this.data.y1 = 1;
-            this.data.y2 = this.data.xValues.length;
-        }
-        for (i = this.data.x1 - 1; i < this.data.x2; i++) {
+        ret.push(this.data.xValues)
+        for (i = 0; i < this.data.groupNum; i++) {
             var tmp = [];
-            for (j = this.data.y1 - 1; j < this.data.y2; j++) {
-                tmp.push([this.data.xValues[j], this.data.datas[i][j]]);
+            tmp.push(this.data.groupName[i]);
+            for (j = 0; j < xValues.length; j++) {
+                tmp.push(this.data.datas[i][j]);
             }
-            ret[this.data.groupName[i]] = tmp;
+            ret.push(tmp);
         }
         console.log(ret);
         return ret;
     },
     convertData: function () {
-        var ret = {};
+        var ret = [];
         var i;
         var j;
+        ret.push(this.data.xValues)
         for (i = 0; i < this.data.groupNum; i++) {
             var tmp = [];
-            for (j = 0; j < this.data.xValues.length; j++) {
-                tmp.push([this.data.xValues[j], this.data.datas[i][j]]);
+            tmp.push(this.data.groupName[i]);
+            for (j = 0; j < xValues.length; j++) {
+                tmp.push(this.data.datas[i][j]);
             }
-            ret[this.data.groupName[i]] = tmp;
+            ret.push(tmp);
         }
+        console.log(ret);
         return ret;
     },
     resetData: function (newData) {
