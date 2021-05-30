@@ -1,6 +1,64 @@
 // pages/draw/draw.js
 
 import * as echarts from '../../ec-canvas/echarts';
+import ecStat from 'echarts-stat';
+echarts.registerTransform(ecStat.transform.regression);
+
+var inputData = [
+    ['pro', 'sb'],
+    ["2000-06-05", 116],
+    ["2000-06-06", 129],
+    ["2000-06-07", 135],
+    ["2000-06-08", 86],
+    ["2000-06-09", 73],
+    ["2000-06-10", 85],
+    ["2000-06-11", 73],
+    ["2000-06-12", 68],
+    ["2000-06-13", 92],
+    ["2000-06-14", 130],
+    ["2000-06-15", 245],
+    ["2000-06-16", 139],
+    ["2000-06-17", 115],
+    ["2000-06-18", 111],
+    ["2000-06-19", 309],
+    ["2000-06-20", 206],
+    ["2000-06-21", 137],
+    ["2000-06-22", 128],
+    ["2000-06-23", 85],
+    ["2000-06-24", 94],
+    ["2000-06-25", 71],
+    ["2000-06-26", 106],
+    ["2000-06-27", 84],
+    // ["2000-06-28", 93],
+    // ["2000-06-29", 85],
+    // ["2000-06-30", 73],
+    // ["2000-07-01", 83],
+    // ["2000-07-02", 125],
+    // ["2000-07-03", 107],
+    // ["2000-07-04", 82],
+    // ["2000-07-05", 44],
+    // ["2000-07-06", 72],
+    // ["2000-07-07", 106],
+    // ["2000-07-08", 107],
+    // ["2000-07-09", 66],
+    // ["2000-07-10", 91],
+    // ["2000-07-11", 92],
+    // ["2000-07-12", 113],
+    // ["2000-07-13", 107],
+    // ["2000-07-14", 131],
+    // ["2000-07-15", 111],
+    // ["2000-07-16", 64],
+    // ["2000-07-17", 69],
+    // ["2000-07-18", 88],
+    // ["2000-07-19", 77],
+    // ["2000-07-20", 83],
+    // ["2000-07-21", 111],
+    // ["2000-07-22", 57],
+    // ["2000-07-23", 55],
+    // ["2000-07-24", 60]
+];
+
+
 var inputData = [
     ['product', 'sb', 'lsp'],
     ['sb1', 41.1, 86.5],
@@ -9,6 +67,15 @@ var inputData = [
     ['sb4', 75, 25],
     ['sb5', 78, 25],
     ['sb6', 33, 66],
+]; // 输入数据
+var inputData = [
+    ['product', 'sb', 'lsp'],
+    [78, 41.1, 86.5],
+    [52, 30.4, 92.1],
+    [85, 22, 182],
+    [86, 75, 25],
+    [42, 78, 25],
+    [36, 33, 66],
 ]; // 输入数据
 var graph = require('./class');
 var xType = "string"; // 输入数据x轴类型
@@ -30,6 +97,8 @@ var typeToIndex = new Map([
     ["pie", 2],
     ["scatter", 3]
 ]);
+
+var indexToSymbol = ['circle', 'rect', 'roundRect', 'triangle', 'diamond', 'pin', 'arrow', 'none']
 
 
 /**
@@ -69,16 +138,74 @@ function setLineOption(lineChart, template) {
     lineChart.clear();
     var series = [];
     var option;
+    var areaStyle = template.areaStyle.split(" ").map(item => {
+        return JSON.parse(item);
+    });
+    var showArea = template.showArea.split(" ").map(item => {
+        return JSON.parse(item);
+    });
+    var showEmphasis = template.showEmphasis.split(" ").map(item => {
+        return JSON.parse(item);
+    });
+    var showMinMarkPoint = template.showMinMarkPoint.split(" ").map(item => {
+        return JSON.parse(item);
+    });
+    var showMaxMarkPoint = template.showMaxMarkPoint.split(" ").map(item => {
+        return JSON.parse(item);
+    });
+    var showAverageMarkLine = template.showAverageMarkLine.split(" ").map(item => {
+        return JSON.parse(item);
+    });
+    var stack = template.stack.split(" ");
+
+
     for (var i = 1; i < inputData[0].length; i++) {
         var name = inputData[0][i];
         var tempJson = {
             name: name,
             type: "line",
+            smooth: template.smooth,
             symbolSize: template.radius,
-            lineStyle: {
-                color: template.color[i - 1],
-            }
+            showSymbol: template.showSymbol,
+            markPoint: {
+                symbol: indexToSymbol[template.markPointStyle],
+                symbolSize: template.markPointSize,
+                data: [],
+                label: {
+                    show: true
+                }
+            },
+            markLine: {
+                data: []
+            },
+            stack: stack[i - 1]
         };
+        if (showArea[i - 1]) {
+            tempJson.areaStyle = {
+                color: areaStyle[i - 1]
+            };
+        }
+
+        if (showEmphasis[i - 1]) {
+            tempJson.emphasis = {
+                foucs: "series"
+            }
+        }
+        if (showMinMarkPoint[i - 1]) {
+            tempJson.markPoint.data.push({
+                type: 'min'
+            });
+        }
+        if (showMaxMarkPoint[i - 1]) {
+            tempJson.markPoint.data.push({
+                type: 'max'
+            });
+        }
+        if (showAverageMarkLine[i - 1]) {
+            tempJson.data.push({
+                type: 'average'
+            });
+        }
         series.push(tempJson);
     }
 
@@ -100,24 +227,19 @@ function setLineOption(lineChart, template) {
                 type: "slider",
                 xAxisIndex: 0,
                 filterMode: 'none',
-                height: 15
+                show: false,
+                height: 0
             },
             {
                 type: "slider",
                 yAxisIndex: 0,
                 filterMode: 'none',
-                width: 15
+                show: false,
+                width: 0
             }
         ],
         grid: {
-            right: '18%',
-            top: '16%',
-        },
-        toolbox: {
-            feature: {
-                mySaveAsImage: mySaveImage(),
-            },
-            right: '20%'
+            bottom: "8%"
         },
         title: {
             text: graphName,
@@ -127,7 +249,6 @@ function setLineOption(lineChart, template) {
                 fontSize: template.font
             }
         },
-
         xAxis: {
             name: xName,
             type: line.xType === "string" ? 'category' : 'value',
@@ -144,14 +265,58 @@ function setLineOption(lineChart, template) {
                 onZero: false
             },
         },
+        legend: {
+            right: '0%',
+            top: '16%',
+            orient: "vertical",
+        },
         series: series
     };
-    setLegendOption(option, template.legendPos);
+    setToolBox(option);
+    //setLegendOption(option, template.legendPos);
     lineChart.setOption(option); // 
+    if (template.showGradient) {
+
+        option.visualMap = {
+            show: false,
+            type: 'continuous',
+            dimension: 0,
+            inRange: {
+                color: [template.gradientColor],
+                colorLightness: template.colorLightness.split(" ").map(item => {
+                    return parseFloat(item)
+                }),
+                colorSaturation: template.colorSaturation.split(" ").map(item => {
+                    return parseFloat(item)
+                }),
+                colorHue: template.colorHue.split(" ").map(item => {
+                    return parseFloat(item)
+                })
+            }
+        }
+        if (template.showXGradient) {
+            if (xType === "string") {
+                option.visualMap.min = 0;
+                option.visualMap.max = inputData.length - 1;
+            } else if (xType === "number") {
+                option.visualMap.min = chart.getModel().getComponent('xAxis', 0).axis.scale._extent[0];
+                option.visualMap.max = chart.getModel().getComponent('xAxis', 0).axis.scale._extent[1];
+            }
+        }
+        if (template.showYGradient) {
+            if (yType === "string") {
+                option.visualMap.min = 0;
+                option.visualMap.max = inputData.length - 1;
+            } else if (yType === "number") {
+                option.visualMap.min = chart.getModel().getComponent('yAxis', 0).axis.scale._extent[0];
+                option.visualMap.max = chart.getModel().getComponent('yAxis', 0).axis.scale._extent[1];
+            }
+        }
+    }
     if (template.showDigit) {
         lineChart.setOption({
             tooltip: {
-                // triggerOn: 'none',
+                trigger: 'axis',
                 // formatter: function (params) {
                 //     var xstr = line.xType === "string" ? params.data[0] : parseFloat(params.data[0]).toFixed(2);
                 //     var ystr = line.yType === "string" ? params.data[1] : parseFloat(params.data[1]).toFixed(2);
@@ -201,6 +366,19 @@ function initBarChart(canvas, width, height, dpr) {
  */
 function setBarOption(barChart, template) {
     barChart.clear();
+    var showEmphasis = template.showEmphasis.split(" ").map(item => {
+        return JSON.parse(item);
+    });
+    var showMinMarkPoint = template.showMinMarkPoint.split(" ").map(item => {
+        return JSON.parse(item);
+    });
+    var showMaxMarkPoint = template.showMaxMarkPoint.split(" ").map(item => {
+        return JSON.parse(item);
+    });
+    var showAverageMarkLine = template.showAverageMarkLine.split(" ").map(item => {
+        return JSON.parse(item);
+    });
+    var stack = template.stack.split(" ");
     var series = [];
     var option;
     for (var i = 1; i < inputData[0].length; i++) {
@@ -210,8 +388,40 @@ function setBarOption(barChart, template) {
             type: "bar",
             barWidth: template.width,
             barGap: template.gap,
-            color: template.color[i - 1]
+            color: template.color[i - 1],
+            markPoint: {
+                symbol: indexToSymbol[template.markPointStyle],
+                symbolSize: template.markPointSize,
+                data: [],
+                label: {
+                    show: true
+                }
+            },
+            markLine: {
+                data: []
+            },
+            stack: stack[i - 1]
         };
+        if (showEmphasis[i - 1]) {
+            tempJson.emphasis = {
+                focus: 'series'
+            }
+        }
+        if (showMinMarkPoint[i - 1]) {
+            tempJson.markPoint.data.push({
+                type: 'min'
+            });
+        }
+        if (showMaxMarkPoint[i - 1]) {
+            tempJson.markPoint.data.push({
+                type: 'max'
+            });
+        }
+        if (showAverageMarkLine[i - 1]) {
+            tempJson.data.push({
+                type: 'average'
+            });
+        }
         series.push(tempJson);
     }
     option = {
@@ -219,8 +429,7 @@ function setBarOption(barChart, template) {
             source: inputData
         },
         grid: {
-            right: '18%',
-            top: '16%',
+            bottom: "8%"
         },
         dataZoom: [{
                 type: "inside",
@@ -230,13 +439,16 @@ function setBarOption(barChart, template) {
             {
                 type: "slider",
                 xAxisIndex: 0,
-                filterMode: 'none'
+                filterMode: 'none',
+                show: false,
+                height: 0
             },
             {
                 type: "slider",
                 yAxisIndex: 0,
                 filterMode: 'none',
-                width: 15
+                show: false,
+                width: 0,
             }
         ],
         title: {
@@ -245,11 +457,6 @@ function setBarOption(barChart, template) {
             textStyle: {
                 color: template.textColor,
                 fontSize: template.font
-            }
-        },
-        toolbox: {
-            feature: {
-                mySaveAsImage: mySaveImage(),
             }
         },
         xAxis: [{
@@ -268,6 +475,7 @@ function setBarOption(barChart, template) {
         }],
         series: series
     };
+    setToolBox(option);
     setLegendOption(option, template.legendPos);
     barChart.setOption(option);
     if (template.showDigit) {
@@ -328,13 +536,44 @@ function setPieOption(pieChart, template) {
         type: 'pie',
         radius: template.radius,
         avoidLabelOverlap: true,
+        label: {
+            show: template.showLabel,
+            fontSize: template.labelFont
+        },
+        itemStyle: {
+            borderRadius: template.borderRadius
+        },
         data: pie.convertToPieData(pie.pieData)
     };
-    series.push(tempJson);
+
+    var tempJsonRing = {
+        name: pie.name,
+        type: 'pie',
+        radius: template.radius.split(" "),
+        avoidLabelOverlap: false,
+        label: {
+            show: template.showLabel,
+            position: 'center'
+        },
+        emphasis: {
+            label: {
+                show: true,
+                fontSize: template.labelFont,
+                fontWeight: 'bold'
+            }
+        },
+        itemStyle: {
+            borderRadius: template.borderRadius
+        },
+        data: pie.convertToPieData(pie.pieData)
+    }
+    series.push(template.showRing ? tempJsonRing : tempJson);
+    if (template.showRose) {
+        series[0].roseType = template.roseType;
+    }
     option = {
         grid: {
-            right: '18%',
-            top: '16%',
+            bottom: "8%"
         },
         title: {
             text: graphName,
@@ -342,11 +581,6 @@ function setPieOption(pieChart, template) {
             textStyle: {
                 color: template.textColor,
                 fontSize: template.titleFont
-            }
-        },
-        toolbox: {
-            feature: {
-                mySaveAsImage: mySaveImage(),
             }
         },
         tooltip: {
@@ -364,21 +598,10 @@ function setPieOption(pieChart, template) {
                 return result;
             }
         },
-        legend: {
-            top: legendArr[0],
-            bottom: legendArr[1],
-            left: legendArr[2],
-            right: legendArr[3],
-            orient: legendArr[4],
-            left: template.legendPos,
-        },
-        label: {
-            show: template.showLabel,
-            fontSize: template.labelFont
-        },
         series: series
     };
     setLegendOption(option, template.legendPos);
+    setToolBox(option);
     pieChart.setOption(option);
     return pieChart;
 }
@@ -434,14 +657,15 @@ function setScatterOption(scatterChart, template) {
             symbolSize: 15,
             itemStyle: {
                 color: template.color[i - 1],
-            }
+            },
         };
         series.push(tempJson);
     }
+
     var option = {
-        dataset: {
+        dataset: [{
             source: inputData
-        },
+        }],
 
         dataZoom: [{
                 type: "inside",
@@ -467,8 +691,7 @@ function setScatterOption(scatterChart, template) {
             }
         ],
         grid: {
-            right: '18%',
-            top: '16%',
+            bottom: "8%"
         },
         title: {
             text: graphName,
@@ -476,11 +699,6 @@ function setScatterOption(scatterChart, template) {
             textStyle: {
                 color: template.textColor,
                 fontSize: template.font
-            }
-        },
-        toolbox: {
-            feature: {
-                mySaveAsImage: mySaveImage(),
             }
         },
         itemStyle: {
@@ -507,6 +725,52 @@ function setScatterOption(scatterChart, template) {
         },
         series: series,
     };
+    var indexToTransform = [{
+            type: 'ecStat:regression'
+        },
+        {
+            type: 'ecStat:regression',
+            config: {
+                method: 'exponential',
+            }
+        },
+        {
+            type: 'ecStat:regression',
+            config: {
+                method: 'logarithmic'
+            }
+        },
+        {
+            type: 'ecStat:regression',
+            config: {
+                method: 'polynomial',
+                order: 3
+            }
+        }
+    ]
+    if (template.useRegression) {
+        option.dataset.push(indexToTransform[template.indexRegression]);
+        option.series.push({
+            type: 'line',
+            smooth: true,
+            datasetIndex: option.dataset.length - 1,
+            symbolSize: 0.1,
+            symbol: 'circle',
+            label: {
+                show: true,
+                fontSize: 16
+            },
+            labelLayout: {
+                dx: -20
+            },
+            encode: {
+                label: 2,
+                tooltip: 1
+            }
+        });
+    }
+
+    setToolBox(option);
     setLegendOption(option, template.legendPos);
     scatterChart.setOption(option);
     scatterChart.setOption({
@@ -528,7 +792,7 @@ function setScatterOption(scatterChart, template) {
 Page({
     data: {
         /**0 表示 为竖屏，1表示为横屏*/
-        screenDirection: 0,
+        screenDirection: wx.getStorageSync('system'),
         actionSheetHidden: true,
         actionSheetItems: [{
                 bindtap: 'Menu1',
@@ -597,6 +861,9 @@ Page({
         }, {
             name: "导出到.csv文件",
             value: 2
+        }, {
+            name: "保存图到相册",
+            value: 3,
         }],
         /**是否展示表格 */
         isHideTabel: "block",
@@ -617,7 +884,7 @@ Page({
         datas: [
             ["", ""],
             ["", ""]
-        ],                      //每一行是同一数据组
+        ], //每一行是同一数据组
         xValues: [
             "", ""
         ],
@@ -688,8 +955,7 @@ Page({
         });
     },
     onSelectSaveOption(event) {
-        console.log(event.detail)
-        var funs = [this.isSaveTemplate, this.saveChart, this.exportToCSV];
+        var funs = [this.isSaveTemplate, this.saveChart, this.exportToCSV, saveImage];
         funs[event.detail.value]();
     },
     beginShowSaveSheet() {
@@ -934,7 +1200,7 @@ Page({
                 break;
             case "pie":
                 var dat = [];
-                for(var i = 0; i < this.data.xValues.length; i++) {
+                for (var i = 0; i < this.data.xValues.length; i++) {
                     dat.push([this.data.xValues[i], this.data.datas[this.data.pieChartNo][i]]);
                 }
                 updatePieData(this.data.groupName[this.data.pieChartNo], dat);
@@ -1178,25 +1444,25 @@ Page({
         if (this.data.value1 == "bar") {
             bar.template.isVisible = "false";
             bar.template.userId = wx.getStorageSync('uid');
-            ret["barChart"] = converToBackTemplate(bar.template, "bar");
+            ret["barChart"] = convertToBackTemplate(bar.template, "bar");
             url = "https://www.jaripon.xyz/chart/barchart/save";
         }
         if (this.data.value1 == "line") {
             line.template.isVisible = "false";
             line.template.userId = wx.getStorageSync('uid');
-            ret["lineChart"] = converToBackTemplate(line.template, "line");
+            ret["lineChart"] = convertToBackTemplate(line.template, "line");
             url = "https://www.jaripon.xyz/chart/linechart/save"
         }
         if (this.data.value1 == "pie") {
             pie.template.isVisible = "false";
             pie.template.userId = wx.getStorageSync('uid');
-            ret["fanChart"] = converToBackTemplate(pie.template, "pie");
+            ret["fanChart"] = convertToBackTemplate(pie.template, "pie");
             url = "https://www.jaripon.xyz/chart/fanchart/save"
         }
         if (this.data.value1 == "scatter") {
             scatter.template.isVisible = "false";
             scatter.template.userId = wx.getStorageSync('uid');
-            ret["scatterPlot"] = converToBackTemplate(scatter.template, "scatter");
+            ret["scatterPlot"] = convertToBackTemplate(scatter.template, "scatter");
             url = "https://www.jaripon.xyz/chart/scatterplot/save";
         }
         console.log(ret);
@@ -1389,6 +1655,7 @@ function updateBarData(inputData) {
  * @param {*} inputData 
  */
 function updatePieData(name, data) {
+    console.log(name, data);
     if (isShowPieChart()) {
         if (pie.setInpuData(name, data)) {
             getPage().setData({
@@ -1446,7 +1713,7 @@ function saveTemplate(template, type, name) {
     template.name = name;
     wx.request({
         url: "https://www.jaripon.xyz/template/" + (type === "pie" ? "fanchart" : type === "scatter" ? type + "plot" : type + "chart") + "/save",
-        data: converToBackTemplate(template, type),
+        data: convertToBackTemplate(template, type),
         method: "POST",
         dataType: "json",
         success: function (res) {
@@ -1465,7 +1732,7 @@ function saveTemplate(template, type, name) {
  * @param {*} type 
  * @returns tempJson
  */
-function converToBackTemplate(template, type) {
+function convertToBackTemplate(template, type) {
     var tempJson = {}
     switch (type) {
         case "line":
@@ -1490,8 +1757,8 @@ function converToBackTemplate(template, type) {
             break;
         case "pie":
             for (var key in template) {
-                if (key === "radius") {
-                    tempJson[key] = parseFloat(template[key]) / 100 + "";
+                if (typeof template[key] == "boolean") {
+                    tempJson[key] = template[key] ? "true" : "false";
                 } else if (typeof template[key] == "boolean") {
                     tempJson[key] = template[key] ? "true" : "false";
                 } else {
@@ -1524,7 +1791,9 @@ function convertFromBackTemplate(template, type) {
     switch (type) {
         case "line":
             for (var key in template) {
-                if (key === "showDigit" || key === "isVisible") {
+                if (key === "showDigit" || key === "isVisible" || key === "showGradient" ||
+                    key === "showXGradient" || key === "showYGradient" || key === "showSymbol" ||
+                    key === "smooth") {
                     tempJson[key] = JSON.parse(template[key]);
                 } else {
                     tempJson[key] = template[key];
@@ -1544,10 +1813,9 @@ function convertFromBackTemplate(template, type) {
             break;
         case "pie":
             for (var key in template) {
-                if (key === "showLabel" || key === "showPercent" || key === "isVisible") {
+                if (key === "showLabel" || key === "showPercent" || key === "isVisible" ||
+                    key === "showRing" || key === "showRose") {
                     tempJson[key] = JSON.parse(template[key]);
-                } else if (key === "radius") {
-                    tempJson[key] = parseFloat(template[key]) * 100 + "%";
                 } else {
                     tempJson[key] = template[key];
                 }
@@ -1573,45 +1841,53 @@ function convertFromBackTemplate(template, type) {
  * 此方法自定义一个echarts toolbox.feature中的一个保存图到本地的属性
  * @returns 
  */
-function mySaveImage() {
-    return {
-        show: true,
-        title: '保存为图片',
-        icon: 'path://M.002 3a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2h-12a2 2 0 0 1-2-2V3zm1 9v1a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V9.5l-3.777-1.947a.5.5 0 0 0-.577.093l-3.71 3.71-2.66-1.772a.5.5 0 0 0-.63.062L1.002 12zm5-6.5a1.5 1.5 0 1 0-3 0 1.5 1.5 0 0 0 3 0z',
-        onclick: function () {
-            wx.showModal({
-                cancelColor: '#9ba8ae',
-                title: '提示',
-                content: '你确定要将此图保存到相册中吗？',
-                success: res => {
-                    var page = getPage();
-                    if (res.confirm) {
-                        const ecCompoent = page.selectComponent('#' + page.data.value1 + "ChartId");
-                        //const ecCompoent = this.selectComponent('#pie' + "ChartId");
-                        ecCompoent.canvasToTempFilePath({
+function saveImage() {
+    wx.showModal({
+        cancelColor: '#9ba8ae',
+        title: '提示',
+        content: '你确定要将此图保存到相册中吗？',
+        success: res => {
+            var page = getPage();
+            if (res.confirm) {
+                const ecCompoent = page.selectComponent('#' + page.data.value1 + "ChartId");
+                //const ecCompoent = this.selectComponent('#pie' + "ChartId");
+                ecCompoent.canvasToTempFilePath({
+                    success: res => {
+                        console.log("tempFilePath:", res.tempFilePath);
+                        wx.saveImageToPhotosAlbum({
+                            filePath: res.tempFilePath || '',
                             success: res => {
-                                console.log("tempFilePath:", res.tempFilePath);
-                                wx.saveImageToPhotosAlbum({
-                                    filePath: res.tempFilePath || '',
-                                    success: res => {
-                                        wx.showToast({
-                                            title: '保存成功'
+                                wx.showToast({
+                                    title: '保存成功'
 
-                                        })
-                                    }
                                 })
                             }
-                        });
-                    } else {
-                        wx.showToast({
-                            title: '您取消了保存',
-                            icon: "error"
-                        });
+                        })
                     }
-                }
-            });
+                });
+            } else {
+                wx.showToast({
+                    title: '您取消了保存',
+                    icon: "error"
+                });
+            }
         }
-    };
+    });
+}
+
+function myFullScreen() {
+    return {
+        show: true,
+        title: '全屏',
+        icon: 'path://M5.828 10.172a.5.5 0 0 0-.707 0l-4.096 4.096V11.5a.5.5 0 0 0-1 0v3.975a.5.5 0 0 0 .5.5H4.5a.5.5 0 0 0 0-1H1.732l4.096-4.096a.5.5 0 0 0 0-.707zm4.344-4.344a.5.5 0 0 0 .707 0l4.096-4.096V4.5a.5.5 0 1 0 1 0V.525a.5.5 0 0 0-.5-.5H11.5a.5.5 0 0 0 0 1h2.768l-4.096 4.096a.5.5 0 0 0 0 .707z',
+        onclick: function () {
+            var page = getPage();
+            page.setData({
+                isHideTabel: page.data.isHideTabel === "none" ? "block" : "none"
+            });
+            resetCharts(page.data.value1);
+        }
+    }
 }
 
 
@@ -1642,7 +1918,15 @@ function setLegendOption(option, legendPos) {
         tempJson.orient = 'horizontal';
     }
     option.legend = tempJson;
-    console.log(option);
+}
+
+function setToolBox(option) {
+    option.toolbox = {
+        feature: {
+            myFullScreen: myFullScreen()
+        },
+        right: '5%'
+    };
 }
 
 /**

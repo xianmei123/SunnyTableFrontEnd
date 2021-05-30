@@ -20,6 +20,7 @@
     "@miniprogram-component-plus/row": "^1.0.0",
     "@miniprogram-component-plus/tabs": "^1.0.0",
     "@vant/weapp": "^1.6.8",
+    "echarts-stat": "^1.2.0",
     "mini-color-picker": "^0.1.2"
   }
 }
