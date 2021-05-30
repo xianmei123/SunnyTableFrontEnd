@@ -750,7 +750,6 @@ Page({
         this.setData({
             currentCell: newData[groupId - 1][dataId - 1]
         });
-        console.log(this.data.currentCell);
     },
     changeCurrentGroupName(event) {
         var groupId = event.target.dataset.a + 1;
@@ -767,7 +766,6 @@ Page({
 
     },
     getData: function (event) {
-        console.log(event.target);
         var groupId = event.target.dataset.a;
         var dataId = event.target.dataset.b;
         var newDatas = this.data.datas;
@@ -805,7 +803,6 @@ Page({
         this.setData({
             groupName: newGroupName
         })
-        console.log(this.data.groupName);
         this.changeCurrentGroupName(event);
     },
     addX: function () {
@@ -887,8 +884,9 @@ Page({
         var ret = [];
         var i;
         var j;
-        ret.push(this.data.groupName);
+        ret.push(this.data.groupName.slice(0));
         ret[0].unshift("虽然啥都没有，但是还是要传");
+        console.log(this.data.groupName);
         for (i = 0; i < this.data.xValues.length; i++) {
             var tmp = [];
             tmp.push(this.data.xValues[i]);
@@ -935,7 +933,12 @@ Page({
                 updateBarData(inputData);
                 break;
             case "pie":
-                updatePieData(this.data.groupName[this.data.pieChartNo], inputData[this.data.groupName[this.data.pieChartNo]]);
+                var dat = [];
+                for(var i = 0; i < this.data.xValues.length; i++) {
+                    dat.push([this.data.xValues[i], this.data.datas[this.data.pieChartNo][i]]);
+                }
+                updatePieData(this.data.groupName[this.data.pieChartNo], dat);
+                console.log(this.data.groupName[this.data.pieChartNo], dat)
                 break;
             case "scatter":
                 updateScatterData(inputData);
