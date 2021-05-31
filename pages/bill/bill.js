@@ -18,13 +18,17 @@ Page({
   
         },
     },
-  
+    
+    onCancel() {
+        this.setData({ show: false });
+    },
+
     onConfirm(event) {
         var date = new Date(event.detail);
-        console.log(date.toLocaleDateString())
-        console.log(this.data.sore)
+        //console.log(date.toLocaleDateString())
+        //console.log(this.data.sore)
         if (this.data.sore) {
-            console.log("true")
+            //console.log("true")
             this.setData({
                 currentDate: event.detail,
                 endDate: date.toLocaleDateString(),
@@ -32,7 +36,7 @@ Page({
             });
         }
         else {
-            console.log("false")
+           // console.log("false")
             this.setData({
                 currentDate: event.detail,
                 startDate: date.toLocaleDateString(),

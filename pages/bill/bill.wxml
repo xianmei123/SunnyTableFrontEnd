@@ -12,8 +12,10 @@
         min-date="{{ minDate }}"
         formatter="{{ formatter }}"
         bind:confirm="onConfirm"
+        bind:cancel="onCancel"
 /></van-popup>
 <button class="button" bindtap="queryData">查询</button>
+
 <view class="box1"
 >账单数据（可以用滑动单元格来做）
 </view>

@@ -9,7 +9,7 @@
 .box1{
   background-color: #fff;
   padding: 5px;
-  height:890rpx;
+  height:800rpx;
   position:relative;
   overflow: scroll;
   top:10rpx;
