@@ -1,2 +1,34 @@
-<!--pages/bill/bill.wxml-->
-<text>pages/bill/bill.wxml</text>
+<van-cell title="选择开始日期" class="ss" value="{{ startDate }}" is-link bind:click="showPopup1" />
+<van-cell title="选择结束日期" class="ss" value="{{ endDate }}" is-link bind:click="showPopup2" />
+<van-popup show="{{ show }}"  
+    show="{{ show }}"
+    position="bottom"
+    custom-style="height: 60%;"
+    bind:close="onClose">
+    <van-datetime-picker
+        type="date"
+        value="{{ currentDate }}"
+        bind:input="onInput"
+        min-date="{{ minDate }}"
+        formatter="{{ formatter }}"
+        bind:confirm="onConfirm"
+/></van-popup>
+<button class="button" bindtap="queryData">查询</button>
+<view class="box1"
+>账单数据（可以用滑动单元格来做）
+</view>
+<van-row class="bottom_box">
+    <van-col span="12" style="text-align:center; padding-top: 4px">
+        <view style="padding-top:4px">
+            <text class="icon-new {{ 'icon' }}" bindtap="addItem"></text>
+        </view>
+        <view style="font-size: 12px;margin-top: -6px; color:black">新建</view>
+    </van-col>
+    <van-col span="12" style="text-align:center;padding-top: 4px;font-weight:normal">
+        <view style="padding-top:4px">
+            <text class="icon-save {{'icon'}}" bindtap="goAnaylse"></text>
+        </view>
+        <view style="font-size: 12px;margin-top: -6px; color:black">分析</view>
+    </van-col>
+</van-row>
+<text>\n</text>
