@@ -1,0 +1,246 @@
+// pages/analyse/analyse.js
+import * as echarts from '../../ec-canvas/echarts';
+
+var graph = require('../draw/class');
+var bar = new graph.BarGraph("bar");
+var pie = new graph.PieGraph("pie");
+var inputData = [
+    ['ppp', 'qqq'],
+    ['1月', 20],
+    ['2月', 45],
+    ['3月', 26],
+    ['4月', 63],
+    ['5月', 43],
+    ['6月', 30],
+    ['7月', 25],
+    ['8月', 71],
+    ['9月', 98],
+    ['10月', 52],
+    ['11月', 64],
+    ['12月', 85],
+];
+
+function initBarChart(canvas, width, height, dpr) {
+    var barChart = echarts.init(canvas, null, {
+        width: width,
+        height: height,
+        devicePixelRatio: dpr
+    });
+    bar.chart = barChart;
+    barChart.on('click', res => {
+        clickBar(res);
+    });
+    canvas.setChart(barChart);
+    barChart.setOption(setBarOption());
+    return barChart;
+}
+
+function setBarOption() {
+    var option = {
+        grid: {
+            bottom: "8%",
+        },
+        dataset: {
+            source: inputData
+        },
+        dataZoom: [{
+                type: "inside",
+                xAxisIndex: 0,
+                filterMode: 'none',
+                height: 0,
+                start: 50
+            },
+            {
+                type: "inside",
+                yAxisIndex: 0,
+                filterMode: 'none',
+                width: 0
+            }
+        ],
+        title: {
+            text: "账单分析",
+            textStyle: {
+                fontSize: 15,
+            }
+        },
+        xAxis: {
+            type: 'category',
+            axisLabel: {
+                interval: 0
+            },
+        },
+        yAxis: {
+            type: 'value',
+        },
+        tooltip: {
+            // trigger: 'axis',
+            // axisPointer: {
+            //     type: 'shadow'
+            // }
+        },
+        series: [{
+            type: 'bar',
+            barWidth: "50%"
+        }],
+
+    };
+    return option;
+}
+
+function clickBar(param) {
+    //两种做法
+    // 暂时作为更新pieChart
+    pie.setInpuData(param.name, getMonthData(param.index));
+    pie.chart.setOption(setPieOption());
+}
+
+/**
+ * 
+ * 得到一个柱子对应的这个月的数据
+ * @param {int} index 此index代表点击的第几个柱子，柱子从0开始 
+ * @returns data是一个数组，类似[["a", 1], ["b", 2], ["c", 3]]
+ */
+function getMonthData(index) {
+    var data = [
+        ["支付宝", 500],
+        ["微信", 200]
+    ];
+    return data;
+}
+
+function initPieChart(canvas, width, height, dpr) {
+    var pieChart = echarts.init(canvas, null, {
+        width: width,
+        height: height,
+        devicePixelRatio: dpr
+    });
+    pie.chart = pieChart;
+    pie.init("string", "number");
+    pie.setInpuData("", []);
+    canvas.setChart(pieChart);
+    pieChart.setOption(setPieOption());
+    pieChart.on('click', res => {
+        clickPie(res);
+    });
+    return pieChart;
+}
+
+function setPieOption() {
+    var option = {
+        title: {
+            text: "支出分布",
+            textStyle: {
+                fontSize: 15
+            }
+        },
+        legend: {
+            right: '0%',
+            top: '16%',
+            orient: "vertical",
+        },
+        series: [{
+            name: pie.name,
+            type: 'pie',
+            radius: ["50%", "75%"],
+            data: convert(pie.pieData, 0),
+            label: {
+                show: false,
+            },
+            emphasis: {
+                label: {
+                    show: true,
+                    formatter: function (params) {
+                        return params.name + "\n" + params.percent + "%(" + parseFloat(params.value).toFixed(1) + ")";
+                    }
+                }
+            },
+        }],
+    };
+    return option;
+}
+
+/**
+ * 此方法应该可以在点击一类花费之后，显示此类花费在此月中的具体花费条目。
+ * @param {JSON} param 点击之后传进来的参数 
+ */
+function clickPie(param) {
+    
+}
+
+function convert(tempData, index) {
+    var resultArr = [];
+    for (var i in tempData) {
+        var tempJson = {};
+        tempJson.name = tempData[i][index];
+        tempJson.value = tempData[i][1 - index];
+        resultArr.push(tempJson);
+    }
+    return resultArr;
+}
+
+Page({
+    data: {
+        barChart: {
+            onInit: initBarChart
+        },
+        pieChart: {
+            onInit: initPieChart
+        }
+    },
+
+    /**
+     * 生命周期函数--监听页面加载
+     */
+    onLoad: function (options) {
+
+    },
+
+    /**
+     * 生命周期函数--监听页面初次渲染完成
+     */
+    onReady: function () {
+
+    },
+
+    /**
+     * 生命周期函数--监听页面显示
+     */
+    onShow: function () {
+
+    },
+
+    /**
+     * 生命周期函数--监听页面隐藏
+     */
+    onHide: function () {
+
+    },
+
+    /**
+     * 生命周期函数--监听页面卸载
+     */
+    onUnload: function () {
+
+    },
+
+    /**
+     * 页面相关事件处理函数--监听用户下拉动作
+     */
+    onPullDownRefresh: function () {
+
+    },
+
+    /**
+     * 页面上拉触底事件的处理函数
+     */
+    onReachBottom: function () {
+
+    },
+
+    /**
+     * 用户点击右上角分享
+     */
+    onShareAppMessage: function () {
+
+    }
+})

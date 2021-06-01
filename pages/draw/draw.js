@@ -326,11 +326,43 @@ function setPieOption(pieChart, template) {
     var tempJson = {
         name: pie.name,
         type: 'pie',
-        radius: template.radius,
+        radius: template.radius.split(" "),
         avoidLabelOverlap: true,
-        data: pie.convertToPieData(pie.pieData)
+        label: {
+            show: template.showLabel,
+            fontSize: template.labelFont
+        },
+        itemStyle: {
+            borderRadius: template.borderRadius
+        },
+        data: pie.convertToPieData(pie.pieData, xType === "string" ? 0 : 1)
     };
-    series.push(tempJson);
+
+    var tempJsonRing = {
+        name: pie.name,
+        type: 'pie',
+        radius: template.radius.split(" "),
+        avoidLabelOverlap: false,
+        label: {
+            show: template.showLabel,
+            position: 'center'
+        },
+        emphasis: {
+            label: {
+                show: true,
+                fontSize: template.labelFont,
+                fontWeight: 'bold'
+            }
+        },
+        itemStyle: {
+            borderRadius: template.borderRadius
+        },
+        data: pie.convertToPieData(pie.pieData, xType === "string" ? 0 : 1)
+    }
+    series.push(template.showRing ? tempJsonRing : tempJson);
+    if (template.showRose) {
+        series[0].roseType = template.roseType;
+    }
     option = {
         grid: {
             right: '18%',
