@@ -13,12 +13,12 @@
 }
 
 .container_row{
-	height: 50vh;
+	height: 60vh;
 	width: 100%;
 }
 
 .container_row_hide{
-	height: 70vh;
+	height: 95vh;
 	width: 100%;
 }
 

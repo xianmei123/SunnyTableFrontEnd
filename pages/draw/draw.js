@@ -30,7 +30,7 @@ var typeToIndex = new Map([
     ["pie", 2],
     ["scatter", 3]
 ]);
-
+var draftNum = 0;
 
 /**
  * 初始化折线图
@@ -948,7 +948,8 @@ Page({
     async saveData() {
         var ret = {};
         ret["id"] = null;
-        ret["name"] = "";
+        draftNum++;
+        ret["name"] = "草稿" + draftNum;
         ret["userId"] = wx.getStorageSync('uid');
         var i;
         var dataArray = [];
