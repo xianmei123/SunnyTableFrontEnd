@@ -981,7 +981,6 @@ Page({
         wx.showToast({
             title: '保存成功',
         });
-        // var x = await this.trans(url, ret);
     },
     goAttribute() {
         var index;
