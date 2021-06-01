@@ -980,7 +980,7 @@ Page({
             }
         });
         wx.showToast({
-            title: '保存成功',
+            title: '保存草稿成功',
         });
     },
     goAttribute() {
