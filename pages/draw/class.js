@@ -44,10 +44,8 @@ class PieGraph extends Graph{
         this.pieTemplate[key] = value;
     }
 
-    convertToPieData(tempData) {
-        console.log(this.template);
+    convertToPieData(tempData, index) {
         var resultArr = [];
-        var index = this.xType === "string" ? 0 : 1;
         for (var i in tempData) {
             var tempJson = {};
             tempJson.name = tempData[i][index];

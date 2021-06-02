@@ -45,6 +45,11 @@ Page({
         }
         
     },
+    goAnalyse() {
+        wx.navigateTo({
+            url: '../analyse/analyse'
+        });
+    },
 
     showPopup1() {
         this.setData({ show: true, sore : false });
@@ -70,6 +75,8 @@ Page({
             currentDate: event.detail,
         });
     },
-
+    queryData(event) {
+        
+    }
     
 });

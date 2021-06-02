@@ -1,5 +1,6 @@
 {
     "pages": [
+        "pages/analyse/analyse",
         "pages/index/index",
         "pages/draw/draw",
         "pages/storage/storage",
@@ -11,6 +12,7 @@
         "pages/input/photo",
         "pages/mine/mine",
         "pages/bill/bill"
+       
     ],
     "subPackages": [
         {
