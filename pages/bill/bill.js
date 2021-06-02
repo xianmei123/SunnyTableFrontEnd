@@ -75,6 +75,8 @@ Page({
             currentDate: event.detail,
         });
     },
-
+    queryData(event) {
+        
+    }
     
 });
