@@ -178,6 +178,117 @@ function convert(tempData, index) {
     return resultArr;
 }
 
+/**
+ * 修改某一时间数据
+ * @param [array] 
+ * sample: ['7月', 50]
+ */
+function modifyMonth(data) {
+    var time = data[0];
+    for (var x in inputData) {
+        if (x[0] === time) {
+            x = data;
+            return;
+        }
+    }
+    wx.showToast({
+      title: '没有符合条件的时间',
+    });
+}
+
+/**
+ * 在最前面添加数据
+ * @param [array] 
+ * sample: [50， 60]（不包括时间）
+ */
+function addDataBefore(data) {
+    var firstDate = inputData[1][0];
+    if (firstDate.substring(firstDate.length - 2, firstDate.length) == '月') {
+        var month = firstDate.substring(0, firstDate.length - 2);
+        if (month == '1') {
+            wx.showToast({
+              title: '不能在前面添加',
+            });
+            return;
+        }
+        inputData.splice(1, 0, data.unshift((parseInt(month) - 1) + '月'));
+    }
+    else {
+        var time = firstDate.substring(0, firstDate.length - 2);
+        inputData.splice(1, 0, '' + data.unshift((parseInt(time) - 1) + firstDate.substring(firstDate.length - 2, firstDate.length)));
+    }
+}
+
+/**
+ * 在最后面添加数据
+ * @param [array] 
+ * sample: [50， 60]（不包括时间）
+ */
+function addDataAfter(data) {
+    var firstDate = inputData[1][0];
+    if (firstDate.substring(firstDate.length - 2, firstDate.length) == '月') {
+        var month = firstDate.substring(0, firstDate.length - 2);
+        if (month == '12') {
+            wx.showToast({
+              title: '不能在后面添加',
+            });
+            return;
+        }
+        inputData.splice(1, 0, data.unshift((parseInt(month) + 1) + '月'));
+    }
+    else {
+        var time = firstDate.substring(0, firstDate.length - 2);
+        inputData.splice(1, 0, '' + data.unshift((parseInt(time) + 1) + firstDate.substring(firstDate.length - 2, firstDate.length)));
+    }
+}
+
+/**
+ * 删除最前面数据
+ */
+function deleteBefore() {
+    if (inputData.length <= 2) {
+        wx.showToast({
+          title: '不能删了',
+        });
+        return;
+    }
+    inputData.splice(1, 1);
+}
+
+/**
+ * 删除最后面数据
+ */
+function deleteAfter() {
+    if (inputData.length <= 2) {
+        wx.showToast({
+          title: '不能删了',
+        });
+        return;
+    }
+    inputData.pop();
+}
+
+/**
+ * 在最前面添加数据
+ */
+function addMonthBefore(data) {
+    var firstDate = inputData[1][0];
+    if (firstDate.substring(firstDate.length - 2, firstDate.length) == '月') {
+        var month = firstDate.substring(0, firstDate.length - 2);
+        if (month == '1') {
+            wx.showToast({
+              title: '不能在前面添加',
+            });
+            return;
+        }
+        inputData.splice(1, 0, data.unshift((parseInt(month) - 1) + '月'));
+    }
+    else {
+        var time = firstDate.substring(0, firstDate.length - 2);
+        inputData.splice(1, 0, '' + data.unshift((parseInt(time) - 1) + firstDate.substring(firstDate.length - 2, firstDate.length)));
+    }
+}
+
 Page({
     data: {
         barChart: {
