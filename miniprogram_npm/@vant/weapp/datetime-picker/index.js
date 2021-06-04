@@ -76,6 +76,10 @@ component_1.VantComponent({
     },
     showToolbar: {
       type: Boolean,
+      value: false,
+    },
+    myShowToolbar: {
+      type: Boolean,
       value: true,
     },
     formatter: {
@@ -296,6 +300,9 @@ component_1.VantComponent({
     },
     onConfirm: function () {
       this.$emit('confirm', this.data.innerValue);
+    },
+    onToday: function () {
+      this.$emit('today');
     },
     onChange: function () {
       var _this = this;

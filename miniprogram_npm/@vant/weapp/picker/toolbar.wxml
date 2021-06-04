@@ -21,3 +21,33 @@
     {{ confirmButtonText }}
   </view>
 </view>
+
+<view wx:if="{{ myShowToolbar }}" class="van-picker__toolbar my-toolbar-class">
+  <view
+    class="van-picker__cancel"
+    hover-class="van-picker__cancel--hover"
+    hover-stay-time="70"
+    data-type="cancel"
+    bindtap="emit"
+  >
+    {{ cancelButtonText }}
+  </view>
+  <view
+    class="van-picker__confirm"
+    hover-class="van-picker__confirm--hover"
+    hover-stay-time="70"
+    data-type="today"
+    bindtap="emit"
+  >
+    {{ todayButtonText }}
+  </view>
+  <view
+    class="van-picker__confirm"
+    hover-class="van-picker__confirm--hover"
+    hover-stay-time="70"
+    data-type="confirm"
+    bindtap="emit"
+  >
+    {{ confirmButtonText }}
+  </view>
+</view>
