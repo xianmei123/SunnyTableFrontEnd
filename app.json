@@ -1,6 +1,5 @@
 {
     "pages": [
-        
         "pages/index/index",
         "pages/draw/draw",
         "pages/storage/storage",

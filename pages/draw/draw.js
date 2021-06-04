@@ -1211,43 +1211,43 @@ Page({
                 break;
         }
     },
-    async saveData() {
-        var ret = {};
-        ret["id"] = null;
-        ret["name"] = "";
-        ret["userId"] = wx.getStorageSync('uid');
-        var i;
-        var dataArray = [];
-        dataArray.push({
-            "name": "xLabel",
-            "cid": null,
-            "lineData": this.data.xValues
-        });
-        for (i = 0; i < this.data.groupNum; i++) {
-            var obj = {
-                "name": this.data.groupName[i],
-                "cid": null,
-                "lineData": this.data.datas[i]
-            }
-            dataArray.push(obj);
-        }
-        ret["dataArray"] = dataArray;
-        var url = "https://www.jaripon.xyz/data/save";
-        wx.request({
-            url: url,
-            data: ret,
-            method: "POST",
-            success: function (res) {
-                console.log(res);
-            },
-            fail: function (res) {
-                console.log("fail");
-            }
-        });
+    saveData() {
+        // var ret = {};
+        // ret["id"] = null;
+        // draftNum++;
+        // ret["name"] = "草稿" + draftNum;
+        // ret["userId"] = wx.getStorageSync('uid');
+        // var i;
+        // var dataArray = [];
+        // dataArray.push({
+        //     "name": "xLabel",
+        //     "cid": null,
+        //     "lineData": this.data.xValues
+        // });
+        // for (i = 0; i < this.data.groupNum; i++) {
+        //     var obj = {
+        //         "name": this.data.groupName[i],
+        //         "cid": null,
+        //         "lineData": this.data.datas[i]
+        //     }
+        //     dataArray.push(obj);
+        // }
+        // ret["dataArray"] = dataArray;
+        // var url = "https://www.jaripon.xyz/data/save";
+        // wx.request({
+        //     url: url,
+        //     data: ret,
+        //     method: "POST",
+        //     success: function (res) {
+        //         console.log(res);
+        //     },
+        //     fail: function (res) {
+        //         console.log("fail");
+        //     }
+        // });
         wx.showToast({
-            title: '保存成功',
+            title: '保存草稿成功',
         });
-        // var x = await this.trans(url, ret);
     },
     goAttribute() {
         var index;
@@ -1535,7 +1535,44 @@ Page({
     },
     onShow() {},
     onReady: function () {
-
+        setInterval(function () {
+            var ret = {};
+            ret["id"] = null;
+            draftNum++;
+            ret["name"] = "草稿" + draftNum;
+            ret["userId"] = wx.getStorageSync('uid');
+            var i;
+            var dataArray = [];
+            dataArray.push({
+                "name": "xLabel",
+                "cid": null,
+                "lineData": this.data.xValues
+            });
+            for (i = 0; i < this.data.groupNum; i++) {
+                var obj = {
+                    "name": this.data.groupName[i],
+                    "cid": null,
+                    "lineData": this.data.datas[i]
+                }
+                dataArray.push(obj);
+            }
+            ret["dataArray"] = dataArray;
+            var url = "https://www.jaripon.xyz/data/save";
+            wx.request({
+                url: url,
+                data: ret,
+                method: "POST",
+                success: function (res) {
+                    console.log(res);
+                },
+                fail: function (res) {
+                    console.log("fail");
+                }
+            });
+            wx.showToast({
+                title: '保存草稿成功',
+            });
+        }, 120000);
     },
     onUnload: function () {
         //inputData = [];
