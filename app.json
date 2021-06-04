@@ -1,6 +1,5 @@
 {
     "pages": [
-        "pages/analyse/analyse",
         "pages/index/index",
         "pages/draw/draw",
         "pages/storage/storage",
