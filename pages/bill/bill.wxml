@@ -316,7 +316,7 @@
     </van-col>
     <van-col span="8" style="text-align:center;padding-top: 4px;font-weight:normal">
         <view style="padding-top:4px">
-            <text class="icon-save {{'icon'}}" bindtap="goAnalyse"></text>
+            <text class="icon_pie icon" bindtap="goAnalyse"></text>
         </view>
         <view style="font-size: 12px;margin-top: -6px; color:black">分析</view>
     </van-col>

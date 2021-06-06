@@ -82,13 +82,11 @@ Page({
         formatter(type, value) {
             if (type === 'year') {
                 return `${value}年`;
-            } 
+            }
             if (type === 'month') {
                 return `${value}月`;
             }
-            //console.log(value)
             return value;
-  
         },
     },
 
