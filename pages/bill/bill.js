@@ -1,3 +1,21 @@
+function formatDate(time, format = 'YY/MM/DD') {
+    //format = 'YY-MM-DD'
+    var date = new Date(time);
+    var year = date.getFullYear(),
+        month = date.getMonth() + 1, //月份是从0开始的
+        day = date.getDate();
+    var preArr = Array.apply(null, Array(10)).map(function (elem, index) {
+        return '0' + index;
+    }); //开个长度为10的数组 格式为 ["00", "01", "02", "03", "04", "05", "06", "07", "08", "09"]
+
+    var newTime = format.replace(/YY/g, year)
+        .replace(/MM/g, preArr[month] || month)
+        .replace(/DD/g, preArr[day] || day)
+    console.log(newTime);
+    return newTime;
+}
+
+
 Page({
     data: {
         date: {
@@ -5,8 +23,8 @@ Page({
             showStart: false,
             showEnd: false,
             menuDateTitle: "日期选择",
-            startDateStr: new Date().toLocaleDateString(),
-            endDateStr: new Date().toLocaleDateString(),
+            startDateStr: formatDate(new Date().getTime(), ),
+            endDateStr:  formatDate(new Date().getTime(), ),
             startDate: Date.now(),
             endDate: Date.now(),
             currentDate1: Date.now(),
@@ -33,19 +51,77 @@ Page({
 
         newBill: {
             show: false,
+            date: {
+                show: false,
+                date: Date.now(),
+                currentDate: Date.now(),
+                minDate: new Date(2021, 3, 1).getTime(),
+                dateStr: formatDate(new Date().getTime(), ),
+            },
+            option: [
+                { text: '衣服', value: '衣服' },
+                { text: '食物', value: '食物' },
+                { text: '居住', value: '居住' },
+                { text: '交通', value: '交通' },
+            ],
+            checkbox: {
+                show: false,
+                list: ['衣服', '食物', '居住', '交通'],
+                result: 1, //0,1,2,3对应list
+                preResult: 1
+            },
+            messageIO: null,
+            messageDetail: null,
+            detail: null,
+            io: null,
+            list: ['收入', '支出'],
+            result: 1, //0表示收入，1表示支出
+            preResult: 1
         },
 
         formatter(type, value) {
             if (type === 'year') {
                 return `${value}年`;
-            } 
+            }
             if (type === 'month') {
                 return `${value}月`;
             }
-            //console.log(value)
             return value;
-  
         },
+    },
+
+    onChangeBillIO(event) {
+        // console.log("event.detail");
+        // console.log(event.detail);
+        this.setData({
+          'newBill.result': event.detail,
+        });
+      },
+    
+    onClickBillIO(event) {
+        const { name } = event.currentTarget.dataset;
+        // console.log("name");
+        // console.log(name);
+        this.setData({
+            'newBill.result': name,
+        });
+    },
+
+    onChangeBillCheckBox(event) {
+        console.log("event.detail");
+        console.log(event.detail);
+        this.setData({
+          'newBill.checkbox.result': event.detail,
+        });
+      },
+    
+    onClickBillCheckBox(event) {
+        const { name } = event.currentTarget.dataset;
+        console.log("name");
+        console.log(name);
+        this.setData({
+            'newBill.checkbox.result': name,
+        });
     },
     
     onCancel1() {
@@ -89,15 +165,39 @@ Page({
         });
     },
 
+    onCancelBillDate() {
+        this.setData({
+            'newBill.show': true,
+            'newBill.date.show': false,
+            'newBill.date.currentDate': this.data.newBill.date.date
+        });
+    },
+
+    onCancelBillCheckBox() {
+        this.setData({
+            'newBill.show': true,
+            'newBill.checkbox.show': false,
+            'newBill.checkbox.result': this.data.newBill.checkbox.preResult
+        });
+     
+    },
+
+    onCancelBill() {
+        this.setData({
+            'newBill.show': false,
+        });
+    },
+
     onConfirm1(event) {
         //console.log(event.detail)
+        var str = formatDate(event.detail, );
         var date1 = new Date(event.detail);
         //console.log(date.toLocaleDateString())
         //console.log(this.data.sore)
         this.setData({
             'date.currentDate1': event.detail,
-            'date.startDate': date1,
-            'date.startDateStr': date1.toLocaleDateString(),
+            'date.startDate': event.detail,
+            'date.startDateStr': str,
             'date.showStart' : false,
             'date.show' : true
         });
@@ -105,13 +205,14 @@ Page({
     },
 
     onConfirm2(event) {
+        var str = formatDate(event.detail, );
         var date1 = new Date(event.detail);
         //console.log(date.toLocaleDateString())
         //console.log(this.data.sore)
         this.setData({
             'date.currentDate2': event.detail,
-            'date.endDate': date1,
-            'date.endDateStr': date1.toLocaleDateString(),
+            'date.endDate': event.detail,
+            'date.endDateStr': str,
             'date.showEnd' : false,
             'date.show' : true
         });
@@ -146,6 +247,31 @@ Page({
         });
     },
 
+    onConfirmBillDate(event) {
+        var str = formatDate(event.detail, );
+        this.setData({
+            'newBill.date.show' : false,
+            'newBill.show' : true,
+            'newBill.date.currentDate': event.detail,
+            'newBill.date.date': event.detail,
+            'newBill.date.dateStr': str
+        });
+    },
+
+    onConfirmBillCheckBox(event) {
+        this.setData({
+            'newBill.checkbox.show' : false,
+            'newBill.show' : true,
+            'newBill.checkbox.preResult': this.data.newBill.checkbox.result
+        });
+    },
+
+    onConfirmBill() {
+        this.setData({
+            'newBill.show' : false,
+        });
+    },
+
     onToday1() {
         this.setData({
             'date.currentDate1': Date.now()
@@ -155,6 +281,12 @@ Page({
     onToday2() {
         this.setData({
             'date.currentDate2': Date.now()
+        })
+    },
+
+    onTodayBillDate() {
+        this.setData({
+            'newBill.date.currentDate': Date.now()
         })
     },
 
@@ -193,6 +325,22 @@ Page({
             'condition.show': false
         });
     },
+
+    showPopupBillDate() {
+        //let  value = 'list.title';
+        this.setData({ 
+            'newBill.show' : false,
+            'newBill.date.show': true
+        });
+    },
+
+    showPopupBillCheckBox() {
+        //let  value = 'list.title';
+        this.setData({ 
+            'newBill.show' : false,
+            'newBill.checkbox.show': true
+        });
+    },
  
     onClose1() {
         this.setData({ 
@@ -203,7 +351,6 @@ Page({
     },
 
     onClose2() {
-        
         this.setData({ 
             'date.showEnd': false ,
             'date.show': true,
@@ -231,6 +378,26 @@ Page({
             'checkboxes.result': this.data.checkboxes.preResult
         });
     },
+
+    onCloseBillDate() {
+        this.setData({
+            'newBill.show': true,
+            'newBill.date.show': false,
+            'newBill.date.currentDate': this.data.newBill.date.date
+        });
+        //console.log(this.data.newBill.date.date);
+        //console.log(this.data.newBill.date.currentDate);
+    },
+
+    onCloseBillCheckBox() {
+        this.setData({
+            'newBill.show': true,
+            'newBill.checkbox.show': false,
+            'newBill.checkbox.result': this.data.newBill.checkbox.preResult
+        });
+        //console.log(this.data.newBill.date.date);
+        //console.log(this.data.newBill.date.currentDate);
+    },
     
     onInput1(event) {
         this.setData({
@@ -241,6 +408,12 @@ Page({
     onInput2(event) {
         this.setData({
             'date.currentDate2': event.detail,
+        });
+    },
+
+    onInputBillDate(event) {
+        this.setData({
+            'newBill.date.currentDate': event.detail,
         });
     },
 
@@ -257,6 +430,22 @@ Page({
         //console.log(event.detail);
         this.setData({
             'condition.message2': event.detail
+        });
+    },
+
+    onChangeInputBillDetail(event) {
+        // event.detail 为当前输入的值
+        //console.log(event.detail);
+        this.setData({
+            'newBill.messageDetail': event.detail
+        });
+    },
+
+    onChangeInputBillIO(event) {
+        // event.detail 为当前输入的值
+        //console.log(event.detail);
+        this.setData({
+            'newBill.messageIO': event.detail
         });
     },
 
@@ -294,6 +483,13 @@ Page({
 
     noopIO() {},
 
-    noopCheckBox() {}
+    noopCheckBox() {},
 
+    addBill() {
+        this.setData({
+            'newBill.show': true,
+        });
+    },
+
+    
 });

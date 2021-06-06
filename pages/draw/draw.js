@@ -59,24 +59,24 @@ var inputData = [
 ];
 
 
-var inputData = [
-    ['product', 'sb', 'lsp'],
-    ['sb1', 41.1, 86.5],
-    ['sb2', 30.4, 92.1],
-    ['sb3', 22, 182],
-    ['sb4', 75, 25],
-    ['sb5', 78, 25],
-    ['sb6', 33, 66],
-]; // 输入数据
-var inputData = [
-    ['product', 'sb', 'lsp'],
-    [78, 41.1, 86.5],
-    [52, 30.4, 92.1],
-    [85, 22, 182],
-    [86, 75, 25],
-    [42, 78, 25],
-    [36, 33, 66],
-]; // 输入数据
+// var inputData = [
+//     ['product', 'sb', 'lsp'],
+//     ['sb1', 41.1, 86.5],
+//     ['sb2', 30.4, 92.1],
+//     ['sb3', 22, 182],
+//     ['sb4', 75, 25],
+//     ['sb5', 78, 25],
+//     ['sb6', 33, 66],
+// ]; // 输入数据
+// var inputData = [
+//     ['product', 'sb', 'lsp'],
+//     [78, 41.1, 86.5],
+//     [52, 30.4, 92.1],
+//     [85, 22, 182],
+//     [86, 75, 25],
+//     [42, 78, 25],
+//     [36, 33, 66],
+// ]; // 输入数据
 var graph = require('./class');
 var xType = "string"; // 输入数据x轴类型
 var yType = "number"; // 输入数据y轴类型
@@ -127,6 +127,12 @@ function initLineChart(canvas, width, height, dpr) {
     return lineChart;
 }
 
+function getSplit(tempArr) {
+    return tempArr.split(" ").map(item => {
+        return JSON.parse(item);
+    });
+}
+
 /**
  * 设置折线图画图option
  * 
@@ -139,26 +145,13 @@ function setLineOption(lineChart, template) {
     lineChart.clear();
     var series = [];
     var option;
-    var areaStyle = template.areaStyle.split(" ").map(item => {
-        return JSON.parse(item);
-    });
-    var showArea = template.showArea.split(" ").map(item => {
-        return JSON.parse(item);
-    });
-    var showEmphasis = template.showEmphasis.split(" ").map(item => {
-        return JSON.parse(item);
-    });
-    var showMinMarkPoint = template.showMinMarkPoint.split(" ").map(item => {
-        return JSON.parse(item);
-    });
-    var showMaxMarkPoint = template.showMaxMarkPoint.split(" ").map(item => {
-        return JSON.parse(item);
-    });
-    var showAverageMarkLine = template.showAverageMarkLine.split(" ").map(item => {
-        return JSON.parse(item);
-    });
+    var areaStyle = template.areaStyle.split(" ");
+    var showArea = getSplit(template.showArea);
+    var showEmphasis = getSplit(template.showEmphasis);
+    var showMinMarkPoint = getSplit(template.showMinMarkPoint);
+    var showMaxMarkPoint = getSplit(template.showMaxMarkPoint);
+    var showAverageMarkLine = getSplit(template.showAverageMarkLine);
     var stack = template.stack.split(" ");
-
 
     for (var i = 1; i < inputData[0].length; i++) {
         var name = inputData[0][i];
@@ -367,18 +360,10 @@ function initBarChart(canvas, width, height, dpr) {
  */
 function setBarOption(barChart, template) {
     barChart.clear();
-    var showEmphasis = template.showEmphasis.split(" ").map(item => {
-        return JSON.parse(item);
-    });
-    var showMinMarkPoint = template.showMinMarkPoint.split(" ").map(item => {
-        return JSON.parse(item);
-    });
-    var showMaxMarkPoint = template.showMaxMarkPoint.split(" ").map(item => {
-        return JSON.parse(item);
-    });
-    var showAverageMarkLine = template.showAverageMarkLine.split(" ").map(item => {
-        return JSON.parse(item);
-    });
+    var showEmphasis = getSplit(template.showEmphasis);
+    var showMinMarkPoint = getSplit(template.showMinMarkPoint);
+    var showMaxMarkPoint = getSplit(template.showMaxMarkPoint);
+    var showAverageMarkLine = getSplit(template.showAverageMarkLine);
     var stack = template.stack.split(" ");
     var series = [];
     var option;
@@ -866,6 +851,18 @@ Page({
             name: "保存图到相册",
             value: 3,
         }],
+
+        showNewSheet: false,
+        newSheetOptions: [{
+                name: "创建新的图",
+                value: 0
+            },
+            {
+                name: "导入数据",
+                value: 1,
+            }
+        ],
+
         /**是否展示表格 */
         isHideTabel: "block",
         lineChart: {
@@ -963,6 +960,45 @@ Page({
         this.setData({
             showSaveSheet: true
         })
+    },
+
+    beginShowNewSheet() {
+        this.setData({
+            showNewSheet: true
+        })
+    },
+    onCloseNewSheet() {
+        this.setData({
+            showNewSheet: false
+        })
+    },
+    onSelectNewOption(event) {
+        if (event.detail.value == 0) {
+            wx.redirectTo({
+                url: '../model_select/model_select'
+            })
+        } else if (event.detail.value == 1) {
+            wx.chooseMessageFile({
+                count: 1,
+                type: 'file',
+                extension: ['xls', 'xlsx'],
+                success: res => {
+                    console.log("success");
+                    wx.uploadFile({
+                        url: 'https://www.jaripon.xyz/data/readFile/' + wx.getStorageSync('uid'),
+                        filePath: res[0],
+                        name: 'uploadFile',
+                        success: res => {
+                            // TODO
+                            /**
+                             * 将服务器返回的数据更新到表格中
+                             */
+                            console.log(res);
+                        }
+                    })
+                }
+            })
+        }
     },
     onLoad() {
         const eventChannel = this.getOpenerEventChannel()

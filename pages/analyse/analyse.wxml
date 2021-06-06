@@ -1,13 +1,13 @@
 <!-- pages/analyse/analyse.wxml -->
-<view class="box1">
+<view>
+    <view class="allMoney">￥ 20.4</view>
+    <view style="font-size: 25rpx; font-weight: bold">支付方式</view>
+    <text>\n</text>
     <view class="container">
         <ec-canvas id="barChartId" canvas-id="bar-canvas" ec="{{ barChart }}"></ec-canvas>
     </view>
-</view>
-<text>\n</text>
-<view class="box1">
+    <text>\n</text>
     <view class="container" style="height: 30vh">
         <ec-canvas id="pieChartId" canvas-id="pie-canvas" ec="{{ pieChart }}"></ec-canvas>
     </view>
 </view>
-

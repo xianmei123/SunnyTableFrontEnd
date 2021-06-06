@@ -2,6 +2,7 @@
 // 获取应用实例
 const app = getApp()
 var baseUrl = 'https://www.jaripon.xyz'
+console.log(typeof(a))
 Page({
 	data: {
 		motto: 'Hello World',

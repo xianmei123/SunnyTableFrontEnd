@@ -1,6 +1,17 @@
 /* pages/analyse/analyse.wxss */
 
+page {
+    background-color: white;
+    color: black;
+}
 .container {
     width: 100%;
     height: 40vh;
+}
+
+.allMoney {
+    color: black;
+    font-size: 50rpx;
+    font-weight: bolder;
+    font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
 }
