@@ -86,6 +86,7 @@ var bar = new graph.BarGraph("bar");
 var pie = new graph.PieGraph("pie");
 var scatter = new graph.ScatterGraph("scatter");
 
+var draftNum = 0;
 var graphName = "默认标题"; // 在图的最上方显示的标题
 var graphId = null; //图的id 是否应该存在内存中？
 var xName = "x";
