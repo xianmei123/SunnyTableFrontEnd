@@ -28,3 +28,4 @@
 <view class="item  " >
 <button open-type="feedback" class="button"> <text class="font-weight-bold">意见反馈</text> </button>
 </view>
+

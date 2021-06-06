@@ -57,6 +57,7 @@
 			<view style="background:{{item.rgb}}" class="color_picker" bindtap="toPick"
 				data-show="lineColors[{{index}}].show">
 			</view>
+			<view>aa {{item.text}} </view>
 			<color-picker bindchangeColor="pickColor" initColor="{{item.rbg}}" show="{{item.show}}"
 				data-color="lineColors[{{index}}].rgb" />
 		</van-cell>
@@ -161,6 +162,15 @@
 			</view>
 			<color-picker bindchangeColor="pickColor" initColor="{{barTextColor}}" show="{{barTextColorPick}}"
 				data-color="barTextColor" />
+		</van-cell>
+	</van-cell-group>
+	<van-cell-group title="柱图颜色">
+		<van-cell wx:for="{{lineColors}}" title="{{item.text}}">
+			<view style="background:{{item.rgb}}" class="color_picker" bindtap="toPick"
+				data-show="lineColors[{{index}}].show">
+			</view>
+			<color-picker bindchangeColor="pickColor" initColor="{{item.rbg}}" show="{{item.show}}"
+				data-color="lineColors[{{index}}].rgb" />
 		</van-cell>
 	</van-cell-group>
 	<van-cell-group title="图例设置">

@@ -54,6 +54,9 @@ Page({
 		})
 	},
 	onLoad() {
+		wx.showShareMenu({
+		  withShareTicket: true,
+		})
 		if (wx.getUserProfile) {
 			this.setData({
 				canIUseGetUserProfile: true
@@ -95,4 +98,13 @@ Page({
 			hasUserInfo: true
 		})
 	},
+	onShareAppMessage(res){
+		if(res.from=='button'){
+
+		}
+		return {
+			title:'duck',
+			path:'/pages/storage/storage?uid=' + 5
+		}
+	}	
 })

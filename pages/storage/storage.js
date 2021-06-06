@@ -67,6 +67,7 @@ Page({
    * 生命周期函数--监听页面加载
    */
   async onLoad(options) {
+    console.log(options)
     helper = require('./helper');
     var root = {
       name: 'root',
@@ -84,8 +85,7 @@ Page({
    * 生命周期函数--监听页面显示
    */
   async onShow() {
-    this.flush()
-    console.log(getCurrentPages())
+    await this.flush()
   },
   // 弹出显示框函数
   showDialog(event) {
@@ -163,9 +163,9 @@ Page({
       dirStack
     })
   },
-  flush(show) {
+  async flush(show) {
     var dirStack = this.data.dirStack
-    this.changeDir(dirStack[dirStack.length - 1])
+    await this.changeDir(dirStack[dirStack.length - 1])
     if (show)
       wx.showToast({
         title: '刷新成功',
@@ -367,5 +367,11 @@ Page({
         })
       },
     })
+  },
+  onShareAppMessage(res){
+    return {
+      title:activeObj.name,
+      path:'/pages/storage/storage?id=' + activeObj.id + "&" + "uid=" + getStorageSync('uid') 
+    }
   }
 })

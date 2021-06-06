@@ -77,11 +77,11 @@
         <!-- 表格 -->
         <scroll-view class="scroll-view_H" scroll-x="true" style="width: 100%">
             <view class="text-item">
-                <van-field value="数据组" disabled bindtap="changeCurrentX" />
+                <van-field value="数据组" disabled bindtap="changeCurrentX" style="boarder:solid!important"/>
             </view>
             <block wx:for="{{iterator2}}" wx:for-index="i">
                 <view class="text-item">
-                    <van-field value="{{ groupName[i] }}" placeholder="数据组{{ i + 1 }}" bind:change="setGroupName"
+                    <van-field value="{{ groupName[i] }}" placeholder="数据组{{ i + 1 }}"  bind:change="setGroupName"
                         data-a="{{i}}" bindtap="changeCurrentGroupName" />
                 </view>
             </block>

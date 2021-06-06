@@ -75,6 +75,7 @@ Page({
 		var [legendPos, lineColors] = this.getTotAttribute(template, '线图')
 		var [lineLegendPosTop, lineLegendPosBottom, lineLegendPosLeft, lineLegendPosRight, linePosVertical] = legendPos
 		var lineAreaStyle = this.transArrColor(template, '区域颜色')
+		console.log('线色',lineColors)
 		this.setData({
 			lineRaiuds: template.radius,
 			lineShowDigit: template.showDigit,
@@ -207,7 +208,6 @@ Page({
 		var template = this.data.defaulteTemplate
 		var [legendPos, barColors] = this.getTotAttribute(template, '柱图')
 		var [barLegendPosTop, barLegendPosBottom, barLegendPosLeft, barLegendPosRight, barPosVertical] = legendPos
-		var barColorsValue = 0
 		this.setData({
 			barWidth: template.width,
 			barGap: template.gap,
@@ -221,7 +221,6 @@ Page({
 			barModelName: template.name,
 			barPosVertical,
 			barColors,
-			barColorsValue,
 			barShowEmphasis: this.transArray(template.showEmphasis),
 			barShowMinMarkPoint: this.transArray(template.showMinMarkPoint),
 			barShowMaxMarkPoint: this.transArray(template.showMaxMarkPoint),
