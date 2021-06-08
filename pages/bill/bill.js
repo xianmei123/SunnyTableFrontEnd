@@ -299,7 +299,7 @@ Page({
         data["userId"] = null;
         data["detail"] = this.data.newBill["detail"];
         data["time"] = this.data.newBill["date"]["date"];
-        data["type"] = this.data.newBill["checkBox"]["result"][this.data.newBill["checkBox"]["result"]];
+        data["type"] = this.data.newBill["checkbox"]["list"][this.data.newBill["checkbox"]["result"]];
         data["income"] = this.data.newBill["list"] === "收入" ? true : false; 
         data["cost"] = this.data.newBill["io"];
         wx.request({
