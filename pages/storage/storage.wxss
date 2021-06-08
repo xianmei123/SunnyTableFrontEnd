@@ -10,3 +10,23 @@
 .van-dropdown-menu{
   --dropdown-menu-height: 40px ;
 }
+.item{
+  display: flex;
+  align-items:center;
+  justify-content:center;
+  border-bottom: 1px solid #ebedf0;
+  color:black;
+  font-weight: 400;
+}
+.button {
+  width: 100%;
+  background: white;
+  border: none;
+  margin: 0rpx;
+  border-radius: 0;
+  color:black;
+  font-weight: 400;
+}
+.file_cell{
+  height:150rpx!important;
+}
