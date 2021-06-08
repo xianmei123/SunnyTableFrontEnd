@@ -88,7 +88,8 @@ Page({
         },
         showCostInput: true,
         showDetailInput: true,
-
+        showVoiceInputMessage: "按住说话",
+        tip: "\ntip:按住说话时，会将输入转换为详细信息和金额两部分"
     },
 
     showCostButton() {
@@ -102,6 +103,9 @@ Page({
         })
     },
     touchStart() {
+        this.setData({
+            showVoiceInputMessage: "松开结束"
+        })
         wx.showLoading({
             title: '录音中'
         });
@@ -215,7 +219,6 @@ Page({
     onCancelBill() {
         this.setData({
             'newBill.show': false,
-
         });
     },
 
@@ -527,6 +530,7 @@ Page({
 			wx.hideLoading()
 			this.setData({
 				hasRecord: false,
+                showVoiceInputMessage: "按住说话"
 			})
 			var tempFilePath = res.tempFilePath;
             wx.uploadFile({
@@ -535,6 +539,10 @@ Page({
                 name: 'file',
                 success: res => {
                     console.log(res);
+                    this.setData({
+                        "newBill.detail": res.data.detail,
+                        "newBill.cost": res.data.cost
+                    });
                 },
                 fail: res => {
                     console.log("falied")
