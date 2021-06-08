@@ -231,10 +231,8 @@ Page({
     },
 
     onConfirmMenuDate(event) {
-
         this.setData({
             'date.show' : false,
-  
         });
     },
 
@@ -258,6 +256,28 @@ Page({
         });
     },
 
+    saveBill() {
+        var url = "https://www.jaripon.xyz/bill/save";
+        wx.request({
+            url: url,
+            data: this.data.newBill,
+            method: "POST",
+            success: function (res) {
+                console.log(res);
+            },
+            fail: function (res) {
+                console.log("fail");
+                wx.showToast({
+                    title: '新建账单失败',
+                });
+                return;
+            }
+        });
+        wx.showToast({
+            title: '新建账单成功',
+        });
+    },
+
     onConfirmBillCheckBox(event) {
         this.setData({
             'newBill.checkbox.show' : false,
@@ -270,6 +290,7 @@ Page({
         this.setData({
             'newBill.show' : false,
         });
+        this.saveBill();
     },
 
     onToday1() {
