@@ -46,6 +46,9 @@ class PieGraph extends Graph{
 
     convertToPieData(tempData, index) {
         var resultArr = [];
+        if (index === undefined) {
+            index = this.xType === "string" ? 0 : 1;
+        }
         for (var i in tempData) {
             var tempJson = {};
             tempJson.name = tempData[i][index];
@@ -56,6 +59,7 @@ class PieGraph extends Graph{
             }
             resultArr.push(tempJson);
         }
+        console.log(resultArr);
         return resultArr;
     }
     setInpuData(name, data) {

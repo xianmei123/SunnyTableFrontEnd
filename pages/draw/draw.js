@@ -3,7 +3,8 @@
 import * as echarts from '../../ec-canvas/echarts';
 import ecStat from 'echarts-stat';
 echarts.registerTransform(ecStat.transform.regression);
-var inputData=[];
+
+
 // var inputData = [
 //     ['pro', 'sb'],
 //     ["2000-06-05", 116],
@@ -59,15 +60,15 @@ var inputData=[];
 // ];
 
 
-// var inputData = [
-//     ['product', 'sb', 'lsp'],
-//     ['sb1', 41.1, 86.5],
-//     ['sb2', 30.4, 92.1],
-//     ['sb3', 22, 182],
-//     ['sb4', 75, 25],
-//     ['sb5', 78, 25],
-//     ['sb6', 33, 66],
-// ]; // 输入数据
+var inputData = [
+    ['product', 'sb', 'lsp'],
+    ['sb1', 41.1, 86.5],
+    ['sb2', 30.4, 92.1],
+    ['sb3', 22, 182],
+    ['sb4', 75, 25],
+    ['sb5', 78, 25],
+    ['sb6', 33, 66],
+]; // 输入数据
 // var inputData = [
 //     ['product', 'sb', 'lsp'],
 //     [78, 41.1, 86.5],
@@ -78,10 +79,10 @@ var inputData=[];
 //     [36, 33, 66],
 // ]; // 输入数据
 var graph = require('./class');
-// var xType = "string"; // 输入数据x轴类型
-// var yType = "number"; // 输入数据y轴类型
-var xType; // 输入数据x轴类型
-var yType;
+var xType = "string"; // 输入数据x轴类型
+var yType = "number"; // 输入数据y轴类型
+// var xType; // 输入数据x轴类型
+// var yType;
 var line = new graph.LineGraph("line");
 var bar = new graph.BarGraph("bar");
 var pie = new graph.PieGraph("pie");
@@ -388,7 +389,8 @@ function setBarOption(barChart, template) {
             markLine: {
                 data: []
             },
-            stack: stack[i - 1]
+            stack: stack[i - 1],
+            color: template.color[i - 1]
         };
         if (showEmphasis[i - 1]) {
             tempJson.emphasis = {
@@ -531,7 +533,7 @@ function setPieOption(pieChart, template) {
         itemStyle: {
             borderRadius: template.borderRadius
         },
-        data: pie.convertToPieData(pie.pieData)
+        data: pie.convertToPieData(pie.pieData, )
     };
 
     var tempJsonRing = {
@@ -632,7 +634,6 @@ function initScatterChart(canvas, width, height, dpr) {
  */
 function setScatterOption(scatterChart, template) {
     scatterChart.clear();
-    var legendArr = template.legendPos.split(",");
     var series = [];
     for (var i = 1; i < inputData[0].length; i++) {
         var name = inputData[0][i];
@@ -669,13 +670,15 @@ function setScatterOption(scatterChart, template) {
                 type: "slider",
                 xAxisIndex: 0,
                 filterMode: 'none',
-                height: 15
+                height: 0,
+                show: false,
             },
             {
                 type: "slider",
                 yAxisIndex: 0,
                 filterMode: 'none',
-                width: 15
+                width: 0,
+                show: false,
             }
         ],
         grid: {
@@ -689,9 +692,6 @@ function setScatterOption(scatterChart, template) {
                 fontSize: template.font
             }
         },
-        itemStyle: {
-            color: template.color[0]
-        },
         xAxis: {
             name: xName,
             type: scatter.xType === "string" ? "category" : "value",
@@ -704,12 +704,12 @@ function setScatterOption(scatterChart, template) {
             boundaryGap: yType === "string" ? false : true
         },
         legend: {
-            top: legendArr[0],
-            bottom: legendArr[1],
-            left: legendArr[2],
-            right: legendArr[3],
-            orient: legendArr[4],
-            left: template.legendPos,
+            right: '0%',
+            top: '16%',
+            orient: "vertical",
+        },
+        tooltip: {
+            trigger: 'item'
         },
         series: series,
     };
@@ -736,7 +736,7 @@ function setScatterOption(scatterChart, template) {
             }
         }
     ]
-    if (template.useRegression) {
+    if (JSON.parse(template.useRegression)) {
         option.dataset.push(indexToTransform[template.indexRegression]);
         option.series.push({
             type: 'line',
@@ -757,23 +757,10 @@ function setScatterOption(scatterChart, template) {
             }
         });
     }
-
     setToolBox(option);
     setLegendOption(option, template.legendPos);
     scatterChart.setOption(option);
-    scatterChart.setOption({
-        tooltip: {
-            triggerOn: 'none',
-            formatter: function (params) {
-                var xstr = scatter.xType === "string" ? params.data[0] : parseFloat(params.data[0]).toFixed(2);
-                var ystr = scatter.yType === "string" ? params.data[1] : parseFloat(params.data[1]).toFixed(2);
-                return 'X: ' +
-                    xstr +
-                    '\nY: ' +
-                    ystr;
-            }
-        },
-    });
+    
     return scatterChart;
 }
 
@@ -1325,7 +1312,8 @@ Page({
             success(result) {
                 result.eventChannel.emit("changeTemplate", {
                     index: index,
-                    template: template
+                    template: template,
+                    count: getPage().data.groupNum,
                 });
             },
 
@@ -1623,7 +1611,7 @@ Page({
         }, 120000);
     },
     onUnload: function () {
-        //inputData = [];
+        inputData = [];
         xType = undefined;
         yType = undefined;
         pie.pieData = null;
@@ -1697,7 +1685,7 @@ function isShowPieChart() {
  * @returns 是否显示散点图
  */
 function isShowScatterChart() {
-    return (xType === "number" && yType === "number") || Object.keys(inputData).length != 0;
+    return (xType === "number" && yType === "number") && Object.keys(inputData).length != 0;
 }
 
 /**
@@ -1743,6 +1731,7 @@ function updatePieData(name, data) {
     console.log(name, data);
     if (isShowPieChart()) {
         if (pie.setInpuData(name, data)) {
+            console.log(pie.pieData);
             getPage().setData({
                 showPieChart: true
             });

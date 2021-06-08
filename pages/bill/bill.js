@@ -532,6 +532,7 @@ Page({
 				hasRecord: false,
                 showVoiceInputMessage: "按住说话"
 			})
+            console.log(res);
 			var tempFilePath = res.tempFilePath;
             wx.uploadFile({
                 url: 'https://www.jaripon.xyz/asr/result/' + wx.getStorageSync('uid'),
