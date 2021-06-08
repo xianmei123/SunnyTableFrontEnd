@@ -271,6 +271,8 @@ Page({
     onConfirmBill() {
         this.setData({
             'newBill.show' : false,
+            'newBill.io' : this.data.newBill.messageIO,
+            'newBill.detail' : this.data.newBill.messageDetail
         });
     },
 
