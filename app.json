@@ -1,5 +1,6 @@
 {
     "pages": [
+        "pages/bill/bill",
         "pages/index/index",
         "pages/draw/draw",
         "pages/storage/storage",
@@ -10,7 +11,7 @@
         "pages/input/text",
         "pages/input/photo",
         "pages/mine/mine",
-        "pages/bill/bill",
+
         "pages/analyse/analyse"
        
     ],

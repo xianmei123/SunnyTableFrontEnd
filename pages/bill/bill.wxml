@@ -1,29 +1,17 @@
-<van-cell center title="日期选择" title-width="150rpx" class="ss" value="{{ date.startDateStr + '-'+ date.endDateStr }}" is-link bind:click="showPopupMenuDate" />
+<van-cell center title="日期选择" title-width="150rpx" class="ss" value="{{ date.startDateStr + '-'+ date.endDateStr }}"
+    is-link bind:click="showPopupMenuDate" />
 <!-- 日期选择的弹出层 -->
-<van-popup show="{{ date.show }}"  
-    position="top"
-   
-    bind:close="onCloseMenuDate">
+<van-popup show="{{ date.show }}" position="top" bind:close="onCloseMenuDate">
     <view class="van-picker__toolbar toolbar-class">
-        <view
-            class="van-picker__cancel"
-            hover-class="van-picker__cancel--hover"
-            hover-stay-time="70"
-            data-type="cancel"
-            bindtap="onCancelMenuDate"
-        >
-        {{ "取消" }}
+        <view class="van-picker__cancel" hover-class="van-picker__cancel--hover" hover-stay-time="70" data-type="cancel"
+            bindtap="onCancelMenuDate">
+            {{ "取消" }}
         </view>
         <view wx:if="{{ menuDateTitle }}" class="van-picker__title van-ellipsis">{{
             menuDateTitle
-        }}</view>
-        <view
-            class="van-picker__confirm"
-            hover-class="van-picker__confirm--hover"
-            hover-stay-time="70"
-            data-type="confirm"
-            bindtap="onConfirmMenuDate"
-        >
+            }}</view>
+        <view class="van-picker__confirm" hover-class="van-picker__confirm--hover" hover-stay-time="70"
+            data-type="confirm" bindtap="onConfirmMenuDate">
             {{ "确认" }}
         </view>
     </view>
@@ -31,203 +19,98 @@
     <van-cell title="选择结束日期" class="ss" value="{{ date.endDateStr }}" is-link bind:click="showPopup2" />
 </van-popup>
 <!-- 开始日期选择的弹出层 -->
-<van-popup show="{{ date.showStart }}"  
-    position="top"
-    custom-style="height: 60%;"
-    bind:close="onClose1">
-    <van-datetime-picker
-        type="date"
-        value="{{ date.currentDate1 }}"
-        bind:input="onInput1"
-        min-date="{{ date.minDate }}"
-        formatter="{{ formatter }}"
-        bind:confirm="onConfirm1"
-        bind:cancel="onCancel1"
-        bind:today="onToday1"
-/></van-popup>
+<van-popup show="{{ date.showStart }}" position="top" custom-style="height: 60%;" bind:close="onClose1">
+    <van-datetime-picker type="date" value="{{ date.currentDate1 }}" bind:input="onInput1" min-date="{{ date.minDate }}"
+        formatter="{{ formatter }}" bind:confirm="onConfirm1" bind:cancel="onCancel1" bind:today="onToday1" />
+</van-popup>
 <!-- 结束日期选择的弹出层 -->
-<van-popup show="{{ date.showEnd }}"  
-    position="top"
-    custom-style="height: 60%;"
-    bind:close="onClose2">
-    <van-datetime-picker
-        type="date"
-        value="{{ date.currentDate2 }}"
-        bind:input="onInput2"
-        min-date="{{ date.minDate }}"
-        formatter="{{ formatter }}"
-        bind:confirm="onConfirm2"
-        bind:cancel="onCancel2"
-        bind:today="onToday2"
-/></van-popup>
+<van-popup show="{{ date.showEnd }}" position="top" custom-style="height: 60%;" bind:close="onClose2">
+    <van-datetime-picker type="date" value="{{ date.currentDate2 }}" bind:input="onInput2" min-date="{{ date.minDate }}"
+        formatter="{{ formatter }}" bind:confirm="onConfirm2" bind:cancel="onCancel2" bind:today="onToday2" />
+</van-popup>
 
 <!-- 筛选中类别选择的弹出层 -->
-<van-popup
-    show="{{ checkboxes.show }}"  
-    position="bottom"
-    custom-style="height: 60%;"
-    bind:close="onCloseCheckBox">
+<van-popup show="{{ checkboxes.show }}" position="bottom" custom-style="height: 60%;" bind:close="onCloseCheckBox">
     <view class="van-picker__toolbar toolbar-class">
-        <view
-            class="van-picker__cancel"
-            hover-class="van-picker__cancel--hover"
-            hover-stay-time="70"
-            data-type="cancel"
-            bindtap="onCancelCheckBox"
-        >
-        {{ "取消" }}
+        <view class="van-picker__cancel" hover-class="van-picker__cancel--hover" hover-stay-time="70" data-type="cancel"
+            bindtap="onCancelCheckBox">
+            {{ "取消" }}
         </view>
-        <view  class="van-picker__title van-ellipsis">{{
+        <view class="van-picker__title van-ellipsis">{{
             "条件筛选"
-        }}</view>
-        <view
-            class="van-picker__confirm"
-            hover-class="van-picker__confirm--hover"
-            hover-stay-time="70"
-            data-type="confirm"
-            bindtap="onConfirmCheckBox"
-        >
+            }}</view>
+        <view class="van-picker__confirm" hover-class="van-picker__confirm--hover" hover-stay-time="70"
+            data-type="confirm" bindtap="onConfirmCheckBox">
             {{ "确认" }}
         </view>
     </view>
     <van-checkbox-group value="{{ checkboxes.result }}" bind:change="onChangeCheckBox">
         <van-cell-group>
-            <van-cell
-                wx:for="{{ checkboxes.list }}"
-                wx:key="index"
-                title="{{ item }}"
-                value-class="value-class"
-                clickable
-                data-index="{{ index }}"
-                bind:click="toggleCheckBox"
-            >
-            <van-checkbox
-                catch:tap="noopCheckBox"
-                class="checkboxes-{{ index }}"
-                name="{{ item }}"
-            />
+            <van-cell wx:for="{{ checkboxes.list }}" wx:key="index" title="{{ item }}" value-class="value-class"
+                clickable data-index="{{ index }}" bind:click="toggleCheckBox">
+                <van-checkbox catch:tap="noopCheckBox" class="checkboxes-{{ index }}" name="{{ item }}" />
             </van-cell>
         </van-cell-group>
     </van-checkbox-group>
 </van-popup>
 <!-- 筛选界面的弹出层 -->
-<van-popup
-    show="{{ condition.show }}"  
-    position="bottom"
-    custom-style="height: 60%;"
-    bind:close="onCloseMenuCondition">
+<van-popup show="{{ condition.show }}" position="bottom" custom-style="height: 60%;" bind:close="onCloseMenuCondition">
     <view class="van-picker__toolbar toolbar-class">
-        <view
-            class="van-picker__cancel"
-            hover-class="van-picker__cancel--hover"
-            hover-stay-time="70"
-            data-type="cancel"
-            bindtap="onCancelMenuCondition"
-        >
-        {{ "取消" }}
+        <view class="van-picker__cancel" hover-class="van-picker__cancel--hover" hover-stay-time="70" data-type="cancel"
+            bindtap="onCancelMenuCondition">
+            {{ "取消" }}
         </view>
         <view class="van-picker__title van-ellipsis">{{
             "条件筛选"
-        }}</view>
-        <view
-            class="van-picker__confirm"
-            hover-class="van-picker__confirm--hover"
-            hover-stay-time="70"
-            data-type="confirm"
-            bindtap="onConfirmMenuCondition"
-        >
+            }}</view>
+        <view class="van-picker__confirm" hover-class="van-picker__confirm--hover" hover-stay-time="70"
+            data-type="confirm" bindtap="onConfirmMenuCondition">
             {{ "确认" }}
         </view>
     </view>
     <van-cell-group>
-        <van-field
-            value="{{ condition.message1 }}"
-            label="最小金额"
-            placeholder="请输入金额，默认为0"
-            clickable
-            autosize
-            input-align="center"
-            border="{{ false }}"
-            bind:change="onChangeInput1"
-        />
-        <van-field
-            value="{{ condition.message2 }}"
-            label="最大金额"
-            placeholder="请输入金额，默认为100000"
-            autosize
-            clickable
-            input-align="center"
-            border="{{ false }}"
-            bind:change="onChangeInput2"
-        />
+        <van-field value="{{ condition.message1 }}" label="最小金额" placeholder="请输入金额，默认为0" clickable autosize
+            input-align="center" border="{{ false }}" bind:change="onChangeInput1" />
+        <van-field value="{{ condition.message2 }}" label="最大金额" placeholder="请输入金额，默认为100000" autosize clickable
+            input-align="center" border="{{ false }}" bind:change="onChangeInput2" />
     </van-cell-group>
-    <van-cell center title="类别选择" title-width="150rpx" value="{{ checkboxes.result }}" is-link bind:click="showPopupCheckBox" />
+    <van-cell center title="类别选择" title-width="150rpx" value="{{ checkboxes.result }}" is-link
+        bind:click="showPopupCheckBox" />
     <!-- 收入、支出复选组 -->
     <van-checkbox-group value="{{ condition.result }}" bind:change="onChangeIO">
         <van-cell-group>
-            <van-cell
-            wx:for="{{ condition.list }}"
-            wx:key="index"
-            title="{{ item }}"
-            value-class="value-class"
-            clickable
-            data-index="{{ index }}"
-            bind:click="toggleIO"
-            >
-            <van-checkbox
-                catch:tap="noopIO"
-                class="io-{{ index }}"
-                name="{{ item }}"
-            />
+            <van-cell wx:for="{{ condition.list }}" wx:key="index" title="{{ item }}" value-class="value-class"
+                clickable data-index="{{ index }}" bind:click="toggleIO">
+                <van-checkbox catch:tap="noopIO" class="io-{{ index }}" name="{{ item }}" />
             </van-cell>
         </van-cell-group>
     </van-checkbox-group>
 </van-popup>
 <!-- 账单数据显示 -->
-<view class="box1"
->账单数据（可以用滑动单元格来做）
+<view class="box1">账单数据（可以用滑动单元格来做）
 </view>
 <!-- 新建账单类别选择的弹出层 -->
-<van-popup
-    show="{{ newBill.checkbox.show }}"  
-    position="center"
-    custom-style="width:90%"
+<van-popup show="{{ newBill.checkbox.show }}" position="center" custom-style="width:90%"
     bind:close="onCloseBillCheckBox">
     <view class="van-picker__toolbar toolbar-class">
-        <view
-            class="van-picker__cancel"
-            hover-class="van-picker__cancel--hover"
-            hover-stay-time="70"
-            data-type="cancel"
-            bindtap="onCancelBillCheckBox"
-        >
-        {{ "取消" }}
+        <view class="van-picker__cancel" hover-class="van-picker__cancel--hover" hover-stay-time="70" data-type="cancel"
+            bindtap="onCancelBillCheckBox">
+            {{ "取消" }}
         </view>
-        <view  class="van-picker__title van-ellipsis">{{
+        <view class="van-picker__title van-ellipsis">{{
             "条件筛选"
-        }}</view>
-        <view
-            class="van-picker__confirm"
-            hover-class="van-picker__confirm--hover"
-            hover-stay-time="70"
-            data-type="confirm"
-            bindtap="onConfirmBillCheckBox"
-        >
+            }}</view>
+        <view class="van-picker__confirm" hover-class="van-picker__confirm--hover" hover-stay-time="70"
+            data-type="confirm" bindtap="onConfirmBillCheckBox">
             {{ "确认" }}
         </view>
     </view>
     <van-radio-group value="{{ newBill.checkbox.result }}" bind:change="onChangeBillCheckBox">
         <van-cell-group>
-           
-            <van-cell  wx:for="{{ newBill.checkbox.list }}"
-                wx:key="index"
-                title="{{ item }}"
-                value-class="value-class"
-                clickable
-                data-name="{{ index }}"
-                data-index="{{ index }}"
-                bind:click="onClickBillCheckBox">
-            <van-radio slot="right-icon" name="{{ index }}" />
+
+            <van-cell wx:for="{{ newBill.checkbox.list }}" wx:key="index" title="{{ item }}" value-class="value-class"
+                clickable data-name="{{ index }}" data-index="{{ index }}" bind:click="onClickBillCheckBox">
+                <van-radio slot="right-icon" name="{{ index }}" />
             </van-cell>
             <!-- <van-cell title="支出" clickable data-name="2" bind:click="onClickBillIO">
             <van-radio slot="right-icon" name="2" />
@@ -242,57 +125,51 @@
     </van-radio-group>
 </van-popup>
 <!-- 新建账单时间选择的弹出层 -->
-<van-popup
-    show="{{ newBill.date.show }}"  
-    position="center"
-    custom-style="width: 90%"
-    bind:close="onCloseBillDate">
-    <van-datetime-picker
-        type="date"
-        value="{{ newBill.date.currentDate }}"
-        bind:input="onInputBillDate"
-        min-date="{{ newBill.date.minDate }}"
-        formatter="{{ formatter }}"
-        bind:confirm="onConfirmBillDate"
-        bind:cancel="onCancelBillDate"
-        bind:today="onTodayBillDate"/>
+<van-popup show="{{ newBill.date.show }}" position="center" custom-style="width: 90%" bind:close="onCloseBillDate">
+    <van-datetime-picker type="date" value="{{ newBill.date.currentDate }}" bind:input="onInputBillDate"
+        min-date="{{ newBill.date.minDate }}" formatter="{{ formatter }}" bind:confirm="onConfirmBillDate"
+        bind:cancel="onCancelBillDate" bind:today="onTodayBillDate" />
 </van-popup>
 <!-- 新建账单的弹出层 -->
-<van-popup
-    show="{{ newBill.show }}"  
-    position="center"
-    custom-style="width: 90%"
-    bind:close="onCloseBill">
+<van-popup show="{{ newBill.show }}" position="center" custom-style="width: 90%" bind:close="onCloseBill">
     <van-cell-group>
         <van-cell title="日期" value="{{ newBill.date.dateStr }}" is-link bind:click="showPopupBillDate" />
-        <van-field
-            value="{{ newBill.detail }}"
-            label="用途/来源"
-            placeholder="请输入详细信息"
-            clickable
-            autosize
-            input-align="right"
-            border="{{ false }}"
-            bind:change="onChangeInput1"
-        />
-        <van-field
-            value="{{ newBill.cost }}"
-            label="支出/收入"
-            placeholder="请输入金额"
-            autosize
-            clickable
-            input-align="right"
-            border="{{ false }}"
-            bind:change="onChangeInput2"
-        />
-        <van-cell center title="类别选择" title-width="150rpx" value="{{ newBill.checkbox.list[newBill.checkbox.result] }}" is-link bind:click="showPopupBillCheckBox" />
+        <van-row >
+            <van-col custom-class = "text" span="7" >
+                <text style="text-align:center; vertical-align: middle; font-size: 14px; font-color: black; font-weight: normal">用途/来源</text>
+            </van-col>
+            <van-col span="14">
+                <van-field wx:if="{{showDetailInput}}" value="{{ newBill.detail }}" label="" placeholder="请输入详细信息" clickable autosize
+            input-align="right" border="{{ false }}" bind:change="onChangeInput1" style="display: inline"/>
+                <van-button wx:if="{{!showDetailInput}}" custom-class="input_button" bindtouchstart='touchStart' bindtouchend='touchEnd'> 按住说话</van-button>
+            </van-col>
+            <van-col custom-class = "text" span="3">
+                <text class="{{showDetailInput ?'icon_micr' :'icon_input' }} icon" style="width: 40rpx; height: 40rpx" bindtap="showDeatilButton"></text>
+            </van-col>
+        </van-row>
+        <van-row >
+            <van-col custom-class = "text" span="7" >
+                <text style="text-align:center; vertical-align: middle; font-size: 14px; font-color: black; font-weight: normal">支出/收入</text>
+            </van-col>
+            <van-col span="14">
+                <van-field wx:if="{{showCostInput}}" value="{{ newBill.cost }}" placeholder="请输入金额" autosize clickable input-align="right"
+                border="{{ false }}" bind:change="onChangeInput2"/>
+                <van-button wx:if="{{!showCostInput}}"custom-class="input_button" bindtouchstart='touchStart' bindtouchend='touchEnd'> 按住说话</van-button>
+            </van-col>
+            <van-col custom-class = "text" span="3">
+                <text class="{{showCostInput ?'icon_micr' :'icon_input' }} icon" style="width: 40rpx; height: 40rpx" bindtap="showCostButton"></text>
+            </van-col>
+        </van-row>
+                
+        <van-cell center title="类别选择" title-width="150rpx" value="{{ newBill.checkbox.list[newBill.checkbox.result] }}"
+            is-link bind:click="showPopupBillCheckBox" />
         <van-radio-group value="{{ newBill.result }}" bind:change="onChangeBillIO">
             <van-cell-group>
                 <van-cell title="收入" clickable data-name="{{ 0 }}" bind:click="onClickBillIO">
-                <van-radio slot="right-icon" name="{{ 0 }}" />
+                    <van-radio slot="right-icon" name="{{ 0 }}" />
                 </van-cell>
                 <van-cell title="支出" clickable data-name="{{ 1 }}" bind:click="onClickBillIO">
-                <van-radio slot="right-icon" name="{{ 1 }}" />
+                    <van-radio slot="right-icon" name="{{ 1 }}" />
                 </van-cell>
             </van-cell-group>
         </van-radio-group>

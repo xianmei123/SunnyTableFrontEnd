@@ -983,15 +983,24 @@ Page({
                 extension: ['xls', 'xlsx'],
                 success: res => {
                     console.log("success");
+                    console.log(res);
+                    const path = res.tempFiles[0].path;
                     wx.uploadFile({
                         url: 'https://www.jaripon.xyz/data/readFile/' + wx.getStorageSync('uid'),
-                        filePath: res[0],
-                        name: 'uploadFile',
+                        filePath: path,
+                        name: 'file',
+                        
                         success: res => {
-                            // TODO
+                            var data = JSON.parse(res.data);
                             /**
-                             * 将服务器返回的数据更新到表格中
+                             * TODO
+                             * data 为 dataset的对象，需要填到表格中
                              */
+                            console.log(res);
+                            console.log(data);
+                        },
+                        fail: res => {
+                            console.log("falied")
                             console.log(res);
                         }
                     })
