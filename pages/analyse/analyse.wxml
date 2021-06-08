@@ -1,7 +1,7 @@
 <!-- pages/analyse/analyse.wxml -->
 <view>
     <view class="allMoney">￥ 20.4</view>
-    <view style="font-size: 25rpx; font-weight: bold">支付方式</view>
+    <!-- <view style="font-size: 25rpx; font-weight: bold">支付方式</view> -->
     <text>\n</text>
     <view class="container">
         <ec-canvas id="barChartId" canvas-id="bar-canvas" ec="{{ barChart }}"></ec-canvas>
