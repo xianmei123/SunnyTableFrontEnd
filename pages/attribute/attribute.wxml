@@ -2,29 +2,122 @@
 
 <!-- 折线图 -->
 <view wx:if="{{type == 0}}">
-	<van-row>
-		<van-field label="模板名称" model:value="{{  lineModelName }}" placeholder="请输入模板名称" border="{{ true }}" />
-	</van-row>
-	<van-row>
-		<van-field label="点半径" model:value="{{  lineRaiuds }}" type="number" placeholder="请输入数字" border="{{ true }}" />
-	</van-row>
-	<van-cell title="字体大小">
-		<van-stepper model:value="{{ lineFont }}" long-press="{{ false }}" min="10" max="30" integer="{{true}}"
-			bind:change="stepperChange" data-name="lineFont" />
-	</van-cell>
-	<van-cell title="数值显示">
-		<van-switch model:checked="{{ lineShowDigit }}" bind:change="changeBool" data-name="lineShowDigit" />
-	</van-cell>
-	<van-cell title="竖放图例">
-		<van-switch model:checked="{{ linePosVertical }}" bind:change="changeBool" data-name="linePosVertical" />
-	</van-cell>
-	<van-cell title="字体颜色">
-		<view style="background:{{lineTextColor}}" class="color_picker" bindtap="toPick" data-show='lineTextColorPick'>
+	<van-cell-group title="基础设置">
+		<van-row>
+			<van-field label="模板名称" model:value="{{  lineModelName }}" placeholder="请输入模板名称" border="{{ true }}" />
+		</van-row>
+		<van-row>
+			<van-field label="数据点半径" model:value="{{  lineRaiuds }}" type="number" placeholder="请输入数字"
+				border="{{ true }}" />
+		</van-row>
+		<van-row>
+			<van-field label="标记点大小" model:value="{{  lineMarkPointSize }}" type="number" placeholder="请输入数字"
+				border="{{ true }}" />
+		</van-row>
+		<van-cell title="标记点种类">
+			<van-stepper model:value="{{ lineMarkPointStyle }}" long-press="{{ false }}" min="10" max="30"
+				integer="{{true}}" bind:change="changeSingleItem" data-name="lineMarkPointStyle" />
+		</van-cell>
+		<van-cell title="字体大小">
+			<van-stepper model:value="{{ lineFont }}" long-press="{{ false }}" min="10" max="30" integer="{{true}}"
+				bind:change="changeSingleItem" data-name="lineFont" />
+		</van-cell>
+		<van-cell title="数值显示">
+			<van-switch model:checked="{{ lineShowDigit }}" bind:change="changeSingleItem" data-name="lineShowDigit" />
+		</van-cell>
+		<van-cell title="符号显示">
+			<van-switch model:checked="{{ lineShowSymbol }}" bind:change="changeSingleItem"
+				data-name="lineShowSymbol" />
+		</van-cell>
+		<van-cell title="折线光滑化">
+			<van-switch model:checked="{{ lineSmooth }}" bind:change="changeSingleItem" data-name="lineSmooth" />
+		</van-cell>
+		<van-cell title="开启渐变">
+			<van-switch model:checked="{{ lineShowGradient }}" bind:change="changeSingleItem"
+				data-name="lineShowGradient" />
+		</van-cell>
+		<van-cell title="开启X轴渐变">
+			<van-switch model:checked="{{ lineShowXGradient }}" bind:change="changeSingleItem"
+				data-name="lineShowXGradient" />
+		</van-cell>
+		<van-cell title="开启Y轴渐变">
+			<van-switch model:checked="{{ lineShowYGradient }}" bind:change="changeSingleItem"
+				data-name="lineShowYGradient" />
+		</van-cell>
+		<van-cell title="字体颜色">
+			<view style="background:{{lineTextColor}}" class="color_picker" bindtap="toPick"
+				data-show='lineTextColorPick'>
+			</view>
+			<color-picker bindchangeColor="pickColor" initColor="{{lineTextColor}}" show="{{lineTextColorPick}}"
+				data-color="lineTextColor" />
+		</van-cell>
+	</van-cell-group>
+	<van-cell-group title="线条颜色">
+		<van-cell wx:for="{{lineColors}}" title="{{item.text}}">
+			<view style="background:{{item.rgb}}" class="color_picker" bindtap="toPick"
+				data-show="lineColors[{{index}}].show">
+			</view>
+			<view>aa {{item.text}} </view>
+			<color-picker bindchangeColor="pickColor" initColor="{{item.rbg}}" show="{{item.show}}"
+				data-color="lineColors[{{index}}].rgb" />
+		</van-cell>
+	</van-cell-group>
+	<van-cell-group title="图例设置">
+		<van-cell title="竖放图例">
+			<van-switch model:checked="{{ linePosVertical }}" bind:change="changeSingleItem"
+				data-name="linePosVertical" />
+		</van-cell>
+		<van-field label="图例上边距" model:value="{{  lineLegendPosTop }}" type="number" placeholder="请输入数字"
+			border="{{ true }}" />
+		<!-- <van-field label="图例下边距" model:value="{{  lineLegendPosBottom }}" placeholder="请输入数字" border="{{ true }}" /> -->
+		<van-field label="图例左边距" model:value="{{   lineLegendPosLeft }}" type="number" placeholder="请输入数字"
+			border="{{ true }}" />
+		<!-- <van-field label="图例右边距" model:value="{{  lineLegendPosRight }}" placeholder="请输入数字" border="{{ true }}" /> -->
+	</van-cell-group>
+	<van-cell-group title="折线聚焦">
+		<van-cell title="折线{{index}}聚焦">
+			<van-switch model:checked="{{ lineShowEmphasis[index] }}" bind:change="changeSingleItem"
+				data-name="lineShowEmphasis[{{index}}]" />
+		</van-cell>
+	</van-cell-group>
+	<van-cell-group title="折线底部区域">
+		<view wx:for="{{lineShowArea}}">
+			<van-cell title="折线{{index}}区域显示">
+				<van-switch model:checked="{{ lineShowArea[index] }}" bind:change="changeSingleItem"
+					data-name="lineShowArea[{{index}}]" />
+			</van-cell>
+			<van-cell title="折现{{index}}区域颜色">
+				<view style="background:{{lineAreaStyle[index].rgb}}" class="color_picker" bindtap="toPick"
+					data-show="lineAreaStyle[{{index}}].show">
+				</view>
+				<color-picker bindchangeColor="pickColor" initColor="{{lineAreaStyle[index].rgb}}"
+					show="{{lineAreaStyle[index].show}}" data-color="lineAreaStyle[{{index}}].show" />
+			</van-cell>
 		</view>
-		<color-picker bindchangeColor="pickColor" initColor="{{lineTextColor}}" show="{{lineTextColorPick}}"
-			data-color="lineTextColor" />
-	</van-cell>
-	<van-row>
+	</van-cell-group>
+	<van-cell-group title="折线辅助线">
+		<view wx:for="{{lineShowAverageMarkLine}}">
+			<van-cell title="折线{{index}}最小标记点">
+				<van-switch model:checked="{{ lineShowMinMarkPoint[index] }}" bind:change="changeSingleItem"
+					data-name="lineShowMinMarkPoint[{{index}}]" />
+			</van-cell>
+			<van-cell title="折线{{index}}最大标记点">
+				<van-switch model:checked="{{ lineShowMaxMarkPoint[index] }}" bind:change="changeSingleItem"
+					data-name="lineShowMaxMarkPoint[{{index}}]" />
+			</van-cell>
+			<van-cell title="折线{{index}}平均标记线">
+				<van-switch model:checked="{{ lineShowAverageMarkLine[index] }}" bind:change="changeSingleItem"
+					data-name="lineShowAverageMarkLine[{{index}}]" />
+			</van-cell>
+		</view>
+	</van-cell-group>
+	<van-cell-group title="区域堆叠">
+		<van-cell wx:for="{{lineStack}}" title="折现{{index}}编号">
+			<van-stepper model:value="{{lineStack[index]  }}" long-press="{{ false }}" min="0" max="9"
+				integer="{{true}}" bind:change="changeSingleItem" data-name="lineStack[{{index}}]" />
+		</van-cell>
+	</van-cell-group>
+	<!-- <van-row>
 		<van-col span="6">
 			<van-dropdown-menu>
 				<van-dropdown-item model:value="{{lineColorsValue}}" bind:change="itemColorSelect"
@@ -40,43 +133,87 @@
 					data-color="lineColors[{{index}}].rgb" />
 			</van-cell>
 		</van-col>
-	</van-row>
-	<van-field label="图例上边距" model:value="{{  lineLegendPosTop }}" type="number" placeholder="请输入数字"
-		border="{{ true }}" />
-	<!-- <van-field label="图例下边距" model:value="{{  lineLegendPosBottom }}" placeholder="请输入数字" border="{{ true }}" /> -->
-	<van-field label="图例左边距" model:value="{{   lineLegendPosLeft }}" type="number" placeholder="请输入数字"
-		border="{{ true }}" />
-	<!-- <van-field label="图例右边距" model:value="{{  lineLegendPosRight }}" placeholder="请输入数字" border="{{ true }}" /> -->
+	</van-row> -->
 </view>
 <!-- 柱状图 -->
 <view wx:if="{{type == 1}}">
-	<van-row>
-		<van-field label="模板名称" model:value="{{  barModelName }}" placeholder="请输入模板名称" border="{{ true }}" />
-	</van-row>
-	<van-row>
-		<van-field label="条宽" model:value="{{  barWidth }}" type="number" placeholder="请输入数字(百分比)"
+	<van-cell-group title="基础设置">
+		<van-row>
+			<van-field label="模板名称" model:value="{{  barModelName }}" placeholder="请输入模板名称" border="{{ true }}" />
+		</van-row>
+		<van-row>
+			<van-field label="条宽" model:value="{{  barWidth }}" type="number" placeholder="请输入数字(百分比)"
+				border="{{ true }}" />
+		</van-row>
+		<van-row>
+			<van-field label="条间隔" model:value="{{  barGap }}" type="number" placeholder="请输入数字(百分比)"
+				border="{{ true }}" />
+		</van-row>
+		<van-cell title="字体大小">
+			<van-stepper model: value="{{ barFont }}" long-press="{{ false }}" min="10" max="30" integer="{{true}}"
+				bind:change="changeSingleItem" data-name="barFont" />
+		</van-cell>
+		<van-cell title="数值显示">
+			<van-switch model: checked="{{ barShowDigit }}" bind:change="changeSingleItem" data-name="barShowDigit" />
+		</van-cell>
+		<van-cell title="字体颜色">
+			<view style="background:{{barTextColor}}" class="color_picker" bindtap="toPick"
+				data-show='barTextColorPick'>
+			</view>
+			<color-picker bindchangeColor="pickColor" initColor="{{barTextColor}}" show="{{barTextColorPick}}"
+				data-color="barTextColor" />
+		</van-cell>
+	</van-cell-group>
+	<van-cell-group title="柱图颜色">
+		<van-cell wx:for="{{lineColors}}" title="{{item.text}}">
+			<view style="background:{{item.rgb}}" class="color_picker" bindtap="toPick"
+				data-show="lineColors[{{index}}].show">
+			</view>
+			<color-picker bindchangeColor="pickColor" initColor="{{item.rbg}}" show="{{item.show}}"
+				data-color="lineColors[{{index}}].rgb" />
+		</van-cell>
+	</van-cell-group>
+	<van-cell-group title="图例设置">
+		<van-cell title="竖放图例">
+			<van-switch model:checked="{{ barPosVertical }}" bind:change="changeSingleItem"
+				data-name="barPosVertical" />
+		</van-cell>
+		<van-field label="图例上边距" model:value="{{  barLegendPosTop }}" type="number" placeholder="请输入数字"
 			border="{{ true }}" />
-	</van-row>
-	<van-row>
-		<van-field label="条间隔" model:value="{{  barGap }}" type="number" placeholder="请输入数字(百分比)" border="{{ true }}" />
-	</van-row>
-	<van-cell title="字体大小">
-		<van-stepper model: value="{{ barFont }}" long-press="{{ false }}" min="10" max="30" integer="{{true}}"
-			bind:change="stepperChange" data-name="barFont" />
-	</van-cell>
-	<van-cell title="数值显示">
-		<van-switch model: checked="{{ barShowDigit }}" bind:change="changeBool" data-name="barShowDigit" />
-	</van-cell>
-	<van-cell title="竖放图例">
-		<van-switch model:checked="{{ barPosVertical }}" bind:change="changeBool" data-name="barPosVertical" />
-	</van-cell>
-	<van-cell title="字体颜色">
-		<view style="background:{{barTextColor}}" class="color_picker" bindtap="toPick" data-show='barTextColorPick'>
+		<!-- <van-field label="图例下边距" model:value="{{  barLegendPosBottom }}" placeholder="请输入数字" border="{{ true }}" /> -->
+		<van-field label="图例左边距" model:value="{{  barLegendPosLeft }}" type="number" placeholder="请输入数字"
+			border="{{ true }}" />
+		<!-- <van-field label="图例右边距" model:value="{{  barLegendPosRight }}" placeholder="请输入数字" border="{{ true }}" /> -->
+	</van-cell-group>
+	<van-cell-group title="柱聚焦">
+		<van-cell title="柱{{index}}聚焦">
+			<van-switch model:checked="{{ barShowEmphasis[index] }}" bind:change="changeSingleItem"
+				data-name="barShowEmphasis[{{index}}]" />
+		</van-cell>
+	</van-cell-group>
+	<van-cell-group title="柱辅助线">
+		<view wx:for="{{barShowAverageMarkLine}}">
+			<van-cell title="柱{{index}}最小标记点">
+				<van-switch model:checked="{{ barShowMinMarkPoint[index] }}" bind:change="changeSingleItem"
+					data-name="barShowMinMarkPoint[{{index}}]" />
+			</van-cell>
+			<van-cell title="柱{{index}}最大标记点">
+				<van-switch model:checked="{{ barShowMaxMarkPoint[index] }}" bind:change="changeSingleItem"
+					data-name="barShowMaxMarkPoint[{{index}}]" />
+			</van-cell>
+			<van-cell title="柱{{index}}平均标记线">
+				<van-switch model:checked="{{ barShowAverageMarkLine[index] }}" bind:change="changeSingleItem"
+					data-name="barShowAverageMarkLine[{{index}}]" />
+			</van-cell>
 		</view>
-		<color-picker bindchangeColor="pickColor" initColor="{{barTextColor}}" show="{{barTextColorPick}}"
-			data-color="barTextColor" />
-	</van-cell>
-	<van-row style="overflow:hidden">
+	</van-cell-group>
+	<van-cell-group title="区域堆叠">
+		<van-cell wx:for="{{barStack}}" title="柱{{index}}编号">
+			<van-stepper model:value="{{barStack[index]  }}" long-press="{{ false }}" min="0" max="9" integer="{{true}}"
+				bind:change="changeSingleItem" data-name="barStack[{{index}}]" />
+		</van-cell>
+	</van-cell-group>
+	<!-- <van-row style="overflow:hidden">
 		<van-col span="6" style="overflow:hidden">
 			<van-dropdown-menu>
 				<van-dropdown-item bind:change="itemColorSelect" data-name="barColors" model:value="{{barColorsValue}}"
@@ -91,123 +228,167 @@
 					data-color="barColors[{{index}}].rgb" />
 			</van-cell>
 		</van-col>
-	</van-row>
-	<van-field label="图例上边距" model:value="{{  barLegendPosTop }}" type="number" placeholder="请输入数字"
-		border="{{ true }}" />
-	<!-- <van-field label="图例下边距" model:value="{{  barLegendPosBottom }}" placeholder="请输入数字" border="{{ true }}" /> -->
-	<van-field label="图例左边距" model:value="{{  barLegendPosLeft }}" type="number" placeholder="请输入数字"
-		border="{{ true }}" />
-	<!-- <van-field label="图例右边距" model:value="{{  barLegendPosRight }}" placeholder="请输入数字" border="{{ true }}" /> -->
+	</van-row> -->
 </view>
 <!-- 扇形图 -->
 <view wx:if="{{type == 2}}">
-	<van-row>
-		<van-field label="模板名称" model:value="{{  pieModelName }}" placeholder="请输入模板名称" border="{{ true }}" />
-	</van-row>
-	<van-row>
-		<van-field label="饼宽" model:value="{{  pieRadius }}" type="number" placeholder="请输入数字(百分比)"
+	<van-cell-group title="基础设置">
+		<van-row>
+			<van-field label="模板名称" model:value="{{  pieModelName }}" placeholder="请输入模板名称" border="{{ true }}" />
+		</van-row>
+		<van-row>
+			<van-field label="饼宽" model:value="{{  pieRadius }}" type="number" placeholder="请输入数字(百分比)"
+				border="{{ true }}" />
+		</van-row>
+		<van-cell title="扇形圆角">
+			<van-stepper model: value="{{ pieboardRadius }}" long-press="{{ false }}" min="0" max="30"
+				integer="{{true}}" bind:change="changeSingleItem" data-name="pieboardRadius" />
+		</van-cell>
+		<van-cell title="百分比精度">
+			<van-stepper model: value="{{ piePrecision }}" long-press="{{ false }}" min="0" max="10" integer="{{true}}"
+				bind:change="changeSingleItem" data-name="piePrecision" />
+		</van-cell>
+		<van-cell title="标题字体">
+			<van-stepper model: value="{{ pieTitleFont }}" long-press="{{ false }}" min="10" max="30" integer="{{true}}"
+				bind:change="changeSingleItem" data-name="pieTitleFont" />
+		</van-cell>
+		<van-cell title="注释字体">
+			<van-stepper model: value="{{ pieLabelFont }}" long-press="{{ false }}" min="10" max="30" integer="{{true}}"
+				bind:change="changeSingleItem" data-name="pieLabelFont" />
+		</van-cell>
+		<van-cell title="百分比显示">
+			<van-switch model: checked="{{ pieShowPercent }}" bind:change="changeSingleItem"
+				data-name="pieShowPercent" />
+		</van-cell>
+		<van-cell title="字体颜色">
+			<view style="background:{{pieTextColor}}" class="color_picker" bindtap="toPick"
+				data-show='pieTextColorPick'>
+			</view>
+			<color-picker bindchangeColor="pickColor" initColor="{{pieTextColor}}" show="{{pieTextColorPick}}"
+				data-color="pieTextColor" />
+		</van-cell>
+	</van-cell-group>
+	<van-cell-group title="饼图颜色">
+		<van-cell wx:for="{{pieColors}}" title="{{item.text}}">
+			<view style="background:{{item.rgb}}" class="color_picker" bindtap="toPick"
+				data-show="pieColors[{{index}}].show">
+			</view>
+			<color-picker bindchangeColor="pickColor" initColor="{{item.rbg}}" show="{{item.show}}"
+				data-color="pieColors[{{index}}].rgb" />
+		</van-cell>
+	</van-cell-group>
+	<van-cell-group title="图例设置">
+		<van-cell title="竖放图例">
+			<van-switch model:checked="{{ piePosVertical }}" bind:change="changeSingleItem"
+				data-name="piePosVertical" />
+		</van-cell>
+		<van-field label="图例上边距" model:value="{{  pieLegendPosTop }}" type="number" placeholder="请输入数字"
 			border="{{ true }}" />
-	</van-row>
-	<van-cell title="百分比精度">
-		<van-stepper model: value="{{ piePrecision }}" long-press="{{ false }}" min="0" max="10" integer="{{true}}"
-			bind:change="stepperChange" data-name="piePrecision" />
-	</van-cell>
-	<van-cell title="标题字体">
-		<van-stepper model: value="{{ pieTitleFont }}" long-press="{{ false }}" min="10" max="30" integer="{{true}}"
-			bind:change="stepperChange" data-name="pieTitleFont" />
-	</van-cell>
-	<van-cell title="注释字体">
-		<van-stepper model: value="{{ pieLabelFont }}" long-press="{{ false }}" min="10" max="30" integer="{{true}}"
-			bind:change="stepperChange" data-name="pieLabelFont" />
-	</van-cell>
-	<van-cell title="百分比显示">
-		<van-switch model: checked="{{ pieShowPercent }}" bind:change="changeBool" data-name="pieShowPercent" />
-	</van-cell>
-	<van-cell title="图例显示">
-		<van-switch model: checked="{{ pieShowLabel }}" bind:change="changeBool" data-name="pieShowLabel" />
-	</van-cell>
-	<van-cell title="竖放图例">
-		<van-switch model:checked="{{ piePosVertical }}" bind:change="changeBool" data-name="piePosVertical" />
-	</van-cell>
-	<van-cell title="字体颜色">
-		<view style="background:{{pieTextColor}}" class="color_picker" bindtap="toPick" data-show='pieTextColorPick'>
+		<van-field label="图例左边距" model:value="{{  pieLegendPosLeft }}" type="number" placeholder="请输入数字"
+			border="{{ true }}" />
+	</van-cell-group>
+	<van-cell-group title="圆环图">
+		<van-cell title="使用圆环">
+			<van-switch model:checked="{{ pieShowRing }}" bind:change="changeSingleItem" data-name="pieShowRing" />
+		</van-cell>
+		<view wx:if="pieShowRing">
+			<van-row>
+				<van-field label="内环大小" model:value="{{  pieRadius[0] }}" type="number" placeholder="请输入数字(百分比)"
+					border="{{ true }}" bind:change="changeSingleItem" data-name="pieRadius[0]" />
+			</van-row>
+			<van-row>
+				<van-field label="外环大小" model:value="{{  pieRadius[1] }}" type="number" placeholder="请输入数字(百分比)"
+					border="{{ true }}" bind:change="changeSingleItem" data-name="pieRadius[1]" />
+			</van-row>
 		</view>
-		<color-picker bindchangeColor="pickColor" initColor="{{pieTextColor}}" show="{{pieTextColorPick}}"
-			data-color="pieTextColor" />
-	</van-cell>
-	<van-row style="overflow:hidden">
-		<van-col span="6" style="overflow:hidden">
-			<van-dropdown-menu>
-				<van-dropdown-item model:value="{{pieColorsValue}}" bind:change="itemColorSelect" data-name="pieColors"
-					popup-style="width:160rpx;font-weight:normal;margin:0;padding:0" options="{{ pieColors }}" />
-			</van-dropdown-menu>
-		</van-col>
-		<van-col wx:for="{{pieColors}}" span="18">
-			<van-cell wx:if="{{index == pieColorsValue}}">
-				<view style="background:{{item.rgb}}" class="color_picker" bindtap="toPick"
-					data-show="pieColors[{{index}}].show"></view>
-				<color-picker bindchangeColor="pickColor" initColor="{{item.rgb}}" show="{{item.show}}"
-					data-color="pieColors[{{index}}].rgb" />
-			</van-cell>
-		</van-col>
-	</van-row>
-	<van-field label="图例上边距" model:value="{{  pieLegendPosTop }}" type="number" placeholder="请输入数字"
-		border="{{ true }}" />
-	<!-- <van-field label="图例下边距" model:value="{{  pieLegendPosBottom }}" placeholder="请输入数字" border="{{ true }}" /> -->
-	<van-field label="图例左边距" model:value="{{  pieLegendPosLeft }}" type="number" placeholder="请输入数字"
-		border="{{ true }}" />
-	<!-- <van-field label="图例右边距" model:value="{{  pieLegendPosRight }}" placeholder="请输入数字" border="{{ true }}" /> -->
+	</van-cell-group>
+	<van-cell-group title="玫瑰图">
+		<van-cell title="使用玫瑰图">
+			<van-switch model:checked="{{ pieShowRose }}" bind:change="changeSingleItem" data-name="pieShowRose" />
+		</van-cell>
+		<van-radio-group value="{{pieRoseType}}" wx:if="{{ pieShowRose }}" bind:change="changeSingleItem"
+			data-name="pieRoseType">
+			<van-cell-group>
+				<van-cell title="半径模式" clickable>
+					<van-radio slot="right-icon" name="0" />
+				</van-cell>
+				<van-cell title="面积模式" clickable>
+					<van-radio slot="right-icon" name="1" />
+				</van-cell>
+			</van-cell-group>
+		</van-radio-group>
+	</van-cell-group>
 </view>
 <!-- 散点图 -->
 <view wx:if="{{type == 3}}">
-	<van-row>
+	<van-cell-group title="基础设置">
+		<van-row>
 			<van-field label="模板名称" model:value="{{  scatterModelName }}" placeholder="请输入模板名称" border="{{ true }}" />
 		</van-row>
-	<van-cell title="字体大小">
-		<van-stepper model: value="{{ scatterFont }}" long-press="{{ false }}" min="10" max="30" integer="{{true}}"
-			bind:change="stepperChange" data-name="scatterFont" />
-	</van-cell>
-	<van-cell title="数值显示">
-		<van-switch model: checked="{{ scatterShowDigit }}" bind:change="changeBool" data-name="scatterShowDigit" />
-	</van-cell>
-	<van-cell title="竖放图例">
-		<van-switch model:checked="{{ scatterPosVertical }}" bind:change="changeBool" data-name="scatterPosVertical" />
-	</van-cell>
-	<van-cell title="连线显示">
-		<van-switch model: checked="{{ scatterShowLine }}" bind:change="changeBool" data-name="scatterShowLine" />
-	</van-cell>
-	<van-cell title="自动点大小">
-		<van-switch model: checked="{{ scatterIncrease }}" bind:change="changeBool" data-name="scatterIncrease" />
-	</van-cell>
-	<van-cell title="字体颜色">
-		<view style="background:{{scatterTextColor}}" class="color_picker" bindtap="toPick"
-			data-show='scatterTextColorPick'></view>
-		<color-picker bindchangeColor="pickColor" initColor="{{scatterTextColor}}" show="{{scatterTextColorPick}}"
-			data-color="scatterTextColor" />
-	</van-cell>
-	<van-row style="overflow:hidden">
-		<van-col span="6" style="overflow:hidden">
-			<van-dropdown-menu>
-				<van-dropdown-item model:value="{{scatterColorsValue}}" bind:change="itemColorSelect"
-					data-name="scatterColors" popup-style="width:160rpx;font-weight:normal;margin:0;padding:0"
-					options="{{ scatterColors }}" />
-			</van-dropdown-menu>
-		</van-col>
-		<van-col wx:for="{{scatterColors}}" span="18">
-			<van-cell wx:if="{{index == scatterColorsValue}}">
-				<view style="background:{{item.rgb}}" class="color_picker" bindtap="toPick"
-					data-show="scatterColors[{{index}}].show"></view>
-				<color-picker bindchangeColor="pickColor" initColor="{{item.rgb}}" show="{{item.show}}"
-					data-color="scatterColors[{{index}}].rgb" />
-			</van-cell>
-		</van-col>
-	</van-row>
-	<van-field label="图例上边距" model:value="{{  scatterLegendPosTop }}" type="number" placeholder="请输入数字"
-		border="{{ true }}" />
-	<!-- <van-field label="图例下边距" model:value="{{  scatterLegendPosBottom }}" placeholder="请输入数字" border="{{ true }}" /> -->
-	<van-field label="图例左边距" model:value="{{  scatterLegendPosLeft }}" type="number" placeholder="请输入数字"
-		border="{{ true }}" />
-	<!-- <van-field label="图例右边距" model:value="{{  scatterLegendPosRight }}" placeholder="请输入数字" border="{{ true }}" /> -->
+		<van-cell title="字体大小">
+			<van-stepper model: value="{{ scatterFont }}" long-press="{{ false }}" min="10" max="30" integer="{{true}}"
+				bind:change="changeSingleItem" data-name="scatterFont" />
+		</van-cell>
+		<van-cell title="数值显示">
+			<van-switch model: checked="{{ scatterShowDigit }}" bind:change="changeSingleItem"
+				data-name="scatterShowDigit" />
+		</van-cell>
+		<van-cell title="连线显示">
+			<van-switch model: checked="{{ scatterShowLine }}" bind:change="changeSingleItem"
+				data-name="scatterShowLine" />
+		</van-cell>
+		<van-cell title="自动点大小">
+			<van-switch model: checked="{{ scatterIncrease }}" bind:change="changeSingleItem"
+				data-name="scatterIncrease" />
+		</van-cell>
+		<van-cell title="字体颜色">
+			<view style="background:{{scatterTextColor}}" class="color_picker" bindtap="toPick"
+				data-show='scatterTextColorPick'></view>
+			<color-picker bindchangeColor="pickColor" initColor="{{scatterTextColor}}" show="{{scatterTextColorPick}}"
+				data-color="scatterTextColor" />
+		</van-cell>
+	</van-cell-group>
+	<van-cell-group title="散点图颜色">
+		<van-cell wx:for="{{scatterColors}}" title="{{item.text}}">
+			<view style="background:{{item.rgb}}" class="color_picker" bindtap="toPick"
+				data-show="scatterColors[{{index}}].show">
+			</view>
+			<color-picker bindchangeColor="pickColor" initColor="{{item.rbg}}" show="{{item.show}}"
+				data-color="scatterColors[{{index}}].rgb" />
+		</van-cell>
+	</van-cell-group>
+	<van-cell-group title="图例设置">
+		<van-cell title="竖放图例">
+			<van-switch model:checked="{{ scatterPosVertical }}" bind:change="changeSingleItem"
+				data-name="scatterPosVertical" />
+		</van-cell>
+		<van-field label="图例上边距" model:value="{{  scatterLegendPosTop }}" type="number" placeholder="请输入数字"
+			border="{{ true }}" />
+		<van-field label="图例左边距" model:value="{{  scatterLegendPosLeft }}" type="number" placeholder="请输入数字"
+			border="{{ true }}" />
+	</van-cell-group>
+	<van-cell-group title="曲线回归">
+		<van-cell title="启用回归">
+			<van-switch model:checked="{{ scatterUseRegression }}" bind:change="changeSingleItem" data-name="scatterUseRegression" />
+		</van-cell>
+		<van-radio-group value="{{scatterIndexRegression}}" wx:if="{{ scatterUseRegression }}" bind:change="changeSingleItem"
+			data-name="scatterIndexRegression">
+			<van-cell-group>
+				<van-cell title="线性回归" clickable>
+					<van-radio slot="right-icon" name="0" />
+				</van-cell>
+				<van-cell title="指数回归" clickable>
+					<van-radio slot="right-icon" name="1" />
+				</van-cell>
+				<van-cell title="对数回归" clickable>
+					<van-radio slot="right-icon" name="2" />
+				</van-cell>
+				<van-cell title="多项式回归" clickable>
+					<van-radio slot="right-icon" name="3" />
+				</van-cell>
+			</van-cell-group>
+		</van-radio-group>
+	</van-cell-group>
 </view>
 <!-- </van-tabs> -->
 <text class="duck">\n </text>

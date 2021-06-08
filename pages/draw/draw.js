@@ -3,32 +3,32 @@
 import * as echarts from '../../ec-canvas/echarts';
 import ecStat from 'echarts-stat';
 echarts.registerTransform(ecStat.transform.regression);
-
-var inputData = [
-    ['pro', 'sb'],
-    ["2000-06-05", 116],
-    ["2000-06-06", 129],
-    ["2000-06-07", 135],
-    ["2000-06-08", 86],
-    ["2000-06-09", 73],
-    ["2000-06-10", 85],
-    ["2000-06-11", 73],
-    ["2000-06-12", 68],
-    ["2000-06-13", 92],
-    ["2000-06-14", 130],
-    ["2000-06-15", 245],
-    ["2000-06-16", 139],
-    ["2000-06-17", 115],
-    ["2000-06-18", 111],
-    ["2000-06-19", 309],
-    ["2000-06-20", 206],
-    ["2000-06-21", 137],
-    ["2000-06-22", 128],
-    ["2000-06-23", 85],
-    ["2000-06-24", 94],
-    ["2000-06-25", 71],
-    ["2000-06-26", 106],
-    ["2000-06-27", 84],
+var inputData=[];
+// var inputData = [
+//     ['pro', 'sb'],
+//     ["2000-06-05", 116],
+//     ["2000-06-06", 129],
+//     ["2000-06-07", 135],
+//     ["2000-06-08", 86],
+//     ["2000-06-09", 73],
+//     ["2000-06-10", 85],
+//     ["2000-06-11", 73],
+//     ["2000-06-12", 68],
+//     ["2000-06-13", 92],
+//     ["2000-06-14", 130],
+//     ["2000-06-15", 245],
+//     ["2000-06-16", 139],
+//     ["2000-06-17", 115],
+//     ["2000-06-18", 111],
+//     ["2000-06-19", 309],
+//     ["2000-06-20", 206],
+//     ["2000-06-21", 137],
+//     ["2000-06-22", 128],
+//     ["2000-06-23", 85],
+//     ["2000-06-24", 94],
+//     ["2000-06-25", 71],
+//     ["2000-06-26", 106],
+//     ["2000-06-27", 84],
     // ["2000-06-28", 93],
     // ["2000-06-29", 85],
     // ["2000-06-30", 73],
@@ -56,36 +56,38 @@ var inputData = [
     // ["2000-07-22", 57],
     // ["2000-07-23", 55],
     // ["2000-07-24", 60]
-];
+// ];
 
 
-var inputData = [
-    ['product', 'sb', 'lsp'],
-    ['sb1', 41.1, 86.5],
-    ['sb2', 30.4, 92.1],
-    ['sb3', 22, 182],
-    ['sb4', 75, 25],
-    ['sb5', 78, 25],
-    ['sb6', 33, 66],
-]; // 输入数据
-var inputData = [
-    ['product', 'sb', 'lsp'],
-    [78, 41.1, 86.5],
-    [52, 30.4, 92.1],
-    [85, 22, 182],
-    [86, 75, 25],
-    [42, 78, 25],
-    [36, 33, 66],
-]; // 输入数据
+// var inputData = [
+//     ['product', 'sb', 'lsp'],
+//     ['sb1', 41.1, 86.5],
+//     ['sb2', 30.4, 92.1],
+//     ['sb3', 22, 182],
+//     ['sb4', 75, 25],
+//     ['sb5', 78, 25],
+//     ['sb6', 33, 66],
+// ]; // 输入数据
+// var inputData = [
+//     ['product', 'sb', 'lsp'],
+//     [78, 41.1, 86.5],
+//     [52, 30.4, 92.1],
+//     [85, 22, 182],
+//     [86, 75, 25],
+//     [42, 78, 25],
+//     [36, 33, 66],
+// ]; // 输入数据
 var graph = require('./class');
-var xType = "string"; // 输入数据x轴类型
-var yType = "number"; // 输入数据y轴类型
-
+// var xType = "string"; // 输入数据x轴类型
+// var yType = "number"; // 输入数据y轴类型
+var xType; // 输入数据x轴类型
+var yType;
 var line = new graph.LineGraph("line");
 var bar = new graph.BarGraph("bar");
 var pie = new graph.PieGraph("pie");
 var scatter = new graph.ScatterGraph("scatter");
 
+var draftNum = 0;
 var graphName = "默认标题"; // 在图的最上方显示的标题
 var graphId = null; //图的id 是否应该存在内存中？
 var xName = "x";
@@ -126,6 +128,12 @@ function initLineChart(canvas, width, height, dpr) {
     return lineChart;
 }
 
+function getSplit(tempArr) {
+    return tempArr.split(" ").map(item => {
+        return JSON.parse(item);
+    });
+}
+
 /**
  * 设置折线图画图option
  * 
@@ -138,26 +146,13 @@ function setLineOption(lineChart, template) {
     lineChart.clear();
     var series = [];
     var option;
-    var areaStyle = template.areaStyle.split(" ").map(item => {
-        return JSON.parse(item);
-    });
-    var showArea = template.showArea.split(" ").map(item => {
-        return JSON.parse(item);
-    });
-    var showEmphasis = template.showEmphasis.split(" ").map(item => {
-        return JSON.parse(item);
-    });
-    var showMinMarkPoint = template.showMinMarkPoint.split(" ").map(item => {
-        return JSON.parse(item);
-    });
-    var showMaxMarkPoint = template.showMaxMarkPoint.split(" ").map(item => {
-        return JSON.parse(item);
-    });
-    var showAverageMarkLine = template.showAverageMarkLine.split(" ").map(item => {
-        return JSON.parse(item);
-    });
+    var areaStyle = template.areaStyle.split(" ");
+    var showArea = getSplit(template.showArea);
+    var showEmphasis = getSplit(template.showEmphasis);
+    var showMinMarkPoint = getSplit(template.showMinMarkPoint);
+    var showMaxMarkPoint = getSplit(template.showMaxMarkPoint);
+    var showAverageMarkLine = getSplit(template.showAverageMarkLine);
     var stack = template.stack.split(" ");
-
 
     for (var i = 1; i < inputData[0].length; i++) {
         var name = inputData[0][i];
@@ -178,7 +173,8 @@ function setLineOption(lineChart, template) {
             markLine: {
                 data: []
             },
-            stack: stack[i - 1]
+            stack: stack[i - 1],
+            color: template.color[i - 1]
         };
         if (showArea[i - 1]) {
             tempJson.areaStyle = {
@@ -366,18 +362,10 @@ function initBarChart(canvas, width, height, dpr) {
  */
 function setBarOption(barChart, template) {
     barChart.clear();
-    var showEmphasis = template.showEmphasis.split(" ").map(item => {
-        return JSON.parse(item);
-    });
-    var showMinMarkPoint = template.showMinMarkPoint.split(" ").map(item => {
-        return JSON.parse(item);
-    });
-    var showMaxMarkPoint = template.showMaxMarkPoint.split(" ").map(item => {
-        return JSON.parse(item);
-    });
-    var showAverageMarkLine = template.showAverageMarkLine.split(" ").map(item => {
-        return JSON.parse(item);
-    });
+    var showEmphasis = getSplit(template.showEmphasis);
+    var showMinMarkPoint = getSplit(template.showMinMarkPoint);
+    var showMaxMarkPoint = getSplit(template.showMaxMarkPoint);
+    var showAverageMarkLine = getSplit(template.showAverageMarkLine);
     var stack = template.stack.split(" ");
     var series = [];
     var option;
@@ -865,6 +853,18 @@ Page({
             name: "保存图到相册",
             value: 3,
         }],
+
+        showNewSheet: false,
+        newSheetOptions: [{
+                name: "创建新的图",
+                value: 0
+            },
+            {
+                name: "导入数据",
+                value: 1,
+            }
+        ],
+
         /**是否展示表格 */
         isHideTabel: "block",
         lineChart: {
@@ -962,6 +962,54 @@ Page({
         this.setData({
             showSaveSheet: true
         })
+    },
+
+    beginShowNewSheet() {
+        this.setData({
+            showNewSheet: true
+        })
+    },
+    onCloseNewSheet() {
+        this.setData({
+            showNewSheet: false
+        })
+    },
+    onSelectNewOption(event) {
+        if (event.detail.value == 0) {
+            wx.redirectTo({
+                url: '../model_select/model_select'
+            })
+        } else if (event.detail.value == 1) {
+            wx.chooseMessageFile({
+                count: 1,
+                type: 'file',
+                extension: ['xls', 'xlsx'],
+                success: res => {
+                    console.log("success");
+                    console.log(res);
+                    const path = res.tempFiles[0].path;
+                    wx.uploadFile({
+                        url: 'https://www.jaripon.xyz/data/readFile/' + wx.getStorageSync('uid'),
+                        filePath: path,
+                        name: 'file',
+                        
+                        success: res => {
+                            var data = JSON.parse(res.data);
+                            /**
+                             * TODO
+                             * data 为 dataset的对象，需要填到表格中
+                             */
+                            console.log(res);
+                            console.log(data);
+                        },
+                        fail: res => {
+                            console.log("falied")
+                            console.log(res);
+                        }
+                    })
+                }
+            })
+        }
     },
     onLoad() {
         const eventChannel = this.getOpenerEventChannel()

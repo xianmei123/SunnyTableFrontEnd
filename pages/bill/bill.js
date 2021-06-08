@@ -37,7 +37,6 @@ Page({
             result: ['衣服', '食物', '居住', '交通'],
             preResult: ['衣服', '食物', '居住', '交通']
         },
-        
         condition: {
             show: false,
             message1: 0,
@@ -78,20 +77,53 @@ Page({
             result: 1, //0表示收入，1表示支出
             preResult: 1
         },
-
         formatter(type, value) {
             if (type === 'year') {
                 return `${value}年`;
-            } 
+            }
             if (type === 'month') {
                 return `${value}月`;
             }
-            //console.log(value)
             return value;
-  
         },
+        showCostInput: true,
+        showDetailInput: true,
+        showVoiceInputMessage: "按住说话",
+        tip: "\ntip:按住说话时，会将输入转换为详细信息和金额两部分"
     },
 
+    showCostButton() {
+        this.setData({
+            showCostInput: !this.data.showCostInput
+        })
+    },
+    showDeatilButton(){
+        this.setData({
+            showDetailInput: !this.data.showDetailInput
+        })
+    },
+    touchStart() {
+        this.setData({
+            showVoiceInputMessage: "松开结束"
+        })
+        wx.showLoading({
+            title: '录音中'
+        });
+        const options = {
+            duration: 60000,
+            sampleRate: 44100,
+            numberOfChannels: 1,
+            encodeBitRate: 192000,
+            format: 'mp3',
+            // frameSize: 50
+        }
+        wx.getRecorderManager().start(options)
+    },
+    touchEnd() {
+        wx.hideLoading()
+		wx.getRecorderManager().stop()
+		console.log('结束录音')
+    },
     onChangeBillIO(event) {
         // console.log("event.detail");
         // console.log(event.detail);
@@ -494,6 +526,31 @@ Page({
             'newBill.show': true,
         });
     },
+    onLoad(){
 
-    
+        wx.getRecorderManager().onStop((res) => {
+			wx.hideLoading()
+			this.setData({
+				hasRecord: false,
+                showVoiceInputMessage: "按住说话"
+			})
+			var tempFilePath = res.tempFilePath;
+            wx.uploadFile({
+                url: 'https://www.jaripon.xyz/asr/result/' + wx.getStorageSync('uid'),
+                filePath: tempFilePath,
+                name: 'file',
+                success: res => {
+                    console.log(res);
+                    this.setData({
+                        "newBill.detail": res.data.detail,
+                        "newBill.cost": res.data.cost
+                    });
+                },
+                fail: res => {
+                    console.log("falied")
+                    console.log(res);
+                }
+            });
+		});
+    }
 });

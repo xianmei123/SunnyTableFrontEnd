@@ -2,6 +2,7 @@
 // 获取应用实例
 const app = getApp()
 var baseUrl = 'https://www.jaripon.xyz'
+console.log(typeof(a))
 Page({
 	data: {
 		motto: 'Hello World',
@@ -53,6 +54,9 @@ Page({
 		})
 	},
 	onLoad() {
+		wx.showShareMenu({
+		  withShareTicket: true,
+		})
 		if (wx.getUserProfile) {
 			this.setData({
 				canIUseGetUserProfile: true
@@ -94,4 +98,13 @@ Page({
 			hasUserInfo: true
 		})
 	},
+	onShareAppMessage(res){
+		if(res.from=='button'){
+
+		}
+		return {
+			title:'duck',
+			path:'/pages/storage/storage?uid=' + 5
+		}
+	}	
 })

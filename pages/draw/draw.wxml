@@ -57,9 +57,7 @@
         </block>
     </view>
 </view>
-<text>\n</text>
-<button type="primary" size="large" bindtap="hideTabel">隐藏数据表格</button>
-<text>\n</text>
+
 <view style="display:{{isHideTabel}}">
     <view>
         <van-field value="{{graphName}}" placeholder="输入图表名称" border="{{ true }}" bind:change="setChartName" />
@@ -79,11 +77,11 @@
         <!-- 表格 -->
         <scroll-view class="scroll-view_H" scroll-x="true" style="width: 100%">
             <view class="text-item">
-                <van-field value="数据组" disabled bindtap="changeCurrentX" />
+                <van-field value="数据组" disabled bindtap="changeCurrentX" style="boarder:solid!important"/>
             </view>
             <block wx:for="{{iterator2}}" wx:for-index="i">
                 <view class="text-item">
-                    <van-field value="{{ groupName[i] }}" placeholder="数据组{{ i + 1 }}" bind:change="setGroupName"
+                    <van-field value="{{ groupName[i] }}" placeholder="数据组{{ i + 1 }}"  bind:change="setGroupName"
                         data-a="{{i}}" bindtap="changeCurrentGroupName" />
                 </view>
             </block>
@@ -128,9 +126,11 @@
 <van-row class="bottom_box">
     <van-col span="6" style="text-align:center; padding-top: 2px">
         <view style="padding-top:4px">
-            <text class="icon-new {{screenDirection == 0 ? 'icon' : 'icon_row'}}"></text>
+            <text class="icon-new {{screenDirection == 0 ? 'icon' : 'icon_row'}}" bindtap="beginShowNewSheet"></text>
         </view>
         <view style="font-size: 12px;margin-top: -6px; color:balck">创建</view>
+        <van-action-sheet show="{{ showNewSheet }}" actions="{{ newSheetOptions }}" cancel-text="取消"
+            bind:close="onCloseNewSheet" bind:select="onSelectNewOption" bind:cancel="onCloseNewSheet" />
     </van-col>
     <van-col span="6" style="text-align:center;padding-top: 2px;font-weight:normal">
         <view style="padding-top:4px">

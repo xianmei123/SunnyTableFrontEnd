@@ -4,6 +4,7 @@ import * as echarts from '../../ec-canvas/echarts';
 var graph = require('../draw/class');
 var bar = new graph.BarGraph("bar");
 var pie = new graph.PieGraph("pie");
+
 var inputData = [
     ['ppp', 'qqq'],
     ['1月', 20],
@@ -95,8 +96,9 @@ function clickBar(param) {
 }
 
 /**
- * 
- * 得到一个柱子对应的这个月的数据
+ * TODO
+ * 得到一个柱子对应的这个月的数据，并对这个月的账单信息进行分类汇总，
+ * 并处理为data类型的数据，便于画饼状图
  * @param {int} index 此index代表点击的第几个柱子，柱子从0开始 
  * @returns data是一个数组，类似[["a", 1], ["b", 2], ["c", 3]]
  */
@@ -160,11 +162,13 @@ function setPieOption() {
 }
 
 /**
- * 此方法应该可以在点击一类花费之后，显示此类花费在此月中的具体花费条目。
+ * TODO
+ * 此方法应该可以在点击一类花费之后，显示此类花费在此月中的全部账单信息，方便进行账单的列表展示。
+ * 使用此方法来展示条目。
  * @param {JSON} param 点击之后传进来的参数 
  */
 function clickPie(param) {
-    
+    console.log(param);
 }
 
 function convert(tempData, index) {

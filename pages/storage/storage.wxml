@@ -1,63 +1,56 @@
 <!-- 提示框 -->
 <mp-dialog title="{{popTitle}}" show="{{dialogShow}}" bindbuttontap="tapDialogButton" buttons="{{dialogButton}}">
   <view>
-    <van-field
-      model:value="{{ newDir }}"
-      placeholder="请输入文件名"
-      border="{{ false }}"
-      bind:change="onChange"/>
+    <van-field model:value="{{ newDir }}" placeholder="请输入文件名" border="{{ false }}" bind:change="onChange" />
   </view>
 </mp-dialog>
-  <!-- 顶部功能栏目 -->
+<!-- 顶部功能栏目 -->
 <view class="top_box">
   <!-- 面包屑栏 -->
   <van-row>
-    <van-col  wx:for="{{dirStack}}" >
-      <text wx:if="{{index!=0}}"  
-       bindtap="crumbChange" data-index="{{index}}" decode="{{true}}" class="crumb_normal">&nbsp; > </text>
-       <text wx:if="{{index!=0}}" class="crumb_normal"
-       bindtap="crumbChange" data-index="{{index}}" decode="{{true}}" 
-       class="crumb_{{index==dirStack.length-1?'active':'normal'}}">{{item.name}}</text>
-      <text wx:else class="crumb_{{index==dirStack.length-1?'active':'normal'}}" 
-      decode="{{true}}"bindtap="crumbChange" data-index="{{index}}">&nbsp; {{item.name}} </text>
+    <van-col wx:for="{{dirStack}}">
+      <text wx:if="{{index!=0}}" bindtap="crumbChange" data-index="{{index}}" decode="{{true}}"
+        class="crumb_normal">&nbsp; > </text>
+      <text wx:if="{{index!=0}}" class="crumb_normal" bindtap="crumbChange" data-index="{{index}}" decode="{{true}}"
+        class="crumb_{{index==dirStack.length-1?'active':'normal'}}">{{item.name}}</text>
+      <text wx:else class="crumb_{{index==dirStack.length-1?'active':'normal'}}" decode="{{true}}" bindtap="crumbChange"
+        data-index="{{index}}">&nbsp; {{item.name}} </text>
     </van-col>
   </van-row>
   <!-- 添加排序搜索 -->
-  <van-row >
-  <van-col span = "2"  offset="1">
-    <van-icon name="plus"  size="30" bindtap="showDialog" data-index="{{0}}"/>
-  <!-- <mp-icon  icon="add" color="black" size="{{25}}" style="bottom:50rpx!important"
-  bindtap="showDialog" data-index="{{0}}"></mp-icon> -->
- </van-col>
-  <van-col span="16" offset="1">
-        <van-dropdown-menu >
-          <van-dropdown-item model:value="{{ dropValue }}" options="{{ dropOption }}" 
-          bind:change="sortObj"/>
-        </van-dropdown-menu >
-  </van-col>
-<van-col span = "2" offset="1" >
-  <van-icon name="replay"  size="30" bindtap="flush" />
-  <!-- <mp-icon  icon="refresh" color="black" size="{{25}}" bindtap="flush" style="bottom:10rpx!important"></mp-icon> -->
- </van-col>
-</van-row>
+  <van-row>
+    <van-col span="2" offset="1">
+      <van-icon name="plus" size="30" bindtap="showDialog" data-index="{{0}}" />
+    </van-col>
+    <van-col span="16" offset="1">
+      <van-dropdown-menu>
+        <van-dropdown-item model:value="{{ dropValue }}" options="{{ dropOption }}" bind:change="sortObj" />
+      </van-dropdown-menu>
+    </van-col>
+    <van-col span="2" offset="1">
+      <van-icon name="replay" size="30" bindtap="flush" />
+    </van-col>
+  </van-row>
 </view>
 
 <text>\n\n\n\n</text>
 <!-- 当前文件夹内容 -->
 <view>
-<van-cell-group wx:for="{{fileList}}">
-  <van-cell wx:if="{{item.type == 4}}" title="{{item.name}}" label="{{item.createTime}}" bindlongpress="popUp"
-  bindtap="openDir" data-item="{{item}}" is-link />
-  <van-cell wx:else title="{{item.name}}" label="{{item.createTime}}" clickable="true" bindlongpress="popUp" bindtap="openObj"
-  data-item="{{item}}"/>
-</van-cell-group>
+  <van-cell-group wx:for="{{fileList}}">
+    <van-cell wx:if="{{item.type == 4}}" title="{{item.name}}" label="{{item.createTime}}" bindlongpress="popUp"
+      bindtap="openDir" data-item="{{item}}" is-link  custom-class="file_cell"/>
+    <van-cell wx:else title="{{item.name}}" label="{{item.createTime}}" clickable="true" bindlongpress="popUp"
+      bindtap="openObj" data-item="{{item}}" custom-class="file_cell"/>
+  </van-cell-group>
 </view>
 <!-- 弹出框 -->
-<van-popup show="{{ popShow }}"  position="bottom"   custom-style="height: 30%;"
-  bind:close="popDown">
-  <van-cell  title="重命名"  clickable="true" bindtap="showDialog" data-index="{{1}}"/>
-  <van-cell  title="删除" clickable="true" bindtap="delObj"  />
-  <!-- <van-cell  title="复制"  clickable="true" bindtap="copyObj"/> -->
-  <van-cell  title="移动"  clickable="true" bindtap="moveObj"/>
+<van-popup show="{{ popShow }}" position="bottom" custom-style="height:400rpx;" bind:close="popDown">
+  <view class="item" bindtap="showDialog" data-index="{{1}}" style="height:{{activeObj.type==3?'100rpx':'130rpx'}}">
+    重命名
+  </view>
+  <view class="item" bindtap="delObj" style="height:{{activeObj.type==3?'100rpx':'130rpx'}}">删除</view>
+  <view class="item" bindtap="moveObj" style="height:{{activeObj.type==3?'100rpx':'130rpx'}}"> 移动</view>
+  <view class="item" wx:if="{{activeObj.type == 3}}">
+    <button open-type="share" class="button" data-id= "{{activeObj.id}}">分享</button>
+  </view>
 </van-popup>
-

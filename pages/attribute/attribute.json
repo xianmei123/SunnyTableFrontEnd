@@ -8,6 +8,8 @@
     "van-stepper": "@vant/weapp/stepper/index",
     "van-switch": "@vant/weapp/switch/index",
     "color-picker":"mini-color-picker/color-picker",
-    "mp-tabs": "@miniprogram-component-plus/tabs"
+    "mp-tabs": "@miniprogram-component-plus/tabs",
+    "van-radio": "@vant/weapp/radio/index",
+    "van-radio-group": "@vant/weapp/radio-group/index"
   }
 }

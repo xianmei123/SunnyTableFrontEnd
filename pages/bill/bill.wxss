@@ -2,53 +2,51 @@
 @import '../../miniprogram_npm/@vant/weapp/picker/index.wxss';
 
 .value-class {
-  flex: none !important;
+	flex: none !important;
 }
 
 .items {
-  width: 500rpx;
-  height: 456rpx;
-  background-color: lightblue;
-  padding: 50rpx;
+	width: 500rpx;
+	height: 456rpx;
+	background-color: lightblue;
+	padding: 50rpx;
 }
 
 .showText {
-  width:100% !important;
+	width: 100% !important;
 }
 
-.box1{
-  background-color: #fff;
-  padding: 5px;
-  height:950rpx;
-  position:relative;
-  overflow: scroll;
-  top:10rpx;
-  border-radius: 8px;
+.box1 {
+	background-color: #fff;
+	padding: 5px;
+	height: 950rpx;
+	position: relative;
+	overflow: scroll;
+	top: 10rpx;
+	border-radius: 8px;
 
 }
-.icon {
-	display: inline-block;
-	width: 48rpx;
-	height: 48rpx;
+
+.button {
+	width: 50% !important;
+	border-radius: 8px;
 }
 
-.button1 {
-  width:100% !important;
-  
+.s_view {
+	bottom: 0rpx;
+	position: fixed;
+	width: 100%;
 }
 
+.text {
+	font-size: 15;
+	padding-left: 16px !important;
+	padding-top: 10px !important;
+	padding-bottom: 10px !important;
+	padding-right: 16px !important;
+}
 
-.saveBtn { 
-  width: 50% !important; 
-  float:left;
-  font-weight: 100;
- }
- .submitBtn { 
-  width: 50% !important;
-  float:right;
- }
-.s_view{
-  bottom: 0rpx; 
-  position: fixed;
-  width: 100%;
+.input_button{
+	border: black !important ;
+	border-radius: 5px !important;
 }
