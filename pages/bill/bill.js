@@ -296,12 +296,13 @@ Page({
         var url = "https://www.jaripon.xyz/bill/add";
         var data = {};
         data["id"] = billId;
-        data["userId"] = null;
+        data["userId"] = wx.getStorageSync('uid');;
         data["detail"] = this.data.newBill["detail"];
         data["time"] = this.data.newBill["date"]["date"];
         data["type"] = this.data.newBill["checkbox"]["list"][this.data.newBill["checkbox"]["result"]];
         data["income"] = this.data.newBill["list"] === "收入" ? true : false; 
         data["cost"] = this.data.newBill["io"];
+        console.log(data);
         wx.request({
             url: url,
             data: data,
