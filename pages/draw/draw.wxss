@@ -25,7 +25,7 @@
 .text-item {
 	display: inline-block;
 	width: 300rpx;
-	height: 100rpx
+	height: 100rpx;
 }
 
 .bg-a {
