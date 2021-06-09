@@ -338,11 +338,11 @@ Page({
             'newBill.io' : this.data.newBill.messageIO,
             'newBill.detail' : this.data.newBill.messageDetail
         });
-        console.log(this.data.newBill.detail);
-        console.log(this.data.newBill.io);
-        console.log(this.data.newBill.date.str);
-        console.log(this.data.newBill.result);
-        console.log(this.data.newBill.checkbox.result);
+        // console.log(this.data.newBill.detail);
+        // console.log(this.data.newBill.io);
+        // console.log(this.data.newBill.date.str);
+        // console.log(this.data.newBill.result);
+        // console.log(this.data.newBill.checkbox.result);
         this.saveBill();
     },
 
