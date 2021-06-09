@@ -579,7 +579,6 @@ Page({
             billData: data
         })
         console.log(billId);
-        this.analyse();
     },
 
     onChangeCheckBox(event) {
