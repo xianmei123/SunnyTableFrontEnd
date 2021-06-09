@@ -174,10 +174,10 @@
             </van-col>
         </van-row> -->
         <van-field label="用途/来源" value="{{ newBill.detail }}" placeholder="请输入详细信息" clickable autosize
-            input-align="right" border="{{ false }}" bind:change="onChangeInput1" style="display: inline"/>
+            input-align="right" border="{{ false }}" bind:change="onChangeInputBillDetail" style="display: inline"/>
 
          <van-field label="支出/收入" value="{{ newBill.cost }}" placeholder="请输入金额" autosize clickable input-align="right"
-                border="{{ false }}" bind:change="onChangeInput2"/>
+                border="{{ false }}" bind:change="onChangeInputBillIO"/>
         <van-cell center title="类别选择" title-width="150rpx" value="{{ newBill.checkbox.list[newBill.checkbox.result] }}"
             is-link bind:click="showPopupBillCheckBox" />
         <van-radio-group value="{{ newBill.result }}" bind:change="onChangeBillIO">
