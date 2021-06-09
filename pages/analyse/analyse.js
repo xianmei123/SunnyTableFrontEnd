@@ -91,6 +91,7 @@ function setBarOption() {
 function clickBar(param) {
     //两种做法
     // 暂时作为更新pieChart
+    console.log(param);
     pie.setInpuData(param.name, getMonthData(param.index));
     pie.chart.setOption(setPieOption());
 }

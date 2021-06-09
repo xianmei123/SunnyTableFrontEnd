@@ -4,60 +4,60 @@ import * as echarts from '../../ec-canvas/echarts';
 import ecStat from 'echarts-stat';
 echarts.registerTransform(ecStat.transform.regression);
 
-
-var inputData = [
-    ['pro', 'sb'],
-    ["2000-06-05", 116],
-    ["2000-06-06", 129],
-    ["2000-06-07", 135],
-    ["2000-06-08", 86],
-    ["2000-06-09", 73],
-    ["2000-06-10", 85],
-    ["2000-06-11", 73],
-    ["2000-06-12", 68],
-    ["2000-06-13", 92],
-    ["2000-06-14", 130],
-    ["2000-06-15", 245],
-    ["2000-06-16", 139],
-    ["2000-06-17", 115],
-    ["2000-06-18", 111],
-    ["2000-06-19", 309],
-    ["2000-06-20", 206],
-    ["2000-06-21", 137],
-    ["2000-06-22", 128],
-    ["2000-06-23", 85],
-    ["2000-06-24", 94],
-    ["2000-06-25", 71],
-    ["2000-06-26", 106],
-    ["2000-06-27", 84],
-    ["2000-06-28", 93],
-    ["2000-06-29", 85],
-    ["2000-06-30", 73],
-    ["2000-07-01", 83],
-    ["2000-07-02", 125],
-    ["2000-07-03", 107],
-    ["2000-07-04", 82],
-    ["2000-07-05", 44],
-    ["2000-07-06", 72],
-    ["2000-07-07", 106],
-    ["2000-07-08", 107],
-    ["2000-07-09", 66],
-    ["2000-07-10", 91],
-    ["2000-07-11", 92],
-    ["2000-07-12", 113],
-    ["2000-07-13", 107],
-    ["2000-07-14", 131],
-    ["2000-07-15", 111],
-    ["2000-07-16", 64],
-    ["2000-07-17", 69],
-    ["2000-07-18", 88],
-    ["2000-07-19", 77],
-    ["2000-07-20", 83],
-    ["2000-07-21", 111],
-    ["2000-07-22", 57],
-    ["2000-07-23", 55],
-    ["2000-07-24", 60]
-];
+const baseUrl = 'https://www.jaripon.xyz';
+// var inputData = [
+//     ['pro', 'sb'],
+//     ["2000-06-05", 116],
+//     ["2000-06-06", 129],
+//     ["2000-06-07", 135],
+//     ["2000-06-08", 86],
+//     ["2000-06-09", 73],
+//     ["2000-06-10", 85],
+//     ["2000-06-11", 73],
+//     ["2000-06-12", 68],
+//     ["2000-06-13", 92],
+//     ["2000-06-14", 130],
+//     ["2000-06-15", 245],
+//     ["2000-06-16", 139],
+//     ["2000-06-17", 115],
+//     ["2000-06-18", 111],
+//     ["2000-06-19", 309],
+//     ["2000-06-20", 206],
+//     ["2000-06-21", 137],
+//     ["2000-06-22", 128],
+//     ["2000-06-23", 85],
+//     ["2000-06-24", 94],
+//     ["2000-06-25", 71],
+//     ["2000-06-26", 106],
+//     ["2000-06-27", 84],
+//     ["2000-06-28", 93],
+//     ["2000-06-29", 85],
+//     ["2000-06-30", 73],
+//     ["2000-07-01", 83],
+//     ["2000-07-02", 125],
+//     ["2000-07-03", 107],
+//     ["2000-07-04", 82],
+//     ["2000-07-05", 44],
+//     ["2000-07-06", 72],
+//     ["2000-07-07", 106],
+//     ["2000-07-08", 107],
+//     ["2000-07-09", 66],
+//     ["2000-07-10", 91],
+//     ["2000-07-11", 92],
+//     ["2000-07-12", 113],
+//     ["2000-07-13", 107],
+//     ["2000-07-14", 131],
+//     ["2000-07-15", 111],
+//     ["2000-07-16", 64],
+//     ["2000-07-17", 69],
+//     ["2000-07-18", 88],
+//     ["2000-07-19", 77],
+//     ["2000-07-20", 83],
+//     ["2000-07-21", 111],
+//     ["2000-07-22", 57],
+//     ["2000-07-23", 55],
+//     ["2000-07-24", 60]
+// ];
 
 
 // var inputData = [
@@ -78,11 +78,12 @@ var inputData = [
 //     [42, 78, 25],
 //     [36, 33, 66],
 // ]; // 输入数据
+var inputData = [];
 var graph = require('./class');
-var xType = "string"; // 输入数据x轴类型
-var yType = "number"; // 输入数据y轴类型
-// var xType; // 输入数据x轴类型
-// var yType;
+// var xType = "string"; // 输入数据x轴类型
+// var yType = "number"; // 输入数据y轴类型
+var xType; // 输入数据x轴类型
+var yType;
 var line = new graph.LineGraph("line");
 var bar = new graph.BarGraph("bar");
 var pie = new graph.PieGraph("pie");
@@ -103,6 +104,14 @@ var typeToIndex = new Map([
 
 var indexToSymbol = ['circle', 'rect', 'roundRect', 'triangle', 'diamond', 'pin', 'arrow', 'none']
 
+var templates = {
+    "lineTemplates": [],
+    "barTemplates": [],
+    "pieTemplates": [],
+    "scatterTemplates": [],
+};
+
+var tempIdToTemplate = new Map();
 
 /**
  * 初始化折线图
@@ -298,7 +307,7 @@ function setLineOption(lineChart, template) {
                 option.visualMap.min = lineChart.getModel().getComponent('xAxis', 0).axis.scale._extent[0];
                 option.visualMap.max = lineChart.getModel().getComponent('xAxis', 0).axis.scale._extent[1];
             }
-            option.visualMap.dimension =  0
+            option.visualMap.dimension = 0
         }
         if (template.showYGradient) {
             if (yType === "string") {
@@ -309,7 +318,6 @@ function setLineOption(lineChart, template) {
                 option.visualMap.max = lineChart.getModel().getComponent('yAxis', 0).axis.scale._extent[1];
             }
         }
-        console.log(option);
         lineChart.setOption(option);
     }
     if (template.showDigit) {
@@ -327,9 +335,6 @@ function setLineOption(lineChart, template) {
             },
         });
     }
-    console.log(lineChart);
-    console.log(option);
-    console.log(template);
     return lineChart;
 }
 
@@ -413,7 +418,7 @@ function setBarOption(barChart, template) {
             });
         }
         if (showAverageMarkLine[i - 1]) {
-            tempJson.data.push({
+            tempJson.markLine.data.push({
                 type: 'average'
             });
         }
@@ -765,7 +770,7 @@ function setScatterOption(scatterChart, template) {
     setToolBox(option);
     setLegendOption(option, template.legendPos);
     scatterChart.setOption(option);
-    
+
     return scatterChart;
 }
 
@@ -891,6 +896,25 @@ Page({
         region: [0, 0],
         pieChartNo: 0
     },
+    changeChart(event) {
+        var value = event.detail;
+        // 更换图的时候，更新此图模板的数据
+        var newOption2 = [];
+        for (var template of templates[value + 'Templates']) {
+            newOption2.push({
+                text: template.name,
+                value: template.id
+            });
+        }
+        this.setData({
+            option2: newOption2,
+            value2: newOption2[0].value
+        });
+    },
+    changeTemplate(event) {
+        console.log(tempIdToTemplate.get(event.deatil));
+        updateTemplate(typeToIndex.get(this.data.value1), tempIdToTemplate.get(event.deatil));
+    },
     actionSheetTap() {
         this.setData({
             actionSheetHidden: !this.data.actionSheetHidden
@@ -984,7 +1008,6 @@ Page({
                         url: 'https://www.jaripon.xyz/data/readFile/' + wx.getStorageSync('uid'),
                         filePath: path,
                         name: 'file',
-                        
                         success: res => {
                             var data = JSON.parse(res.data);
                             /**
@@ -1003,7 +1026,32 @@ Page({
             })
         }
     },
-    onLoad() {
+    async onLoad() {
+        var hepler = require('../storage/helper');
+        var types = ["barTemplates", "lineTemplates", "pieTemplates", "scatterTemplates"];
+        var urls = ['/template/barchart/open/', '/template/linechart/open/', '/template/fanchart/open/', '/template/scatterplot/open/']
+        var res = await hepler.trans(baseUrl + '/template/chart/display/' + wx.getStorageSync('uid') + '/' + 10);
+        for (var i of res.data) {
+            var url = baseUrl + urls[i.type - 1] + i.fid;
+            var template = await hepler.trans(url);
+            templates[types[i.type - 1]].push(convertFromBackTemplate(template.data, types[i.type - 1].split("Template")[0]));
+            tempIdToTemplate.set(i.fid, template.data);
+        }
+        line.template = templates["lineTemplates"][0];
+        bar.template = templates["barTemplates"][0];
+        pie.template = templates["pieTemplates"][0];
+        scatter.template = templates["scatterTemplates"][0];
+        var newOption2 = [];
+        for (var template of templates['lineTemplates']) {
+            newOption2.push({
+                text: template.name,
+                value: template.id
+            });
+        }
+        this.setData({
+            option2: newOption2,
+            value2: newOption2[0].value
+        });
         const eventChannel = this.getOpenerEventChannel()
         if (eventChannel) {
             eventChannel.on("openData", res => {
@@ -1620,6 +1668,12 @@ Page({
         xType = undefined;
         yType = undefined;
         pie.pieData = null;
+        templates = {
+            "lineTemplates": [],
+            "barTemplates": [],
+            "pieTemplates": [],
+            "scatterTemplates": [],
+        };
     },
 });
 
@@ -1796,12 +1850,15 @@ function saveTemplate(template, type, name) {
         method: "POST",
         dataType: "json",
         success: function (res) {
+            templates[type + "Templates"].push(template);
+            tempIdToTemplate.set(res.data, template);
             console.log(res);
             wx.showToast({
                 title: '保存成功',
             });
         }
     });
+
 }
 
 /**
