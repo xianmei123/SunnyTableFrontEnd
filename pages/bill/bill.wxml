@@ -87,7 +87,18 @@
     </van-checkbox-group>
 </van-popup>
 <!-- 账单数据显示 -->
-<view class="box1">账单数据（可以用滑动单元格来做）
+<view class="box1">账单数据 
+    <block wx:for="{{ billData }}" wx:for-item="billItem">
+        <van-cell-group>
+        <van-cell value="{{billItem.time}}" icon="{{billItem.income ? plus : minus}}" is-link>
+            <view slot="title">
+                <view class="van-cell-text">{{billItem.detail + " "  +billItem.type}}</view>
+                <van-tag>{{billItem.cost}}</van-tag>
+            </view>
+        </van-cell>
+    </van-cell-group>
+    </block>
+    <van-button round type="info" bindtap="queryBillByTime">更新账单数据</van-button>
 </view>
 <!-- 新建账单类别选择的弹出层 -->
 <van-popup show="{{ newBill.checkbox.show }}" position="center" custom-style="width:90%"
@@ -133,7 +144,7 @@
 <!-- 新建账单的弹出层 -->
 <van-popup show="{{ newBill.show }}" position="center" custom-style="width: 90%" bind:close="onCancelBill">
     <view class="van-picker__toolbar toolbar-class">
-    <view class="van-picker__cancel" hover-class="van-picker__cancel--hover" hover-stay-time="70" data-type="cancel"
+        <view class="van-picker__cancel" hover-class="van-picker__cancel--hover" hover-stay-time="70" data-type="cancel"
             bindtap="onCancelBill">
             {{ "取消" }}
         </view>
@@ -174,10 +185,10 @@
             </van-col>
         </van-row> -->
         <van-field label="用途/来源" value="{{ newBill.detail }}" placeholder="请输入详细信息" clickable autosize
-            input-align="right" border="{{ false }}" bind:change="onChangeInputBillDetail" style="display: inline"/>
+            input-align="right" border="{{ false }}" bind:change="onChangeInputBillDetail" style="display: inline" />
 
-         <van-field label="支出/收入" value="{{ newBill.cost }}" placeholder="请输入金额" autosize clickable input-align="right"
-                border="{{ false }}" bind:change="onChangeInputBillIO"/>
+        <van-field label="支出/收入" value="{{ newBill.cost }}" placeholder="请输入金额" autosize clickable input-align="right"
+            border="{{ false }}" bind:change="onChangeInputBillIO" />
         <van-cell center title="类别选择" title-width="150rpx" value="{{ newBill.checkbox.list[newBill.checkbox.result] }}"
             is-link bind:click="showPopupBillCheckBox" />
         <van-radio-group value="{{ newBill.result }}" bind:change="onChangeBillIO">
@@ -193,8 +204,9 @@
     </van-cell-group>
     <!-- <button class="button1" bindtap="onConfirmBill">确定</button>
     <button class="button1" bindtap="onCancelBill">取消</button> -->
-    <text >\n</text>
-    <button class="button" type="primary" bindtouchstart='touchStart' bindtouchend='touchEnd'>{{showVoiceInputMessage}}</button>
+    <text>\n</text>
+    <button class="button" type="primary" bindtouchstart='touchStart'
+        bindtouchend='touchEnd'>{{showVoiceInputMessage}}</button>
     <view style="text-align: center;font-size: 10px;margin-top: 10px">{{tip}}</view>
 </van-popup>
 <!-- 底部按钮 -->
