@@ -1,0 +1,18 @@
+<scroll-view class="scroll-view_H" scroll-x scroll-with-animation style="width: 100%;height:1600rpx" bindscroll="getSelectItem">
+  <block wx:for="{{pics}}"  wx:key="unique" wx:for-index="id" wx:for-item="item">
+    <view class="scroll_item {{item.selected ? 'selected' : ''}}" data-index='{{item.index}}' bindtap='selectProItem'>
+    <view class='proImg'><image src="{{item.url}}" class="slide-image"  mode="widthFix"/></view>
+      <view class='detailBox'>
+          <view class='proTitle'>{{item.title}}</view>
+          <!-- <view class='proDec'>{{item.proDec}}</view>
+          <view class='proPrice'>￥{{item.proPrice}}</view>
+          <navigator class='detailLink'  url="../detail/detail?id={{item.id}}">查看详情 ></navigator> -->
+      </view>
+    </view>
+  </block>
+ 
+</scroll-view>
+
+<button bindtap="goIndex" style="margin-top:30rpx"  type="primary">进入小程序</button>
+
+<view style="text-align: center;font-size: 10px;">{{tip}}</view>

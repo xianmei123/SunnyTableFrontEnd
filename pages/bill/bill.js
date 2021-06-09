@@ -338,6 +338,11 @@ Page({
             'newBill.io' : this.data.newBill.messageIO,
             'newBill.detail' : this.data.newBill.messageDetail
         });
+        // console.log(this.data.newBill.detail);
+        // console.log(this.data.newBill.io);
+        // console.log(this.data.newBill.date.str);
+        // console.log(this.data.newBill.result);
+        // console.log(this.data.newBill.checkbox.result);
         this.saveBill();
     },
 
@@ -509,6 +514,7 @@ Page({
         this.setData({
             'newBill.messageDetail': event.detail
         });
+        //console.log(this.data.newBill.messageDetail);
     },
 
     onChangeInputBillIO(event) {
@@ -517,6 +523,7 @@ Page({
         this.setData({
             'newBill.messageIO': event.detail
         });
+        //console.log(this.data.newBill.messageIO);
     },
 
     queryData(event) {
