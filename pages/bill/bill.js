@@ -297,11 +297,11 @@ Page({
         var data = {};
         data["id"] = billId;
         data["userId"] = wx.getStorageSync('uid');;
-        data["detail"] = this.data.newBill["detail"];
+        data["detail"] = this.data.condition["message1"];
         data["time"] = this.data.newBill["date"]["date"];
         data["type"] = this.data.newBill["checkbox"]["list"][this.data.newBill["checkbox"]["result"]];
-        data["income"] = this.data.newBill["list"] === "收入" ? true : false; 
-        data["cost"] = this.data.newBill["io"];
+        data["income"] = this.data.newBill["result"] === 0 ? true : false; 
+        data["cost"] = this.data.condition["message2"];
         console.log(data);
         wx.request({
             url: url,
@@ -360,8 +360,9 @@ Page({
     },
 
     goAnalyse() {
+        var analyseData = null;
         wx.navigateTo({
-            url: '../analyse/analyse'
+            url: '../analyse/analyse?analyseData=' + analyseData
         });
     },
 
