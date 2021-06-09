@@ -58,7 +58,7 @@
 				data-show="lineColors[{{index}}].show">
 			</view>
 			<view>aa {{item.text}} </view>
-			<color-picker bindchangeColor="pickColor" initColor="{{item.rbg}}" show="{{item.show}}"
+			<color-picker bindchangeColor="pickColor" initColor="{{item.rgb}}" show="{{item.show}}"
 				data-color="lineColors[{{index}}].rgb" />
 		</van-cell>
 	</van-cell-group>
@@ -75,7 +75,7 @@
 		<!-- <van-field label="图例右边距" model:value="{{  lineLegendPosRight }}" placeholder="请输入数字" border="{{ true }}" /> -->
 	</van-cell-group>
 	<van-cell-group title="折线聚焦">
-		<van-cell title="折线{{index}}聚焦">
+		<van-cell wx:for="{{lineShowEmphasis}}" title="折线{{index}}聚焦">
 			<van-switch model:checked="{{ lineShowEmphasis[index] }}" bind:change="changeSingleItem"
 				data-name="lineShowEmphasis[{{index}}]" />
 		</van-cell>
@@ -169,7 +169,7 @@
 			<view style="background:{{item.rgb}}" class="color_picker" bindtap="toPick"
 				data-show="lineColors[{{index}}].show">
 			</view>
-			<color-picker bindchangeColor="pickColor" initColor="{{item.rbg}}" show="{{item.show}}"
+			<color-picker bindchangeColor="pickColor" initColor="{{item.rgb}}" show="{{item.show}}"
 				data-color="lineColors[{{index}}].rgb" />
 		</van-cell>
 	</van-cell-group>
@@ -273,7 +273,7 @@
 			<view style="background:{{item.rgb}}" class="color_picker" bindtap="toPick"
 				data-show="pieColors[{{index}}].show">
 			</view>
-			<color-picker bindchangeColor="pickColor" initColor="{{item.rbg}}" show="{{item.show}}"
+			<color-picker bindchangeColor="pickColor" initColor="{{item.rgb}}" show="{{item.show}}"
 				data-color="pieColors[{{index}}].rgb" />
 		</van-cell>
 	</van-cell-group>
@@ -353,7 +353,7 @@
 			<view style="background:{{item.rgb}}" class="color_picker" bindtap="toPick"
 				data-show="scatterColors[{{index}}].show">
 			</view>
-			<color-picker bindchangeColor="pickColor" initColor="{{item.rbg}}" show="{{item.show}}"
+			<color-picker bindchangeColor="pickColor" initColor="{{item.rgb}}" show="{{item.show}}"
 				data-color="scatterColors[{{index}}].rgb" />
 		</van-cell>
 	</van-cell-group>

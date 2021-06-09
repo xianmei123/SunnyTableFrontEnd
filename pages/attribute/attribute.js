@@ -76,6 +76,7 @@ Page({
 		var [lineLegendPosTop, lineLegendPosBottom, lineLegendPosLeft, lineLegendPosRight, linePosVertical] = legendPos
 		var lineAreaStyle = this.transArrColor(template, '区域颜色')
 		console.log('线色',lineColors)
+		console.log(template)
 		this.setData({
 			lineRaiuds: template.radius,
 			lineShowDigit: template.showDigit,
@@ -102,7 +103,8 @@ Page({
 			lineShowGradient: template.showGradient,
 			lineShowXGradient: template.showXGradient,
 			lineShowYGradient: template.showYGradient,
-			lineStack: this.transArray(template.stack)
+			lineStack: [0,0]
+			// lineStack: this.transArray(template.stack)
 		})
 		console.log('colors', this.data.lineTextColor, this.data.lineColors)
 		console.log(this.data.lineColors)
@@ -148,7 +150,9 @@ Page({
 	},
 	transArray(arr) {
 		return arr.split(" ").map(item => {
-			return JSON.parse(item)
+			if(item == 'lsp') return null;
+			else 
+				return JSON.parse(item)
 		})
 	},
 	wrapArrToDrop(arr) {
@@ -169,7 +173,7 @@ Page({
 		console.log(lengendPosList)
 		var stack = []
 		for (var x = 0; x < template.stack.length; x++) {
-			stack.push(lineStack[x] || template.stack[x])
+			stack.push(this.data.lineStack[x] || template.stack[x])
 		}
 		return {
 			radius: (this.data.lineRaiuds || template.radius).toString(),
@@ -181,21 +185,21 @@ Page({
 			name: this.data.lineModelName || template.name,
 			smooth: this.data.lineSmooth,
 			areaStyle: this.data.lineAreaStyle.map(this.transSigleColor),
-			showArea: this.showArea.map(item => {
+			showArea: this.data.lineShowArea.map(item => {
 				return item.toString()
 			}),
-			showEmphasis: this.lineShowEmphasis.map(item => {
+			showEmphasis: this.data.lineShowEmphasis.map(item => {
 				return item.toString()
 			}),
-			showMinMarkPoint: this.lineShowMinMarkPoint.map(item => {
+			showMinMarkPoint: this.data.lineShowMinMarkPoint.map(item => {
 				return item.toString()
 			}),
-			showMaxMarkPoint: this.lineShowMaxMarkPoint.map(item => {
+			showMaxMarkPoint: this.data.lineShowMaxMarkPoint.map(item => {
 				return item.toString()
 			}),
-			markPointSize: this.lineMarkPointSize,
-			markPointSize: this.linkeMarkPointStyle,
-			showAverageMarkLine: this.lineShowAverageMarkLine.map(item => {
+			markPointSize: this.data.lineMarkPointSize,
+			markPointSize: this.data.linkeMarkPointStyle,
+			showAverageMarkLine: this.data.lineShowAverageMarkLine.map(item => {
 				return item.toString()
 			}),
 			showGradient: this.data.lineShowGradient,
@@ -238,7 +242,7 @@ Page({
 		var lengendPosList = [(this.data.barLegendPosTop || barLegendPosTop) + '%', (this.data.barLegendPosBottom || barLegendPosBottom) + '%', (this.data.barLegendPosLeft || barLegendPosLeft) + '%', (this.data.barLegendPosRight || barLegendPosRight) + '%' + barPosVertical ? 'vetical' : 'horizon'].join(',')
 		var stack = []
 		for (var x = 0; x < template.stack.length; x++) {
-			stack.push(lineStack[x] || template.stack[x])
+			stack.push(this.data.barStack[x] || template.stack[x])
 		}
 		return {
 			width: this.data.barWidth || template.width + '%',
@@ -249,18 +253,18 @@ Page({
 			legendPos: lengendPosList,
 			textColor: this.rgb2hex(this.data.barTextColor),
 			name: this.data.barModelName || template.name,
-			showEmphasis: this.barShowEmphasis.map(item => {
+			showEmphasis: this.data.barShowEmphasis.map(item => {
 				return item.toString()
 			}),
-			showMinMarkPoint: this.barShowMinMarkPoint.map(item => {
+			showMinMarkPoint: this.data.barShowMinMarkPoint.map(item => {
 				return item.toString()
 			}),
-			showMaxMarkPoint: this.barShowMaxMarkPoint.map(item => {
+			showMaxMarkPoint: this.data.barShowMaxMarkPoint.map(item => {
 				return item.toString()
 			}),
-			markPointSize: this.barMarkPointSize,
-			markPointSize: this.linkeMarkPointStyle,
-			showAverageMarkLine: this.barShowAverageMarkLine.map(item => {
+			markPointSize: this.data.barMarkPointSize,
+			markPointSize: this.data.linkeMarkPointStyle,
+			showAverageMarkLine: this.data.barShowAverageMarkLine.map(item => {
 				return item.toString()
 			}),
 			stack: stack
@@ -315,10 +319,10 @@ Page({
 			textColor: this.rgb2hex(this.data.barTextColor),
 			name: this.data.pieModelName || template.name,
 			radius: radius,
-			borderRadius: pieBorderRadius || template.borderRadius,
-			showRing: pieShowRing || template.showRing,
-			showRose: pieShowRose || template.showRose,
-			roseType: pieRoseType == 0 ? 'radius' : 'area'
+			borderRadius: this.data.pieBorderRadius || template.borderRadius,
+			showRing: this.data.pieShowRing || template.showRing,
+			showRose: this.data.pieShowRose || template.showRose,
+			roseType: this.data.pieRoseType == 0 ? 'radius' : 'area'
 		}
 	},
 	initScatter() {
@@ -359,8 +363,8 @@ Page({
 			legendPos: lengendPosList,
 			textColor: this.rgb2hex(this.data.scatterTextColor),
 			name: this.data.scatterModelName || template.name,
-			useRegression: scatterUseRegression,
-			indexRegression: scatterIndexRegression
+			useRegression: this.data.scatterUseRegression,
+			indexRegression: this.data.scatterIndexRegression
 		}
 	},
 	onLoad: function (options) {
