@@ -165,12 +165,12 @@
 		</van-cell>
 	</van-cell-group>
 	<van-cell-group title="柱图颜色">
-		<van-cell wx:for="{{lineColors}}" title="{{item.text}}">
+		<van-cell wx:for="{{barColors}}" title="{{item.text}}">
 			<view style="background:{{item.rgb}}" class="color_picker" bindtap="toPick"
-				data-show="lineColors[{{index}}].show">
+				data-show="barColors[{{index}}].show">
 			</view>
 			<color-picker bindchangeColor="pickColor" initColor="{{item.rgb}}" show="{{item.show}}"
-				data-color="lineColors[{{index}}].rgb" />
+				data-color="barColors[{{index}}].rgb" />
 		</van-cell>
 	</van-cell-group>
 	<van-cell-group title="图例设置">
@@ -186,7 +186,7 @@
 		<!-- <van-field label="图例右边距" model:value="{{  barLegendPosRight }}" placeholder="请输入数字" border="{{ true }}" /> -->
 	</van-cell-group>
 	<van-cell-group title="柱聚焦">
-		<van-cell title="柱{{index}}聚焦">
+		<van-cell wx:for="{{barShowEmphasis}}" title="柱{{index}}聚焦">
 			<van-switch model:checked="{{ barShowEmphasis[index] }}" bind:change="changeSingleItem"
 				data-name="barShowEmphasis[{{index}}]" />
 		</van-cell>
@@ -237,7 +237,7 @@
 			<van-field label="模板名称" model:value="{{  pieModelName }}" placeholder="请输入模板名称" border="{{ true }}" />
 		</van-row>
 		<van-row>
-			<van-field label="饼宽" model:value="{{  pieRadius }}" type="number" placeholder="请输入数字(百分比)"
+			<van-field label="饼宽" model:value="{{  pieRadius[0] }}" type="number" placeholder="请输入数字(百分比)"
 				border="{{ true }}" />
 		</van-row>
 		<van-cell title="扇形圆角">
@@ -292,10 +292,6 @@
 			<van-switch model:checked="{{ pieShowRing }}" bind:change="changeSingleItem" data-name="pieShowRing" />
 		</van-cell>
 		<view wx:if="pieShowRing">
-			<van-row>
-				<van-field label="内环大小" model:value="{{  pieRadius[0] }}" type="number" placeholder="请输入数字(百分比)"
-					border="{{ true }}" bind:change="changeSingleItem" data-name="pieRadius[0]" />
-			</van-row>
 			<van-row>
 				<van-field label="外环大小" model:value="{{  pieRadius[1] }}" type="number" placeholder="请输入数字(百分比)"
 					border="{{ true }}" bind:change="changeSingleItem" data-name="pieRadius[1]" />
@@ -371,7 +367,7 @@
 		<van-cell title="启用回归">
 			<van-switch model:checked="{{ scatterUseRegression }}" bind:change="changeSingleItem" data-name="scatterUseRegression" />
 		</van-cell>
-		<van-radio-group value="{{scatterIndexRegression}}" wx:if="{{ scatterUseRegression }}" bind:change="changeSingleItem"
+		<van-radio-group wx:if="{{scatterUseRegression}}" value="{{scatterIndexRegression}}" wx:if="{{ scatterUseRegression }}" bind:change="changeSingleItem"
 			data-name="scatterIndexRegression">
 			<van-cell-group>
 				<van-cell title="线性回归" clickable>

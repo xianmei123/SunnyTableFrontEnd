@@ -208,7 +208,7 @@ function setLineOption(lineChart, template) {
             });
         }
         if (showAverageMarkLine[i - 1]) {
-            tempJson.data.push({
+            tempJson.markLine.data.push({
                 type: 'average'
             });
         }

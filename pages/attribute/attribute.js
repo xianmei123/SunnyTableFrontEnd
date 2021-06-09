@@ -33,7 +33,7 @@ Page({
 		pieRadius: 20,
 		piePrecision: 5,
 		pieShowPercent: true,
-		pieShowLable: false,
+		pieShowLabel: false,
 		pieTitleFont: 20,
 		pieLabelFont: 20,
 		pieLegendPosTop: 50,
@@ -150,9 +150,8 @@ Page({
 	},
 	transArray(arr) {
 		return arr.split(" ").map(item => {
-			if(item == 'lsp') return null;
-			else 
-				return JSON.parse(item)
+			if(item=="") return null;
+			else return JSON.parse(item)
 		})
 	},
 	wrapArrToDrop(arr) {
@@ -212,10 +211,10 @@ Page({
 		var template = this.data.defaulteTemplate
 		var [legendPos, barColors] = this.getTotAttribute(template, '柱图')
 		var [barLegendPosTop, barLegendPosBottom, barLegendPosLeft, barLegendPosRight, barPosVertical] = legendPos
-		console.log('bar!',typeof(template.stack))
+		console.log('bar!',template)
 		this.setData({
-			barWidth: template.width,
-			barGap: template.gap,
+			barWidth: template.width.split('%')[0],
+			barGap: template.gap.split('%')[0],
 			barFont: template.font,
 			barLegendPosTop,
 			barLegendPosBottom,
@@ -268,7 +267,7 @@ Page({
 			showAverageMarkLine: this.data.barShowAverageMarkLine.map(item => {
 				return item.toString()
 			}).join(' '),
-			stack: stack
+			stack: stack.join(' ')
 		}
 	},
 	initPie() {
@@ -278,10 +277,9 @@ Page({
 		var [pieLegendPosTop, pieLegendPosBottom, pieLegendPosLeft, pieLegendPosRight, piePosVertical] = legendPos
 		var pieColorsValue = 0
 		this.setData({
-			pieRadius: template.radius,
 			piePrecision: template.precision,
 			pieShowPercent: template.showPercent,
-			pieShowLable: template.showLabel,
+			pieShowLabel: template.showLabel,
 			pieTitleFont: template.titleFont,
 			pieLabelFont: template.pieLabelFont,
 			pieLegendPosTop,
@@ -298,7 +296,7 @@ Page({
 			pieBorderRadius: template.borderRadius,
 			pieShowRing: template.showRing,
 			pieShowRose: template.showRose,
-			pieRoseType: template.pieRoseType == 'radius' ? 0 : 1
+			pieRoseType: template.pieRoseType == 'radius' ? '0' : '1'
 		})
 		console.log(this.data.pieTextColor)
 	},
@@ -307,23 +305,22 @@ Page({
 		var [legendPos, pieColors] = this.getTotAttribute(template, '饼图')
 		var [pieLegendPosTop, pieLegendPosBottom, pieLegendPosLeft, pieLegendPosRight, piePosVertical] = legendPos
 		var lengendPosList = [(this.data.pieLegendPosTop || pieLegendPosTop) + '%', (this.data.pieLegendPosBottom || pieLegendPosBottom) + '%', (this.data.pieLegendPosLeft || pieLegendPosLeft) + '%', (this.data.pieLegendPosRight || pieLegendPosRight) + '%' + piePosVertical ? 'vetical' : 'horizon'].join(',')
-		var radius = [pieRadius[0] ? pieRadius[0] + "%" : template.radius[0], pieRadius[1] ? pieRadius[1] + "%" : template.radius]
+		var radius = [this.data.pieRadius[0] ? this.data.pieRadius[0] + "%" : template.radius[0], this.data.pieRadius[1] ? this.data.pieRadius[1] + "%" : template.radius]
 		return {
-			radius: this.data.pieRadius || template.radius + "%",
+			radius: radius.join(' '),
 			precision: this.data.piePrecision || template.precision,
 			color: this.data.pieColors.map(this.transSigleColor),
 			showPercent: this.data.pieShowPercent,
-			showLabel: this.data.pieShowLable,
+			showLabel: this.data.pieShowLabel,
 			titleFont: this.data.pieTitleFont || template.titleFont,
 			labelFont: this.data.pieLabelFont || template.labelFont,
 			legendPos: lengendPosList,
 			textColor: this.rgb2hex(this.data.barTextColor),
 			name: this.data.pieModelName || template.name,
-			radius: radius,
 			borderRadius: this.data.pieBorderRadius || template.borderRadius,
 			showRing: this.data.pieShowRing || template.showRing,
 			showRose: this.data.pieShowRose || template.showRose,
-			roseType: this.data.pieRoseType == 0 ? 'radius' : 'area'
+			roseType: this.data.pieRoseType == '0' ? 'radius' : 'area'
 		}
 	},
 	initScatter() {
@@ -347,7 +344,8 @@ Page({
 			scatterPosVertical,
 			scatterColors,
 			scatterColorsValue,
-			scatterUseRegression: template.useRegression
+			scatterUseRegression: JSON.parse(template.useRegression),
+			scatterIndexRegression:template.indexRegression.toString()
 		})
 	},
 	getScatterTemplate() {
@@ -355,6 +353,7 @@ Page({
 		var [legendPos, scatterColors] = this.getTotAttribute(template, '散点图')
 		var [scatterLegendPosTop, scatterLegendPosBottom, scatterLegendPosLeft, scatterLegendPosRight, scatterPosVertical] = legendPos
 		var lengendPosList = [this.data.scatterLegendPosTop || scatterLegendPosTop + '%', this.data.scatterLegendPosBottom || scatterLegendPosBottom + '%', this.data.scatterLegendPosLeft || scatterLegendPosLeft + '%', this.data.scatterLegendPosRight || scatterLegendPosRight + '%' + scatterPosVertical ? 'vetical' : 'horizon'].join(',')
+		console.log('scatter',template)
 		return {
 			showLine: this.data.scatterShowLine,
 			increate: this.data.scatterIncrease,
@@ -382,6 +381,8 @@ Page({
 				type: index,
 				defaulteTemplate: data.template
 			})
+			console.log(this.data.template)
+			this.setData({count:data.template.count})
 			init[index]()
 		})
 
@@ -449,6 +450,9 @@ Page({
 	changeSingleItem(event) {
 		var detail = event.detail
 		var name = event.currentTarget.dataset.name
+		if(name=='pieShowRing'){				
+			this.setData({pieShowLabel:!detail})
+		}
 		this.setData({
 			[name]: detail
 		});
