@@ -108,9 +108,7 @@ Page({
         showDetailInput: true,
         showVoiceInputMessage: "按住说话",
         tip: "\ntip:按住说话时，会将输入转换为详细信息和金额两部分",
-        billData: [],
-        plus: "plus",
-        minus: "minus"
+        billData: []
     },
 
     showCostButton() {
@@ -554,25 +552,33 @@ Page({
             "startTime": this.data.date["startDateStr"].replace("/", "-").replace("/", "-"),
             "endTime": this.data.date["endDateStr"].replace("/", "-").replace("/", "-")
         }
-        console.log(data);
-        wx.request({
-            url: url,
-            data: data,
-            method: "POST",
-            success: function (res) {
-                console.log(res.data);
-                billId = res.data.length;
-                getPage().setData({
-                    billData: res.data
-                });
-                console.log(getPage().data.billData);
-            },
-            fail: function (res) {
-                wx.showToast({
-                    title: '查询失败',
-                })
-            }
-        });
+        return new Promise((resolve, reject) => {
+            wx.request({
+                url: url,
+                data: data,
+                method: "POST",
+                success: (res) => {
+                    console.log(res.data);
+                    billId = res.data.length;
+                    console.log(billId);
+                    resolve(res.data);
+                },
+                fail: function (res) {
+                    wx.showToast({
+                        title: '查询失败',
+                    })
+                }
+            });
+        })
+    },
+
+    async updateBillData() {
+        let data = await this.queryBillByTime();
+        billId = data.length;
+        this.setData({
+            billData: data
+        })
+        console.log(billId);
     },
 
     onChangeCheckBox(event) {
@@ -616,8 +622,45 @@ Page({
             'newBill.show': true,
         });
     },
-    onLoad() {
+    analyse() {
+        let startMonth = (this.data.date["startDateStr"].split("/"))[1];
+        let endMonth = (this.data.date["endDateStr"].split("/"))[1];
+        let everyMonth = {};
+        let everyDay = [];
+        for (let month = startMonth; month <= endMonth; month++) {
+            everyMonth[month + " in"] = 0;
+            everyMonth[month + " out"] = 0;
+        }
+        var data = {
+            "userId": wx.getStorageSync('uid'),
+            "startTime": this.data.date["startDateStr"].replace("/", "-").replace("/", "-"),
+            "endTime": this.data.date["endDateStr"].replace("/", "-").replace("/", "-")
+        }
+        let ret = this.queryBillByTime();
+        for (bill in ret) {
+            if (bill["time"] >= data["startTime"] && bill["time"] <= data["endTime"]) {
+                let inc = bill["income"] == "true" ? true : false;
+                let mon = (bill["time"].split("-"))[1];
+                let cost = bill["cost"];
+                let key = inc ? (mon + " in") : (mon + " out");
+                everyMonth[key] = everyMonth[key] + cost;
+                everyDay.push({
+                    "detail": bill["detail"],
+                    "time": bill["time"],
+                    "cost": cost,
+                    "type": bill["type"],
+                    "income": inc
+                });
+            }
+        }
+        var analyseData = {
+            "month": everyMonth,
+            "day": everyDay
+        }
+        return analyseData;
+    },
 
+    onLoad() {
         wx.getRecorderManager().onStop((res) => {
             wx.hideLoading()
             this.setData({

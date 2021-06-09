@@ -87,18 +87,19 @@
     </van-checkbox-group>
 </van-popup>
 <!-- 账单数据显示 -->
-<view class="box1">账单数据 
+<view class="box1">
+    <text>账单数据\n\n</text>
     <block wx:for="{{ billData }}" wx:for-item="billItem">
         <van-cell-group>
-        <van-cell value="{{billItem.time}}" icon="{{billItem.income ? plus : minus}}" is-link>
-            <view slot="title">
-                <view class="van-cell-text">{{billItem.detail + " "  +billItem.type}}</view>
-                <van-tag>{{billItem.cost}}</van-tag>
-            </view>
-        </van-cell>
-    </van-cell-group>
+            <van-cell value="{{billItem.time}}" icon="{{billItem.income == 'true' ? 'plus' : 'minus'}}" is-link>
+                <view slot="title">
+                    <view class="van-cell-text">{{billItem.detail + "：" +billItem.type}}</view>
+                    <van-tag>{{billItem.cost}}</van-tag>
+                </view>
+            </van-cell>
+        </van-cell-group>
     </block>
-    <van-button round type="info" bindtap="queryBillByTime">更新账单数据</van-button>
+    <van-button round type="info" bindtap="updateBillData">更新账单数据</van-button>
 </view>
 <!-- 新建账单类别选择的弹出层 -->
 <van-popup show="{{ newBill.checkbox.show }}" position="center" custom-style="width:90%"
