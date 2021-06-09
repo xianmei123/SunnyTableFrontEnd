@@ -579,6 +579,7 @@ Page({
             billData: data
         })
         console.log(billId);
+        this.analyse();
     },
 
     onChangeCheckBox(event) {
@@ -622,33 +623,38 @@ Page({
             'newBill.show': true,
         });
     },
-    analyse() {
+    async analyse() {
         let startMonth = (this.data.date["startDateStr"].split("/"))[1];
         let endMonth = (this.data.date["endDateStr"].split("/"))[1];
-        let everyMonth = {};
+        let everyMonth = {
+            "in": [],
+            "out": []
+        };
         let everyDay = [];
         for (let month = startMonth; month <= endMonth; month++) {
-            everyMonth[month + " in"] = 0;
-            everyMonth[month + " out"] = 0;
+            everyMonth["in"].push([month, 0]);
+            everyMonth["out"].push([month, 0])
         }
         var data = {
             "userId": wx.getStorageSync('uid'),
             "startTime": this.data.date["startDateStr"].replace("/", "-").replace("/", "-"),
             "endTime": this.data.date["endDateStr"].replace("/", "-").replace("/", "-")
         }
-        let ret = this.queryBillByTime();
-        for (bill in ret) {
-            if (bill["time"] >= data["startTime"] && bill["time"] <= data["endTime"]) {
-                let inc = bill["income"] == "true" ? true : false;
-                let mon = (bill["time"].split("-"))[1];
-                let cost = bill["cost"];
-                let key = inc ? (mon + " in") : (mon + " out");
-                everyMonth[key] = everyMonth[key] + cost;
+        let ret = await this.queryBillByTime();
+        console.log(data["startTime"]);
+        console.log(data["endTime"]);
+        for (var i = 0; i < ret.length; i++) {
+            if (ret[i]["time"] >= data["startTime"] && ret[i]["time"] <= data["endTime"]) {
+                let inc = ret[i]["income"] == "true" ? true : false;
+                let mon = (ret[i]["time"].split("-"))[1];
+                let cost = ret[i]["cost"];
+                let key = inc ? "in" : "out";
+                everyMonth[key][parseInt(mon) - parseInt(startMonth)][1] += cost;
                 everyDay.push({
-                    "detail": bill["detail"],
-                    "time": bill["time"],
+                    "detail": ret[i]["detail"],
+                    "time": ret[i]["time"],
                     "cost": cost,
-                    "type": bill["type"],
+                    "type": ret[i]["type"],
                     "income": inc
                 });
             }
@@ -657,6 +663,7 @@ Page({
             "month": everyMonth,
             "day": everyDay
         }
+        console.log(analyseData);
         return analyseData;
     },
 
