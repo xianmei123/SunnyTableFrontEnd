@@ -14,7 +14,7 @@
    </scroll-view> 
   </van-col>
   </van-row>
-    <button style="margin-top:30rpx" bindtap="goSelectModel" type="primary">创建图表</button>
+    <button style="margin-top:30rpx" bindtap="goDraw" type="primary">创建图表</button>
   </van-tab>
   <van-tab name="timeData" title="时间图表">
     <!-- 时间图表类似 -->
