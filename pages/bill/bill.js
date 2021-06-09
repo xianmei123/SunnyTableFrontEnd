@@ -1,5 +1,10 @@
 var billId = 0;
 
+function getPage() {
+    var pages = getCurrentPages();
+    return pages[pages.length - 1];
+}
+
 function formatDate(time, format = 'YY/MM/DD') {
     //format = 'YY-MM-DD'
     var date = new Date(time);
@@ -26,7 +31,7 @@ Page({
             showEnd: false,
             menuDateTitle: "日期选择",
             startDateStr: formatDate(new Date().getTime(), ),
-            endDateStr:  formatDate(new Date().getTime(), ),
+            endDateStr: formatDate(new Date().getTime(), ),
             startDate: Date.now(),
             endDate: Date.now(),
             currentDate1: Date.now(),
@@ -59,11 +64,22 @@ Page({
                 minDate: new Date(2021, 3, 1).getTime(),
                 dateStr: formatDate(new Date().getTime(), ),
             },
-            option: [
-                { text: '衣服', value: '衣服' },
-                { text: '食物', value: '食物' },
-                { text: '居住', value: '居住' },
-                { text: '交通', value: '交通' },
+            option: [{
+                    text: '衣服',
+                    value: '衣服'
+                },
+                {
+                    text: '食物',
+                    value: '食物'
+                },
+                {
+                    text: '居住',
+                    value: '居住'
+                },
+                {
+                    text: '交通',
+                    value: '交通'
+                },
             ],
             checkbox: {
                 show: false,
@@ -77,7 +93,7 @@ Page({
             io: null,
             list: ['收入', '支出'],
             result: 1, //0表示收入，1表示支出
-            preResult: 1
+            preResult: 1,
         },
         formatter(type, value) {
             if (type === 'year') {
@@ -91,7 +107,10 @@ Page({
         showCostInput: true,
         showDetailInput: true,
         showVoiceInputMessage: "按住说话",
-        tip: "\ntip:按住说话时，会将输入转换为详细信息和金额两部分"
+        tip: "\ntip:按住说话时，会将输入转换为详细信息和金额两部分",
+        billData: [],
+        plus: "plus",
+        minus: "minus"
     },
 
     showCostButton() {
@@ -99,7 +118,7 @@ Page({
             showCostInput: !this.data.showCostInput
         })
     },
-    showDeatilButton(){
+    showDeatilButton() {
         this.setData({
             showDetailInput: !this.data.showDetailInput
         })
@@ -123,19 +142,21 @@ Page({
     },
     touchEnd() {
         wx.hideLoading()
-		wx.getRecorderManager().stop()
-		console.log('结束录音')
+        wx.getRecorderManager().stop()
+        console.log('结束录音')
     },
     onChangeBillIO(event) {
         // console.log("event.detail");
         // console.log(event.detail);
         this.setData({
-          'newBill.result': event.detail,
+            'newBill.result': event.detail,
         });
-      },
-    
+    },
+
     onClickBillIO(event) {
-        const { name } = event.currentTarget.dataset;
+        const {
+            name
+        } = event.currentTarget.dataset;
         // console.log("name");
         // console.log(name);
         this.setData({
@@ -147,30 +168,32 @@ Page({
         console.log("event.detail");
         console.log(event.detail);
         this.setData({
-          'newBill.checkbox.result': event.detail,
+            'newBill.checkbox.result': event.detail,
         });
-      },
-    
+    },
+
     onClickBillCheckBox(event) {
-        const { name } = event.currentTarget.dataset;
+        const {
+            name
+        } = event.currentTarget.dataset;
         console.log("name");
         console.log(name);
         this.setData({
             'newBill.checkbox.result': name,
         });
     },
-    
+
     onCancel1() {
-        this.setData({ 
-            'date.showStart': false ,
+        this.setData({
+            'date.showStart': false,
             'date.show': true,
             'date.currentDate1': this.data.date.startDate
         });
     },
 
     onCancel2() {
-        this.setData({ 
-            'date.showEnd': false ,
+        this.setData({
+            'date.showEnd': false,
             'date.show': true,
             'date.currentDate2': this.data.date.endDate
         });
@@ -188,7 +211,7 @@ Page({
     },
 
     onCancelMenuDate() {
-        this.setData({ 
+        this.setData({
             'date.show': false
         });
     },
@@ -215,7 +238,7 @@ Page({
             'newBill.checkbox.show': false,
             'newBill.checkbox.result': this.data.newBill.checkbox.preResult
         });
-     
+
     },
 
     onCancelBill() {
@@ -234,10 +257,10 @@ Page({
             'date.currentDate1': event.detail,
             'date.startDate': event.detail,
             'date.startDateStr': str,
-            'date.showStart' : false,
-            'date.show' : true
+            'date.showStart': false,
+            'date.show': true
         });
-        
+
     },
 
     onConfirm2(event) {
@@ -249,34 +272,34 @@ Page({
             'date.currentDate2': event.detail,
             'date.endDate': event.detail,
             'date.endDateStr': str,
-            'date.showEnd' : false,
-            'date.show' : true
+            'date.showEnd': false,
+            'date.show': true
         });
     },
 
     onConfirmMenuCondition(event) {
         //console.log(this.data.message2);
         this.setData({
-            'condition.show' : false,
+            'condition.show': false,
             'condition.maxCost': this.data.condition.message2,
             'condition.minCost': this.data.condition.message1,
             'condition.preResult': this.data.condition.result
         });
         //console.log(this.data.maxCost);
-        
+
     },
 
     onConfirmMenuDate(event) {
         this.setData({
-            'date.show' : false,
+            'date.show': false,
         });
     },
 
     onConfirmCheckBox(event) {
 
         this.setData({
-            'condition.show' : true,
-            'checkboxes.show' : false,
+            'condition.show': true,
+            'checkboxes.show': false,
             'checkboxes.preResult': this.data.checkboxes.result
         });
     },
@@ -284,8 +307,8 @@ Page({
     onConfirmBillDate(event) {
         var str = formatDate(event.detail, );
         this.setData({
-            'newBill.date.show' : false,
-            'newBill.show' : true,
+            'newBill.date.show': false,
+            'newBill.show': true,
             'newBill.date.currentDate': event.detail,
             'newBill.date.date': event.detail,
             'newBill.date.dateStr': str
@@ -293,15 +316,16 @@ Page({
     },
 
     saveBill() {
+        this.queryBillByTime();
         var url = "https://www.jaripon.xyz/bill/add";
         var data = {};
         data["id"] = billId;
-        data["userId"] = wx.getStorageSync('uid');;
-        data["detail"] = this.data.condition["message1"];
+        data["userId"] = wx.getStorageSync('uid');
+        data["detail"] = this.data.newBill["detail"];
         data["time"] = this.data.newBill["date"]["date"];
         data["type"] = this.data.newBill["checkbox"]["list"][this.data.newBill["checkbox"]["result"]];
-        data["income"] = this.data.newBill["result"] === 0 ? true : false; 
-        data["cost"] = this.data.condition["message2"];
+        data["income"] = this.data.newBill["result"] === 0 ? true : false;
+        data["cost"] = this.data.newBill["io"];
         console.log(data);
         wx.request({
             url: url,
@@ -321,28 +345,23 @@ Page({
         wx.showToast({
             title: '新建账单成功',
         });
-        billId++;
+        this.queryBillByTime();
     },
 
     onConfirmBillCheckBox(event) {
         this.setData({
-            'newBill.checkbox.show' : false,
-            'newBill.show' : true,
+            'newBill.checkbox.show': false,
+            'newBill.show': true,
             'newBill.checkbox.preResult': this.data.newBill.checkbox.result
         });
     },
 
     onConfirmBill() {
         this.setData({
-            'newBill.show' : false,
-            'newBill.io' : this.data.newBill.messageIO,
-            'newBill.detail' : this.data.newBill.messageDetail
+            'newBill.show': false,
+            'newBill.io': this.data.newBill.messageIO,
+            'newBill.detail': this.data.newBill.messageDetail
         });
-        // console.log(this.data.newBill.detail);
-        // console.log(this.data.newBill.io);
-        // console.log(this.data.newBill.date.str);
-        // console.log(this.data.newBill.result);
-        // console.log(this.data.newBill.checkbox.result);
         this.saveBill();
     },
 
@@ -372,67 +391,71 @@ Page({
     },
 
     showPopup1() {
-        this.setData({ 
-            'date.showStart': true ,
+        this.setData({
+            'date.showStart': true,
             'date.show': false
         });
     },
 
     showPopup2() {
-        this.setData({ 
-            'date.showEnd': true ,
+        this.setData({
+            'date.showEnd': true,
             'date.show': false
         });
     },
-    
+
     showPopupMenuCondition() {
-        this.setData({ 'condition.show': true });
-    },    
+        this.setData({
+            'condition.show': true
+        });
+    },
 
     showPopupMenuDate() {
-        this.setData({ 'date.show': true });
-    },    
+        this.setData({
+            'date.show': true
+        });
+    },
 
     showPopupCheckBox() {
         //let  value = 'list.title';
-        this.setData({ 
-            'checkboxes.show' : true,
+        this.setData({
+            'checkboxes.show': true,
             'condition.show': false
         });
     },
 
     showPopupBillDate() {
         //let  value = 'list.title';
-        this.setData({ 
-            'newBill.show' : false,
+        this.setData({
+            'newBill.show': false,
             'newBill.date.show': true
         });
     },
 
     showPopupBillCheckBox() {
         //let  value = 'list.title';
-        this.setData({ 
-            'newBill.show' : false,
+        this.setData({
+            'newBill.show': false,
             'newBill.checkbox.show': true
         });
     },
- 
+
     onClose1() {
-        this.setData({ 
-            'date.showStart': false ,
+        this.setData({
+            'date.showStart': false,
             'date.show': true,
             'date.currentDate1': this.data.date.startDate
         });
     },
 
     onClose2() {
-        this.setData({ 
-            'date.showEnd': false ,
+        this.setData({
+            'date.showEnd': false,
             'date.show': true,
             'date.currentDate2': this.data.date.endDate
         });
     },
-    
+
     onCloseMenuCondition() {
         this.setData({
             'condition.show': false,
@@ -473,7 +496,7 @@ Page({
         //console.log(this.data.newBill.date.date);
         //console.log(this.data.newBill.date.currentDate);
     },
-    
+
     onInput1(event) {
         this.setData({
             'date.currentDate1': event.detail,
@@ -514,7 +537,6 @@ Page({
         this.setData({
             'newBill.messageDetail': event.detail
         });
-        //console.log(this.data.newBill.messageDetail);
     },
 
     onChangeInputBillIO(event) {
@@ -523,37 +545,64 @@ Page({
         this.setData({
             'newBill.messageIO': event.detail
         });
-        //console.log(this.data.newBill.messageIO);
     },
 
-    queryData(event) {
-        
+    queryBillByTime() {
+        var url = "https://www.jaripon.xyz/bill/query/time";
+        var data = {
+            "userId": wx.getStorageSync('uid'),
+            "startTime": this.data.date["startDateStr"].replace("/", "-").replace("/", "-"),
+            "endTime": this.data.date["endDateStr"].replace("/", "-").replace("/", "-")
+        }
+        console.log(data);
+        wx.request({
+            url: url,
+            data: data,
+            method: "POST",
+            success: function (res) {
+                console.log(res.data);
+                billId = res.data.length;
+                getPage().setData({
+                    billData: res.data
+                });
+                console.log(getPage().data.billData);
+            },
+            fail: function (res) {
+                wx.showToast({
+                    title: '查询失败',
+                })
+            }
+        });
     },
-    
+
     onChangeCheckBox(event) {
         //console.log(event.detail);
         this.setData({
-          'checkboxes.result': event.detail
+            'checkboxes.result': event.detail
         });
     },
 
     onChangeIO(event) {
         //console.log(event.detail);
         this.setData({
-          'condition.result': event.detail
+            'condition.result': event.detail
         });
     },
-    
+
     toggleCheckBox(event) {
         //console.log(event.detail);
-        const { index } = event.currentTarget.dataset;
+        const {
+            index
+        } = event.currentTarget.dataset;
         const checkbox = this.selectComponent(`.checkboxes-${index}`);
         checkbox.toggle();
     },
 
     toggleIO(event) {
         //console.log(event.detail);
-        const { index } = event.currentTarget.dataset;
+        const {
+            index
+        } = event.currentTarget.dataset;
         const checkbox = this.selectComponent(`.io-${index}`);
         checkbox.toggle();
     },
@@ -567,15 +616,15 @@ Page({
             'newBill.show': true,
         });
     },
-    onLoad(){
+    onLoad() {
 
         wx.getRecorderManager().onStop((res) => {
-			wx.hideLoading()
-			this.setData({
-				hasRecord: false,
+            wx.hideLoading()
+            this.setData({
+                hasRecord: false,
                 showVoiceInputMessage: "按住说话"
-			})
-			var tempFilePath = res.tempFilePath;
+            })
+            var tempFilePath = res.tempFilePath;
             wx.uploadFile({
                 url: 'https://www.jaripon.xyz/asr/result/' + wx.getStorageSync('uid'),
                 filePath: tempFilePath,
@@ -592,6 +641,6 @@ Page({
                     console.log(res);
                 }
             });
-		});
+        });
     }
 });
