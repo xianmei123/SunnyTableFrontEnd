@@ -184,34 +184,35 @@ Page({
 			textColor: this.rgb2hex(this.data.lineTextColor),
 			name: this.data.lineModelName || template.name,
 			smooth: this.data.lineSmooth,
-			areaStyle: this.data.lineAreaStyle.map(this.transSigleColor),
+			areaStyle: this.data.lineAreaStyle.map(this.transSigleColor).join(' '),
 			showArea: this.data.lineShowArea.map(item => {
 				return item.toString()
-			}),
+			}).join(' '),
 			showEmphasis: this.data.lineShowEmphasis.map(item => {
 				return item.toString()
-			}),
+			}).join(' '),
 			showMinMarkPoint: this.data.lineShowMinMarkPoint.map(item => {
 				return item.toString()
-			}),
+			}).join(' '),
 			showMaxMarkPoint: this.data.lineShowMaxMarkPoint.map(item => {
 				return item.toString()
-			}),
+			}).join(' '),
 			markPointSize: this.data.lineMarkPointSize,
 			markPointSize: this.data.linkeMarkPointStyle,
 			showAverageMarkLine: this.data.lineShowAverageMarkLine.map(item => {
 				return item.toString()
-			}),
+			}).join(' '),
 			showGradient: this.data.lineShowGradient,
 			showXGradient: this.data.lineShowXGradient,
 			showYGradient: this.data.lineYShowGradient,
-			stack: stack,
+			stack: stack.join(' '),
 		}
 	},
 	initBar() {
 		var template = this.data.defaulteTemplate
 		var [legendPos, barColors] = this.getTotAttribute(template, '柱图')
 		var [barLegendPosTop, barLegendPosBottom, barLegendPosLeft, barLegendPosRight, barPosVertical] = legendPos
+		console.log('bar!',typeof(template.stack))
 		this.setData({
 			barWidth: template.width,
 			barGap: template.gap,
@@ -255,18 +256,18 @@ Page({
 			name: this.data.barModelName || template.name,
 			showEmphasis: this.data.barShowEmphasis.map(item => {
 				return item.toString()
-			}),
+			}).join(' '),
 			showMinMarkPoint: this.data.barShowMinMarkPoint.map(item => {
 				return item.toString()
-			}),
+			}).join(' '),
 			showMaxMarkPoint: this.data.barShowMaxMarkPoint.map(item => {
 				return item.toString()
-			}),
+			}).join(' '),
 			markPointSize: this.data.barMarkPointSize,
 			markPointSize: this.data.linkeMarkPointStyle,
 			showAverageMarkLine: this.data.barShowAverageMarkLine.map(item => {
 				return item.toString()
-			}),
+			}).join(' '),
 			stack: stack
 		}
 	},

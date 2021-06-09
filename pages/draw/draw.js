@@ -5,70 +5,70 @@ import ecStat from 'echarts-stat';
 echarts.registerTransform(ecStat.transform.regression);
 
 
-// var inputData = [
-//     ['pro', 'sb'],
-//     ["2000-06-05", 116],
-//     ["2000-06-06", 129],
-//     ["2000-06-07", 135],
-//     ["2000-06-08", 86],
-//     ["2000-06-09", 73],
-//     ["2000-06-10", 85],
-//     ["2000-06-11", 73],
-//     ["2000-06-12", 68],
-//     ["2000-06-13", 92],
-//     ["2000-06-14", 130],
-//     ["2000-06-15", 245],
-//     ["2000-06-16", 139],
-//     ["2000-06-17", 115],
-//     ["2000-06-18", 111],
-//     ["2000-06-19", 309],
-//     ["2000-06-20", 206],
-//     ["2000-06-21", 137],
-//     ["2000-06-22", 128],
-//     ["2000-06-23", 85],
-//     ["2000-06-24", 94],
-//     ["2000-06-25", 71],
-//     ["2000-06-26", 106],
-//     ["2000-06-27", 84],
-    // ["2000-06-28", 93],
-    // ["2000-06-29", 85],
-    // ["2000-06-30", 73],
-    // ["2000-07-01", 83],
-    // ["2000-07-02", 125],
-    // ["2000-07-03", 107],
-    // ["2000-07-04", 82],
-    // ["2000-07-05", 44],
-    // ["2000-07-06", 72],
-    // ["2000-07-07", 106],
-    // ["2000-07-08", 107],
-    // ["2000-07-09", 66],
-    // ["2000-07-10", 91],
-    // ["2000-07-11", 92],
-    // ["2000-07-12", 113],
-    // ["2000-07-13", 107],
-    // ["2000-07-14", 131],
-    // ["2000-07-15", 111],
-    // ["2000-07-16", 64],
-    // ["2000-07-17", 69],
-    // ["2000-07-18", 88],
-    // ["2000-07-19", 77],
-    // ["2000-07-20", 83],
-    // ["2000-07-21", 111],
-    // ["2000-07-22", 57],
-    // ["2000-07-23", 55],
-    // ["2000-07-24", 60]
-// ];
-
-
 var inputData = [
-    ['product', 'sb', 'lsp'],
-    ['sb1', 41.1, 86.5],
-    ['sb2', 30.4, 92.1],
-    ['sb3', 22, 182],
-    ['sb4', 75, 25],
-    ['sb5', 78, 25],
-    ['sb6', 33, 66],
-]; // 输入数据
+    ['pro', 'sb'],
+    ["2000-06-05", 116],
+    ["2000-06-06", 129],
+    ["2000-06-07", 135],
+    ["2000-06-08", 86],
+    ["2000-06-09", 73],
+    ["2000-06-10", 85],
+    ["2000-06-11", 73],
+    ["2000-06-12", 68],
+    ["2000-06-13", 92],
+    ["2000-06-14", 130],
+    ["2000-06-15", 245],
+    ["2000-06-16", 139],
+    ["2000-06-17", 115],
+    ["2000-06-18", 111],
+    ["2000-06-19", 309],
+    ["2000-06-20", 206],
+    ["2000-06-21", 137],
+    ["2000-06-22", 128],
+    ["2000-06-23", 85],
+    ["2000-06-24", 94],
+    ["2000-06-25", 71],
+    ["2000-06-26", 106],
+    ["2000-06-27", 84],
+    ["2000-06-28", 93],
+    ["2000-06-29", 85],
+    ["2000-06-30", 73],
+    ["2000-07-01", 83],
+    ["2000-07-02", 125],
+    ["2000-07-03", 107],
+    ["2000-07-04", 82],
+    ["2000-07-05", 44],
+    ["2000-07-06", 72],
+    ["2000-07-07", 106],
+    ["2000-07-08", 107],
+    ["2000-07-09", 66],
+    ["2000-07-10", 91],
+    ["2000-07-11", 92],
+    ["2000-07-12", 113],
+    ["2000-07-13", 107],
+    ["2000-07-14", 131],
+    ["2000-07-15", 111],
+    ["2000-07-16", 64],
+    ["2000-07-17", 69],
+    ["2000-07-18", 88],
+    ["2000-07-19", 77],
+    ["2000-07-20", 83],
+    ["2000-07-21", 111],
+    ["2000-07-22", 57],
+    ["2000-07-23", 55],
+    ["2000-07-24", 60]
+];
+
+
+// var inputData = [
+//     ['product', 'sb', 'lsp'],
+//     ['sb1', 41.1, 86.5],
+//     ['sb2', 30.4, 92.1],
+//     ['sb3', 22, 182],
+//     ['sb4', 75, 25],
+//     ['sb5', 78, 25],
+//     ['sb6', 33, 66],
+// ]; // 输入数据
 // var inputData = [
 //     ['product', 'sb', 'lsp'],
 //     [78, 41.1, 86.5],
@@ -273,13 +273,12 @@ function setLineOption(lineChart, template) {
     //setLegendOption(option, template.legendPos);
     lineChart.setOption(option); // 
     if (template.showGradient) {
-
         option.visualMap = {
             show: false,
             type: 'continuous',
-            dimension: 0,
+            seriesIndex: 0,
             inRange: {
-                color: [template.gradientColor],
+                color: ["#839d14"],
                 colorLightness: template.colorLightness.split(" ").map(item => {
                     return parseFloat(item)
                 }),
@@ -294,21 +293,24 @@ function setLineOption(lineChart, template) {
         if (template.showXGradient) {
             if (xType === "string") {
                 option.visualMap.min = 0;
-                option.visualMap.max = inputData.length - 1;
+                option.visualMap.max = (inputData.length - 2);
             } else if (xType === "number") {
-                option.visualMap.min = chart.getModel().getComponent('xAxis', 0).axis.scale._extent[0];
-                option.visualMap.max = chart.getModel().getComponent('xAxis', 0).axis.scale._extent[1];
+                option.visualMap.min = lineChart.getModel().getComponent('xAxis', 0).axis.scale._extent[0];
+                option.visualMap.max = lineChart.getModel().getComponent('xAxis', 0).axis.scale._extent[1];
             }
+            option.visualMap.dimension =  0
         }
         if (template.showYGradient) {
             if (yType === "string") {
                 option.visualMap.min = 0;
                 option.visualMap.max = inputData.length - 1;
             } else if (yType === "number") {
-                option.visualMap.min = chart.getModel().getComponent('yAxis', 0).axis.scale._extent[0];
-                option.visualMap.max = chart.getModel().getComponent('yAxis', 0).axis.scale._extent[1];
+                option.visualMap.min = lineChart.getModel().getComponent('yAxis', 0).axis.scale._extent[0];
+                option.visualMap.max = lineChart.getModel().getComponent('yAxis', 0).axis.scale._extent[1];
             }
         }
+        console.log(option);
+        lineChart.setOption(option);
     }
     if (template.showDigit) {
         lineChart.setOption({
@@ -325,6 +327,9 @@ function setLineOption(lineChart, template) {
             },
         });
     }
+    console.log(lineChart);
+    console.log(option);
+    console.log(template);
     return lineChart;
 }
 
