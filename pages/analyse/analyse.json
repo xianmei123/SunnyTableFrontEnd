@@ -1,6 +1,8 @@
 {
   "usingComponents": {
-    "ec-canvas": "../../ec-canvas/ec-canvas"
+    "ec-canvas": "../../ec-canvas/ec-canvas",
+    "van-datetime-picker": "@vant/weapp/datetime-picker/index",
+    "van-popup": "@vant/weapp/popup/index"
   },
   "navigationBarTitleText": "分析"
 }

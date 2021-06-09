@@ -1762,6 +1762,8 @@ function getPage() {
  * @param {*} inputData 
  */
 function updateLineData(inputData) {
+    console.log(typeof inputData[0][2]);
+    console.log(typeof inputData[1][2]);
     line.init(xType, yType);
     if (isShowLineChart()) {
         console.log(line);

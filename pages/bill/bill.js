@@ -381,10 +381,13 @@ Page({
         })
     },
 
-    goAnalyse() {
-        var analyseData = null;
+    async goAnalyse() {
+        var data = await this.analyse();
         wx.navigateTo({
-            url: '../analyse/analyse?analyseData=' + analyseData
+            url: '../analyse/analyse',
+            success: result => {
+                result.eventChannel.emit("analyse", data);
+            }
         });
     },
 
@@ -682,7 +685,8 @@ Page({
                     console.log(res);
                     this.setData({
                         "newBill.detail": res.data.detail,
-                        "newBill.cost": res.data.cost
+                        "newBill.cost": res.data.cost,
+                        "newBill.result": res.data.io
                     });
                 },
                 fail: res => {

@@ -1,6 +1,24 @@
 <!-- pages/analyse/analyse.wxml -->
 <view>
-    <view class="allMoney">￥ 20.4</view>
+
+    <button class="slot-button" slot="title" catch:tap="clickButton">
+            {{buttonText}}
+            <van-icon name="exchange" style="padding-top: 2px !important"/>
+    </button>
+    <!-- <van-cell custom-class="cell-root" title-class="cell-title" value-class="cell-value" is-link="true" value="{{currentDate}}" arrow-direction="down" bind:click="clickCell">
+        <button class="slot-button" slot="title" catch:tap="clickButton">
+            {{buttonText}}
+            <van-icon name="exchange" />
+        </button>
+    </van-cell> -->
+    <!-- <van-popup show="{{ showDatePicker }}" position="bottom"
+        custom-style="height: 50%;"
+        bind:close="onCloseDatePicker"
+        >
+        <van-datetime-picker wx:if="{{pattern === 0}}" type="year-month" value="{{ currentDate }}" bind:input="onInput" min-date="{{ minDate }}" />
+        <van-datetime-picker wx:else type="date" value="{{ currentDate }}" bind:input="onInput" min-date="{{ minDate }}" />
+    </van-popup> -->
+    <view class="allMoney">￥ {{allMoney}}</view>
     <!-- <view style="font-size: 25rpx; font-weight: bold">支付方式</view> -->
     <text>\n</text>
     <view class="container">
@@ -10,4 +28,18 @@
     <view class="container" style="height: 30vh">
         <ec-canvas id="pieChartId" canvas-id="pie-canvas" ec="{{ pieChart }}"></ec-canvas>
     </view>
+
+    <view class="box1">
+    <text>账单数据\n\n</text>
+    <block wx:for="{{ showBillData }}" wx:for-item="billItem">
+        <van-cell-group>
+            <van-cell value="{{billItem.time}}">
+                <view slot="title">
+                    <view class="van-cell-text">{{billItem.detail + "：" +billItem.type}}</view>
+                    <van-tag>{{billItem.cost}}</van-tag>
+                </view>
+            </van-cell>
+        </van-cell-group>
+    </block>
+</view>
 </view>
