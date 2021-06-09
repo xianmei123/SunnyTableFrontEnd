@@ -3,60 +3,61 @@
 import * as echarts from '../../ec-canvas/echarts';
 import ecStat from 'echarts-stat';
 echarts.registerTransform(ecStat.transform.regression);
-var inputData=[];
-// var inputData = [
-//     ['pro', 'sb'],
-//     ["2000-06-05", 116],
-//     ["2000-06-06", 129],
-//     ["2000-06-07", 135],
-//     ["2000-06-08", 86],
-//     ["2000-06-09", 73],
-//     ["2000-06-10", 85],
-//     ["2000-06-11", 73],
-//     ["2000-06-12", 68],
-//     ["2000-06-13", 92],
-//     ["2000-06-14", 130],
-//     ["2000-06-15", 245],
-//     ["2000-06-16", 139],
-//     ["2000-06-17", 115],
-//     ["2000-06-18", 111],
-//     ["2000-06-19", 309],
-//     ["2000-06-20", 206],
-//     ["2000-06-21", 137],
-//     ["2000-06-22", 128],
-//     ["2000-06-23", 85],
-//     ["2000-06-24", 94],
-//     ["2000-06-25", 71],
-//     ["2000-06-26", 106],
-//     ["2000-06-27", 84],
-    // ["2000-06-28", 93],
-    // ["2000-06-29", 85],
-    // ["2000-06-30", 73],
-    // ["2000-07-01", 83],
-    // ["2000-07-02", 125],
-    // ["2000-07-03", 107],
-    // ["2000-07-04", 82],
-    // ["2000-07-05", 44],
-    // ["2000-07-06", 72],
-    // ["2000-07-07", 106],
-    // ["2000-07-08", 107],
-    // ["2000-07-09", 66],
-    // ["2000-07-10", 91],
-    // ["2000-07-11", 92],
-    // ["2000-07-12", 113],
-    // ["2000-07-13", 107],
-    // ["2000-07-14", 131],
-    // ["2000-07-15", 111],
-    // ["2000-07-16", 64],
-    // ["2000-07-17", 69],
-    // ["2000-07-18", 88],
-    // ["2000-07-19", 77],
-    // ["2000-07-20", 83],
-    // ["2000-07-21", 111],
-    // ["2000-07-22", 57],
-    // ["2000-07-23", 55],
-    // ["2000-07-24", 60]
-// ];
+
+
+var inputData = [
+    ['pro', 'sb'],
+    ["2000-06-05", 116],
+    ["2000-06-06", 129],
+    ["2000-06-07", 135],
+    ["2000-06-08", 86],
+    ["2000-06-09", 73],
+    ["2000-06-10", 85],
+    ["2000-06-11", 73],
+    ["2000-06-12", 68],
+    ["2000-06-13", 92],
+    ["2000-06-14", 130],
+    ["2000-06-15", 245],
+    ["2000-06-16", 139],
+    ["2000-06-17", 115],
+    ["2000-06-18", 111],
+    ["2000-06-19", 309],
+    ["2000-06-20", 206],
+    ["2000-06-21", 137],
+    ["2000-06-22", 128],
+    ["2000-06-23", 85],
+    ["2000-06-24", 94],
+    ["2000-06-25", 71],
+    ["2000-06-26", 106],
+    ["2000-06-27", 84],
+    ["2000-06-28", 93],
+    ["2000-06-29", 85],
+    ["2000-06-30", 73],
+    ["2000-07-01", 83],
+    ["2000-07-02", 125],
+    ["2000-07-03", 107],
+    ["2000-07-04", 82],
+    ["2000-07-05", 44],
+    ["2000-07-06", 72],
+    ["2000-07-07", 106],
+    ["2000-07-08", 107],
+    ["2000-07-09", 66],
+    ["2000-07-10", 91],
+    ["2000-07-11", 92],
+    ["2000-07-12", 113],
+    ["2000-07-13", 107],
+    ["2000-07-14", 131],
+    ["2000-07-15", 111],
+    ["2000-07-16", 64],
+    ["2000-07-17", 69],
+    ["2000-07-18", 88],
+    ["2000-07-19", 77],
+    ["2000-07-20", 83],
+    ["2000-07-21", 111],
+    ["2000-07-22", 57],
+    ["2000-07-23", 55],
+    ["2000-07-24", 60]
+];
 
 
 // var inputData = [
@@ -78,10 +79,10 @@ var inputData=[];
 //     [36, 33, 66],
 // ]; // 输入数据
 var graph = require('./class');
-// var xType = "string"; // 输入数据x轴类型
-// var yType = "number"; // 输入数据y轴类型
-var xType; // 输入数据x轴类型
-var yType;
+var xType = "string"; // 输入数据x轴类型
+var yType = "number"; // 输入数据y轴类型
+// var xType; // 输入数据x轴类型
+// var yType;
 var line = new graph.LineGraph("line");
 var bar = new graph.BarGraph("bar");
 var pie = new graph.PieGraph("pie");
@@ -272,13 +273,12 @@ function setLineOption(lineChart, template) {
     //setLegendOption(option, template.legendPos);
     lineChart.setOption(option); // 
     if (template.showGradient) {
-
         option.visualMap = {
             show: false,
             type: 'continuous',
-            dimension: 0,
+            seriesIndex: 0,
             inRange: {
-                color: [template.gradientColor],
+                color: ["#839d14"],
                 colorLightness: template.colorLightness.split(" ").map(item => {
                     return parseFloat(item)
                 }),
@@ -293,21 +293,24 @@ function setLineOption(lineChart, template) {
         if (template.showXGradient) {
             if (xType === "string") {
                 option.visualMap.min = 0;
-                option.visualMap.max = inputData.length - 1;
+                option.visualMap.max = (inputData.length - 2);
             } else if (xType === "number") {
-                option.visualMap.min = chart.getModel().getComponent('xAxis', 0).axis.scale._extent[0];
-                option.visualMap.max = chart.getModel().getComponent('xAxis', 0).axis.scale._extent[1];
+                option.visualMap.min = lineChart.getModel().getComponent('xAxis', 0).axis.scale._extent[0];
+                option.visualMap.max = lineChart.getModel().getComponent('xAxis', 0).axis.scale._extent[1];
             }
+            option.visualMap.dimension =  0
         }
         if (template.showYGradient) {
             if (yType === "string") {
                 option.visualMap.min = 0;
                 option.visualMap.max = inputData.length - 1;
             } else if (yType === "number") {
-                option.visualMap.min = chart.getModel().getComponent('yAxis', 0).axis.scale._extent[0];
-                option.visualMap.max = chart.getModel().getComponent('yAxis', 0).axis.scale._extent[1];
+                option.visualMap.min = lineChart.getModel().getComponent('yAxis', 0).axis.scale._extent[0];
+                option.visualMap.max = lineChart.getModel().getComponent('yAxis', 0).axis.scale._extent[1];
             }
         }
+        console.log(option);
+        lineChart.setOption(option);
     }
     if (template.showDigit) {
         lineChart.setOption({
@@ -324,6 +327,9 @@ function setLineOption(lineChart, template) {
             },
         });
     }
+    console.log(lineChart);
+    console.log(option);
+    console.log(template);
     return lineChart;
 }
 
@@ -388,7 +394,8 @@ function setBarOption(barChart, template) {
             markLine: {
                 data: []
             },
-            stack: stack[i - 1]
+            stack: stack[i - 1],
+            color: template.color[i - 1]
         };
         if (showEmphasis[i - 1]) {
             tempJson.emphasis = {
@@ -531,7 +538,7 @@ function setPieOption(pieChart, template) {
         itemStyle: {
             borderRadius: template.borderRadius
         },
-        data: pie.convertToPieData(pie.pieData)
+        data: pie.convertToPieData(pie.pieData, )
     };
 
     var tempJsonRing = {
@@ -632,7 +639,6 @@ function initScatterChart(canvas, width, height, dpr) {
  */
 function setScatterOption(scatterChart, template) {
     scatterChart.clear();
-    var legendArr = template.legendPos.split(",");
     var series = [];
     for (var i = 1; i < inputData[0].length; i++) {
         var name = inputData[0][i];
@@ -669,13 +675,15 @@ function setScatterOption(scatterChart, template) {
                 type: "slider",
                 xAxisIndex: 0,
                 filterMode: 'none',
-                height: 15
+                height: 0,
+                show: false,
             },
             {
                 type: "slider",
                 yAxisIndex: 0,
                 filterMode: 'none',
-                width: 15
+                width: 0,
+                show: false,
             }
         ],
         grid: {
@@ -689,9 +697,6 @@ function setScatterOption(scatterChart, template) {
                 fontSize: template.font
             }
         },
-        itemStyle: {
-            color: template.color[0]
-        },
         xAxis: {
             name: xName,
             type: scatter.xType === "string" ? "category" : "value",
@@ -704,12 +709,12 @@ function setScatterOption(scatterChart, template) {
             boundaryGap: yType === "string" ? false : true
         },
         legend: {
-            top: legendArr[0],
-            bottom: legendArr[1],
-            left: legendArr[2],
-            right: legendArr[3],
-            orient: legendArr[4],
-            left: template.legendPos,
+            right: '0%',
+            top: '16%',
+            orient: "vertical",
+        },
+        tooltip: {
+            trigger: 'item'
         },
         series: series,
     };
@@ -736,7 +741,7 @@ function setScatterOption(scatterChart, template) {
             }
         }
     ]
-    if (template.useRegression) {
+    if (JSON.parse(template.useRegression)) {
         option.dataset.push(indexToTransform[template.indexRegression]);
         option.series.push({
             type: 'line',
@@ -757,23 +762,10 @@ function setScatterOption(scatterChart, template) {
             }
         });
     }
-
     setToolBox(option);
     setLegendOption(option, template.legendPos);
     scatterChart.setOption(option);
-    scatterChart.setOption({
-        tooltip: {
-            triggerOn: 'none',
-            formatter: function (params) {
-                var xstr = scatter.xType === "string" ? params.data[0] : parseFloat(params.data[0]).toFixed(2);
-                var ystr = scatter.yType === "string" ? params.data[1] : parseFloat(params.data[1]).toFixed(2);
-                return 'X: ' +
-                    xstr +
-                    '\nY: ' +
-                    ystr;
-            }
-        },
-    });
+    
     return scatterChart;
 }
 
@@ -1325,7 +1317,8 @@ Page({
             success(result) {
                 result.eventChannel.emit("changeTemplate", {
                     index: index,
-                    template: template
+                    template: template,
+                    count: getPage().data.groupNum,
                 });
             },
 
@@ -1623,7 +1616,7 @@ Page({
         }, 120000);
     },
     onUnload: function () {
-        //inputData = [];
+        inputData = [];
         xType = undefined;
         yType = undefined;
         pie.pieData = null;
@@ -1697,7 +1690,7 @@ function isShowPieChart() {
  * @returns 是否显示散点图
  */
 function isShowScatterChart() {
-    return (xType === "number" && yType === "number") || Object.keys(inputData).length != 0;
+    return (xType === "number" && yType === "number") && Object.keys(inputData).length != 0;
 }
 
 /**
@@ -1743,6 +1736,7 @@ function updatePieData(name, data) {
     console.log(name, data);
     if (isShowPieChart()) {
         if (pie.setInpuData(name, data)) {
+            console.log(pie.pieData);
             getPage().setData({
                 showPieChart: true
             });
