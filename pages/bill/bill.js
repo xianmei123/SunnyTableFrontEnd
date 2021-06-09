@@ -1,3 +1,5 @@
+var billId = 0;
+
 function formatDate(time, format = 'YY/MM/DD') {
     //format = 'YY-MM-DD'
     var date = new Date(time);
@@ -265,10 +267,8 @@ Page({
     },
 
     onConfirmMenuDate(event) {
-
         this.setData({
             'date.show' : false,
-  
         });
     },
 
@@ -292,6 +292,38 @@ Page({
         });
     },
 
+    saveBill() {
+        var url = "https://www.jaripon.xyz/bill/add";
+        var data = {};
+        data["id"] = billId;
+        data["userId"] = wx.getStorageSync('uid');;
+        data["detail"] = this.data.newBill["detail"];
+        data["time"] = this.data.newBill["date"]["date"];
+        data["type"] = this.data.newBill["checkbox"]["list"][this.data.newBill["checkbox"]["result"]];
+        data["income"] = this.data.newBill["list"] === "收入" ? true : false; 
+        data["cost"] = this.data.newBill["io"];
+        console.log(data);
+        wx.request({
+            url: url,
+            data: data,
+            method: "POST",
+            success: function (res) {
+                console.log(res);
+            },
+            fail: function (res) {
+                console.log("fail");
+                wx.showToast({
+                    title: '新建账单失败',
+                });
+                return;
+            }
+        });
+        wx.showToast({
+            title: '新建账单成功',
+        });
+        billId++;
+    },
+
     onConfirmBillCheckBox(event) {
         this.setData({
             'newBill.checkbox.show' : false,
@@ -303,7 +335,10 @@ Page({
     onConfirmBill() {
         this.setData({
             'newBill.show' : false,
+            'newBill.io' : this.data.newBill.messageIO,
+            'newBill.detail' : this.data.newBill.messageDetail
         });
+        this.saveBill();
     },
 
     onToday1() {
