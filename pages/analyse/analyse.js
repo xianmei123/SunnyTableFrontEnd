@@ -16,24 +16,14 @@ var monthAllBill = {
 var allMoneyIn = 0;
 var allMoneyOut = 0;
 var barClicked;
-var inputData = [
-    
-    ['1月', 20],
-    ['2月', 45],
-    ['3月', 26],
-    ['4月', 63],
-    ['5月', 43],
-    ['6月', 30],
-    ['7月', 25],
-    ['8月', 71],
-    ['9月', 98],
-    ['10月', 52],
-    ['11月', 64],
-    ['12月', 85],
-];
+var inputData;
 
 function initData() {
-   // inputData = monthSumBill.out;
+    monthSumBill.in.unshift(["product", "账单"]);
+    monthSumBill.out.unshift(["product", "账单"]);
+    inputData = monthSumBill.out;
+   
+    console.log(inputData);
     var monthin = {
         "yuefen": {
             "zhifubao": [{}, {}, {}]
@@ -59,7 +49,7 @@ function initData() {
             }
         } else {
             allMoneyOut += bill.cost;
-            if (month in bill) {
+            if (month in monthAllBill.out) {
                 if (bill.type in monthAllBill.out[month]) {
                     monthAllBill.out[month][bill.type].push(bill);
                 } else {
@@ -72,11 +62,10 @@ function initData() {
         }
 
     }
+    console.log(monthAllBill);
     getPage().setData({
         allMoney: allMoneyOut
     });
-    console.log(monthAllBill);
-    setBarOption();
 }
 
 function initBarChart(canvas, width, height, dpr) {
@@ -91,10 +80,12 @@ function initBarChart(canvas, width, height, dpr) {
     });
     canvas.setChart(barChart);
     barChart.setOption(setBarOption());
+    console.log("success InitBar");
     return barChart;
 }
 
 function setBarOption() {
+    console.log(inputData);
     var option = {
         grid: {
             bottom: "8%",
@@ -107,7 +98,7 @@ function setBarOption() {
                 xAxisIndex: 0,
                 filterMode: 'none',
                 height: 0,
-                start: 50
+                start: inputData.length < 8 ? 0 : 50 
             },
             {
                 type: "inside",
@@ -132,14 +123,15 @@ function setBarOption() {
             type: 'value',
         },
         tooltip: {
-            // trigger: 'axis',
-            // axisPointer: {
-            //     type: 'shadow'
-            // }
+            trigger: 'axis',
+            axisPointer: {
+                type: 'shadow'
+            }
         },
         series: [{
             type: 'bar',
-            barWidth: "50%"
+            barWidth: "50%",
+            barMinHeight: 10,
         }],
 
     };
@@ -157,7 +149,7 @@ function initPieChart(canvas, width, height, dpr) {
     pie.setInpuData("", []);
     canvas.setChart(pieChart);
     pieChart.setOption(setPieOption());
-    pieChart.on('click', res => {
+    pie.chart.on('click', res => {
         clickPie(res);
     });
     return pieChart;
@@ -183,12 +175,16 @@ function setPieOption() {
             data: convert(pie.pieData, 0),
             label: {
                 show: false,
+                position: 'center'
+            },
+            labelLine: {
+                show: false
             },
             emphasis: {
                 label: {
                     show: true,
                     formatter: function (params) {
-                        return params.name + "\n" + params.percent + "%(" + parseFloat(params.value).toFixed(1) + ")";
+                        return params.name + "\n" + params.value + "(" + parseFloat(params.percent).toFixed(1) + ")%";
                     }
                 }
             },
@@ -198,11 +194,6 @@ function setPieOption() {
 }
 
 function clickBar(param) {
-    //两种做法
-    // 暂时作为更新pieChart
-    getPage().selectComponent('#pieChartId').init((canvas, width, height, dpr) => {
-        return initPieChart(canvas, width, height, dpr);
-    });
     barClicked = param.name;
     pie.setInpuData(param.name, getMonthData(param.name));
     pie.chart.setOption(setPieOption());
@@ -220,7 +211,7 @@ function getMonthData(value) {
     var sum = [];
     for (var type in monthAllBill[index][value]) {
         var temp = 0;
-        for (var bill of monthAllBill[index][value][bill]) {
+        for (var bill of monthAllBill[index][value][type]) {
             temp += parseFloat(bill.cost);
         }
         sum.push([type, temp]);
@@ -237,7 +228,8 @@ function getMonthData(value) {
 function clickPie(param) {
     var index = getPage().data.pattern === 0 ? "out" : "in";
     getPage().setData({
-        showBillData: monthAllBill[index][barClicked][param.value]
+        billTitle: param.name,
+        showBillData: monthAllBill[index][barClicked][param.name]
     });
 }
 
@@ -266,6 +258,7 @@ Page({
         minDate: new Date().getTime(),
         pattern: 0, //
         buttonText: "支出",
+        billTitle: '',
         showDatePicker: false,
 
     },
@@ -299,9 +292,10 @@ Page({
         
         inputData = this.data.pattern === 0 ? monthSumBill.out : monthSumBill.in;
         
-        setBarOption();
-        this.data.pieChart = null;
-        pie.chart = null;
+        bar.chart.setOption(setBarOption());
+       
+        pie.setInpuData("", []);
+        pie.chart.setOption(setPieOption());
         console.log();
     },
     onCloseDatePicker() {
@@ -313,7 +307,10 @@ Page({
      * 生命周期函数--监听页面卸载
      */
     onUnload: function () {
-
+        monthAllBill = {
+            "in": {},
+            "out": {},
+        };
     },
 })
 function getPage() {

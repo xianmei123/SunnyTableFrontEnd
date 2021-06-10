@@ -60,7 +60,7 @@
 	font-size: 60rpx;
 	color: white;
 	/* 背景颜色设置 */
-	background-color:#1abc9c;
+	background-color:#1a81bc;
 	height: 250rpx; 
 	/* flex布局 */
 	display: flex;
