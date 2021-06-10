@@ -1,4 +1,4 @@
-<van-tabs active="{{ active }}" bind:change="onChange">
+<van-tabs active="{{ active }}" bind:change="onChange" nav-class="nex_top">
   <van-tab name="staticData" title="数据图表" style="margin:20rpx">
   <van-row wx:for="{{pics}}">
   <van-col span="8" >
@@ -14,12 +14,12 @@
    </scroll-view> 
   </van-col>
   </van-row>
-    <button style="margin-top:30rpx" bindtap="goDraw" type="primary">创建图表</button>
+    <button style="margin-top:30rpx;background-color:#1a81bc !important" bindtap="goDraw" type="primary">创建图表</button>
   </van-tab>
   <van-tab name="timeData" title="时间图表">
     <!-- 时间图表类似 -->
     <navigator url="/pages/bill/bill">
-      <button style="margin-top:30rpx"  type="primary">创建账单</button>
+      <button style="margin-top:30rpx;background-color:#1a81bc !important"    type="primary">创建账单</button>
     </navigator>
   </van-tab>
 </van-tabs>

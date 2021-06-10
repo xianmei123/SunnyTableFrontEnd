@@ -5,7 +5,7 @@
   </view>
 </mp-dialog>
 <!-- 顶部功能栏目 -->
-<view class="top_box">
+<view class="top_box nex_top">
   <!-- 面包屑栏 -->
   <van-row>
     <van-col wx:for="{{dirStack}}">
@@ -23,8 +23,8 @@
       <van-icon name="plus" size="30" bindtap="showDialog" data-index="{{0}}" />
     </van-col>
     <van-col span="16" offset="1">
-      <van-dropdown-menu>
-        <van-dropdown-item model:value="{{ dropValue }}" options="{{ dropOption }}" bind:change="sortObj" />
+      <van-dropdown-menu title-class="nex_top">
+        <van-dropdown-item title-class="nex_top" model:value="{{ dropValue }}" options="{{ dropOption }}" bind:change="sortObj" />
       </van-dropdown-menu>
     </van-col>
     <van-col span="2" offset="1">
@@ -38,19 +38,19 @@
 <view>
   <van-cell-group wx:for="{{fileList}}">
     <van-cell wx:if="{{item.type == 4}}" title="{{item.name}}" label="{{item.createTime}}" bindlongpress="popUp"
-      bindtap="openDir" data-item="{{item}}" is-link  custom-class="file_cell"/>
+      bindtap="openDir" data-item="{{item}}" is-link  custom-class="file_cell first_item"/>
     <van-cell wx:else title="{{item.name}}" label="{{item.createTime}}" clickable="true" bindlongpress="popUp"
       bindtap="openObj" data-item="{{item}}" custom-class="file_cell"/>
   </van-cell-group>
 </view>
 <!-- 弹出框 -->
 <van-popup show="{{ popShow }}" position="bottom" custom-style="height:400rpx;" bind:close="popDown">
-  <view class="item" bindtap="showDialog" data-index="{{1}}" style="height:{{activeObj.type==3?'100rpx':'130rpx'}}">
+  <view class="item" bindtap="showDialog" data-index="{{1}}" style="height:{{activeObj.type==3?'100rpx':'130rpx'}};font-weight:400">
     重命名
   </view>
-  <view class="item" bindtap="delObj" style="height:{{activeObj.type==3?'100rpx':'130rpx'}}">删除</view>
-  <view class="item" bindtap="moveObj" style="height:{{activeObj.type==3?'100rpx':'130rpx'}}"> 移动</view>
-  <view class="item" wx:if="{{activeObj.type == 3}}">
+  <view class="item" bindtap="delObj" style="height:{{activeObj.type==3?'100rpx':'130rpx'}};font-weight:400">删除</view>
+  <view class="item" bindtap="moveObj" style="height:{{activeObj.type==3?'100rpx':'130rpx'}};font-weight:400"> 移动</view>
+  <view class="item" wx:if="{{activeObj.type == 3}}" style="height:100rpx;font-weight:400">
     <button open-type="share" class="button" data-id= "{{activeObj.id}}">分享</button>
   </view>
 </van-popup>

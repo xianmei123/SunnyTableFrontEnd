@@ -4,14 +4,14 @@
 <view wx:if="{{type==0}}">
 	<van-cell-group title="基础设置">
 		<van-row>
-			<van-field label="模板名称" model:value="{{  lineModelName }}" placeholder="请输入模板名称" border="{{ true }}" />
+			<van-field label-class="van_field" label="模板名称" model:value="{{  lineModelName }}" placeholder="请输入模板名称" border="{{ true }}" />
 		</van-row>
 		<van-row>
-			<van-field label="数据点半径" model:value="{{  lineRaiuds }}" type="number" placeholder="请输入数字"
+			<van-field label-class="van_field" label="数据点半径" model:value="{{  lineRaiuds }}" type="number" placeholder="请输入数字"
 				border="{{ true }}" />
 		</van-row>
 		<van-row>
-			<van-field label="标记点大小" model:value="{{  lineMarkPointSize }}" type="number" placeholder="请输入数字"
+			<van-field label-class="van_field" label="标记点大小" model:value="{{  lineMarkPointSize }}" type="number" placeholder="请输入数字"
 				border="{{ true }}" />
 		</van-row>
 		<van-cell title="标记点种类">
@@ -66,12 +66,12 @@
 			<van-switch model:checked="{{ linePosVertical }}" bind:change="changeSingleItem"
 				data-name="linePosVertical" />
 		</van-cell>
-		<van-field label="图例上边距" model:value="{{  lineLegendPosTop }}" type="number" placeholder="请输入数字"
+		<van-field label-class="van_field" label="图例上边距" model:value="{{  lineLegendPosTop }}" type="number" placeholder="请输入数字"
 			border="{{ true }}" />
-		<!-- <van-field label="图例下边距" model:value="{{  lineLegendPosBottom }}" placeholder="请输入数字" border="{{ true }}" /> -->
-		<van-field label="图例左边距" model:value="{{   lineLegendPosLeft }}" type="number" placeholder="请输入数字"
+		<!-- <van-field label-class="van_field" label="图例下边距" model:value="{{  lineLegendPosBottom }}" placeholder="请输入数字" border="{{ true }}" /> -->
+		<van-field label-class="van_field" label="图例左边距" model:value="{{   lineLegendPosLeft }}" type="number" placeholder="请输入数字"
 			border="{{ true }}" />
-		<!-- <van-field label="图例右边距" model:value="{{  lineLegendPosRight }}" placeholder="请输入数字" border="{{ true }}" /> -->
+		<!-- <van-field label-class="van_field" label="图例右边距" model:value="{{  lineLegendPosRight }}" placeholder="请输入数字" border="{{ true }}" /> -->
 	</van-cell-group>
 	<van-cell-group title="折线聚焦">
 		<van-cell wx:for="{{uses}}" title="折线{{index}}聚焦">
@@ -138,14 +138,14 @@
 <view wx:if="{{type == 1}}">
 	<van-cell-group title="基础设置">
 		<van-row>
-			<van-field label="模板名称" model:value="{{  barModelName }}" placeholder="请输入模板名称" border="{{ true }}" />
+			<van-field label-class="van_field" label="模板名称" model:value="{{  barModelName }}" placeholder="请输入模板名称" border="{{ true }}" />
 		</van-row>
 		<van-row>
-			<van-field label="条宽" model:value="{{  barWidth }}" type="number" placeholder="请输入数字(百分比)"
+			<van-field label-class="van_field" label="条宽" model:value="{{  barWidth }}" type="number" placeholder="请输入数字(百分比)"
 				border="{{ true }}" />
 		</van-row>
 		<van-row>
-			<van-field label="条间隔" model:value="{{  barGap }}" type="number" placeholder="请输入数字(百分比)"
+			<van-field label-class="van_field" label="条间隔" model:value="{{  barGap }}" type="number" placeholder="请输入数字(百分比)"
 				border="{{ true }}" />
 		</van-row>
 		<van-cell title="字体大小">
@@ -177,12 +177,12 @@
 			<van-switch model:checked="{{ barPosVertical }}" bind:change="changeSingleItem"
 				data-name="barPosVertical" />
 		</van-cell>
-		<van-field label="图例上边距" model:value="{{  barLegendPosTop }}" type="number" placeholder="请输入数字"
+		<van-field label-class="van_field" label="图例上边距" model:value="{{  barLegendPosTop }}" type="number" placeholder="请输入数字"
 			border="{{ true }}" />
-		<!-- <van-field label="图例下边距" model:value="{{  barLegendPosBottom }}" placeholder="请输入数字" border="{{ true }}" /> -->
-		<van-field label="图例左边距" model:value="{{  barLegendPosLeft }}" type="number" placeholder="请输入数字"
+		<!-- <van-field label-class="van_field" label="图例下边距" model:value="{{  barLegendPosBottom }}" placeholder="请输入数字" border="{{ true }}" /> -->
+		<van-field label-class="van_field" label="图例左边距" model:value="{{  barLegendPosLeft }}" type="number" placeholder="请输入数字"
 			border="{{ true }}" />
-		<!-- <van-field label="图例右边距" model:value="{{  barLegendPosRight }}" placeholder="请输入数字" border="{{ true }}" /> -->
+		<!-- <van-field label-class="van_field" label="图例右边距" model:value="{{  barLegendPosRight }}" placeholder="请输入数字" border="{{ true }}" /> -->
 	</van-cell-group>
 	<van-cell-group title="柱聚焦">
 		<van-cell wx:for="{{uses}}" title="柱{{index}}聚焦">
@@ -233,10 +233,10 @@
 <view wx:if="{{type == 2}}">
 	<van-cell-group title="基础设置">
 		<van-row>
-			<van-field label="模板名称" model:value="{{  pieModelName }}" placeholder="请输入模板名称" border="{{ true }}" />
+			<van-field label-class="van_field" label="模板名称" model:value="{{  pieModelName }}" placeholder="请输入模板名称" border="{{ true }}" />
 		</van-row>
 		<van-row>
-			<van-field label="饼宽" model:value="{{  pieRadius[0] }}" type="number" placeholder="请输入数字(百分比)"
+			<van-field label-class="van_field" label="饼宽" model:value="{{  pieRadius[0] }}" type="number" placeholder="请输入数字(百分比)"
 				border="{{ true }}" />
 		</van-row>
 		<van-cell title="扇形圆角">
@@ -281,9 +281,9 @@
 			<van-switch model:checked="{{ piePosVertical }}" bind:change="changeSingleItem"
 				data-name="piePosVertical" />
 		</van-cell>
-		<van-field label="图例上边距" model:value="{{  pieLegendPosTop }}" type="number" placeholder="请输入数字"
+		<van-field label-class="van_field" label="图例上边距" model:value="{{  pieLegendPosTop }}" type="number" placeholder="请输入数字"
 			border="{{ true }}" />
-		<van-field label="图例左边距" model:value="{{  pieLegendPosLeft }}" type="number" placeholder="请输入数字"
+		<van-field label-class="van_field" label="图例左边距" model:value="{{  pieLegendPosLeft }}" type="number" placeholder="请输入数字"
 			border="{{ true }}" />
 	</van-cell-group>
 	<van-cell-group title="圆环图">
@@ -292,7 +292,7 @@
 		</van-cell>
 		<view wx:if="pieShowRing">
 			<van-row>
-				<van-field label="外环大小" model:value="{{  pieRadius[1] }}" type="number" placeholder="请输入数字(百分比)"
+				<van-field label-class="van_field" label="外环大小" model:value="{{  pieRadius[1] }}" type="number" placeholder="请输入数字(百分比)"
 					border="{{ true }}" bind:change="changeSingleItem" data-name="pieRadius[1]" />
 			</van-row>
 		</view>
@@ -318,7 +318,7 @@
 <view wx:if="{{type == 3}}">
 	<van-cell-group title="基础设置">
 		<van-row>
-			<van-field label="模板名称" model:value="{{  scatterModelName }}" placeholder="请输入模板名称" border="{{ true }}" />
+			<van-field label-class="van_field" label="模板名称" model:value="{{  scatterModelName }}" placeholder="请输入模板名称" border="{{ true }}" />
 		</van-row>
 		<van-cell title="字体大小">
 			<van-stepper model: value="{{ scatterFont }}" long-press="{{ false }}" min="10" max="30" integer="{{true}}"
@@ -357,9 +357,9 @@
 			<van-switch model:checked="{{ scatterPosVertical }}" bind:change="changeSingleItem"
 				data-name="scatterPosVertical" />
 		</van-cell>
-		<van-field label="图例上边距" model:value="{{  scatterLegendPosTop }}" type="number" placeholder="请输入数字"
+		<van-field label-class="van_field" label="图例上边距" model:value="{{  scatterLegendPosTop }}" type="number" placeholder="请输入数字"
 			border="{{ true }}" />
-		<van-field label="图例左边距" model:value="{{  scatterLegendPosLeft }}" type="number" placeholder="请输入数字"
+		<van-field label-class="van_field" label="图例左边距" model:value="{{  scatterLegendPosLeft }}" type="number" placeholder="请输入数字"
 			border="{{ true }}" />
 	</van-cell-group>
 	<van-cell-group title="曲线回归">
