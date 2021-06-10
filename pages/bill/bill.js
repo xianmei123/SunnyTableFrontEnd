@@ -578,12 +578,17 @@ Page({
 
     async updateBillData() {
         let data = await this.queryBillByTime();
-        billId = data.length;
-        this.setData({
-            billData: data
-        })
-        console.log(billId);
-        this.analyse();
+        if (data != undefined) {
+            billId = data.length;
+            this.setData({
+                billData: data
+            })
+            console.log(billId);
+            this.analyse();
+            wx.showToast({
+              title: '更新成功',
+            })
+        }
     },
 
     onChangeCheckBox(event) {
@@ -640,26 +645,26 @@ Page({
         let everyDay = [];
         if (startYear == endYear) {
             for (let month = startMonth; month <= endMonth; month++) {
-                everyMonth["in"].push([startYear + "-" + monthList[month], 0]);
-                everyMonth["out"].push([startYear + "-" + monthList[month], 0])
+                everyMonth["in"].push([startYear + "-" + monthList[month - 1], 0]);
+                everyMonth["out"].push([startYear + "-" + monthList[month - 1], 0])
             }
-        }       //同一年的情况
+        } //同一年的情况
         else {
             for (let month = startMonth; month <= 12; month++) {
-                everyMonth["in"].push([startYear + "-" + monthList[month], 0]);
-                everyMonth["out"].push([startYear + "-" + monthList[month], 0]);
+                everyMonth["in"].push([startYear + "-" + monthList[month - 1], 0]);
+                everyMonth["out"].push([startYear + "-" + monthList[month - 1], 0]);
             }
-            for (let year = startYear + 1; year < endYear; year++) {
+            for (let year = parseInt(startYear) + 1; year < endYear; year++) {
                 for (let month = startMonth; month <= endMonth; month++) {
-                    everyMonth["in"].push([year + "-" + monthList[month], 0]);
-                    everyMonth["out"].push([year + "-" + monthList[month], 0]);
+                    everyMonth["in"].push([year + "-" + monthList[month - 1], 0]);
+                    everyMonth["out"].push([year + "-" + monthList[month - 1], 0]);
                 }
             }
             for (let month = 1; month <= endMonth; month++) {
-                everyMonth["in"].push([endYear + "-" + monthList[month], 0]);
-                everyMonth["out"].push([endYear + "-" + monthList[month], 0]);
+                everyMonth["in"].push([endYear + "-" + monthList[month - 1], 0]);
+                everyMonth["out"].push([endYear + "-" + monthList[month - 1], 0]);
             }
-        }      
+        }
         var data = {
             "userId": wx.getStorageSync('uid'),
             "startTime": this.data.date["startDateStr"].replace("/", "-").replace("/", "-"),
