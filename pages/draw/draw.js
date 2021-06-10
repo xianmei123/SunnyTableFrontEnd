@@ -995,7 +995,7 @@ Page({
     onSelectNewOption(event) {
         if (event.detail.value == 0) {
             wx.redirectTo({
-                url: '../model_select/model_select'
+                url: '..//model_select'
             })
         } else if (event.detail.value == 1) {
             wx.chooseMessageFile({

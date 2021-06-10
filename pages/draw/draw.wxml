@@ -59,7 +59,8 @@
 </view>
 
 <view style="display:{{isHideTabel}}">
-    <view>
+    <text >\n</text>
+    <view class="border">
         <van-field value="{{graphName}}" placeholder="输入图表名称" border="{{ true }}" bind:change="setChartName" />
         <van-row>
             <van-col span="12">
@@ -101,11 +102,9 @@
             </block>
         </scroll-view>
         <view class="divide_H"></view>
-        <van-row>
-            <van-col span="18">
-                <van-button type="default" bindtap="actionSheetTap">编辑表格</van-button>
-            </van-col>
-        </van-row>
+        <view>
+            <van-button type="default" bindtap="actionSheetTap" custom-class="button-center" block >编辑表格</van-button>
+        </view>
         <action-sheet hidden="{{actionSheetHidden}}" bindchange="actionSheetbindchange">
             <block wx:for-items="{{actionSheetItems}}">
                 <action-sheet-item bindtap="bind{{item.bindtap}}">{{item.txt}}</action-sheet-item>

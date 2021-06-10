@@ -1,7 +1,7 @@
 <!--pages/attribute/attribute.wxml-->
 
 <!-- 折线图 -->
-<view wx:if="{{type == 0}}">
+<view wx:if="{{type==0}}">
 	<van-cell-group title="基础设置">
 		<van-row>
 			<van-field label="模板名称" model:value="{{  lineModelName }}" placeholder="请输入模板名称" border="{{ true }}" />
@@ -52,16 +52,15 @@
 				data-color="lineTextColor" />
 		</van-cell>
 	</van-cell-group>
-	<van-cell-group title="线条颜色">
-		<van-cell wx:for="{{lineColors}}" title="{{item.text}}">
-			<view style="background:{{item.rgb}}" class="color_picker" bindtap="toPick"
-				data-show="lineColors[{{index}}].show">
-			</view>
-			<view>aa {{item.text}} </view>
-			<color-picker bindchangeColor="pickColor" initColor="{{item.rgb}}" show="{{item.show}}"
-				data-color="lineColors[{{index}}].rgb" />
-		</van-cell>
-	</van-cell-group>
+	<van-cell-group title="线条颜色" >
+			<van-cell wx:for="{{uses}}" title="{{lineColors[index].text}}">
+				<view style="background:{{lineColors[index].rgb}}" class="color_picker" bindtap="toPick"
+					data-show="lineColors[{{index}}].show">
+				</view>
+				<color-picker bindchangeColor="pickColor" initColor="{{lineColors[index].rgb}}"
+					show="{{lineColors[index].show}}" data-color="lineColors[{{index}}].rgb" />
+			</van-cell>
+		</van-cell-group>
 	<van-cell-group title="图例设置">
 		<van-cell title="竖放图例">
 			<van-switch model:checked="{{ linePosVertical }}" bind:change="changeSingleItem"
@@ -75,28 +74,28 @@
 		<!-- <van-field label="图例右边距" model:value="{{  lineLegendPosRight }}" placeholder="请输入数字" border="{{ true }}" /> -->
 	</van-cell-group>
 	<van-cell-group title="折线聚焦">
-		<van-cell wx:for="{{lineShowEmphasis}}" title="折线{{index}}聚焦">
+		<van-cell wx:for="{{uses}}" title="折线{{index}}聚焦">
 			<van-switch model:checked="{{ lineShowEmphasis[index] }}" bind:change="changeSingleItem"
 				data-name="lineShowEmphasis[{{index}}]" />
 		</van-cell>
 	</van-cell-group>
 	<van-cell-group title="折线底部区域">
-		<view wx:for="{{lineShowArea}}">
+		<view wx:for="{{uses}}">
 			<van-cell title="折线{{index}}区域显示">
 				<van-switch model:checked="{{ lineShowArea[index] }}" bind:change="changeSingleItem"
 					data-name="lineShowArea[{{index}}]" />
 			</van-cell>
 			<van-cell title="折现{{index}}区域颜色">
-				<view style="background:{{lineAreaStyle[index].rgb}}" class="color_picker" bindtap="toPick"
-					data-show="lineAreaStyle[{{index}}].show">
-				</view>
-				<color-picker bindchangeColor="pickColor" initColor="{{lineAreaStyle[index].rgb}}"
-					show="{{lineAreaStyle[index].show}}" data-color="lineAreaStyle[{{index}}].show" />
-			</van-cell>
+					<view style="background:{{lineAreaStyle[index].rgb}}" class="color_picker" bindtap="toPick"
+						data-show="lineAreaStyle[{{index}}].show">
+					</view>
+					<color-picker bindchangeColor="pickColor" initColor="{{lineAreaStyle[index].rgb}}"
+						show="{{lineAreaStyle[index].show}}" data-color="lineAreaStyle[{{index}}].show" />
+				</van-cell>
 		</view>
 	</van-cell-group>
 	<van-cell-group title="折线辅助线">
-		<view wx:for="{{lineShowAverageMarkLine}}">
+		<view wx:for="{{uses}}">
 			<van-cell title="折线{{index}}最小标记点">
 				<van-switch model:checked="{{ lineShowMinMarkPoint[index] }}" bind:change="changeSingleItem"
 					data-name="lineShowMinMarkPoint[{{index}}]" />
@@ -112,7 +111,7 @@
 		</view>
 	</van-cell-group>
 	<van-cell-group title="区域堆叠">
-		<van-cell wx:for="{{lineStack}}" title="折现{{index}}编号">
+		<van-cell wx:for="{{uses}}" title="折现{{index}}编号">
 			<van-stepper model:value="{{lineStack[index]  }}" long-press="{{ false }}" min="0" max="9"
 				integer="{{true}}" bind:change="changeSingleItem" data-name="lineStack[{{index}}]" />
 		</van-cell>
@@ -125,7 +124,7 @@
 					options="{{ lineColors }}" />
 			</van-dropdown-menu>
 		</van-col>
-		<van-col wx:for="{{lineColors}}" span="18">
+		<van-col wx:for="{{uses}}" span="18">
 			<van-cell wx:if="{{index == lineColorsValue}}">
 				<view style="background:{{item.rgb}}" class="color_picker" bindtap="toPick"
 					data-show="lineColors[{{index}}].show"></view>
@@ -165,12 +164,12 @@
 		</van-cell>
 	</van-cell-group>
 	<van-cell-group title="柱图颜色">
-		<van-cell wx:for="{{barColors}}" title="{{item.text}}">
-			<view style="background:{{item.rgb}}" class="color_picker" bindtap="toPick"
+		<van-cell wx:for="{{uses}}" title="{{barColors[index].text}}">
+			<view style="background:{{barColors[index].rgb}}" class="color_picker" bindtap="toPick"
 				data-show="barColors[{{index}}].show">
 			</view>
-			<color-picker bindchangeColor="pickColor" initColor="{{item.rgb}}" show="{{item.show}}"
-				data-color="barColors[{{index}}].rgb" />
+			<color-picker bindchangeColor="pickColor" initColor="{{barColors[index].rgb}}"
+				show="{{barColors[index].show}}" data-color="barColors[{{index}}].rgb" />
 		</van-cell>
 	</van-cell-group>
 	<van-cell-group title="图例设置">
@@ -186,13 +185,13 @@
 		<!-- <van-field label="图例右边距" model:value="{{  barLegendPosRight }}" placeholder="请输入数字" border="{{ true }}" /> -->
 	</van-cell-group>
 	<van-cell-group title="柱聚焦">
-		<van-cell wx:for="{{barShowEmphasis}}" title="柱{{index}}聚焦">
+		<van-cell wx:for="{{uses}}" title="柱{{index}}聚焦">
 			<van-switch model:checked="{{ barShowEmphasis[index] }}" bind:change="changeSingleItem"
 				data-name="barShowEmphasis[{{index}}]" />
 		</van-cell>
 	</van-cell-group>
 	<van-cell-group title="柱辅助线">
-		<view wx:for="{{barShowAverageMarkLine}}">
+		<view wx:for="{{uses}}">
 			<van-cell title="柱{{index}}最小标记点">
 				<van-switch model:checked="{{ barShowMinMarkPoint[index] }}" bind:change="changeSingleItem"
 					data-name="barShowMinMarkPoint[{{index}}]" />
@@ -208,7 +207,7 @@
 		</view>
 	</van-cell-group>
 	<van-cell-group title="区域堆叠">
-		<van-cell wx:for="{{barStack}}" title="柱{{index}}编号">
+		<van-cell wx:for="{{uses}}" title="柱{{index}}编号">
 			<van-stepper model:value="{{barStack[index]  }}" long-press="{{ false }}" min="0" max="9" integer="{{true}}"
 				bind:change="changeSingleItem" data-name="barStack[{{index}}]" />
 		</van-cell>
@@ -220,7 +219,7 @@
 					popup-style="width:160rpx;font-weight:normal;margin:0;padding:0" options="{{ barColors }}" />
 			</van-dropdown-menu>
 		</van-col>
-		<van-col wx:for="{{barColors}}" span="18">
+		<van-col wx:for="{{uses}}" span="18">
 			<van-cell wx:if="{{index == barColorsValue}}">
 				<view style="background:{{item.rgb}}" class="color_picker" bindtap="toPick"
 					data-show="barColors[{{index}}].show"></view>
@@ -269,12 +268,12 @@
 		</van-cell>
 	</van-cell-group>
 	<van-cell-group title="饼图颜色">
-		<van-cell wx:for="{{pieColors}}" title="{{item.text}}">
-			<view style="background:{{item.rgb}}" class="color_picker" bindtap="toPick"
+		<van-cell wx:for="{{uses}}" title="{{pieColors[index].text}}">
+			<view style="background:{{pieColors[index].rgb}}" class="color_picker" bindtap="toPick"
 				data-show="pieColors[{{index}}].show">
 			</view>
-			<color-picker bindchangeColor="pickColor" initColor="{{item.rgb}}" show="{{item.show}}"
-				data-color="pieColors[{{index}}].rgb" />
+			<color-picker bindchangeColor="pickColor" initColor="{{pieColors[index].rgb}}"
+				show="{{pieColors[index].show}}" data-color="pieColors[{{index}}].rgb" />
 		</van-cell>
 	</van-cell-group>
 	<van-cell-group title="图例设置">
@@ -345,12 +344,12 @@
 		</van-cell>
 	</van-cell-group>
 	<van-cell-group title="散点图颜色">
-		<van-cell wx:for="{{scatterColors}}" title="{{item.text}}">
-			<view style="background:{{item.rgb}}" class="color_picker" bindtap="toPick"
+		<van-cell wx:for="{{uses}}" title="{{scatterColors[index].text}}">
+			<view style="background:{{scatterColors[index].rgb}}" class="color_picker" bindtap="toPick"
 				data-show="scatterColors[{{index}}].show">
 			</view>
-			<color-picker bindchangeColor="pickColor" initColor="{{item.rgb}}" show="{{item.show}}"
-				data-color="scatterColors[{{index}}].rgb" />
+			<color-picker bindchangeColor="pickColor" initColor="{{scatterColors[index].rgb}}"
+				show="{{scatterColors[index].show}}" data-color="scatterColors[{{index}}].rgb" />
 		</van-cell>
 	</van-cell-group>
 	<van-cell-group title="图例设置">
@@ -365,10 +364,11 @@
 	</van-cell-group>
 	<van-cell-group title="曲线回归">
 		<van-cell title="启用回归">
-			<van-switch model:checked="{{ scatterUseRegression }}" bind:change="changeSingleItem" data-name="scatterUseRegression" />
+			<van-switch model:checked="{{ scatterUseRegression }}" bind:change="changeSingleItem"
+				data-name="scatterUseRegression" />
 		</van-cell>
-		<van-radio-group wx:if="{{scatterUseRegression}}" value="{{scatterIndexRegression}}" wx:if="{{ scatterUseRegression }}" bind:change="changeSingleItem"
-			data-name="scatterIndexRegression">
+		<van-radio-group wx:if="{{scatterUseRegression}}" value="{{scatterIndexRegression}}"
+			wx:if="{{ scatterUseRegression }}" bind:change="changeSingleItem" data-name="scatterIndexRegression">
 			<van-cell-group>
 				<van-cell title="线性回归" clickable>
 					<van-radio slot="right-icon" name="0" />
@@ -388,4 +388,6 @@
 </view>
 <!-- </van-tabs> -->
 <text class="duck">\n </text>
-<button bindtap="submit" type="primary"> 提交 </button>
+<button bindtap="submit" type="primary">
+	提交
+</button>

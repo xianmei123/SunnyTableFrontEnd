@@ -30,7 +30,7 @@
     </view>
 
     <view class="box1">
-    <text>账单数据\n\n</text>
+    <text>{{billTitle}}\n\n</text>
     <block wx:for="{{ showBillData }}" wx:for-item="billItem">
         <van-cell-group>
             <van-cell value="{{billItem.time}}">
