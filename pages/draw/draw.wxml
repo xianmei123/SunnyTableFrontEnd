@@ -103,7 +103,7 @@
         </scroll-view>
         <view class="divide_H"></view>
         <view>
-            <van-button type="default" bindtap="actionSheetTap" custom-class="button-center" block >编辑表格</van-button>
+            <van-button type="default" bindtap="actionSheetTap"  block >编辑表格</van-button>
         </view>
         <action-sheet hidden="{{actionSheetHidden}}" bindchange="actionSheetbindchange">
             <block wx:for-items="{{actionSheetItems}}">
@@ -120,14 +120,14 @@
         <text>\n</text>
     </block>
     <text>\n</text>
-    <button type="primary" size="large" bindtap="repaint">绘制图表</button>
+    <button type="primary" size="large" bindtap="repaint" class="button-center">绘制图表</button>
 </view>
 <van-row class="bottom_box">
     <van-col span="8" style="text-align:center; padding-top: 2px">
         <view style="padding-top:4px">
             <text class="icon-new {{screenDirection == 0 ? 'icon' : 'icon_row'}}" bindtap="beginShowNewSheet"></text>
         </view>
-        <view style="font-size: 12px;margin-top: -6px; color:balck">创建</view>
+        <view style="font-size: 12px;margin-top: -6px; color:white">创建</view>
         <van-action-sheet show="{{ showNewSheet }}" actions="{{ newSheetOptions }}" cancel-text="取消"
             bind:close="onCloseNewSheet" bind:select="onSelectNewOption" bind:cancel="onCloseNewSheet" />
     </van-col>
@@ -135,7 +135,7 @@
         <view style="padding-top:4px">
             <text class="icon-save {{screenDirection == 0 ? 'icon' : 'icon_row'}}" bindtap="beginShowSaveSheet"></text>
         </view>
-        <view style="font-size: 12px;margin-top: -6px; color:balck">保存</view>
+        <view style="font-size: 12px;margin-top: -6px; color:white">保存</view>
         <van-action-sheet show="{{ showSaveSheet }}" actions="{{ saveSheetOptions }}" cancel-text="取消"
             bind:close="onCloseSaveSheet" bind:select="onSelectSaveOption" bind:cancel="onCloseSaveSheet" />
     </van-col>
@@ -143,7 +143,7 @@
         <view style="padding-top:4px">
             <text class="icon-modify {{screenDirection == 0 ? 'icon' : 'icon_row'}}" bindtap="goAttribute"></text>
         </view>
-        <view style="font-size: 12px;margin-top: -6px; color:balck">修改</view>
+        <view style="font-size: 12px;margin-top: -6px; color:white">修改</view>
     </van-col>
 </van-row>
 <text>\n</text>

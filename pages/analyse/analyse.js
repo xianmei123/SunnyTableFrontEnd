@@ -291,18 +291,11 @@ Page({
         });
         
         inputData = this.data.pattern === 0 ? monthSumBill.out : monthSumBill.in;
-<<<<<<< HEAD
-
-        setBarOption();
-        this.data.pieChart = null;
-        pie.chart = null;
-=======
         
         bar.chart.setOption(setBarOption());
        
         pie.setInpuData("", []);
         pie.chart.setOption(setPieOption());
->>>>>>> fabbdbb3a6b0c8b0249e061d45147b4692d1ff3f
         console.log();
     },
     onCloseDatePicker() {

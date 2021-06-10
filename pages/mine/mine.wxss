@@ -29,7 +29,7 @@
   opacity: 1;
   top:300rpx;
   margin-left: -280rpx;
-  color: grey;
+  color:#003153;
 }
 .logo {
   position: absolute;
@@ -65,7 +65,12 @@
   margin-right: 10rpx;
 }
 .item{
-  background-color: #fff;
+  /* background-color: #fff; */
+  /* background-color: #F9DCC4; */
+  /* background-color: #1D3557; */
+  /* background-color: #FEC89A; */
+  /* background-color: #A8DADC; */
+  background-color: #457B9D;
   /* color:black; */
   margin: 20rpx 20rpx 10rpx 10rpx; 
   padding: 5rpx;
@@ -79,15 +84,18 @@
   align-items:center;
   justify-content:center;
   /* box-shadow: 1px 1px 3px #aaaaaa;  */
-  color:grey;
+  color:white;
 }
 .button {
   width: 100%;
-  background: white;
+  /* background: white; */
+  /* background-color: #1D3557; */
+  /* background-color: #A8DADC; */
+  background-color: #457B9D;
   border: none;
   margin: 0rpx;
   border-radius: 0;
-  color:grey;
+  color:white;
 }
 .button_title {
   font-size: 1rem;
