@@ -298,7 +298,7 @@ Page({
         });
         
         inputData = this.data.pattern === 0 ? monthSumBill.out : monthSumBill.in;
-        
+
         setBarOption();
         this.data.pieChart = null;
         pie.chart = null;

@@ -124,7 +124,7 @@
     <button type="primary" size="large" bindtap="repaint">绘制图表</button>
 </view>
 <van-row class="bottom_box">
-    <van-col span="6" style="text-align:center; padding-top: 2px">
+    <van-col span="8" style="text-align:center; padding-top: 2px">
         <view style="padding-top:4px">
             <text class="icon-new {{screenDirection == 0 ? 'icon' : 'icon_row'}}" bindtap="beginShowNewSheet"></text>
         </view>
@@ -132,13 +132,7 @@
         <van-action-sheet show="{{ showNewSheet }}" actions="{{ newSheetOptions }}" cancel-text="取消"
             bind:close="onCloseNewSheet" bind:select="onSelectNewOption" bind:cancel="onCloseNewSheet" />
     </van-col>
-    <van-col span="6" style="text-align:center;padding-top: 2px;font-weight:normal">
-        <view style="padding-top:4px">
-            <text class="icon-draft {{screenDirection == 0 ? 'icon' : 'icon_row'}}" bindtap="saveData"></text>
-        </view>
-        <view style="font-size: 12px;margin-top: -6px; color:balck">草稿</view>
-    </van-col>
-    <van-col span="6" style="text-align:center;padding-top: 2px;font-weight:normal">
+    <van-col span="8" style="text-align:center;padding-top: 2px;font-weight:normal">
         <view style="padding-top:4px">
             <text class="icon-save {{screenDirection == 0 ? 'icon' : 'icon_row'}}" bindtap="beginShowSaveSheet"></text>
         </view>
@@ -146,7 +140,7 @@
         <van-action-sheet show="{{ showSaveSheet }}" actions="{{ saveSheetOptions }}" cancel-text="取消"
             bind:close="onCloseSaveSheet" bind:select="onSelectSaveOption" bind:cancel="onCloseSaveSheet" />
     </van-col>
-    <van-col span="6" style="text-align:center;">
+    <van-col span="8" style="text-align:center;">
         <view style="padding-top:4px">
             <text class="icon-modify {{screenDirection == 0 ? 'icon' : 'icon_row'}}" bindtap="goAttribute"></text>
         </view>

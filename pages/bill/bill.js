@@ -314,7 +314,7 @@ Page({
     },
 
     saveBill() {
-        this.queryBillByTime();
+        this.queryBill();
         var url = "https://www.jaripon.xyz/bill/add";
         var data = {};
         data["id"] = billId;
@@ -343,7 +343,7 @@ Page({
         wx.showToast({
             title: '新建账单成功',
         });
-        this.queryBillByTime();
+        this.queryBill();
     },
 
     onConfirmBillCheckBox(event) {
@@ -548,7 +548,7 @@ Page({
         });
     },
 
-    queryBillByTime() {
+    queryBill() {
         var url = "https://www.jaripon.xyz/bill/query/time";
         var data = {
             "userId": wx.getStorageSync('uid'),
@@ -563,7 +563,6 @@ Page({
                 success: (res) => {
                     console.log(res.data);
                     billId = res.data.length;
-                    console.log(billId);
                     resolve(res.data);
                 },
                 fail: function (res) {
@@ -577,16 +576,14 @@ Page({
     },
 
     async updateBillData() {
-        let data = await this.queryBillByTime();
+        let data = await this.queryBill();
         if (data != undefined) {
             billId = data.length;
             this.setData({
                 billData: data
             })
-            console.log(billId);
-            this.analyse();
             wx.showToast({
-              title: '更新成功',
+                title: '更新成功',
             })
         }
     },
@@ -670,7 +667,7 @@ Page({
             "startTime": this.data.date["startDateStr"].replace("/", "-").replace("/", "-"),
             "endTime": this.data.date["endDateStr"].replace("/", "-").replace("/", "-")
         }
-        let ret = await this.queryBillByTime();
+        let ret = await this.queryBill();
         for (var i = 0; i < ret.length; i++) {
             if (ret[i]["time"] >= data["startTime"] && ret[i]["time"] <= data["endTime"]) {
                 let inc = ret[i]["income"] == "true" ? true : false;
@@ -695,6 +692,29 @@ Page({
         console.log(analyseData);
         return analyseData;
     },
+
+    deleteBillById(bid) {
+        var url = "https://www.jaripon.xyz/bill/delete/" + bid;
+        wx.request({
+            url: url,
+            data: data,
+            method: "POST",
+            success: (res) => {
+                wx.showToast({
+                    title: '删除成功',
+                })
+            },
+            fail: function (res) {
+                wx.showToast({
+                    icon: 'error',
+                    title: '删除失败'
+                })
+            }
+        });
+        this.queryBill();
+    },
+
+
 
     onLoad() {
         wx.getRecorderManager().onStop((res) => {

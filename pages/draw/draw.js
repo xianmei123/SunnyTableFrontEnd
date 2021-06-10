@@ -894,7 +894,9 @@ Page({
         currentCell: "",
         defaultRegion: true, //是否选过
         region: [0, 0],
-        pieChartNo: 0
+        pieChartNo: 0,
+        average: [],
+        variance: []
     },
     changeChart(event) {
         var value = event.detail;
@@ -1014,6 +1016,20 @@ Page({
                              * TODO
                              * data 为 dataset的对象，需要填到表格中
                              */
+                            var newGroupName = [];
+                            var newDatas = [];
+                            var dataArray = data["dataArray"];
+                            var i;
+                            for (i = 1; i < dataArray.length; i++) {
+                                newGroupName.push(dataArray[i]["name"]);
+                                newDatas.push(dataArray[i]["lineData"]);
+                            }
+                            console.log('newDatas', newDatas)
+                            this.setData({
+                                xValues: dataArray[0]["lineData"],
+                                datas: newDatas,
+                                groupName: newGroupName
+                            })
                             console.log(res);
                             console.log(data);
                         },
@@ -1299,44 +1315,6 @@ Page({
                 break;
         }
     },
-    saveData() {
-        // var ret = {};
-        // ret["id"] = null;
-        // draftNum++;
-        // ret["name"] = "草稿" + draftNum;
-        // ret["userId"] = wx.getStorageSync('uid');
-        // var i;
-        // var dataArray = [];
-        // dataArray.push({
-        //     "name": "xLabel",
-        //     "cid": null,
-        //     "lineData": this.data.xValues
-        // });
-        // for (i = 0; i < this.data.groupNum; i++) {
-        //     var obj = {
-        //         "name": this.data.groupName[i],
-        //         "cid": null,
-        //         "lineData": this.data.datas[i]
-        //     }
-        //     dataArray.push(obj);
-        // }
-        // ret["dataArray"] = dataArray;
-        // var url = "https://www.jaripon.xyz/data/save";
-        // wx.request({
-        //     url: url,
-        //     data: ret,
-        //     method: "POST",
-        //     success: function (res) {
-        //         console.log(res);
-        //     },
-        //     fail: function (res) {
-        //         console.log("fail");
-        //     }
-        // });
-        wx.showToast({
-            title: '保存草稿成功',
-        });
-    },
     goAttribute() {
         var index;
         var template;
@@ -1605,11 +1583,100 @@ Page({
         });
         this.repaint();
     },
+    async calculateSum() {
+        let ret = await new Promise((resolve, reject) => {
+            wx.request({
+                url: baseUrl + "/expression/sum",
+                data: this.data.datas,
+                method: "POST",
+                success: (res) => {
+                    console.log(res.data);
+                    resolve(res.data);
+                },
+                fail: function (res) {
+                    wx.showToast({
+                        icon: 'error',
+                        title: '计算均值失败'
+                    })
+                }
+            });
+        });
+        this.setData({
+            average: ret
+        })
+    },
+    async calculateAverage() {
+        let ret = await new Promise((resolve, reject) => {
+            wx.request({
+                url: baseUrl + "/expression/average",
+                data: this.data.datas,
+                method: "POST",
+                success: (res) => {
+                    console.log(res.data);
+                    resolve(res.data);
+                },
+                fail: function (res) {
+                    wx.showToast({
+                        icon: 'error',
+                        title: '计算均值失败'
+                    })
+                }
+            });
+        });
+        this.setData({
+            average: ret
+        })
+    },
+    async calculateVariance() {
+        let ret = await new Promise((resolve, reject) => {
+            wx.request({
+                url: baseUrl + "/expression/variance",
+                data: this.data.datas,
+                method: "POST",
+                success: (res) => {
+                    console.log(res.data);
+                    resolve(res.data);
+                },
+                fail: function (res) {
+                    wx.showToast({
+                        icon: 'error',
+                        title: '计算均值失败'
+                    })
+                }
+            });
+        });
+        this.setData({
+            average: ret
+        })
+    },
+    async calculateuncertainty() {
+        let ret = await new Promise((resolve, reject) => {
+            wx.request({
+                url: baseUrl + "/expression/uncertainty",
+                data: this.data.datas,
+                method: "POST",
+                success: (res) => {
+                    console.log(res.data);
+                    resolve(res.data);
+                },
+                fail: function (res) {
+                    wx.showToast({
+                        icon: 'error',
+                        title: '计算均值失败'
+                    })
+                }
+            });
+        });
+        this.setData({
+            average: ret
+        })
+    },
     // 保存模板
     saveTemplate: function () {
         var index = typeToIndex.get(this.data.value1);
         saveTemplate(indexToGraph[index].template, this.data.value1, this.data.inputTemplateName);
     },
+
     /**
      * 用户点击右上角分享
      */
@@ -1624,7 +1691,7 @@ Page({
     },
     onShow() {},
     onReady: function () {
-        setInterval(function () {
+        setInterval(() => {
             var ret = {};
             ret["id"] = null;
             draftNum++;
@@ -1657,9 +1724,6 @@ Page({
                 fail: function (res) {
                     console.log("fail");
                 }
-            });
-            wx.showToast({
-                title: '保存草稿成功',
             });
         }, 120000);
     },

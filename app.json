@@ -1,9 +1,9 @@
 {
   "pages": [
+    "pages/draw/draw",
     "pages/bill/bill",
     "pages/tutorial/tutorial",
     "pages/index/index",
-    "pages/draw/draw",
     "pages/storage/storage",
     "pages/attribute/attribute",
     "pages/storage/modify/modify",
