@@ -568,7 +568,8 @@ Page({
                 },
                 fail: function (res) {
                     wx.showToast({
-                        title: '查询失败',
+                        icon: 'error',
+                        title: '查询失败'
                     })
                 }
             });
@@ -582,6 +583,7 @@ Page({
             billData: data
         })
         console.log(billId);
+        this.analyse();
     },
 
     onChangeCheckBox(event) {
@@ -626,32 +628,52 @@ Page({
         });
     },
     async analyse() {
+        let startYear = (this.data.date["startDateStr"].split("/"))[0];
+        let endYear = (this.data.date["endDateStr"].split("/"))[0];
         let startMonth = (this.data.date["startDateStr"].split("/"))[1];
         let endMonth = (this.data.date["endDateStr"].split("/"))[1];
         let everyMonth = {
             "in": [],
             "out": []
         };
+        var monthList = ["01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"];
         let everyDay = [];
-        for (let month = startMonth; month <= endMonth; month++) {
-            everyMonth["in"].push([month, 0]);
-            everyMonth["out"].push([month, 0])
-        }
+        if (startYear == endYear) {
+            for (let month = startMonth; month <= endMonth; month++) {
+                everyMonth["in"].push([startYear + "-" + monthList[month], 0]);
+                everyMonth["out"].push([startYear + "-" + monthList[month], 0])
+            }
+        }       //同一年的情况
+        else {
+            for (let month = startMonth; month <= 12; month++) {
+                everyMonth["in"].push([startYear + "-" + monthList[month], 0]);
+                everyMonth["out"].push([startYear + "-" + monthList[month], 0]);
+            }
+            for (let year = startYear + 1; year < endYear; year++) {
+                for (let month = startMonth; month <= endMonth; month++) {
+                    everyMonth["in"].push([year + "-" + monthList[month], 0]);
+                    everyMonth["out"].push([year + "-" + monthList[month], 0]);
+                }
+            }
+            for (let month = 1; month <= endMonth; month++) {
+                everyMonth["in"].push([endYear + "-" + monthList[month], 0]);
+                everyMonth["out"].push([endYear + "-" + monthList[month], 0]);
+            }
+        }      
         var data = {
             "userId": wx.getStorageSync('uid'),
             "startTime": this.data.date["startDateStr"].replace("/", "-").replace("/", "-"),
             "endTime": this.data.date["endDateStr"].replace("/", "-").replace("/", "-")
         }
         let ret = await this.queryBillByTime();
-        console.log(data["startTime"]);
-        console.log(data["endTime"]);
         for (var i = 0; i < ret.length; i++) {
             if (ret[i]["time"] >= data["startTime"] && ret[i]["time"] <= data["endTime"]) {
                 let inc = ret[i]["income"] == "true" ? true : false;
+                let year = (ret[i]["time"].split("-"))[0];
                 let mon = (ret[i]["time"].split("-"))[1];
                 let cost = ret[i]["cost"];
                 let key = inc ? "in" : "out";
-                everyMonth[key][parseInt(mon) - parseInt(startMonth)][1] += cost;
+                everyMonth[key][12 * (parseInt(year) - parseInt(startYear)) + parseInt(mon) - parseInt(startMonth)][1] += cost;
                 everyDay.push({
                     "detail": ret[i]["detail"],
                     "time": ret[i]["time"],
