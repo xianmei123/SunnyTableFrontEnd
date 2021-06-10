@@ -2,58 +2,57 @@
 
 <!-- 折线图 -->
 <view wx:if="{{type==0}}">
-		<van-cell-group title="基础设置" >
-			<van-row>
-				<van-field label="模板名称" model:value="{{  lineModelName }}" placeholder="请输入模板名称" border="{{ true }}" />
-			</van-row>
-			<van-row>
-				<van-field label="数据点半径" model:value="{{  lineRaiuds }}" type="number" placeholder="请输入数字"
-					border="{{ true }}" />
-			</van-row>
-			<van-row>
-				<van-field label="标记点大小" model:value="{{  lineMarkPointSize }}" type="number" placeholder="请输入数字"
-					border="{{ true }}" />
-			</van-row>
-			<van-cell title="标记点种类">
-				<van-stepper model:value="{{ lineMarkPointStyle }}" long-press="{{ false }}" min="10" max="30"
-					integer="{{true}}" bind:change="changeSingleItem" data-name="lineMarkPointStyle" />
-			</van-cell>
-			<van-cell title="字体大小">
-				<van-stepper model:value="{{ lineFont }}" long-press="{{ false }}" min="10" max="30" integer="{{true}}"
-					bind:change="changeSingleItem" data-name="lineFont" />
-			</van-cell>
-			<van-cell title="数值显示">
-				<van-switch model:checked="{{ lineShowDigit }}" bind:change="changeSingleItem"
-					data-name="lineShowDigit" />
-			</van-cell>
-			<van-cell title="符号显示">
-				<van-switch model:checked="{{ lineShowSymbol }}" bind:change="changeSingleItem"
-					data-name="lineShowSymbol" />
-			</van-cell>
-			<van-cell title="折线光滑化">
-				<van-switch model:checked="{{ lineSmooth }}" bind:change="changeSingleItem" data-name="lineSmooth" />
-			</van-cell>
-			<van-cell title="开启渐变">
-				<van-switch model:checked="{{ lineShowGradient }}" bind:change="changeSingleItem"
-					data-name="lineShowGradient" />
-			</van-cell>
-			<van-cell title="开启X轴渐变">
-				<van-switch model:checked="{{ lineShowXGradient }}" bind:change="changeSingleItem"
-					data-name="lineShowXGradient" />
-			</van-cell>
-			<van-cell title="开启Y轴渐变">
-				<van-switch model:checked="{{ lineShowYGradient }}" bind:change="changeSingleItem"
-					data-name="lineShowYGradient" />
-			</van-cell>
-			<van-cell title="字体颜色">
-				<view style="background:{{lineTextColor}}" class="color_picker" bindtap="toPick"
-					data-show='lineTextColorPick'>
-				</view>
-				<color-picker bindchangeColor="pickColor" initColor="{{lineTextColor}}" show="{{lineTextColorPick}}"
-					data-color="lineTextColor" />
-			</van-cell>
-		</van-cell-group>
-		<van-cell-group title="线条颜色" >
+	<van-cell-group title="基础设置">
+		<van-row>
+			<van-field label="模板名称" model:value="{{  lineModelName }}" placeholder="请输入模板名称" border="{{ true }}" />
+		</van-row>
+		<van-row>
+			<van-field label="数据点半径" model:value="{{  lineRaiuds }}" type="number" placeholder="请输入数字"
+				border="{{ true }}" />
+		</van-row>
+		<van-row>
+			<van-field label="标记点大小" model:value="{{  lineMarkPointSize }}" type="number" placeholder="请输入数字"
+				border="{{ true }}" />
+		</van-row>
+		<van-cell title="标记点种类">
+			<van-stepper model:value="{{ lineMarkPointStyle }}" long-press="{{ false }}" min="10" max="30"
+				integer="{{true}}" bind:change="changeSingleItem" data-name="lineMarkPointStyle" />
+		</van-cell>
+		<van-cell title="字体大小">
+			<van-stepper model:value="{{ lineFont }}" long-press="{{ false }}" min="10" max="30" integer="{{true}}"
+				bind:change="changeSingleItem" data-name="lineFont" />
+		</van-cell>
+		<van-cell title="数值显示">
+			<van-switch model:checked="{{ lineShowDigit }}" bind:change="changeSingleItem" data-name="lineShowDigit" />
+		</van-cell>
+		<van-cell title="符号显示">
+			<van-switch model:checked="{{ lineShowSymbol }}" bind:change="changeSingleItem"
+				data-name="lineShowSymbol" />
+		</van-cell>
+		<van-cell title="折线光滑化">
+			<van-switch model:checked="{{ lineSmooth }}" bind:change="changeSingleItem" data-name="lineSmooth" />
+		</van-cell>
+		<van-cell title="开启渐变">
+			<van-switch model:checked="{{ lineShowGradient }}" bind:change="changeSingleItem"
+				data-name="lineShowGradient" />
+		</van-cell>
+		<van-cell title="开启X轴渐变">
+			<van-switch model:checked="{{ lineShowXGradient }}" bind:change="changeSingleItem"
+				data-name="lineShowXGradient" />
+		</van-cell>
+		<van-cell title="开启Y轴渐变">
+			<van-switch model:checked="{{ lineShowYGradient }}" bind:change="changeSingleItem"
+				data-name="lineShowYGradient" />
+		</van-cell>
+		<van-cell title="字体颜色">
+			<view style="background:{{lineTextColor}}" class="color_picker" bindtap="toPick"
+				data-show='lineTextColorPick'>
+			</view>
+			<color-picker bindchangeColor="pickColor" initColor="{{lineTextColor}}" show="{{lineTextColorPick}}"
+				data-color="lineTextColor" />
+		</van-cell>
+	</van-cell-group>
+	<van-cell-group title="线条颜色" >
 			<van-cell wx:for="{{uses}}" title="{{lineColors[index].text}}">
 				<view style="background:{{lineColors[index].rgb}}" class="color_picker" bindtap="toPick"
 					data-show="lineColors[{{index}}].show">
@@ -62,61 +61,61 @@
 					show="{{lineColors[index].show}}" data-color="lineColors[{{index}}].rgb" />
 			</van-cell>
 		</van-cell-group>
-		<van-cell-group title="图例设置" >
-			<van-cell title="竖放图例">
-				<van-switch model:checked="{{ linePosVertical }}" bind:change="changeSingleItem"
-					data-name="linePosVertical" />
+	<van-cell-group title="图例设置">
+		<van-cell title="竖放图例">
+			<van-switch model:checked="{{ linePosVertical }}" bind:change="changeSingleItem"
+				data-name="linePosVertical" />
+		</van-cell>
+		<van-field label="图例上边距" model:value="{{  lineLegendPosTop }}" type="number" placeholder="请输入数字"
+			border="{{ true }}" />
+		<!-- <van-field label="图例下边距" model:value="{{  lineLegendPosBottom }}" placeholder="请输入数字" border="{{ true }}" /> -->
+		<van-field label="图例左边距" model:value="{{   lineLegendPosLeft }}" type="number" placeholder="请输入数字"
+			border="{{ true }}" />
+		<!-- <van-field label="图例右边距" model:value="{{  lineLegendPosRight }}" placeholder="请输入数字" border="{{ true }}" /> -->
+	</van-cell-group>
+	<van-cell-group title="折线聚焦">
+		<van-cell wx:for="{{uses}}" title="折线{{index}}聚焦">
+			<van-switch model:checked="{{ lineShowEmphasis[index] }}" bind:change="changeSingleItem"
+				data-name="lineShowEmphasis[{{index}}]" />
+		</van-cell>
+	</van-cell-group>
+	<van-cell-group title="折线底部区域">
+		<view wx:for="{{uses}}">
+			<van-cell title="折线{{index}}区域显示">
+				<van-switch model:checked="{{ lineShowArea[index] }}" bind:change="changeSingleItem"
+					data-name="lineShowArea[{{index}}]" />
 			</van-cell>
-			<van-field label="图例上边距" model:value="{{  lineLegendPosTop }}" type="number" placeholder="请输入数字"
-				border="{{ true }}" />
-			<!-- <van-field label="图例下边距" model:value="{{  lineLegendPosBottom }}" placeholder="请输入数字" border="{{ true }}" /> -->
-			<van-field label="图例左边距" model:value="{{   lineLegendPosLeft }}" type="number" placeholder="请输入数字"
-				border="{{ true }}" />
-			<!-- <van-field label="图例右边距" model:value="{{  lineLegendPosRight }}" placeholder="请输入数字" border="{{ true }}" /> -->
-		</van-cell-group>
-		<van-cell-group title="折线聚焦" >
-			<van-cell wx:for="{{uses}}" title="折线{{index}}聚焦">
-				<van-switch model:checked="{{ lineShowEmphasis[index] }}" bind:change="changeSingleItem"
-					data-name="lineShowEmphasis[{{index}}]" />
-			</van-cell>
-		</van-cell-group>
-		<van-cell-group title="折线底部区域" >
-			<view wx:for="{{uses}}">
-				<van-cell title="折线{{index}}区域显示">
-					<van-switch model:checked="{{ lineShowArea[index] }}" bind:change="changeSingleItem"
-						data-name="lineShowArea[{{index}}]" />
-				</van-cell>
-				<van-cell title="折现{{index}}区域颜色">
+			<van-cell title="折现{{index}}区域颜色">
 					<view style="background:{{lineAreaStyle[index].rgb}}" class="color_picker" bindtap="toPick"
 						data-show="lineAreaStyle[{{index}}].show">
 					</view>
 					<color-picker bindchangeColor="pickColor" initColor="{{lineAreaStyle[index].rgb}}"
 						show="{{lineAreaStyle[index].show}}" data-color="lineAreaStyle[{{index}}].show" />
 				</van-cell>
-			</view>
-		</van-cell-group>
-		<van-cell-group title="折线辅助线" >
-			<view wx:for="{{uses}}">
-				<van-cell title="折线{{index}}最小标记点">
-					<van-switch model:checked="{{ lineShowMinMarkPoint[index] }}" bind:change="changeSingleItem"
-						data-name="lineShowMinMarkPoint[{{index}}]" />
-				</van-cell>
-				<van-cell title="折线{{index}}最大标记点">
-					<van-switch model:checked="{{ lineShowMaxMarkPoint[index] }}" bind:change="changeSingleItem"
-						data-name="lineShowMaxMarkPoint[{{index}}]" />
-				</van-cell>
-				<van-cell title="折线{{index}}平均标记线">
-					<van-switch model:checked="{{ lineShowAverageMarkLine[index] }}" bind:change="changeSingleItem"
-						data-name="lineShowAverageMarkLine[{{index}}]" />
-				</van-cell>
-			</view>
-		</van-cell-group>
-		<van-cell-group title="区域堆叠" >
-			<van-cell wx:for="{{uses}}" title="折现{{index}}编号">
-				<van-stepper model:value="{{lineStack[index]  }}" long-press="{{ false }}" min="0" max="9"
-					integer="{{true}}" bind:change="changeSingleItem" data-name="lineStack[{{index}}]" />
+		</view>
+	</van-cell-group>
+	<van-cell-group title="折线辅助线">
+		<view wx:for="{{uses}}">
+			<van-cell title="折线{{index}}最小标记点">
+				<van-switch model:checked="{{ lineShowMinMarkPoint[index] }}" bind:change="changeSingleItem"
+					data-name="lineShowMinMarkPoint[{{index}}]" />
 			</van-cell>
-		</van-cell-group>
+			<van-cell title="折线{{index}}最大标记点">
+				<van-switch model:checked="{{ lineShowMaxMarkPoint[index] }}" bind:change="changeSingleItem"
+					data-name="lineShowMaxMarkPoint[{{index}}]" />
+			</van-cell>
+			<van-cell title="折线{{index}}平均标记线">
+				<van-switch model:checked="{{ lineShowAverageMarkLine[index] }}" bind:change="changeSingleItem"
+					data-name="lineShowAverageMarkLine[{{index}}]" />
+			</van-cell>
+		</view>
+	</van-cell-group>
+	<van-cell-group title="区域堆叠">
+		<van-cell wx:for="{{uses}}" title="折现{{index}}编号">
+			<van-stepper model:value="{{lineStack[index]  }}" long-press="{{ false }}" min="0" max="9"
+				integer="{{true}}" bind:change="changeSingleItem" data-name="lineStack[{{index}}]" />
+		</van-cell>
+	</van-cell-group>
 	<!-- <van-row>
 		<van-col span="6">
 			<van-dropdown-menu>

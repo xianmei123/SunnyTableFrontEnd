@@ -383,14 +383,14 @@ Page({
 			})
 			this.setData({
 				type: index,
-				defaulteTemplate: data.template
+				defaulteTemplate: data.template,
+				count:data.count
 			})
-			console.log(this.data.template)
-			var uses = []  
-			for(var x = 0;x<count;x++)
-				uses.push(i)
-			this.setData({count:data.template.count,uses})
 			init[index]()
+			var uses = []  
+			for(var x = 0;x<data.count;x++)
+				uses.push(x)
+			this.setData({uses})
 		})
 
 	},
@@ -472,11 +472,6 @@ Page({
 		})
 	},
 	submit(event) {
-		// var tmeplates = [this.getLineTemplate, this.getBarTemplate, this.getPieTemplate, this.getScatterTemplate]
-		// var targets = [updateLineTemplate, updateBarTemplate, updatePieTemplate, updateScatterTemplate]
-		// var index = this.data.type
-		// var template = tmeplates[index]()
-		// targets[index](template)
 		this.setData({
 			isChangeTemplate: true
 		});
