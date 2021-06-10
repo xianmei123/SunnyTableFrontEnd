@@ -4,6 +4,10 @@ Page({
 	 * 页面的初始数据
 	 */
 	data: {
+		lineActiveNames: ['1'],
+		barActiveNames:['1'],
+		pieActiveNames:['1'],
+		scatterActiveNames:['1'],
 		isChangeTemplate: false,
 		active: 1,
 		myshow: true,
@@ -382,7 +386,10 @@ Page({
 				defaulteTemplate: data.template
 			})
 			console.log(this.data.template)
-			this.setData({count:data.template.count})
+			var uses = []  
+			for(var x = 0;x<count;x++)
+				uses.push(i)
+			this.setData({count:data.template.count,uses})
 			init[index]()
 		})
 

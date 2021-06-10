@@ -7,3 +7,9 @@
 .drop_style{
     width: 80rpx;
 }
+van-collapse-item {
+    height: 100rpx !important;
+}
+.van-collapse-item__title{
+    height: 200rpx !important;
+}
