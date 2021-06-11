@@ -102,17 +102,6 @@
             </block>
         </scroll-view>
         <view class="divide_H"></view>
-        <view>
-            <van-button type="default" bindtap="actionSheetTap"  block >编辑表格</van-button>
-        </view>
-        <!-- <van-action-sheet show="{{ actionSheetHidden }}" actions="{{ saveSheetOptions }}" cancel-text="取消"
-            bind:close="onCloseSaveSheet" bind:select="onSelectSaveOption" bind:cancel="onCloseSaveSheet" /> -->
-        <action-sheet hidden="{{actionSheetHidden}}" bindchange="actionSheetbindchange">
-            <block wx:for-items="{{actionSheetItems}}">
-                <action-sheet-item bindtap="bind{{item.bindtap}}">{{item.txt}}</action-sheet-item>
-            </block>
-            <action-sheet-cancel class="cancel">取消</action-sheet-cancel>
-        </action-sheet>
     </view>
     <block wx:if="{{value1=='pie'}}">
         <text>\n</text>
@@ -121,6 +110,10 @@
             bind:change="choosePieChart" />
         <text>\n</text>
     </block>
+    <text>\n</text>
+    <button type="primary" size="large" bindtap="actionEditTable" class="button-center">编辑表格</button>
+    <van-action-sheet show="{{ showEditSheet }}" actions="{{ editTableOptions }}" cancel-text="取消"
+            bind:close="onCloseEditTable" bind:select="onSelectEditTable" bind:cancel="onCloseEditTable" />
     <text>\n</text>
     <button type="primary" size="large" bindtap="repaint" class="button-center">绘制图表</button>
 </view>

@@ -798,23 +798,6 @@ Page({
         /**0 表示 为竖屏，1表示为横屏*/
         screenDirection: wx.getStorageSync('system'),
         actionSheetHidden: true,
-        actionSheetItems: [{
-                bindtap: 'Menu1',
-                txt: '添加横坐标'
-            },
-            {
-                bindtap: 'Menu2',
-                txt: '添加数据组'
-            },
-            {
-                bindtap: 'Menu3',
-                txt: '删除横坐标'
-            },
-            {
-                bindtap: 'Menu4',
-                txt: '删除数据组'
-            }
-        ],
         graphName: "", // 在图的最上方显示的标题
         xName: "",
         yName: "",
@@ -860,6 +843,20 @@ Page({
         inputTemplateName: "",
         /**是否展示底部保存的上拉列表 */
         showSaveSheet: false,
+        showEditSheet: false,
+        editTableOptions: [{
+            name: "增加行",
+            value: 0
+        }, {
+            name: "增加列",
+            value: 1
+        }, {
+            name: "删除行",
+            value: 2
+        }, {
+            name: "删除列",
+            value: 3,
+        }],
         saveSheetOptions: [{
             name: "保存模板",
             value: 0
@@ -946,39 +943,15 @@ Page({
         console.log(tempIdToTemplate.get(event.deatil));
         updateTemplate(typeToIndex.get(this.data.value1), tempIdToTemplate.get(event.deatil));
     },
-    actionSheetTap() {
+    actionEditTable() {
         this.setData({
-            actionSheetHidden: !this.data.actionSheetHidden
+            showEditSheet: !this.data.showEditSheet
         })
     },
     actionSheetbindchange() {
         this.setData({
             actionSheetHidden: !this.data.actionSheetHidden
         })
-    },
-    bindMenu1() {
-        this.setData({
-            actionSheetHidden: !this.data.actionSheetHidden
-        })
-        this.addX();
-    },
-    bindMenu2() {
-        this.setData({
-            actionSheetHidden: !this.data.actionSheetHidden
-        })
-        this.addDataGroup();
-    },
-    bindMenu3() {
-        this.setData({
-            actionSheetHidden: !this.data.actionSheetHidden
-        })
-        this.delX();
-    },
-    bindMenu4() {
-        this.setData({
-            actionSheetHidden: !this.data.actionSheetHidden
-        })
-        this.delGroup();
     },
     onCloseInputTempName() {
         this.setData({
@@ -995,6 +968,15 @@ Page({
         this.setData({
             inputTemplateName: event.detail
         });
+    },
+    onCloseEditTable() {
+        this.setData({
+            showEditSheet: false
+        });
+    },
+    onSelectEditTable(event) {
+        var funs = [this.addX, this.addDataGroup, this.delX, this.delGroup];
+        funs[event.detail.value]();
     },
     onCloseSaveSheet() {
         this.setData({
