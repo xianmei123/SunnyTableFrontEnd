@@ -78,11 +78,11 @@
         <!-- 表格 -->
         <scroll-view class="scroll-view_H" scroll-x="true" style="width: 100%">
             <view class="text-item">
-                <van-field value="数据组" disabled bindtap="changeCurrentX" style="boarder:solid!important"/>
+                <van-field value="" placeholder="横坐标" disabled bindtap="changeCurrentX" style="boarder:solid!important"/>
             </view>
             <block wx:for="{{iterator2}}" wx:for-index="i">
                 <view class="text-item">
-                    <van-field value="{{ groupName[i] }}" placeholder="数据组{{ i + 1 }}"  bind:change="setGroupName"
+                    <van-field value="{{ groupName[i] }}" placeholder="{{placeData}}{{ i + 1 }}"  bind:change="setGroupName"
                         data-a="{{i}}" bindtap="changeCurrentGroupName" />
                 </view>
             </block>
@@ -102,23 +102,18 @@
             </block>
         </scroll-view>
         <view class="divide_H"></view>
-        <view>
-            <van-button type="default" bindtap="actionSheetTap"  block >编辑表格</van-button>
-        </view>
-        <action-sheet hidden="{{actionSheetHidden}}" bindchange="actionSheetbindchange">
-            <block wx:for-items="{{actionSheetItems}}">
-                <action-sheet-item bindtap="bind{{item.bindtap}}">{{item.txt}}</action-sheet-item>
-            </block>
-            <action-sheet-cancel class="cancel">取消</action-sheet-cancel>
-        </action-sheet>
     </view>
     <block wx:if="{{value1=='pie'}}">
         <text>\n</text>
-        <text>请输入想要绘制的数据组序号\n</text>
+        <text>请输入想要绘制的饼序号\n</text>
         <van-field border="{{ false }}" bind:change="getData" data-a="{{j}}" data-b="{{i + 1}}"
             bind:change="choosePieChart" />
         <text>\n</text>
     </block>
+    <text>\n</text>
+    <button type="primary" size="large" bindtap="actionEditTable" class="button-center">编辑表格</button>
+    <van-action-sheet show="{{ showEditSheet }}" actions="{{ editTableOptions }}" cancel-text="取消"
+            bind:close="onCloseEditTable" bind:select="onSelectEditTable" bind:cancel="onCloseEditTable" />
     <text>\n</text>
     <button type="primary" size="large" bindtap="repaint" class="button-center">绘制图表</button>
 </view>
@@ -143,7 +138,7 @@
         <view style="padding-top:4px">
             <text class="icon-modify {{screenDirection == 0 ? 'icon' : 'icon_row'}}" bindtap="goAttribute"></text>
         </view>
-        <view style="font-size: 12px;margin-top: -6px; color:black">修改</view>
+        <view style="font-size: 12px;margin-top: -6px; color:black">模板</view>
     </van-col>
 </van-row>
 <text>\n</text>
