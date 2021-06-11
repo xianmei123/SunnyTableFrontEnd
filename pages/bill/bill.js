@@ -819,7 +819,7 @@ Page({
                 filePath: tempFilePath,
                 name: 'file',
                 success: res => {
-                    console.log(res);
+                    res = JSON.parse(res);
                     this.setData({
                         "newBill.detail": res.data.detail,
                         "newBill.cost": res.data.cost,

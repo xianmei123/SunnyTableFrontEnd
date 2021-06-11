@@ -85,8 +85,8 @@ page {
 
 .icon {
     display: inline-block;
-    width: 48rpx;
-    height: 48rpx;
+    width: 24px;
+    height: 24px;
 }
 .nex_top{
     /* background-color: #457B9D; */
@@ -116,8 +116,8 @@ page {
 
 .icon_row {
     display: inline-block;
-    width: 22rpx;
-    height: 22rpx;
+    width: 24px;
+    height: 24px;
 }
 
 .icon-draft {
