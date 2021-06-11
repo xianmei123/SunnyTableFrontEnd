@@ -33,6 +33,13 @@
                 {
                     "name": "pages/attribute/attribute",
                     "pathName": "pages/attribute/attribute",
+                    "query": "",
+                    "scene": null
+                },
+                {
+                    "name": "pages/draw/draw",
+                    "pathName": "pages/draw/draw",
+                    "query": "",
                     "scene": null
                 }
             ]

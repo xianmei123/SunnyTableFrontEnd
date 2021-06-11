@@ -155,7 +155,7 @@
 </van-popup>
 <!-- 新建账单的弹出层 -->
 <van-popup show="{{ newBill.show }}" position="center" custom-style="width: 90%" bind:close="onCancelBill">
-    <view class="van-picker__toolbar toolbar-class">
+    <view wx:if="{{newBill.show}}" class="van-picker__toolbar toolbar-class">
         <view class="van-picker__cancel" hover-class="van-picker__cancel--hover" hover-stay-time="70" data-type="cancel"
             bindtap="onCancelBill">
             {{ "取消" }}
@@ -231,7 +231,7 @@
     </van-col>
     <van-col span="8" style="text-align:center;padding-top: 4px;font-weight:normal">
         <view style="padding-top:4px">
-            <text class="icon-save {{'icon'}}" bindtap="showPopupMenuCondition"></text>
+            <text class="icon-filter {{'icon'}}" bindtap="showPopupMenuCondition"></text>
         </view>
         <view style="font-size: 12px;margin-top: -6px; color:black">筛选</view>
     </van-col>
