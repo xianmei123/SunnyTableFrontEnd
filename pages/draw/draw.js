@@ -342,14 +342,15 @@ function setLineOption(lineChart, template) {
         lineChart.setOption({
             tooltip: {
                 trigger: 'axis',
-                formatter: function (params) {
-                    var xstr = line.xType === "string" ? params.data[0] : parseFloat(params.data[0]).toFixed(2);
-                    var ystr = line.yType === "string" ? params.data[1] : parseFloat(params.data[1]).toFixed(2);
-                    return 'X: ' +
-                        xstr +
-                        '\nY: ' +
-                        ystr;
-                }
+                // formatter: function (params) {
+                //     console.log(params);
+                //     var xstr = line.xType === "string" ? params[0].data[0] : parseFloat(params[0].data[0]).toFixed(2);
+                //     var ystr = line.yType === "string" ? params[0].data[1] : parseFloat(params[0].data[1]).toFixed(2);
+                //     return 'X: ' +
+                //         xstr +
+                //         '\nY: ' +
+                //         ystr;
+                // }
             },
         });
     }
@@ -1081,6 +1082,7 @@ Page({
                     });
                 }
                 this.setData({
+                    value1: value,
                     option2: newOption2,
                     value2: newOption2[0].value
                 });
