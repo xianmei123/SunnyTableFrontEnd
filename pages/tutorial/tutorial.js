@@ -105,7 +105,7 @@ Page({
     console.log(e.detail.scrollWidth);
     var scrollLeft = e.detail.scrollLeft;//滚动宽度
     console.log(e.detail.scrollLeft);
-    var curIndex = Math.floor(scrollLeft / 250);//通过Math.round方法对滚动大于一半的位置
+    var curIndex = Math.floor((scrollLeft +160) / 320);//通过Math.round方法对滚动大于一半的位置
     console.log(curIndex);
     //进行进位
     for (var i = 0, len = that.data.pics.length; i < len; ++i) {

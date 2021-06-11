@@ -1,0 +1,15 @@
+
+var filter = {
+  getIndex: function (str) {
+    var list = [ '娱乐', '餐饮', '购物', '日用', '零食', '果蔬', '交通', '学习', '服饰', '医疗',  '住房' , '工资', '兼职', '理财', '礼金'];
+    for (var i = 0; i < list.length; i++) {
+      if (str == list[i]) {
+        return i;
+      }
+    }
+
+  }
+}
+module.exports = {
+  getIndex: filter.getIndex
+}

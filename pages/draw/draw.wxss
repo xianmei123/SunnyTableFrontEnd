@@ -73,10 +73,25 @@
 }
 .bottom_box{
 	z-index: 5;
+	/* background-color: #1D3557 ; */
+	background-color: white;
 }
 
 
 
-.buttom-center{
+.button-center{
 	margin: 0 auto;
+	background-color:#1a81bc !important
 }
+
+.van-dropdown-menu{
+	--dropdown-menu-height: 40px ;
+	/* background-color: #457B9D !important; */
+	background-color: #00477d !important;
+	--dropdown-menu-title-text-color: white;
+	/* background-color: #ffc0cb !important; */
+	/* color:#003153; */
+  }
+  .van-dropdown-item__option{
+	background-color: #457B9D !important;
+  }

@@ -1,7 +1,7 @@
 /* pages/storage/storage.wxss */
 .crumb_normal{
   font-size: 40rpx;
-  color:gray
+  color:white
 }
 .crumb_active{
   font-size: 40rpx;
@@ -9,6 +9,16 @@
 }
 .van-dropdown-menu{
   --dropdown-menu-height: 40px ;
+  /* background-color: #457B9D !important; */
+  background-color: #00477d !important;
+  /* background-color: #ffc0cb !important; */
+  --dropdown-menu-title-text-color:white;
+  /* --cell-background-color: #00477d; */
+  /* color: white !important; */
+  /* font-weight: bold; */
+}
+.van-dropdown-item__option{
+  background-color: #457B9D !important;
 }
 .item{
   display: flex;
@@ -29,4 +39,13 @@
 }
 .file_cell{
   height:150rpx!important;
+  /* background-color: #A8DADC !important; */
+  /* background-color: #1a81bc !important; */
+  background-color: white !important;
+  /* background-color: #457B9D !important; */
+  /* color: white !important; */
+  color: black !important;
+  font-weight: 400 !important;
+  font-size: 40rpx !important;
+  text-align: center !important;
 }

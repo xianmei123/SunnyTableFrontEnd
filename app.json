@@ -25,11 +25,11 @@
     }
   ],
   "window": {
-    "backgroundColor": "#D4F2E7",
+    "backgroundColor": "#457B9D",
     "backgroundTextStyle": "light",
-    "navigationBarBackgroundColor": "#fff",
+    "navigationBarBackgroundColor": "#1d3557",
     "navigationBarTitleText": "Weixin",
-    "navigationBarTextStyle": "black"
+    "navigationBarTextStyle": "white"
   },
   "style": "v2",
   "sitemapLocation": "sitemap.json",
@@ -37,8 +37,9 @@
     "weui": true
   },
   "tabBar": {
-    "color": "#bdc3c7",
-    "borderStyle": "black",
+    "backgroundColor": "white",
+    "borderStyle": "white",
+    "color": "black",
     "selectedColor": "#2980b9",
     "list": [
       {

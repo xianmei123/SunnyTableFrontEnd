@@ -78,12 +78,23 @@
 
 page {
     background-color: #eee;
+    /* background-color: #fec89a; */
+    /* background-color: #f8edeb; */
+    /* background-color:#F1FAEE; */
 }
 
 .icon {
     display: inline-block;
     width: 48rpx;
     height: 48rpx;
+}
+.nex_top{
+    /* background-color: #457B9D; */
+    background-color: #00477d;
+    color:white;
+}
+.first_item{
+    background-color: #F9DCC4;
 }
 
 .icon-save {

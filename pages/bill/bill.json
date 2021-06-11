@@ -10,6 +10,7 @@
     "van-dropdown-menu": "@vant/weapp/dropdown-menu/index",
     "van-dropdown-item": "@vant/weapp/dropdown-item/index",
     "van-radio": "@vant/weapp/radio/index",
-  "van-radio-group": "@vant/weapp/radio-group/index"
+  "van-radio-group": "@vant/weapp/radio-group/index",
+  "van-icon": "@vant/weapp/icon/index"
   }
 }
