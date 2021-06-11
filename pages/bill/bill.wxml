@@ -22,12 +22,12 @@
 </van-popup>
 <!-- 开始日期选择的弹出层 -->
 <van-popup show="{{ date.showStart }}" position="top" custom-style="height: 60%;" bind:close="onClose1">
-    <van-datetime-picker type="date" value="{{ date.currentDate1 }}" bind:input="onInput1" min-date="{{ date.minDate }}"
+    <van-datetime-picker type="date" value="{{ date.currentDate1 }}" bind:change="onChangeStrat" min-date="{{ date.minDate }}"
         formatter="{{ formatter }}" bind:confirm="onConfirm1" bind:cancel="onCancel1" bind:today="onToday1" />
 </van-popup>
 <!-- 结束日期选择的弹出层 -->
 <van-popup show="{{ date.showEnd }}" position="top" custom-style="height: 60%;" bind:close="onClose2">
-    <van-datetime-picker type="date" value="{{ date.currentDate2 }}" bind:input="onInput2" min-date="{{ date.minDate }}"
+    <van-datetime-picker  type="date" value="{{ date.currentDate2 }}" bind:change="onChangeEnd" min-date="{{ date.minDate }}"
         formatter="{{ formatter }}" bind:confirm="onConfirm2" bind:cancel="onCancel2" bind:today="onToday2" />
 </van-popup>
 
@@ -149,7 +149,7 @@
 </van-popup>
 <!-- 新建账单时间选择的弹出层 -->
 <van-popup show="{{ newBill.date.show }}" position="center" custom-style="width: 90%" bind:close="onCloseBillDate">
-    <van-datetime-picker type="date" value="{{ newBill.date.currentDate }}" bind:input="onInputBillDate"
+    <van-datetime-picker type="date" value="{{ newBill.date.currentDate }}" bind:change="onChangeBillDate"
         min-date="{{ newBill.date.minDate }}" formatter="{{ formatter }}" bind:confirm="onConfirmBillDate"
         bind:cancel="onCancelBillDate" bind:today="onTodayBillDate" />
 </van-popup>

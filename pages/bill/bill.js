@@ -425,14 +425,16 @@ Page({
     showPopup1() {
         this.setData({
             'date.showStart': true,
-            'date.show': false
+            'date.show': false,
+            'date.currentDate1': this.data.date.startDate
         });
     },
 
     showPopup2() {
         this.setData({
             'date.showEnd': true,
-            'date.show': false
+            'date.show': false,
+            'date.currentDate2': this.data.date.endDate
         });
     },
 
@@ -463,7 +465,8 @@ Page({
         //let  value = 'list.title';
         this.setData({
             'newBill.show': false,
-            'newBill.date.show': true
+            'newBill.date.show': true,
+            'newBill.date.currentDate': this.data.newBill.date.date
         });
     },
 
@@ -476,6 +479,7 @@ Page({
     },
 
     onClose1() {
+        console.log("d调用");
         // console.log('currb'+this.data.date.currentDate1);
         // console.log('stb'+this.data.date.startDate);
         this.setData({
@@ -483,6 +487,7 @@ Page({
             'date.show': true,
             'date.currentDate1': this.data.date.startDate
         });
+
         // console.log('sta'+this.data.date.startDate);
         // console.log('curra'+this.data.date.currentDate1);
     },
@@ -540,7 +545,61 @@ Page({
         this.setData({
             'date.currentDate1': event.detail,
         });
-        //console.log('chage'+this.data.date.currentDate1);
+        console.log('chage'+this.data.date.currentDate1);
+    },
+
+    onChangeStrat(event) {
+        console.log(event.detail.getColumnValue(0)+'-'+event.detail.getColumnValue(1) + '-' +event.detail.getColumnValue(2));
+        var dateStr = event.detail.getColumnValue(0)+'-'+event.detail.getColumnValue(1) + '-' +event.detail.getColumnValue(2);
+        var year = event.detail.getColumnValue(0).substr(0,4);
+        var month = event.detail.getColumnValue(1).substr(0,2);
+        var day = event.detail.getColumnValue(2).substr(0,2);
+        var dateStr = year+'/'+month+'/'+day;
+        console.log(year+'/'+month+'/'+day);
+        var date = new Date(year, month-1, day);
+        console.log(date.toLocaleDateString());
+        this.setData({
+            'date.currentDate1' : date.getTime(),
+           
+        })
+        // var date = new Date()
+        // let value=event.detail.getColumnValue(0)+'-'+event.detail.getColumnValue(1)
+    },
+
+    onChangeEnd(event) {
+        //console.log(event.detail.getColumnValue(0)+'-'+event.detail.getColumnValue(1) + '-' +event.detail.getColumnValue(2));
+        var dateStr = event.detail.getColumnValue(0)+'-'+event.detail.getColumnValue(1) + '-' +event.detail.getColumnValue(2);
+        var year = event.detail.getColumnValue(0).substr(0,4);
+        var month = event.detail.getColumnValue(1).substr(0,2);
+        var day = event.detail.getColumnValue(2).substr(0,2);
+        var dateStr = year+'/'+month+'/'+day;
+        //console.log(year+'/'+month+'/'+day);
+        var date = new Date(year, month-1, day);
+        //console.log(date.toLocaleDateString());
+        this.setData({
+            'date.currentDate2' : date.getTime(),
+           
+        })
+        // var date = new Date()
+        // let value=event.detail.getColumnValue(0)+'-'+event.detail.getColumnValue(1)
+    },
+
+    onChangeBillDate(event) {
+        //console.log(event.detail.getColumnValue(0)+'-'+event.detail.getColumnValue(1) + '-' +event.detail.getColumnValue(2));
+        var dateStr = event.detail.getColumnValue(0)+'-'+event.detail.getColumnValue(1) + '-' +event.detail.getColumnValue(2);
+        var year = event.detail.getColumnValue(0).substr(0,4);
+        var month = event.detail.getColumnValue(1).substr(0,2);
+        var day = event.detail.getColumnValue(2).substr(0,2);
+        var dateStr = year+'/'+month+'/'+day;
+        //console.log(year+'/'+month+'/'+day);
+        var date = new Date(year, month-1, day);
+        //console.log(date.toLocaleDateString());
+        this.setData({
+            'newBill.date.currentDate' : date.getTime(),
+           
+        })
+        // var date = new Date()
+        // let value=event.detail.getColumnValue(0)+'-'+event.detail.getColumnValue(1)
     },
 
     onInput2(event) {
@@ -557,7 +616,7 @@ Page({
 
     onChangeInput1(event) {
         // event.detail 为当前输入的值
-        //console.log(event.detail);
+        console.log(event.detail);
         this.setData({
             'condition.message1': event.detail
         });
