@@ -42,9 +42,19 @@ Page({
 			url: '../logs/logs'
 		})
 	},
-	goDraw() {
+	goDraw(e) {
+		var value =  e.target.dataset.name
+		if(value=='折线图') value = 'line'
+		else if(value=='柱状图') value = 'bar'
+		else if(value=='饼状图') value = 'pie'
+		else value ='scatter'
 		wx.navigateTo({
 			url: '../draw/draw',
+			success(result) {
+				result.eventChannel.emit("goDraw", {
+				  value: value
+				})
+			  }
 		})
 	},
 	goSelectModel() {
@@ -105,5 +115,5 @@ Page({
 			title:'duck',
 			path:'/pages/storage/storage?uid=' + 5
 		}
-	}	
+	}
 })

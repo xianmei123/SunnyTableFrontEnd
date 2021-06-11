@@ -20,7 +20,8 @@
   <!-- 添加排序搜索 -->
   <van-row>
     <van-col span="2" offset="1">
-      <van-icon name="plus" size="30" bindtap="showDialog" data-index="{{0}}" />
+      <text class="icon-new icon " bindtap="goAnalyse" bindtap="showDialog" data-index="{{0}}"></text>
+      <view style="font-size: 12px;margin-top: -6px; color:black">新建</view>
     </van-col>
     <van-col span="16" offset="1">
       <van-dropdown-menu title-class="nex_top">
@@ -28,7 +29,9 @@
       </van-dropdown-menu>
     </van-col>
     <van-col span="2" offset="1">
-      <van-icon name="replay" size="30" bindtap="flush" />
+      <text class="icon-flush icon " bindtap="goAnalyse" bindtap="flush" ></text>
+      <view style="font-size: 12px;margin-top: -6px; color:black">刷新</view>
+      <!-- <van-icon name="replay" size="30" bindtap="flush" /> -->
     </van-col>
   </van-row>
 </view>

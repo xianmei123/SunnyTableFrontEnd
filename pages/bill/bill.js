@@ -128,6 +128,30 @@ Page({
         icons:getApp().globalData.icons,
     },
 
+    onClose(event) {
+        const { position, instance } = event.detail;
+        console.log(event.detail);
+        var index = event.target.dataset.a;
+        switch (position) {
+          case 'left':
+          case 'cell':
+            instance.close();
+            break;
+          case 'right':
+            wx.showModal({
+                title: '提示',
+                content: '确定要删除吗？',
+                success: (sm) => {
+                  if (sm.confirm) {
+                      this.deleteBillById(this.data.billData[index]["id"]);
+                    } else if (sm.cancel) {
+                      console.log('用户点击取消')
+                    }
+                  }
+                })
+        }
+      },
+
     getIndex1() {
         return 0;
     },
@@ -374,7 +398,7 @@ Page({
         wx.showToast({
             title: '新建账单成功',
         });
-        this.queryBill();
+        this.updateBillDataNotShow();
     },
 
     onConfirmBillCheckBox(event) {
@@ -681,7 +705,17 @@ Page({
                 billData: data
             })
             wx.showToast({
-                title: '更新成功',
+                title: '账单数据已更新',
+            })
+        }
+    },
+
+    async updateBillDataNotShow() {
+        let data = await this.queryBill();
+        if (data != undefined) {
+            billId = data.length;
+            this.setData({
+                billData: data
             })
         }
     },
@@ -880,7 +914,6 @@ Page({
         var url = "https://www.jaripon.xyz/bill/delete/" + bid;
         wx.request({
             url: url,
-            data: data,
             method: "POST",
             success: (res) => {
                 wx.showToast({
@@ -894,7 +927,7 @@ Page({
                 })
             }
         });
-        this.queryBill();
+        this.updateBillDataNotShow();
     },
 
 
@@ -925,5 +958,6 @@ Page({
                 }
             });
         });
+        this.updateBillDataNotShow();
     }
 });
