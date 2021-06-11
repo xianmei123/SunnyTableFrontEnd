@@ -5,9 +5,9 @@ Page({
 	 */
 	data: {
 		lineActiveNames: ['1'],
-		barActiveNames:['1'],
-		pieActiveNames:['1'],
-		scatterActiveNames:['1'],
+		barActiveNames: ['1'],
+		pieActiveNames: ['1'],
+		scatterActiveNames: ['1'],
 		isChangeTemplate: false,
 		active: 1,
 		myshow: true,
@@ -79,7 +79,7 @@ Page({
 		var [legendPos, lineColors] = this.getTotAttribute(template, '线图')
 		var [lineLegendPosTop, lineLegendPosBottom, lineLegendPosLeft, lineLegendPosRight, linePosVertical] = legendPos
 		var lineAreaStyle = this.transArrColor(template, '区域颜色')
-		console.log('线色',lineColors)
+		console.log('线色', lineColors)
 		console.log(template)
 		this.setData({
 			lineRaiuds: template.radius,
@@ -107,7 +107,7 @@ Page({
 			lineShowGradient: template.showGradient,
 			lineShowXGradient: template.showXGradient,
 			lineShowYGradient: template.showYGradient,
-			lineStack: [0,0]
+			lineStack: [0, 0]
 			// lineStack: this.transArray(template.stack)
 		})
 		console.log('colors', this.data.lineTextColor, this.data.lineColors)
@@ -154,7 +154,7 @@ Page({
 	},
 	transArray(arr) {
 		return arr.split(" ").map(item => {
-			if(item=="") return null;
+			if (item == "") return null;
 			else return JSON.parse(item)
 		})
 	},
@@ -215,7 +215,7 @@ Page({
 		var template = this.data.defaulteTemplate
 		var [legendPos, barColors] = this.getTotAttribute(template, '柱图')
 		var [barLegendPosTop, barLegendPosBottom, barLegendPosLeft, barLegendPosRight, barPosVertical] = legendPos
-		console.log('bar!',template)
+		console.log('bar!', template)
 		this.setData({
 			barWidth: template.width.split('%')[0],
 			barGap: template.gap.split('%')[0],
@@ -349,7 +349,7 @@ Page({
 			scatterColors,
 			scatterColorsValue,
 			scatterUseRegression: JSON.parse(template.useRegression),
-			scatterIndexRegression:template.indexRegression.toString()
+			scatterIndexRegression: template.indexRegression.toString()
 		})
 	},
 	getScatterTemplate() {
@@ -357,7 +357,7 @@ Page({
 		var [legendPos, scatterColors] = this.getTotAttribute(template, '散点图')
 		var [scatterLegendPosTop, scatterLegendPosBottom, scatterLegendPosLeft, scatterLegendPosRight, scatterPosVertical] = legendPos
 		var lengendPosList = [this.data.scatterLegendPosTop || scatterLegendPosTop + '%', this.data.scatterLegendPosBottom || scatterLegendPosBottom + '%', this.data.scatterLegendPosLeft || scatterLegendPosLeft + '%', this.data.scatterLegendPosRight || scatterLegendPosRight + '%' + scatterPosVertical ? 'vetical' : 'horizon'].join(',')
-		console.log('scatter',template)
+		console.log('scatter', template)
 		return {
 			showLine: this.data.scatterShowLine,
 			increate: this.data.scatterIncrease,
@@ -384,28 +384,30 @@ Page({
 			this.setData({
 				type: index,
 				defaulteTemplate: data.template,
-				count:data.count
+				count: data.count
 			})
 			init[index]()
-			var uses = []  
-			for(var x = 0;x<data.count;x++)
+			var uses = []
+			for (var x = 0; x < data.count; x++)
 				uses.push(x)
-			this.setData({uses})
+			this.setData({
+				uses
+			})
 		})
 
 	},
 	onUnload() {
-		if (this.data.isChangeTemplate) {
-			var tmeplates = [this.getLineTemplate, this.getBarTemplate, this.getPieTemplate, this.getScatterTemplate]
-			var index = this.data.type
-			var template = this.data.defaulteTemplate
-			var mtemplate = tmeplates[index]()
-			Object.assign(template, mtemplate)
-			const eventChannel = this.getOpenerEventChannel()
-			eventChannel.emit('back', {
-				template: template
-			});
-		}
+
+		var tmeplates = [this.getLineTemplate, this.getBarTemplate, this.getPieTemplate, this.getScatterTemplate]
+		var index = this.data.type
+		var template = this.data.defaulteTemplate
+		var mtemplate = tmeplates[index]()
+		Object.assign(template, mtemplate)
+		const eventChannel = this.getOpenerEventChannel()
+		eventChannel.emit('back', {
+			template: template
+		});
+
 	},
 	/**
 	 * 生命周期函数--监听页面初次渲染完成
@@ -457,18 +459,23 @@ Page({
 	changeSingleItem(event) {
 		var detail = event.detail
 		var name = event.currentTarget.dataset.name
-		if(name=='pieShowRing'){				
-			this.setData({pieShowLabel:!detail})
+		if (name == 'pieShowRing') {
+			this.setData({
+				pieShowLabel: !detail
+			})
 		}
 		this.setData({
 			[name]: detail
 		});
 	},
-	modifySingleItem(event){
+	modifySingleItem(event) {
 		console.log(event)
-		var {name,value} = event.currentTarget.dataset
+		var {
+			name,
+			value
+		} = event.currentTarget.dataset
 		this.setData({
-			[name]:value
+			[name]: value
 		})
 	},
 	submit(event) {

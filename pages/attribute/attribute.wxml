@@ -388,6 +388,6 @@
 </view>
 <!-- </van-tabs> -->
 <text class="duck">\n </text>
-<button bindtap="submit" type="primary">
+<!-- <button bindtap="submit" type="primary">
 	提交
-</button>
+</button> -->

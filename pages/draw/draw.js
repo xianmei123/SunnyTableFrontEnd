@@ -90,10 +90,9 @@ var pie = new graph.PieGraph("pie");
 var scatter = new graph.ScatterGraph("scatter");
 
 var draftNum = 0;
-var graphName = "默认标题"; // 在图的最上方显示的标题
-var graphId = null; //图的id 是否应该存在内存中？
-var xName = "x";
-var yName = "y";
+var graphName = ""; // 在图的最上方显示的标题
+var xName = "";
+var yName = "";
 var indexToGraph = [line, bar, pie, scatter];
 var typeToIndex = new Map([
     ["line", 0],
@@ -112,6 +111,26 @@ var templates = {
 };
 
 var tempIdToTemplate = new Map();
+
+function isNumber(val) {
+    var regPos = /^\d+(\.\d+)?$/; //非负浮点数
+    var regNeg = /^(-(([0-9]+\.[0-9]*[1-9][0-9]*)|([0-9]*[1-9][0-9]*\.[0-9]+)|([0-9]*[1-9][0-9]*)))$/; //负浮点数
+    if (regPos.test(val) && regNeg.test(val)) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+function convertNum(val) {
+    if (val == "" || val == null || val == undefined) {
+        return null;
+    }
+    else if (isNumber(val)) {
+        return parseFloat(val);
+    }
+    return val;
+}
 
 /**
  * 初始化折线图
@@ -245,7 +264,7 @@ function setLineOption(lineChart, template) {
             }
         ],
         grid: {
-            bottom: "8%"
+            bottom: "10%",
         },
         title: {
             text: graphName,
@@ -796,9 +815,9 @@ Page({
                 txt: '删除数据组'
             }
         ],
-        graphName: "默认标题", // 在图的最上方显示的标题
-        xName: "x",
-        yName: "y",
+        graphName: "", // 在图的最上方显示的标题
+        xName: "",
+        yName: "",
         option1: [{
                 text: '折线图',
                 value: 'line'
@@ -831,7 +850,11 @@ Page({
         showBarChart: true,
         showPieChart: true,
         showScatterChart: true,
-        errorChart: "您当前无法绘制此图，请检查您的数据是否为空或数据的格式是否正确。",
+        errorLineChart: "请您输入数据进行画图。",
+        errorBarChart: "请您输入数据进行画图。",
+        errorPieChart: "请您输入数据进行画图，并在下方选择您要画的饼图序号。",
+        errorScatterChart: "请您输入数据进行画图。\ntip：散点图只能绘制横纵坐标全为数值的图。",
+
         /**是否战术输入模板名字 */
         showInputTemplateName: false,
         inputTemplateName: "",
@@ -1259,9 +1282,9 @@ Page({
         console.log(this.data.groupName);
         for (i = 0; i < this.data.xValues.length; i++) {
             var tmp = [];
-            tmp.push(this.data.xValues[i]);
+            tmp.push(convertNum(this.data.xValues[i]));
             for (j = 0; j < this.data.groupNum; j++) {
-                tmp.push(this.data.datas[j][i]);
+                tmp.push(convertNum(this.data.datas[j][i]));
             }
             ret.push(tmp);
         }
@@ -1692,39 +1715,43 @@ Page({
     onShow() {},
     onReady: function () {
         setInterval(() => {
-            var ret = {};
-            ret["id"] = null;
-            draftNum++;
-            ret["name"] = "草稿" + draftNum;
-            ret["userId"] = wx.getStorageSync('uid');
-            var i;
-            var dataArray = [];
-            dataArray.push({
-                "name": "xLabel",
-                "cid": null,
-                "lineData": this.data.xValues
-            });
-            for (i = 0; i < this.data.groupNum; i++) {
-                var obj = {
-                    "name": this.data.groupName[i],
+            var page = getPage();
+            if (page.route == "pages/draw/draw") {
+                console.log(page.route);
+                var ret = {};
+                ret["id"] = null;
+                draftNum++;
+                ret["name"] = "草稿";
+                ret["userId"] = wx.getStorageSync('uid');
+                var i;
+                var dataArray = [];
+                dataArray.push({
+                    "name": "xLabel",
                     "cid": null,
-                    "lineData": this.data.datas[i]
+                    "lineData": this.data.xValues
+                });
+                for (i = 0; i < this.data.groupNum; i++) {
+                    var obj = {
+                        "name": this.data.groupName[i],
+                        "cid": null,
+                        "lineData": this.data.datas[i]
+                    }
+                    dataArray.push(obj);
                 }
-                dataArray.push(obj);
+                ret["dataArray"] = dataArray;
+                var url = "https://www.jaripon.xyz/data/save";
+                wx.request({
+                    url: url,
+                    data: ret,
+                    method: "POST",
+                    success: function (res) {
+                        console.log(res);
+                    },
+                    fail: function (res) {
+                        console.log("fail");
+                    }
+                });
             }
-            ret["dataArray"] = dataArray;
-            var url = "https://www.jaripon.xyz/data/save";
-            wx.request({
-                url: url,
-                data: ret,
-                method: "POST",
-                success: function (res) {
-                    console.log(res);
-                },
-                fail: function (res) {
-                    console.log("fail");
-                }
-            });
         }, 120000);
     },
     onUnload: function () {
