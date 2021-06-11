@@ -24,3 +24,5 @@
     </navigator>
   </van-tab>
 </van-tabs>
+
+<!-- <button bindtap="updateTemplate"> update</button> -->
