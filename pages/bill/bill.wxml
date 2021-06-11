@@ -48,8 +48,8 @@
     </view>
     <van-checkbox-group value="{{ checkbox.result }}" bind:change="onChangeCheckBox">
         <van-cell-group>
-            <van-cell wx:for="{{ checkbox.list }}" wx:key="index" title="{{ item }}" value-class="value-class"
-                clickable data-index="{{ index }}" bind:click="toggleCheckBox">
+            <van-cell wx:for="{{ checkbox.list }}" wx:key="index" title="{{ item }}" value-class="value-class" clickable
+                data-index="{{ index }}" bind:click="toggleCheckBox">
                 <van-checkbox catch:tap="noopCheckBox" class="checkboxes-{{ index }}" name="{{ item }}" />
             </van-cell>
         </van-cell-group>
@@ -76,8 +76,8 @@
         <van-field value="{{ condition.message2 }}" label="最大金额" placeholder="请输入金额，默认为100000" autosize clickable
             input-align="center" border="{{ false }}" bind:change="onChangeInput2" />
     </van-cell-group>
-     <!-- 收入、支出复选组 -->
-     <van-checkbox-group value="{{ condition.result }}" bind:change="onChangeIO">
+    <!-- 收入、支出复选组 -->
+    <van-checkbox-group value="{{ condition.result }}" bind:change="onChangeIO">
         <van-cell-group>
             <van-cell wx:for="{{ condition.list }}" wx:key="index" title="{{ item }}" value-class="value-class"
                 clickable data-index="{{ index }}" bind:click="toggleIO">
@@ -87,28 +87,28 @@
     </van-checkbox-group>
     <van-cell center title="类别选择" title-width="150rpx" value="{{ checkbox.result }}" is-link
         bind:click="showPopupCheckBox" />
-   
+
 </van-popup>
 <!-- 账单数据显示 -->
 <view class="box1">
     <!-- <view style="height:5vh;width:100%;display:flex;flex-direction:column;align-items:center;justify-content: center">
         <text style="text-align:center">账单数据</text></view> -->
     <!-- <view class="title">账单数据\n\n</view> -->
-    <block wx:for="{{ billData }}" wx:for-item="billItem">
-        <van-cell-group>
-            <van-cell center title="{{billItem.detail}}" value="{{billItem.income == 'true' ? billItem.cost : -billItem.cost}}" label=" {{ billItem.type}} {{billItem.time}}">
-                <view slot="icon" style="width:70rpx">
-                    <van-icon name="{{icons[filter.getIndex(billItem.type)]}}" size="50rpx" />
-                
-                
-                </view>
-                <!-- <view slot="title">
-                    <view class="van-cell-text">{{billItem.detail}}</view>
-                    <van-tag>{{billItem.type}}</van-tag>
-                
-                </view> -->
-            </van-cell>
-        </van-cell-group>
+    <block wx:for="{{ billData }}" wx:for-item="billItem" wx:for-index="index">
+        <van-swipe-cell id="swipe-cell" right-width="{{ 65 }}" async-close bind:close="onClose" data-a="{{index}}">
+            <van-cell-group>
+                <van-cell center title="{{billItem.detail}}"
+                    value="{{billItem.income == 'true' ? billItem.cost : -billItem.cost}}"
+                    label=" {{ billItem.type}} {{billItem.time}}">
+                    <view slot="icon" style="width:70rpx">
+                        <van-icon name="{{icons[filter.getIndex(billItem.type)]}}" size="50rpx" />
+                    </view>
+                </van-cell>
+            </van-cell-group>
+            <view slot="right">
+                <text class="delete-slot"></text>
+            </view>
+        </van-swipe-cell>
     </block>
     <van-button round type="info" bindtap="updateBillData">更新账单数据</van-button>
 </view>

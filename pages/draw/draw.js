@@ -915,10 +915,15 @@ Page({
         region: [0, 0],
         pieChartNo: 0,
         average: [],
-        variance: []
+        variance: [],
+        placeData: "折线" //第一行显示
     },
     changeChart(event) {
         var value = event.detail;
+        var newFirstHolder = (value == "line") ? "折线" :
+                            (value == "bar") ? "柱" :
+                            (value == "pie") ? "饼" :
+                            (value == "scatter") ? "散点组" : "";
         // 更换图的时候，更新此图模板的数据
         var newOption2 = [];
         for (var template of templates[value + 'Templates']) {
@@ -929,7 +934,8 @@ Page({
         }
         this.setData({
             option2: newOption2,
-            value2: newOption2[0].value
+            value2: newOption2[0].value,
+            placeData: newFirstHolder
         });
     },
     changeTemplate(event) {
@@ -1275,7 +1281,6 @@ Page({
         var j;
         ret.push(this.data.groupName.slice(0));
         ret[0].unshift("虽然啥都没有，但是还是要传");
-        console.log(this.data.groupName);
         for (i = 0; i < this.data.xValues.length; i++) {
             var tmp = [];
             tmp.push(convertNum(this.data.xValues[i]));

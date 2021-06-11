@@ -78,11 +78,11 @@
         <!-- 表格 -->
         <scroll-view class="scroll-view_H" scroll-x="true" style="width: 100%">
             <view class="text-item">
-                <van-field value="数据组" disabled bindtap="changeCurrentX" style="boarder:solid!important"/>
+                <van-field value="" placeholder="横坐标" disabled bindtap="changeCurrentX" style="boarder:solid!important"/>
             </view>
             <block wx:for="{{iterator2}}" wx:for-index="i">
                 <view class="text-item">
-                    <van-field value="{{ groupName[i] }}" placeholder="数据组{{ i + 1 }}"  bind:change="setGroupName"
+                    <van-field value="{{ groupName[i] }}" placeholder="{{placeData}}{{ i + 1 }}"  bind:change="setGroupName"
                         data-a="{{i}}" bindtap="changeCurrentGroupName" />
                 </view>
             </block>
@@ -105,6 +105,8 @@
         <view>
             <van-button type="default" bindtap="actionSheetTap"  block >编辑表格</van-button>
         </view>
+        <!-- <van-action-sheet show="{{ actionSheetHidden }}" actions="{{ saveSheetOptions }}" cancel-text="取消"
+            bind:close="onCloseSaveSheet" bind:select="onSelectSaveOption" bind:cancel="onCloseSaveSheet" /> -->
         <action-sheet hidden="{{actionSheetHidden}}" bindchange="actionSheetbindchange">
             <block wx:for-items="{{actionSheetItems}}">
                 <action-sheet-item bindtap="bind{{item.bindtap}}">{{item.txt}}</action-sheet-item>
@@ -114,7 +116,7 @@
     </view>
     <block wx:if="{{value1=='pie'}}">
         <text>\n</text>
-        <text>请输入想要绘制的数据组序号\n</text>
+        <text>请输入想要绘制的饼序号\n</text>
         <van-field border="{{ false }}" bind:change="getData" data-a="{{j}}" data-b="{{i + 1}}"
             bind:change="choosePieChart" />
         <text>\n</text>
