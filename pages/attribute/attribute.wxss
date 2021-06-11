@@ -14,7 +14,7 @@ van-collapse-item {
     height: 200rpx !important;
 }
 .van-cell{
-    background-color: #A8DADC !important;
+    /* background-color: #A8DADC !important; */
     color: black;
 }
   .van_field{

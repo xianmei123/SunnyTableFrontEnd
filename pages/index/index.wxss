@@ -71,3 +71,7 @@
 .button {
 	background-color: #1a81bc !important;
   }
+  .van-tab{
+	--tab-active-text-color: white;
+	--tab-text-color: white;
+  }

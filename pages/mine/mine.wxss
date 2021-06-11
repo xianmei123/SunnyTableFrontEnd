@@ -70,7 +70,8 @@
   /* background-color: #1D3557; */
   /* background-color: #FEC89A; */
   /* background-color: #A8DADC; */
-  background-color: #457B9D;
+  /* background-color: #457B9D; */
+  background-color: #1a81bc;
   /* color:black; */
   margin: 20rpx 20rpx 10rpx 10rpx; 
   padding: 5rpx;
@@ -91,7 +92,8 @@
   /* background: white; */
   /* background-color: #1D3557; */
   /* background-color: #A8DADC; */
-  background-color: #457B9D;
+  /* background-color: #457B9D; */
+  background-color: #1a81bc;
   border: none;
   margin: 0rpx;
   border-radius: 0;
