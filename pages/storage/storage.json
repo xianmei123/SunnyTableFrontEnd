@@ -4,5 +4,6 @@
     "mp-icon": "weui-miniprogram/icon/icon",
     "van-dialog": "@vant/weapp/dialog/index"
   },
-  "navigationBarTitleText": "存储区"
+  "navigationBarTitleText": "存储区",
+    "enablePullDownRefresh": true
 }
