@@ -1,5 +1,5 @@
 <!-- 垂直滚动，这里必须设置高度 -->
-<van-dropdown-menu>
+<van-dropdown-menu style="display:{{isHideTabel}}">
     <van-dropdown-item model:value="{{ value1 }}" options="{{ option1 }}" bindchange="changeChart" bind:open="reGetTemplate"/>
     <van-dropdown-item model:value="{{ value2 }}" options="{{ option2 }}" bindchange="changeTemplate"/>
 </van-dropdown-menu>
@@ -15,7 +15,7 @@
             </view>
         </block>
         <block wx:if="{{showLineChart ? false : true}}">
-            <view>{{errorChart}}</view>
+            <view>{{errorLineChart}}</view>
         </block>
     </view>
     <!-- 柱状图 -->
@@ -28,7 +28,7 @@
             </view>
         </block>
         <block wx:if="{{showBarChart ? false : true}}">
-            <view>{{errorChart}}</view>
+            <view>{{errorBarChart}}</view>
         </block>
     </view>
     <!-- 饼状图 -->
@@ -41,7 +41,7 @@
             </view>
         </block>
         <block wx:if="{{showPieChart ? false : true}}">
-            <view>{{errorChart}}</view>
+            <view>{{errorPieChart}}</view>
         </block>
     </view>
     <view wx:if="{{value1=='scatter'}}">
@@ -53,7 +53,7 @@
             </view>
         </block>
         <block wx:if="{{showScatterChart ? false : true}}">
-            <view>{{errorChart}}</view>
+            <view>{{errorScatterChart}}</view>
         </block>
     </view>
 </view>
@@ -124,7 +124,7 @@
     <text>\n</text>
     <button type="primary" size="large" bindtap="repaint" class="button-center">绘制图表</button>
 </view>
-<van-row class="bottom_box">
+<van-row class="bottom_box" style="display:{{isHideTabel}}">
     <van-col span="8" style="text-align:center; padding-top: 2px">
         <view style="padding-top:4px">
             <text class="icon-new {{screenDirection == 0 ? 'icon' : 'icon_row'}}" bindtap="beginShowNewSheet"></text>

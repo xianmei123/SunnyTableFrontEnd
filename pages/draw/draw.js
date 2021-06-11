@@ -264,7 +264,7 @@ function setLineOption(lineChart, template) {
             }
         ],
         grid: {
-            bottom: "8%"
+            bottom: "10%",
         },
         title: {
             text: graphName,
@@ -850,7 +850,11 @@ Page({
         showBarChart: true,
         showPieChart: true,
         showScatterChart: true,
-        errorChart: "您当前无法绘制此图，请检查您的数据是否为空或数据的格式是否正确。",
+        errorLineChart: "请您输入数据进行画图。",
+        errorBarChart: "请您输入数据进行画图。",
+        errorPieChart: "请您输入数据进行画图，并在下方选择您要画的饼图序号。",
+        errorScatterChart: "请您输入数据进行画图。\ntip：散点图只能绘制横纵坐标全为数值的图。",
+
         /**是否战术输入模板名字 */
         showInputTemplateName: false,
         inputTemplateName: "",
