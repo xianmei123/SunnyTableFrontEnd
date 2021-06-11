@@ -1327,7 +1327,6 @@ Page({
     },
     goAttribute() {
         var index;
-        var template;
         switch (this.data.value1) {
             case "line":
                 index = 0;
@@ -1342,8 +1341,6 @@ Page({
                 index = 3;
                 break;
         }
-        template = indexToGraph[index].template;
-        
         wx.navigateTo({
             url: '../attribute/attribute',
             events: {
@@ -1358,7 +1355,7 @@ Page({
             success(result) {
                 result.eventChannel.emit("changeTemplate", {
                     index: index,
-                    template: template,
+                    template: indexToGraph[index].template,
                     count: getPage().data.groupNum,
                 });
             },
@@ -1906,16 +1903,12 @@ function updateTemplate(updateGraphIndex, template) {
     indexToGraph[updateGraphIndex].setTemplate(template);
     if (updateGraphIndex == 0 && isShowLineChart()) {
         setLineOption(indexToGraph[updateGraphIndex].chart, template);
-        line.template = template;
     } else if (updateGraphIndex == 1 && isShowBarChart()) {
         setBarOption(indexToGraph[updateGraphIndex].chart, template);
-        bar.template = template;
     } else if (updateGraphIndex == 2) {
         setPieOption(indexToGraph[updateGraphIndex].chart, template);
-        pie.template = template;
     } else if (updateGraphIndex == 3 && isShowScatterChart()) {
         setScatterOption(indexToGraph[updateGraphIndex].chart, template);
-        scatter.template = template;
     }
 
 }
