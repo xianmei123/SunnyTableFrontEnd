@@ -342,14 +342,15 @@ function setLineOption(lineChart, template) {
         lineChart.setOption({
             tooltip: {
                 trigger: 'axis',
-                formatter: function (params) {
-                    var xstr = line.xType === "string" ? params.data[0] : parseFloat(params.data[0]).toFixed(2);
-                    var ystr = line.yType === "string" ? params.data[1] : parseFloat(params.data[1]).toFixed(2);
-                    return 'X: ' +
-                        xstr +
-                        '\nY: ' +
-                        ystr;
-                }
+                // formatter: function (params) {
+                //     console.log(params);
+                //     var xstr = line.xType === "string" ? params[0].data[0] : parseFloat(params[0].data[0]).toFixed(2);
+                //     var ystr = line.yType === "string" ? params[0].data[1] : parseFloat(params[0].data[1]).toFixed(2);
+                //     return 'X: ' +
+                //         xstr +
+                //         '\nY: ' +
+                //         ystr;
+                // }
             },
         });
     }
@@ -1081,6 +1082,7 @@ Page({
                     });
                 }
                 this.setData({
+                    value1: value,
                     option2: newOption2,
                     value2: newOption2[0].value
                 });
@@ -1325,7 +1327,6 @@ Page({
     },
     goAttribute() {
         var index;
-        var template;
         switch (this.data.value1) {
             case "line":
                 index = 0;
@@ -1340,8 +1341,6 @@ Page({
                 index = 3;
                 break;
         }
-        template = indexToGraph[index].template;
-        
         wx.navigateTo({
             url: '../attribute/attribute',
             events: {
@@ -1356,7 +1355,7 @@ Page({
             success(result) {
                 result.eventChannel.emit("changeTemplate", {
                     index: index,
-                    template: template,
+                    template: indexToGraph[index].template,
                     count: getPage().data.groupNum,
                 });
             },
@@ -1904,16 +1903,12 @@ function updateTemplate(updateGraphIndex, template) {
     indexToGraph[updateGraphIndex].setTemplate(template);
     if (updateGraphIndex == 0 && isShowLineChart()) {
         setLineOption(indexToGraph[updateGraphIndex].chart, template);
-        line.template = template;
     } else if (updateGraphIndex == 1 && isShowBarChart()) {
         setBarOption(indexToGraph[updateGraphIndex].chart, template);
-        bar.template = template;
     } else if (updateGraphIndex == 2) {
         setPieOption(indexToGraph[updateGraphIndex].chart, template);
-        pie.template = template;
     } else if (updateGraphIndex == 3 && isShowScatterChart()) {
         setScatterOption(indexToGraph[updateGraphIndex].chart, template);
-        scatter.template = template;
     }
 
 }

@@ -1,13 +1,6 @@
-// const { getCurrentPage } = require("../../miniprogram_npm/@vant/weapp/common/utils")
 import {checks} from 'helper'
 var helper;
 var baseUrl = 'https://www.jaripon.xyz'
-// var checks = (fileList, name) => {
-//   for (var x of fileList) {
-//     if (x.name == name) return false
-//   }
-//   return true
-// }
 var dateTrans = function formatDate(time, format = 'YY-MM-DD hh:mm:ss') {
 	var date = new Date(time);
 	var year = date.getFullYear(),
@@ -60,13 +53,24 @@ Page({
 		showData: [
 			["x", 'a', 'b', 'c', 'd', 'e'],
 			["y", 1, 2, 3, 4, 5]
-		]
-
+    ],
+    touchS: [0, 0],
+    touchE: [0, 0]
   },
   /**
    * 生命周期函数--监听页面加载
    */
   async onLoad(options) {
+    wx.getSystemInfo({
+      success: (res)=>{
+        let clientHeight = res.windowHeight;
+        let clientWidth = res.windowWidth;
+        let changeHeight = 750 / clientWidth;
+        let height = clientHeight * changeHeight;
+        this.setData({
+          screenHeight: height
+        })
+      }})
     console.log(options)
     helper = require('./helper');
     var root = {
@@ -193,12 +197,12 @@ Page({
     var url = baseUrl + '/file/dir/create' + '/' + wx.getStorageSync('uid') + '/' + faFid + '/' + name
     var res = await helper.trans(url)
     if (await helper.hasError(res)) return false
-    var item = res.data
-    var dirStack = this.data.dirStack
-    this.data.fileList.push(item)
-    this.setData({
-      fileList: this.data.fileList
-    })
+    this.flush(false)
+    // var item = res.data
+    // this.data.fileList.push(item)
+    // this.setData({
+    //   fileList: this.data.fileList
+    // })
     return true
   },
   async changeDir(item) {
@@ -291,13 +295,13 @@ Page({
       this.openTemplate(item)
   },
   async delObj(event) {
+    this.setData({
+      popShow: false,
+    })
     var srcfid = this.data.activeObj.id
-    var url = baseUrl + "/file/dir/remove" + '/' + srcfid
-    var res = await helper.trans(url)
-    if (await helper.hasError(res)) return false
     var fileList = this.data.fileList
     for (var i = 0; i < fileList.length; i++) {
-      if (fileList[i].id == this.data.activeObj.id) {
+      if (fileList[i].id == srcfid) {
         if(fileList[i].type==4&&fileList[i].templateType!=0){
           wx.showToast({
             title: '无法删默认目录',
@@ -305,17 +309,42 @@ Page({
           })
           return false
         }
+        var url = baseUrl + "/file/dir/remove" + '/' + srcfid
+        var res = await helper.trans(url)
+        if (await helper.hasError(res)) return false
         fileList.splice(i, 1)
+        this.setData({fileList:fileList})
         break
       }
     }
-    this.setData({
-      fileList,
-      popShow: false
-    })
     return true
   },
+  async delAll(event){
+    if(this.data.dirStack.length==1){
+      wx.showToast({
+        title: '无法清空根目录',
+        icon:'error'
+      })
+      return false;
+    }
+    var fileList = JSON.parse(JSON.stringify(this.data.fileList))
+    for(var x of fileList){
+      var url = baseUrl + "/file/dir/remove" + '/' + x.id 
+      var res = await helper.trans(url)
+      if (await helper.hasError(res)) break ;
+      this.data.fileList.splice(0,1)
+    }
+      this.setData({fileList:this.data.fileList})
+    // this.setData({fileList:[]})
+  },
   async renameObj(name) {
+    if(this.data.activeObj.type==4 && this.data.activeObj.templateType ==0){
+      wx.showToast({
+        title: '无法重命名默认目录',
+        icon:'error'
+      })
+      return false;
+    }
     var fid = this.data.activeObj.id
     var url = baseUrl + '/file/dir/rename' + '/' + fid + '/' + name
     var res = await helper.trans(url)
@@ -353,6 +382,16 @@ Page({
     })
   },
   async moveObj(e) {
+    if(this.data.activeObj.type==4&&this.data.activeObj.templateType!=0){
+      this.setData({
+        popShow: false,
+      })
+      wx.showToast({
+        title: '无法移动默认目录',
+        icon:'error'
+      })
+      return false;
+    }
     var url = baseUrl + "/file/dir/move" + '/' + this.data.activeObj.id
     wx.navigateTo({
       url: 'modify/modify',
@@ -372,6 +411,32 @@ Page({
     return {
       title:activeObj.name,
       path:'/pages/storage/storage?id=' + activeObj.id + "&" + "uid=" + getStorageSync('uid') 
+    }
+  },
+  async onPullDownRefresh(){
+    await this.flush(true)
+    wx.stopPullDownRefresh({
+      success: (res) => {},
+    })
+  },
+  touchStart(e) {
+    console.log(e)
+    console.log("fuck")
+    let sx = e.touches[0].pageX
+    let sy = e.touches[0].pageY
+    this.data.touchS = [sx, sy]
+  },
+  async touchEnd(e) {
+    console.log(e)
+    let start = this.data.touchS
+    let end = [e.changedTouches[0].pageX,e.changedTouches[0].pageY]
+    var dirStack = this.data.dirStack
+    if (start[0] > end[0] + 100 ) {
+      if(dirStack.length > 1)
+         if(await this.changeDir(dirStack[dirStack.length - 2])){
+            dirStack.splice(dirStack.length-1,1)
+            this.setData({dirStack})
+         }
     }
   }
 })

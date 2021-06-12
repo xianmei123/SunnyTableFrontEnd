@@ -1,3 +1,4 @@
+<view style="height:{{screenHeight}}rpx" bindtouchstart="touchStart"  bindtouchend="touchEnd">
 <view class="top_box">
   <!-- 面包屑栏 -->
   <van-row>
@@ -43,6 +44,8 @@
   bindtap="openDir" data-item="{{item}}" is-link  custom-class="file_cell first_item"/>
   <van-cell wx:else title="{{item.name}}" label="{{item.createTime}}" clickable="true" custom-class="file_cell"/>
 </van-cell-group>
+</view>
+<view style="height:550rpx"></view>
 </view>
 
 

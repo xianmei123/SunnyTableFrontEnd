@@ -6,7 +6,7 @@
 }
 .crumb_active{
   font-size: 40rpx;
-  color:red
+  color:#1296db
 }
 .van-dropdown-menu{
   --dropdown-menu-height: 40px ;
