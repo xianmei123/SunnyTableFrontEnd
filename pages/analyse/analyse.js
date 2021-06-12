@@ -10,6 +10,7 @@ var monthSumBill = {
     "out": [],
 };
 var monthAllBill = {
+
     "in": {},
     "out": {},
 };
@@ -22,7 +23,7 @@ function initData() {
     monthSumBill.in.unshift(["product", "账单"]);
     monthSumBill.out.unshift(["product", "账单"]);
     inputData = monthSumBill.out;
-   
+
     console.log(inputData);
     var monthin = {
         "yuefen": {
@@ -33,7 +34,7 @@ function initData() {
     allMoneyOut = 0;
     for (var bill of allBill) {
         console.log(bill);
-        
+
         var month = bill.time.slice(0, bill.time.lastIndexOf("-"))
         if (bill.income) {
             allMoneyIn += bill.cost;
@@ -88,7 +89,9 @@ function setBarOption() {
     console.log(inputData);
     var option = {
         grid: {
-            bottom: "8%",
+            left: "0%",
+            bottom: "0%",
+            containLabel: true
         },
         dataset: {
             source: inputData
@@ -98,7 +101,7 @@ function setBarOption() {
                 xAxisIndex: 0,
                 filterMode: 'none',
                 height: 0,
-                start: inputData.length < 8 ? 0 : 50 
+                start: inputData.length < 8 ? 0 : 50
             },
             {
                 type: "inside",
@@ -164,6 +167,7 @@ function setPieOption() {
             }
         },
         legend: {
+            type: "scroll",
             right: '0%',
             top: '16%',
             orient: "vertical",
@@ -194,9 +198,16 @@ function setPieOption() {
 }
 
 function clickBar(param) {
+    console.log(param);
+    getPage().setData({
+        showBillData: [],
+        billTitle: '',
+
+    });
     barClicked = param.name;
     pie.setInpuData(param.name, getMonthData(param.name));
     pie.chart.setOption(setPieOption());
+
 }
 
 /**
@@ -260,6 +271,7 @@ Page({
         buttonText: "支出",
         billTitle: '',
         showDatePicker: false,
+        icons: getApp().globalData.icons,
 
     },
 
@@ -288,13 +300,15 @@ Page({
         this.setData({
             buttonText: this.data.pattern === 0 ? '支出' : '收入',
             allMoney: this.data.pattern === 0 ? allMoneyOut : allMoneyIn,
+            showBillData: [],
         });
-        
+
         inputData = this.data.pattern === 0 ? monthSumBill.out : monthSumBill.in;
-        
+
         bar.chart.setOption(setBarOption());
-       
+        pie.init("string", "number");
         pie.setInpuData("", []);
+
         pie.chart.setOption(setPieOption());
         console.log();
     },
@@ -313,6 +327,7 @@ Page({
         };
     },
 })
+
 function getPage() {
     var pages = getCurrentPages();
     return pages[pages.length - 1];

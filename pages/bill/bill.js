@@ -966,12 +966,27 @@ Page({
                 filePath: tempFilePath,
                 name: 'file',
                 success: res => {
-                    res = JSON.parse(res);
+                    res = JSON.parse(res.data);
                     this.setData({
-                        "newBill.detail": res.data.detail,
-                        "newBill.cost": res.data.cost,
-                        "newBill.result": res.data.io
+                        "newBill.detail": res.detail,
+                        "newBill.cost": res.cost,
                     });
+                    if (res.io == 0) {
+                        this.setData({
+                            'newBill.result': res.io,
+                            'newBill.checkbox.list' : this.data.newBill.checkbox.list2,
+                            'newBill.checkbox.result' : 0,
+                            'newBill.checkbox.peResult' : 0,
+                        });
+                    }
+                    else {
+                        this.setData({
+                            'newBill.result': res.io,
+                            'newBill.checkbox.list' : this.data.newBill.checkbox.list1,
+                            'newBill.checkbox.result' : 0,
+                            'newBill.checkbox.peResult' : 0,
+                        });
+                    }
                 },
                 fail: res => {
                     console.log("falied")
