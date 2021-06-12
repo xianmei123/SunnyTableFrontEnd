@@ -1,4 +1,5 @@
 var billId = 0;
+var id4replace = 0;
 
 function getPage() {
     var pages = getCurrentPages();
@@ -9,6 +10,9 @@ function getIndex(str) {
     var list = [ '娱乐', '餐饮', '购物', '日用', '零食', '果蔬', '交通', '学习', '服饰', '医疗',  '住房' , '工资', '兼职', '理财', '礼金'];
     for (var i = 0; i < list.length; i++) {
       if (str == list[i]) {
+        if(i >= 11) {
+            return i - 11;
+        }
         return i;
       }
     }
@@ -207,12 +211,15 @@ Page({
                 'newBill.result': name,
                 'newBill.checkbox.list' : this.data.newBill.checkbox.list2,
                 'newBill.checkbox.result' : 0,
+                'newBill.checkbox.peResult' : 0,
             });
         }
         else {
             this.setData({
                 'newBill.result': name,
-                'newBill.checkbox.list' : this.data.newBill.checkbox.list1
+                'newBill.checkbox.list' : this.data.newBill.checkbox.list1,
+                'newBill.checkbox.result' : 0,
+                'newBill.checkbox.peResult' : 0,
             });
         }
         
@@ -371,13 +378,20 @@ Page({
     saveBill() {
         this.queryBill();
         var url = "https://www.jaripon.xyz/bill/add";
+       
         var data = {};
         data["id"] = billId;
+        if (this.data.newBill.modify == true) {
+            url = "https://www.jaripon.xyz/bill/replace";
+            data["id"] = id4replace;
+        }
+        console.log(data["id"] + "  " + url);
         data["userId"] = wx.getStorageSync('uid');
         data["detail"] = this.data.newBill["detail"];
         data["time"] = this.data.newBill["date"]["date"];
         data["type"] = this.data.newBill["checkbox"]["list"][this.data.newBill["checkbox"]["result"]];
-        data["income"] = this.data.newBill["result"] === 0 ? true : false;
+        data["income"] = this.data.newBill["result"] === 0 ? 'true' : 'false';
+        console.log(data["income"]);
         data["cost"] = this.data.newBill["io"];
         console.log(data);
         wx.request({
@@ -390,13 +404,13 @@ Page({
             fail: function (res) {
                 console.log("fail");
                 wx.showToast({
-                    title: '新建账单失败',
+                    title: '保存账单失败',
                 });
                 return;
             }
         });
         wx.showToast({
-            title: '新建账单成功',
+            title: '保存账单成功',
         });
         this.updateBillDataNotShow();
     },
@@ -820,12 +834,17 @@ Page({
         //console.log(t);
         var oldDate = new Date(arr[0], t, arr[2]);
         //console.log(oldDate.getTime());
+        console.log("modify" + item.income);
         var result = 0;
+        var list = this.data.newBill.checkbox.list2;
         if (item.income == 'false') {
             result = 1;
+            list = this.data.newBill.checkbox.list1;
         }
+        console.log("modify" + result);
         var result1 = getIndex(item.type);
-        //console.log(result1);
+        id4replace = item.id;
+        console.log(result1);
         this.setData({
             'newBill.show': true,
             'newBill.modify': true,
@@ -840,6 +859,7 @@ Page({
             'newBill.checkbox.preResult' :result1,
             'newBill.result': result,
             'newBill.preResult': result,
+            'newBill.checkbox.list': list,
         });
         //console.log(this.data.newBill.io);
     },
