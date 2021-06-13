@@ -20,12 +20,24 @@ Page({
 			},
 		],
 		dropValue: 0,
+		touchS: [0, 0],
+		touchE: [0, 0]
 	},
 
 	/**
 	 * 生命周期函数--监听页面加载
 	 */
 	async onLoad(options) {
+		wx.getSystemInfo({
+			success: (res)=>{
+			  let clientHeight = res.windowHeight;
+			  let clientWidth = res.windowWidth;
+			  let changeHeight = 750 / clientWidth;
+			  let height = clientHeight * changeHeight;
+			  this.setData({
+				screenHeight: height
+			  })
+			}})
 		var root = {
 			name: 'root',
 			id: wx.getStorageSync('rootId'),
@@ -110,5 +122,23 @@ Page({
 				}
 			})
 		}
-	}
+	},
+	touchStart(e) {
+		let sx = e.touches[0].pageX
+		let sy = e.touches[0].pageY
+		this.data.touchS = [sx, sy]
+	  },
+	  async touchEnd(e) {
+		console.log(e)
+		let start = this.data.touchS
+		let end = [e.changedTouches[0].pageX,e.changedTouches[0].pageY]
+		var dirStack = this.data.dirStack
+		if (start[0] > end[0] + 100 ) {
+		  if(dirStack.length > 1)
+			 if(await this.changeDir(dirStack[dirStack.length - 2])){
+				dirStack.splice(dirStack.length-1,1)
+				this.setData({dirStack})
+			 }
+		}
+	  }
 })

@@ -21,8 +21,8 @@
         "checkSiteMap": true,
         "uploadWithSourceMap": true,
         "compileHotReLoad": false,
-        "useMultiFrameRuntime": true,
-        "useApiHook": true,
+        "useMultiFrameRuntime": false,
+        "useApiHook": false,
         "useApiHostProcess": false,
         "babelSetting": {
             "ignore": [],
@@ -31,12 +31,11 @@
         },
         "enableEngineNative": false,
         "useIsolateContext": true,
-        "useCompilerModule": true,
-        "userConfirmedUseCompilerModuleSwitch": false,
         "userConfirmedBundleSwitch": false,
         "packNpmManually": false,
         "packNpmRelationList": [],
-        "minifyWXSS": true
+        "minifyWXSS": true,
+        "showES6CompileOption": false
     },
     "compileType": "miniprogram",
     "libVersion": "2.16.1",

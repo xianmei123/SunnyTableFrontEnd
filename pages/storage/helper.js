@@ -4,7 +4,6 @@ export var trans = async function (url, data, method) {
 			url: url,
 			data: data,
 			complete(res) {
-				
 				resolve(res)
 			}
 		})

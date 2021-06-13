@@ -10,11 +10,12 @@
   <van-col span="16">
    <!-- <scroll-view scroll-x="true" bindscroll="scroll"  style="width: 100%" class="scroll-view_H" > -->
    <scroll-view scroll-x="true" style="width: 100%" class="scroll-view_H" >
-    <image src="/lib/image/graph/{{item}}" class="scroll-view-item_H" wx:for="{{item.pic}}"></image>
+    <image src="/lib/image/graph/{{pic}}" class="scroll-view-item_H" wx:for="{{item.pic}}" bindtap="goDraw"
+    wx:for-item="pic" data-name="{{item.name}}"></image>
    </scroll-view> 
   </van-col>
   </van-row>
-    <button style="margin-top:30rpx;background-color:#1a81bc !important" bindtap="goDraw" type="primary">创建图表</button>
+    <!-- <button style="margin-top:30rpx;background-color:#1a81bc !important" bindtap="goDraw" type="primary">创建图表</button> -->
   </van-tab>
   <van-tab name="timeData" title="时间图表">
     <!-- 时间图表类似 -->
@@ -23,3 +24,5 @@
     </navigator>
   </van-tab>
 </van-tabs>
+
+<!-- <button bindtap="updateTemplate"> update</button> -->

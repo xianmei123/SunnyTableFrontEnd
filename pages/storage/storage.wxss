@@ -1,18 +1,20 @@
 /* pages/storage/storage.wxss */
 .crumb_normal{
   font-size: 40rpx;
-  color:white
+  /* color:white */
+  color:black;
 }
 .crumb_active{
   font-size: 40rpx;
-  color:red
+  color:#1296db
 }
 .van-dropdown-menu{
   --dropdown-menu-height: 40px ;
   /* background-color: #457B9D !important; */
-  background-color: #00477d !important;
+  /* background-color: #00477d !important; */
   /* background-color: #ffc0cb !important; */
-  --dropdown-menu-title-text-color:white;
+  /* background-color: #043e90 !important; */
+  /* --dropdown-menu-title-text-color:black; */
   /* --cell-background-color: #00477d; */
   /* color: white !important; */
   /* font-weight: bold; */

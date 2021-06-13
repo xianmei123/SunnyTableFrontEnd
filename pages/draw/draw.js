@@ -125,8 +125,7 @@ function isNumber(val) {
 function convertNum(val) {
     if (val == "" || val == null || val == undefined) {
         return null;
-    }
-    else if (isNumber(val)) {
+    } else if (isNumber(val)) {
         return parseFloat(val);
     }
     return val;
@@ -265,6 +264,8 @@ function setLineOption(lineChart, template) {
         ],
         grid: {
             bottom: "10%",
+            left: '0%',
+            containLabel: true
         },
         title: {
             text: graphName,
@@ -298,7 +299,7 @@ function setLineOption(lineChart, template) {
         series: series
     };
     setToolBox(option);
-    //setLegendOption(option, template.legendPos);
+    setLegendOption(option, template.legendPos);
     lineChart.setOption(option); // 
     if (template.showGradient) {
         option.visualMap = {
@@ -344,8 +345,9 @@ function setLineOption(lineChart, template) {
             tooltip: {
                 trigger: 'axis',
                 // formatter: function (params) {
-                //     var xstr = line.xType === "string" ? params.data[0] : parseFloat(params.data[0]).toFixed(2);
-                //     var ystr = line.yType === "string" ? params.data[1] : parseFloat(params.data[1]).toFixed(2);
+                //     console.log(params);
+                //     var xstr = line.xType === "string" ? params[0].data[0] : parseFloat(params[0].data[0]).toFixed(2);
+                //     var ystr = line.yType === "string" ? params[0].data[1] : parseFloat(params[0].data[1]).toFixed(2);
                 //     return 'X: ' +
                 //         xstr +
                 //         '\nY: ' +
@@ -448,7 +450,9 @@ function setBarOption(barChart, template) {
             source: inputData
         },
         grid: {
-            bottom: "8%"
+            bottom: "10%",
+            left: '0%',
+            containLabel: true
         },
         dataZoom: [{
                 type: "inside",
@@ -592,7 +596,9 @@ function setPieOption(pieChart, template) {
     }
     option = {
         grid: {
-            bottom: "8%"
+            bottom: "10%",
+            left: '0%',
+            containLabel: true
         },
         title: {
             text: graphName,
@@ -711,7 +717,9 @@ function setScatterOption(scatterChart, template) {
             }
         ],
         grid: {
-            bottom: "8%"
+            bottom: "10%",
+            left: '0%',
+            containLabel: true
         },
         title: {
             text: graphName,
@@ -731,11 +739,6 @@ function setScatterOption(scatterChart, template) {
             name: yName,
             type: scatter.yType === "string" ? "category" : "value",
             boundaryGap: yType === "string" ? false : true
-        },
-        legend: {
-            right: '0%',
-            top: '16%',
-            orient: "vertical",
         },
         tooltip: {
             trigger: 'item'
@@ -789,7 +792,6 @@ function setScatterOption(scatterChart, template) {
     setToolBox(option);
     setLegendOption(option, template.legendPos);
     scatterChart.setOption(option);
-
     return scatterChart;
 }
 
@@ -864,7 +866,7 @@ Page({
             name: "保存图表",
             value: 1
         }, {
-            name: "导出到.csv文件",
+            name: "导出到.xls文件",
             value: 2
         }, {
             name: "保存图到相册",
@@ -1006,7 +1008,7 @@ Page({
     onSelectNewOption(event) {
         if (event.detail.value == 0) {
             wx.redirectTo({
-                url: '..//model_select'
+                url: '../index/index'
             })
         } else if (event.detail.value == 1) {
             wx.chooseMessageFile({
@@ -1071,6 +1073,7 @@ Page({
         for (var i of res.data) {
             var url = baseUrl + urls[i.type - 1] + i.fid;
             var template = await hepler.trans(url);
+            console.log(res);
             templates[types[i.type - 1]].push(convertFromBackTemplate(template.data, types[i.type - 1].split("Template")[0]));
             tempIdToTemplate.set(i.fid, template.data);
         }
@@ -1078,17 +1081,7 @@ Page({
         bar.template = templates["barTemplates"][0];
         pie.template = templates["pieTemplates"][0];
         scatter.template = templates["scatterTemplates"][0];
-        var newOption2 = [];
-        for (var template of templates['lineTemplates']) {
-            newOption2.push({
-                text: template.name,
-                value: template.id
-            });
-        }
-        this.setData({
-            option2: newOption2,
-            value2: newOption2[0].value
-        });
+
         const eventChannel = this.getOpenerEventChannel()
         if (eventChannel) {
             eventChannel.on("openData", res => {
@@ -1097,6 +1090,21 @@ Page({
             eventChannel.on("openChart", res => {
                 this.openChart(res.data)
             })
+            eventChannel.on("goDraw", res => {
+                var value = res.value;
+                var newOption2 = [];
+                for (var template of templates[value + 'Templates']) {
+                    newOption2.push({
+                        text: template.name,
+                        value: template.id
+                    });
+                }
+                this.setData({
+                    value1: value,
+                    option2: newOption2,
+                    value2: newOption2[0].value
+                });
+            });
         }
     },
     hideTabel() {
@@ -1337,7 +1345,6 @@ Page({
     },
     goAttribute() {
         var index;
-        var template;
         switch (this.data.value1) {
             case "line":
                 index = 0;
@@ -1352,18 +1359,21 @@ Page({
                 index = 3;
                 break;
         }
-        template = indexToGraph[index].template;
         wx.navigateTo({
             url: '../attribute/attribute',
             events: {
                 back: (backData) => {
+                    getPage().setData({
+                        screenDirection: wx.getStorageSync('system'),
+                    });
                     updateTemplate(index, backData.template);
+                    
                 }
             },
             success(result) {
                 result.eventChannel.emit("changeTemplate", {
                     index: index,
-                    template: template,
+                    template: indexToGraph[index].template,
                     count: getPage().data.groupNum,
                 });
             },
@@ -1850,11 +1860,8 @@ function getPage() {
  * @param {*} inputData 
  */
 function updateLineData(inputData) {
-    console.log(typeof inputData[0][2]);
-    console.log(typeof inputData[1][2]);
     line.init(xType, yType);
     if (isShowLineChart()) {
-        console.log(line);
         setLineOption(line.chart, line.template);
     }
 }
@@ -1912,13 +1919,13 @@ function updateScatterData(inputData) {
  */
 function updateTemplate(updateGraphIndex, template) {
     indexToGraph[updateGraphIndex].setTemplate(template);
-    if (updateGraphIndex == 0) {
+    if (updateGraphIndex == 0 && isShowLineChart()) {
         setLineOption(indexToGraph[updateGraphIndex].chart, template);
-    } else if (updateGraphIndex == 1) {
+    } else if (updateGraphIndex == 1 && isShowBarChart()) {
         setBarOption(indexToGraph[updateGraphIndex].chart, template);
     } else if (updateGraphIndex == 2) {
         setPieOption(indexToGraph[updateGraphIndex].chart, template);
-    } else if (updateGraphIndex == 3) {
+    } else if (updateGraphIndex == 3 && isShowScatterChart()) {
         setScatterOption(indexToGraph[updateGraphIndex].chart, template);
     }
 

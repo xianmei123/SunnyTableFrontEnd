@@ -1,3 +1,4 @@
+<view style="height:{{screenHeight}}rpx" bindtouchstart="touchStart"  bindtouchend="touchEnd">
 <view class="top_box">
   <!-- 面包屑栏 -->
   <van-row>
@@ -14,9 +15,11 @@
   <!-- 添加排序搜索 -->
   <van-row >
   <van-col span = "2"  offset="1" custom-class="icon-col">
-    <van-icon name="orders-o" size="28" bindtap="saveObj"/>
+    <!-- <van-icon name="orders-o" size="28" bindtap="saveObj"/> -->
   <!-- <mp-icon  icon="download" color="black" size="{{25}}" style="bottom:10rpx!important"
   bindtap="saveObj"></mp-icon> -->
+  <text class="icon-move icon " bindtap="goAnalyse" bindtap="saveObj" ></text>
+      <view style="font-size: 12px;margin-top: -6px; color:black">移动</view>
  </van-col>
   <van-col span="16" offset="1">
         <van-dropdown-menu >
@@ -26,7 +29,9 @@
   </van-col>
 <van-col span = "2" offset="1" >
   <!-- <mp-icon  icon="refresh" color="black" size="{{25}}" bindtap="flush" style="bottom:10rpx!important"></mp-icon> -->
-  <van-icon name="replay"  size="30" bindtap="flush" />
+  <text class="icon-flush icon " bindtap="goAnalyse" bindtap="flush" ></text>
+      <view style="font-size: 12px;margin-top: -6px; color:black">刷新</view>
+  <!-- <van-icon name="replay"  size="30" bindtap="flush" /> -->
  </van-col>
 </van-row>
 </view>
@@ -36,9 +41,11 @@
 <view>
 <van-cell-group wx:for="{{fileList}}">
   <van-cell wx:if="{{item.type == 4}}" title="{{item.name}}" label="{{item.createTime}}" 
-  bindtap="openDir" data-item="{{item}}" is-link />
-  <van-cell wx:else title="{{item.name}}" label="{{item.createTime}}" clickable="true" />
+  bindtap="openDir" data-item="{{item}}" is-link  custom-class="file_cell first_item"/>
+  <van-cell wx:else title="{{item.name}}" label="{{item.createTime}}" clickable="true" custom-class="file_cell"/>
 </van-cell-group>
+</view>
+<view style="height:550rpx"></view>
 </view>
 
 

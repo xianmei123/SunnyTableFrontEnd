@@ -1,7 +1,8 @@
 <!-- 提示框 -->
+<view style="height:{{screenHeight}}rpx" bindtouchstart="touchStart"  bindtouchend="touchEnd">
 <mp-dialog title="{{popTitle}}" show="{{dialogShow}}" bindbuttontap="tapDialogButton" buttons="{{dialogButton}}">
   <view>
-    <van-field model:value="{{ newDir }}" placeholder="请输入文件名" border="{{ false }}" bind:change="onChange" />
+    <van-field model:value="{{ newDir }}" placeholder="请输入文件夹名" border="{{ false }}" bind:change="onChange" />
   </view>
 </mp-dialog>
 <!-- 顶部功能栏目 -->
@@ -20,7 +21,8 @@
   <!-- 添加排序搜索 -->
   <van-row>
     <van-col span="2" offset="1">
-      <van-icon name="plus" size="30" bindtap="showDialog" data-index="{{0}}" />
+      <text class="icon-new icon "  bindtap="showDialog" data-index="{{0}}"></text>
+      <view style="font-size: 12px;margin-top: -6px; color:black">新建</view>
     </van-col>
     <van-col span="16" offset="1">
       <van-dropdown-menu title-class="nex_top">
@@ -28,7 +30,9 @@
       </van-dropdown-menu>
     </van-col>
     <van-col span="2" offset="1">
-      <van-icon name="replay" size="30" bindtap="flush" />
+      <text class="icon-clear icon "  bindtap="delAll" ></text>
+      <view style="font-size: 12px;margin-top: -6px; color:black">清空</view>
+      <!-- <van-icon name="replay" size="30" bindtap="flush" /> -->
     </van-col>
   </van-row>
 </view>
@@ -54,3 +58,5 @@
     <button open-type="share" class="button" data-id= "{{activeObj.id}}">分享</button>
   </view>
 </van-popup>
+<!-- <view style="height:250rpx"></view> -->
+</view>

@@ -72,6 +72,6 @@
 	background-color: #1a81bc !important;
   }
   .van-tab{
-	--tab-active-text-color: white;
-	--tab-text-color: white;
+	--tab-active-text-color: black;
+	--tab-text-color: black;
   }
