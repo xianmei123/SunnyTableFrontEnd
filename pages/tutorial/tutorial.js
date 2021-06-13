@@ -10,25 +10,31 @@ Page({
 				selected: true,
 				title: '折线图',
 				unique: 'unique_1',
-				url: '/lib/image/graph/draw1.png'
+				url: 'https://www.jaripon.xyz/image/t1.jpg'
 			},
 			{
 				selected: false,
 				title: '折线图',
 				unique: 'unique_1',
-				url: '/lib/image/graph/line1.png'
+				url: 'https://www.jaripon.xyz/image/t2.jpg'
 			},
 			{
 				selected: false,
 				title: '折线图',
 				unique: 'unique_1',
-				url: '/lib/image/graph/line1.png'
+				url: 'https://www.jaripon.xyz/image/t3.jpg'
 			},
 			{
 				selected: false,
 				title: '折线图',
 				unique: 'unique_1',
-				url: '/lib/image/graph/line1.png'
+				url: 'https://www.jaripon.xyz/image/t4.jpg'
+      },
+      {
+				selected: false,
+				title: '折线图',
+				unique: 'unique_1',
+				url: 'https://www.jaripon.xyz/image/t5.jpg'
 			},
 
 		],
