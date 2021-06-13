@@ -1054,5 +1054,11 @@ Page({
             });
         });
         this.updateBillDataNotShow();
-    }
+    },
+    async onPullDownRefresh(){
+        this.updateBillData();
+        wx.stopPullDownRefresh({
+          success: (res) => {},
+        })
+      }
 });

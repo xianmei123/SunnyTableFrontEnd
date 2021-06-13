@@ -122,8 +122,8 @@
                     </view>
                 </van-cell>
             </van-cell-group>
-            <view slot="right">
-                <text class="delete-slot"></text>
+            <view slot="right" class="delete-slot">
+                删除
             </view>
         </van-swipe-cell>
     </block>

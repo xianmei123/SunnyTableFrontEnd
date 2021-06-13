@@ -2,30 +2,41 @@
 <wxs module="foo">
   var test = "sfdsdsf";
   var duck = function(event, ownerInstance){
-    console.log(event.hi)
-    ownerInstance.callMethod('showTips',{'a':0,'b':event,'owner':
-    ownerInstance.selectComponent('view')})
-    // event.instance.callMethod(duck("showTip"))
+  console.log(event.hi)
+  ownerInstance.callMethod('showTips',{'a':0,'b':event,'owner':
+  ownerInstance.selectComponent('view')})
+  // event.instance.callMethod(duck("showTip"))
   };
   module.exports = {
   test : test,
   duck: duck
-  } 
+  }
 </wxs>
 <view class="container">
+  <van-row>
+    <van-col span="8" offset="8">
+      <view class='headView'>
+        <open-data class='icon' mode="aspectFit" type="userAvatarUrl"></open-data>
+        <view class='icon'></view>
+      </view>
+    </van-col>
+  </van-row>
   <block style="background-color:#00BFFF">
-    <image class="logo" src='{{userLogo}}'></image>
-    <view class='title'>hi~ {{userName}}</view>
+    <view class='title'>
+      hi ~ <open-data type="userNickName" lang="zh_CN"></open-data>
+    </view>
   </block>
 </view>
-<view style="margin-top:500rpx"> </view>
-<view class="item  font-weight-bold"  bindtap="login">
-  微信授权
+<view style="margin-top:450rpx"> </view>
+<!-- <view class="item  font-weight-bold"  bindtap="login">
+  头像显示
+</view> -->
+<view class="item  font-weight-bold" bindtap="goTutorial">
+  使用教程
 </view>
 <view class="item  font-weight-bold" bindtap='aboutUs'>
   关于我们
 </view>
-<view class="item  " >
-<button open-type="feedback" class="button"> <text class="font-weight-bold">意见反馈</text> </button>
+<view class="item  ">
+  <button open-type="feedback" class="button"> <text class="font-weight-bold">意见反馈</text> </button>
 </view>
-

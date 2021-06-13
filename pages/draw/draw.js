@@ -1385,7 +1385,7 @@ Page({
                 index = 3;
                 break;
         }
-        var groupNum = getPage().data.groupNum;
+        var groupName = getPage().data.groupNum
         wx.navigateTo({
             url: '../attribute/attribute',
             events: {
@@ -1401,7 +1401,7 @@ Page({
                 result.eventChannel.emit("changeTemplate", {
                     index: index,
                     template: indexToGraph[index].template,
-                    count: groupNum
+                    count: groupName 
                 });
             },
 

@@ -85,7 +85,7 @@
 				<van-switch model:checked="{{ lineShowArea[index] }}" bind:change="changeSingleItem"
 					data-name="lineShowArea[{{index}}]" />
 			</van-cell>
-			<van-cell title="折现{{index}}区域颜色">
+			<van-cell title="折线{{index}}区域颜色">
 					<view style="background:{{lineAreaStyle[index].rgb}}" class="color_picker" bindtap="toPick"
 						data-show="lineAreaStyle[{{index}}].show">
 					</view>
@@ -111,7 +111,7 @@
 		</view>
 	</van-cell-group>
 	<van-cell-group title="区域堆叠">
-		<van-cell wx:for="{{uses}}" title="折现{{index}}编号">
+		<van-cell wx:for="{{uses}}" title="折线{{index}}编号">
 			<van-stepper model:value="{{lineStack[index]  }}" long-press="{{ false }}" min="0" max="9"
 				integer="{{true}}" bind:change="changeSingleItem" data-name="lineStack[{{index}}]" />
 		</van-cell>
