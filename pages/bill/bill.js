@@ -7,14 +7,14 @@ function getPage() {
 }
 
 function getIndex(str) {
-    var list = [ '娱乐', '餐饮', '购物', '日用', '零食', '果蔬', '交通', '学习', '服饰', '医疗',  '住房' , '工资', '兼职', '理财', '礼金'];
+    var list = ['娱乐', '餐饮', '购物', '日用', '零食', '果蔬', '交通', '学习', '服饰', '医疗', '住房', '工资', '兼职', '理财', '礼金'];
     for (var i = 0; i < list.length; i++) {
-      if (str == list[i]) {
-        if(i >= 11) {
-            return i - 11;
+        if (str == list[i]) {
+            if (i >= 11) {
+                return i - 11;
+            }
+            return i;
         }
-        return i;
-      }
     }
 }
 
@@ -54,12 +54,12 @@ Page({
         },
         checkbox: {
             show: false,
-            list1:['娱乐', '餐饮', '购物', '日用', '零食', '果蔬', '交通', '学习', '服饰', '医疗',  '住房' ],
-            list2:  ['工资', '兼职', '理财', '礼金'],
-            list3: [ '娱乐', '餐饮', '购物', '日用', '零食', '果蔬', '交通', '学习', '服饰', '医疗',  '住房' , '工资', '兼职', '理财', '礼金'],
-            list : [ '娱乐', '餐饮', '购物', '日用', '零食', '果蔬', '交通', '学习', '服饰', '医疗',  '住房' , '工资', '兼职', '理财', '礼金'],
-            result:  [ '娱乐', '餐饮', '购物', '日用', '零食', '果蔬', '交通', '学习', '服饰', '医疗',  '住房' , '工资', '兼职', '理财', '礼金'],
-            preResult:  [ '娱乐', '餐饮', '购物', '日用', '零食', '果蔬', '交通', '学习', '服饰', '医疗',  '住房' , '工资', '兼职', '理财', '礼金'],
+            list1: ['娱乐', '餐饮', '购物', '日用', '零食', '果蔬', '交通', '学习', '服饰', '医疗', '住房'],
+            list2: ['工资', '兼职', '理财', '礼金'],
+            list3: ['娱乐', '餐饮', '购物', '日用', '零食', '果蔬', '交通', '学习', '服饰', '医疗', '住房', '工资', '兼职', '理财', '礼金'],
+            list: ['娱乐', '餐饮', '购物', '日用', '零食', '果蔬', '交通', '学习', '服饰', '医疗', '住房', '工资', '兼职', '理财', '礼金'],
+            result: ['娱乐', '餐饮', '购物', '日用', '零食', '果蔬', '交通', '学习', '服饰', '医疗', '住房', '工资', '兼职', '理财', '礼金'],
+            preResult: ['娱乐', '餐饮', '购物', '日用', '零食', '果蔬', '交通', '学习', '服饰', '医疗', '住房', '工资', '兼职', '理财', '礼金'],
         },
         condition: {
             show: false,
@@ -101,11 +101,11 @@ Page({
             ],
             checkbox: {
                 show: false,
-                list1: [ '娱乐', '餐饮', '购物', '日用', '零食', '果蔬', '交通', '学习', '服饰', '医疗',  '住房' ],
+                list1: ['娱乐', '餐饮', '购物', '日用', '零食', '果蔬', '交通', '学习', '服饰', '医疗', '住房'],
                 list2: ['工资', '兼职', '理财', '礼金'],
                 result: 0, //0,1,2,3对应list
                 preResult: 0,
-                list : [ '娱乐', '餐饮', '购物', '日用', '零食', '果蔬', '交通', '学习', '服饰', '医疗',   '住房' ],
+                list: ['娱乐', '餐饮', '购物', '日用', '零食', '果蔬', '交通', '学习', '服饰', '医疗', '住房'],
             },
             messageIO: null,
             messageDetail: null,
@@ -127,34 +127,38 @@ Page({
         showCostInput: true,
         showDetailInput: true,
         showVoiceInputMessage: "按住说话",
-        tip: "\ntip:按住说话时，会将输入转换为详细信息和金额两部分",
+        tip: "\nTip:按住说话时，会将输入转换为详细信息、金额和类型三部分\n" + 
+        "语音输入模板有：1. xxx花费/花了xxx元  2. xxx收入/赚了xxx元，还有更多等待您的探索!",
         billData: [],
-        icons:getApp().globalData.icons,
+        icons: getApp().globalData.icons,
     },
 
     onClose(event) {
-        const { position, instance } = event.detail;
+        const {
+            position,
+            instance
+        } = event.detail;
         console.log(event.detail);
         var index = event.target.dataset.a;
         switch (position) {
-          case 'left':
-          case 'cell':
-            instance.close();
-            break;
-          case 'right':
-            wx.showModal({
-                title: '提示',
-                content: '确定要删除吗？',
-                success: (sm) => {
-                  if (sm.confirm) {
-                      this.deleteBillById(this.data.billData[index]["id"]);
-                    } else if (sm.cancel) {
-                      console.log('用户点击取消')
+            case 'left':
+            case 'cell':
+                instance.close();
+                break;
+            case 'right':
+                wx.showModal({
+                    title: '提示',
+                    content: '确定要删除吗？',
+                    success: (sm) => {
+                        if (sm.confirm) {
+                            this.deleteBillById(this.data.billData[index]["id"]);
+                        } else if (sm.cancel) {
+                            console.log('用户点击取消')
+                        }
                     }
-                  }
                 })
         }
-      },
+    },
 
     getIndex1() {
         return 0;
@@ -209,20 +213,19 @@ Page({
         if (name == 0) {
             this.setData({
                 'newBill.result': name,
-                'newBill.checkbox.list' : this.data.newBill.checkbox.list2,
-                'newBill.checkbox.result' : 0,
-                'newBill.checkbox.peResult' : 0,
+                'newBill.checkbox.list': this.data.newBill.checkbox.list2,
+                'newBill.checkbox.result': 0,
+                'newBill.checkbox.peResult': 0,
             });
-        }
-        else {
+        } else {
             this.setData({
                 'newBill.result': name,
-                'newBill.checkbox.list' : this.data.newBill.checkbox.list1,
-                'newBill.checkbox.result' : 0,
-                'newBill.checkbox.peResult' : 0,
+                'newBill.checkbox.list': this.data.newBill.checkbox.list1,
+                'newBill.checkbox.result': 0,
+                'newBill.checkbox.peResult': 0,
             });
         }
-        
+
     },
 
     onChangeBillCheckBox(event) {
@@ -345,6 +348,7 @@ Page({
             'condition.minCost': this.data.condition.message1,
             'condition.preResult': this.data.condition.result
         });
+        this.filter()
         //console.log(this.data.maxCost);
 
     },
@@ -380,7 +384,7 @@ Page({
     saveBill() {
         this.queryBill();
         var url = "https://www.jaripon.xyz/bill/add";
-       
+
         var data = {};
         data["id"] = billId;
         if (this.data.newBill.modify == true) {
@@ -416,6 +420,51 @@ Page({
         });
         this.updateBillDataNotShow();
         this.updateBillDataNotShow();
+    },
+    // condition: {
+    //     show: false,
+    //     message1: 0,
+    //     message2: 10000,
+    //     minCost: 0,
+    //     maxCost: 10000,
+    //     list: ['收入', '支出'],
+    //     result: ['收入', '支出'],
+    //     preResult: ['收入', '支出']
+    // },
+    filterJudge(bill) {
+        let income = (bill["income"] == "true") ? "收入" : "支出";
+        console.log(income);
+        console.log(this.data.condition["result"]);
+        if (this.data.condition["result"].indexOf(income) < 0) {
+            return false;
+        }
+        if (bill["cost"] < this.data.condition["minCost"] || bill["cost"] > this.data.condition["maxCost"]) {
+            return false;
+        }
+        console.log(bill["type"]);
+        console.log(this.data.checkbox["result"]);
+        if (this.data.checkbox["result"].indexOf(bill["type"]) < 0) {
+            return false;
+        }
+        return true;
+    },
+
+    async filter() {
+        let data = await this.queryBill();
+        if (data != undefined) {
+            this.setData({
+                billData: data
+            })
+        }
+        let newBillData = [];
+        for (let i = 0; i < this.data.billData.length; i++) {
+            if (this.filterJudge(this.data.billData[i])) {
+                newBillData.push(this.data.billData[i]);
+            }
+        }
+        this.setData({
+            billData: newBillData
+        })
     },
 
     onConfirmBillCheckBox(event) {
@@ -496,7 +545,7 @@ Page({
         this.setData({
             'checkbox.show': true,
             'condition.show': false,
-            'checkbox.result' : this.data.checkbox.result,
+            'checkbox.result': this.data.checkbox.result,
         });
         // console.log(this.data.checkbox.result);
         // console.log(this.data.checkbox.list);
@@ -559,7 +608,7 @@ Page({
             'condition.show': true,
             'checkbox.result': this.data.checkbox.preResult
         });
-       // console.log(this.data.checkbox.result);
+        // console.log(this.data.checkbox.result);
     },
 
     onCloseBillDate() {
@@ -586,22 +635,22 @@ Page({
         this.setData({
             'date.currentDate1': event.detail,
         });
-        console.log('chage'+this.data.date.currentDate1);
+        console.log('chage' + this.data.date.currentDate1);
     },
 
     onChangeStrat(event) {
-        console.log(event.detail.getColumnValue(0)+'-'+event.detail.getColumnValue(1) + '-' +event.detail.getColumnValue(2));
-        var dateStr = event.detail.getColumnValue(0)+'-'+event.detail.getColumnValue(1) + '-' +event.detail.getColumnValue(2);
-        var year = event.detail.getColumnValue(0).substr(0,4);
-        var month = event.detail.getColumnValue(1).substr(0,2);
-        var day = event.detail.getColumnValue(2).substr(0,2);
-        var dateStr = year+'/'+month+'/'+day;
-        console.log(year+'/'+month+'/'+day);
-        var date = new Date(year, month-1, day);
+        console.log(event.detail.getColumnValue(0) + '-' + event.detail.getColumnValue(1) + '-' + event.detail.getColumnValue(2));
+        var dateStr = event.detail.getColumnValue(0) + '-' + event.detail.getColumnValue(1) + '-' + event.detail.getColumnValue(2);
+        var year = event.detail.getColumnValue(0).substr(0, 4);
+        var month = event.detail.getColumnValue(1).substr(0, 2);
+        var day = event.detail.getColumnValue(2).substr(0, 2);
+        var dateStr = year + '/' + month + '/' + day;
+        console.log(year + '/' + month + '/' + day);
+        var date = new Date(year, month - 1, day);
         console.log(date.toLocaleDateString());
         this.setData({
-            'date.currentDate1' : date.getTime(),
-           
+            'date.currentDate1': date.getTime(),
+
         })
         // var date = new Date()
         // let value=event.detail.getColumnValue(0)+'-'+event.detail.getColumnValue(1)
@@ -609,17 +658,17 @@ Page({
 
     onChangeEnd(event) {
         //console.log(event.detail.getColumnValue(0)+'-'+event.detail.getColumnValue(1) + '-' +event.detail.getColumnValue(2));
-        var dateStr = event.detail.getColumnValue(0)+'-'+event.detail.getColumnValue(1) + '-' +event.detail.getColumnValue(2);
-        var year = event.detail.getColumnValue(0).substr(0,4);
-        var month = event.detail.getColumnValue(1).substr(0,2);
-        var day = event.detail.getColumnValue(2).substr(0,2);
-        var dateStr = year+'/'+month+'/'+day;
+        var dateStr = event.detail.getColumnValue(0) + '-' + event.detail.getColumnValue(1) + '-' + event.detail.getColumnValue(2);
+        var year = event.detail.getColumnValue(0).substr(0, 4);
+        var month = event.detail.getColumnValue(1).substr(0, 2);
+        var day = event.detail.getColumnValue(2).substr(0, 2);
+        var dateStr = year + '/' + month + '/' + day;
         //console.log(year+'/'+month+'/'+day);
-        var date = new Date(year, month-1, day);
+        var date = new Date(year, month - 1, day);
         //console.log(date.toLocaleDateString());
         this.setData({
-            'date.currentDate2' : date.getTime(),
-           
+            'date.currentDate2': date.getTime(),
+
         })
         // var date = new Date()
         // let value=event.detail.getColumnValue(0)+'-'+event.detail.getColumnValue(1)
@@ -627,17 +676,17 @@ Page({
 
     onChangeBillDate(event) {
         //console.log(event.detail.getColumnValue(0)+'-'+event.detail.getColumnValue(1) + '-' +event.detail.getColumnValue(2));
-        var dateStr = event.detail.getColumnValue(0)+'-'+event.detail.getColumnValue(1) + '-' +event.detail.getColumnValue(2);
-        var year = event.detail.getColumnValue(0).substr(0,4);
-        var month = event.detail.getColumnValue(1).substr(0,2);
-        var day = event.detail.getColumnValue(2).substr(0,2);
-        var dateStr = year+'/'+month+'/'+day;
+        var dateStr = event.detail.getColumnValue(0) + '-' + event.detail.getColumnValue(1) + '-' + event.detail.getColumnValue(2);
+        var year = event.detail.getColumnValue(0).substr(0, 4);
+        var month = event.detail.getColumnValue(1).substr(0, 2);
+        var day = event.detail.getColumnValue(2).substr(0, 2);
+        var dateStr = year + '/' + month + '/' + day;
         //console.log(year+'/'+month+'/'+day);
-        var date = new Date(year, month-1, day);
+        var date = new Date(year, month - 1, day);
         //console.log(date.toLocaleDateString());
         this.setData({
-            'newBill.date.currentDate' : date.getTime(),
-           
+            'newBill.date.currentDate': date.getTime(),
+
         })
         // var date = new Date()
         // let value=event.detail.getColumnValue(0)+'-'+event.detail.getColumnValue(1)
@@ -751,34 +800,31 @@ Page({
         if (a.length == 2) {
             this.setData({
                 'condition.result': event.detail,
-                'checkbox.list' : this.data.checkbox.list3,
-                'checkbox.result' : this.data.checkbox.list3,
-                'checkbox.preResult' : this.data.checkbox.list3,
+                'checkbox.list': this.data.checkbox.list3,
+                'checkbox.result': this.data.checkbox.list3,
+                'checkbox.preResult': this.data.checkbox.list3,
             });
-        }
-        else if (a.length == 1 & a[0] == "收入") {
+        } else if (a.length == 1 & a[0] == "收入") {
             this.setData({
                 'condition.result': event.detail,
-                'checkbox.list' : this.data.checkbox.list2,
-                'checkbox.result' : this.data.checkbox.list2,
-                'checkbox.preResult' : this.data.checkbox.list2,
+                'checkbox.list': this.data.checkbox.list2,
+                'checkbox.result': this.data.checkbox.list2,
+                'checkbox.preResult': this.data.checkbox.list2,
             });
-        }
-        else if (a.length == 1 & a[0] == "支出") {
+        } else if (a.length == 1 & a[0] == "支出") {
             this.setData({
                 'condition.result': event.detail,
-                'checkbox.list' : this.data.checkbox.list1,
-                'checkbox.result' : this.data.checkbox.list1,
-                'checkbox.preResult' : this.data.checkbox.list1,
+                'checkbox.list': this.data.checkbox.list1,
+                'checkbox.result': this.data.checkbox.list1,
+                'checkbox.preResult': this.data.checkbox.list1,
             });
-        }
-        else {
+        } else {
             this.setData({
                 'condition.result': event.detail,
-                'checkbox.list' : [],
-                'checkbox.result' : [],
-                'checkbox.preResult' : [],
-                
+                'checkbox.list': [],
+                'checkbox.result': [],
+                'checkbox.preResult': [],
+
             });
         }
         // console.log(this.data.checkbox.result);
@@ -814,11 +860,11 @@ Page({
             'newBill.show': true,
             'newBill.modify': false,
             'newBill.messsageIO': null,
-            'newBill.messageDetail' : null,
-            'newBill.io' : null,
-            'newBill.detail' : null,
-            'newBill.checkbox.result' :0,
-            'newBill.checkbox.preResult' :0,
+            'newBill.messageDetail': null,
+            'newBill.io': null,
+            'newBill.detail': null,
+            'newBill.checkbox.result': 0,
+            'newBill.checkbox.preResult': 0,
             'newBill.result': 1,
             'newBill.preResult': 1,
             'newBill.date.date': Date.now(),
@@ -833,7 +879,7 @@ Page({
         // console.log(item.cost);
         var arr = item.time.split("-");
         //console.log(arr);
-        var t = arr[1]-1;
+        var t = arr[1] - 1;
         //console.log(t);
         var oldDate = new Date(arr[0], t, arr[2]);
         //console.log(oldDate.getTime());
@@ -852,14 +898,14 @@ Page({
             'newBill.show': true,
             'newBill.modify': true,
             'newBill.messageIO': item.cost,
-            'newBill.messageDetail' : item.detail,
-            'newBill.io' : item.cost,
-            'newBill.detail' : item.detail,
+            'newBill.messageDetail': item.detail,
+            'newBill.io': item.cost,
+            'newBill.detail': item.detail,
             'newBill.date.currentDate': oldDate.getTime(),
-            'newBill.date.date':  oldDate.getTime(),
+            'newBill.date.date': oldDate.getTime(),
             'newBill.date.dateStr': item.time,
-            'newBill.checkbox.result' :result1,
-            'newBill.checkbox.preResult' :result1,
+            'newBill.checkbox.result': result1,
+            'newBill.checkbox.preResult': result1,
             'newBill.result': result,
             'newBill.preResult': result,
             'newBill.checkbox.list': list,
@@ -867,7 +913,7 @@ Page({
         //console.log(this.data.newBill.io);
     },
 
-   
+
 
     async analyse() {
         let startYear = (this.data.date["startDateStr"].split("/"))[0];
@@ -968,26 +1014,37 @@ Page({
                 filePath: tempFilePath,
                 name: 'file',
                 success: res => {
-                    res = JSON.parse(res.data);
-                    this.setData({
-                        "newBill.detail": res.detail,
-                        "newBill.io": res.cost,
-                    });
-                    if (res.io == 0) {
+
+                    console.log(res);
+                    var data = JSON.parse(res.data);
+                    console.log(data);
+                    if (!"code" in data) {
+
                         this.setData({
-                            'newBill.result': res.io,
-                            'newBill.checkbox.list' : this.data.newBill.checkbox.list2,
-                            'newBill.checkbox.result' : 0,
-                            'newBill.checkbox.peResult' : 0,
+                            "newBill.detail": data.detail,
+                            "newBill.cost": data.cost,
                         });
-                    }
-                    else {
-                        this.setData({
-                            'newBill.result': res.io,
-                            'newBill.checkbox.list' : this.data.newBill.checkbox.list1,
-                            'newBill.checkbox.result' : 0,
-                            'newBill.checkbox.peResult' : 0,
-                        });
+                        if (data.io == 0) {
+                            this.setData({
+                                'newBill.result': data.io,
+                                'newBill.checkbox.list': this.data.newBill.checkbox.list2,
+                                'newBill.checkbox.result': 0,
+                                'newBill.checkbox.peResult': 0,
+                            });
+                        } else {
+                            this.setData({
+                                'newBill.result': data.io,
+                                'newBill.checkbox.list': this.data.newBill.checkbox.list1,
+                                'newBill.checkbox.result': 0,
+                                'newBill.checkbox.peResult': 0,
+                            });
+                        }
+                    } else {
+                        wx.showModal({
+                            title: "Tip",
+                            content: data.message + '请按模板输入',
+                            showCancel: false,
+                        })
                     }
                 },
                 fail: res => {

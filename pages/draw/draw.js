@@ -115,7 +115,7 @@ var tempIdToTemplate = new Map();
 function isNumber(val) {
     var regPos = /^\d+(\.\d+)?$/; //非负浮点数
     var regNeg = /^(-(([0-9]+\.[0-9]*[1-9][0-9]*)|([0-9]*[1-9][0-9]*\.[0-9]+)|([0-9]*[1-9][0-9]*)))$/; //负浮点数
-    if (regPos.test(val) && regNeg.test(val)) {
+    if (regPos.test(val) || regNeg.test(val)) {
         return true;
     } else {
         return false;
@@ -123,9 +123,11 @@ function isNumber(val) {
 }
 
 function convertNum(val) {
+    console.log(val);
     if (val == "" || val == null || val == undefined) {
         return null;
     } else if (isNumber(val)) {
+        console.log("trrr");
         return parseFloat(val);
     }
     return val;
@@ -202,7 +204,11 @@ function setLineOption(lineChart, template) {
                 data: []
             },
             stack: stack[i - 1],
-            color: template.color[i - 1]
+            color: template.color[i - 1],
+            encode: {
+                x: 0,
+                y: i
+            }
         };
         if (showArea[i - 1]) {
             tempJson.areaStyle = {
@@ -232,10 +238,11 @@ function setLineOption(lineChart, template) {
         }
         series.push(tempJson);
     }
-
     option = {
         dataset: {
-            source: inputData,
+            source: [["ll", "y", "z"],
+                    [1,3,5],
+                    [2,4,6]]
         },
         dataZoom: [{
                 type: "inside",
@@ -277,7 +284,7 @@ function setLineOption(lineChart, template) {
         },
         xAxis: {
             name: xName,
-            type: line.xType === "string" ? 'category' : 'value',
+            type: line.xType == "string" ? 'category' : 'value',
             boundaryGap: !(line.xType === "string"),
             axisLine: {
                 onZero: false,
@@ -285,7 +292,7 @@ function setLineOption(lineChart, template) {
         },
         yAxis: {
             name: yName,
-            type: line.yType === "string" ? 'category' : 'value',
+            type: line.yType == "string" ? 'category' : 'value',
             boundaryGap: !(line.yType === "string"),
             axisLine: {
                 onZero: false
@@ -298,6 +305,7 @@ function setLineOption(lineChart, template) {
         },
         series: series
     };
+    console.log(option);
     setToolBox(option);
     setLegendOption(option, template.legendPos);
     lineChart.setOption(option); // 
@@ -421,7 +429,11 @@ function setBarOption(barChart, template) {
                 data: []
             },
             stack: stack[i - 1],
-            color: template.color[i - 1]
+            color: template.color[i - 1],
+            encode: {
+                x: 0,
+                y: i
+            }
         };
         if (showEmphasis[i - 1]) {
             tempJson.emphasis = {
@@ -682,6 +694,10 @@ function setScatterOption(scatterChart, template) {
             itemStyle: {
                 color: template.color[i - 1],
             },
+            encode: {
+                x: 0,
+                y: i
+            }
         };
         series.push(tempJson);
     }
@@ -919,14 +935,14 @@ Page({
         pieChartNo: 0,
         average: [],
         variance: [],
-        placeData: "折线" //第一行显示
+        placeData: ""//第一行显示
     },
     changeChart(event) {
         var value = event.detail;
         var newFirstHolder = (value == "line") ? "折线" :
-                            (value == "bar") ? "柱" :
-                            (value == "pie") ? "饼" :
-                            (value == "scatter") ? "散点组" : "";
+            (value == "bar") ? "柱" :
+            (value == "pie") ? "饼" :
+            (value == "scatter") ? "散点组" : "";
         // 更换图的时候，更新此图模板的数据
         var newOption2 = [];
         for (var template of templates[value + 'Templates']) {
@@ -1091,7 +1107,7 @@ Page({
                 this.openChart(res.data)
             })
             eventChannel.on("goDraw", res => {
-                var value = res.value;
+                var value = res.value; 
                 var newOption2 = [];
                 for (var template of templates[value + 'Templates']) {
                     newOption2.push({
@@ -1102,7 +1118,8 @@ Page({
                 this.setData({
                     value1: value,
                     option2: newOption2,
-                    value2: newOption2[0].value
+                    value2: newOption2[0].value,
+                    placeData: (value == "line") ? "折线" : (value == "bar") ? "柱" : (value == "pie") ? "饼" : (value == "scatter") ? "散点组" : "" 
                 });
             });
         }
@@ -1294,6 +1311,7 @@ Page({
             ret.push(tmp);
         }
         console.log(ret);
+        console.log(typeof ret[1][1]);
         return ret;
     },
     resetData: function (newData) {
@@ -1321,6 +1339,7 @@ Page({
     repaint: function () {
         inputData = this.convertPaintData();
         xType = this.judgeXType();
+        console.log(xType);
         yType = this.judgeYType();
         updateShow();
         switch (this.data.value1) {
@@ -1367,7 +1386,7 @@ Page({
                         screenDirection: wx.getStorageSync('system'),
                     });
                     updateTemplate(index, backData.template);
-                    
+
                 }
             },
             success(result) {

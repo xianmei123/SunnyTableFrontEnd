@@ -1,8 +1,8 @@
 {
   "pages": [
+    "pages/tutorial/tutorial",
     "pages/index/index",
     "pages/bill/bill",
-    "pages/tutorial/tutorial",
     "pages/draw/draw",
     "pages/storage/storage",
     "pages/attribute/attribute",
