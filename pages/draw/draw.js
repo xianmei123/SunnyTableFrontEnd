@@ -264,6 +264,8 @@ function setLineOption(lineChart, template) {
         ],
         grid: {
             bottom: "10%",
+            left: '0%',
+            containLabel: true
         },
         title: {
             text: graphName,
@@ -448,7 +450,9 @@ function setBarOption(barChart, template) {
             source: inputData
         },
         grid: {
-            bottom: "10%"
+            bottom: "10%",
+            left: '0%',
+            containLabel: true
         },
         dataZoom: [{
                 type: "inside",
@@ -592,7 +596,9 @@ function setPieOption(pieChart, template) {
     }
     option = {
         grid: {
-            bottom: "10%"
+            bottom: "10%",
+            left: '0%',
+            containLabel: true
         },
         title: {
             text: graphName,
@@ -711,7 +717,9 @@ function setScatterOption(scatterChart, template) {
             }
         ],
         grid: {
-            bottom: "10%"
+            bottom: "10%",
+            left: '0%',
+            containLabel: true
         },
         title: {
             text: graphName,
