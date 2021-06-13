@@ -965,8 +965,8 @@ Page({
         });
     },
     changeTemplate(event) {
-        console.log(tempIdToTemplate.get(event.deatil));
-        updateTemplate(typeToIndex.get(this.data.value1), tempIdToTemplate.get(event.deatil));
+        //console.log(tempIdToTemplate.get(event.detail));
+        updateTemplate(typeToIndex.get(this.data.value1), tempIdToTemplate.get(event.detail));
     },
     actionEditTable() {
         this.setData({
@@ -1092,14 +1092,15 @@ Page({
         var hepler = require('../storage/helper');
         var types = ["barTemplates", "lineTemplates", "pieTemplates", "scatterTemplates"];
         var urls = ['/template/barchart/open/', '/template/linechart/open/', '/template/fanchart/open/', '/template/scatterplot/open/']
-        var res = await hepler.trans(baseUrl + '/template/chart/display/' + wx.getStorageSync('uid') + '/' + 10);
+        var res = await hepler.trans(baseUrl + '/template/chart/display/' + wx.getStorageSync('uid') + '/' + 20 );
         for (var i of res.data) {
             var url = baseUrl + urls[i.type - 1] + i.fid;
             var template = await hepler.trans(url);
-            console.log(res);
             templates[types[i.type - 1]].push(convertFromBackTemplate(template.data, types[i.type - 1].split("Template")[0]));
             tempIdToTemplate.set(i.fid, template.data);
+            //console.log(tempIdToTemplate.get(i.fid));
         }
+        console.log("tempIdToTemplate", tempIdToTemplate);
         line.template = templates["lineTemplates"][0];
         bar.template = templates["barTemplates"][0];
         pie.template = templates["pieTemplates"][0];
@@ -1398,6 +1399,7 @@ Page({
                 }
             },
             success(result) {
+                console.log(index, indexToGraph[index].template);
                 result.eventChannel.emit("changeTemplate", {
                     index: index,
                     template: indexToGraph[index].template,
@@ -1922,7 +1924,7 @@ function isShowLineChart() {
  * @returns 是否显示条形图
  */
 function isShowBarChart() {
-    return (xType === "string" && yType === "number") || (xType === "string" && yType === "number") || Object.keys(inputData).length != 0;
+    return (xType === "string" && yType === "number") || (xType === "number" && yType === "string") && Object.keys(inputData).length != 0;
 }
 
 /**
@@ -1969,6 +1971,7 @@ function updateLineData(inputData) {
  */
 function updateBarData(inputData) {
     bar.init(inputData, xType, yType);
+    console.log("BARtYPE", xType, yType);
     if (isShowBarChart()) {
         setBarOption(bar.chart, bar.template);
     }
@@ -2015,6 +2018,7 @@ function updateScatterData(inputData) {
  */
 function updateTemplate(updateGraphIndex, template) {
     indexToGraph[updateGraphIndex].setTemplate(template);
+    console.log(line.template);
     if (updateGraphIndex == 0 && isShowLineChart()) {
         setLineOption(indexToGraph[updateGraphIndex].chart, template);
     } else if (updateGraphIndex == 1 && isShowBarChart()) {
