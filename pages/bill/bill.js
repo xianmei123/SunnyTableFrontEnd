@@ -345,6 +345,7 @@ Page({
             'condition.minCost': this.data.condition.message1,
             'condition.preResult': this.data.condition.result
         });
+        this.filter()
         //console.log(this.data.maxCost);
 
     },
@@ -414,6 +415,51 @@ Page({
         });
         this.updateBillDataNotShow();
         this.updateBillDataNotShow();
+    },
+    // condition: {
+    //     show: false,
+    //     message1: 0,
+    //     message2: 10000,
+    //     minCost: 0,
+    //     maxCost: 10000,
+    //     list: ['收入', '支出'],
+    //     result: ['收入', '支出'],
+    //     preResult: ['收入', '支出']
+    // },
+    filterJudge(bill) {
+        let income = (bill["income"] == "true") ? "收入" : "支出";
+        console.log(income);
+        console.log(this.data.condition["result"]);
+        if (this.data.condition["result"].indexOf(income) < 0) {
+            return false;
+        }
+        if (bill["cost"] < this.data.condition["minCost"] || bill["cost"] > this.data.condition["maxCost"]) {
+            return false;
+        }
+        console.log(bill["type"]);
+        console.log(this.data.checkbox["result"]);
+        if (this.data.checkbox["result"].indexOf(bill["type"]) < 0) {
+            return false;
+        }
+        return true;
+    },
+
+    async filter() {
+        let data = await this.queryBill();
+        if (data != undefined) {
+            this.setData({
+                billData: data
+            })
+        }
+        let newBillData = [];
+        for (let i = 0; i < this.data.billData.length; i++) {
+            if (this.filterJudge(this.data.billData[i])) {
+                newBillData.push(this.data.billData[i]);
+            }
+        }
+        this.setData({
+            billData: newBillData
+        })
     },
 
     onConfirmBillCheckBox(event) {

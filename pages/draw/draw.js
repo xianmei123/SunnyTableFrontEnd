@@ -115,7 +115,7 @@ var tempIdToTemplate = new Map();
 function isNumber(val) {
     var regPos = /^\d+(\.\d+)?$/; //非负浮点数
     var regNeg = /^(-(([0-9]+\.[0-9]*[1-9][0-9]*)|([0-9]*[1-9][0-9]*\.[0-9]+)|([0-9]*[1-9][0-9]*)))$/; //负浮点数
-    if (regPos.test(val) && regNeg.test(val)) {
+    if (regPos.test(val) || regNeg.test(val)) {
         return true;
     } else {
         return false;
@@ -123,9 +123,11 @@ function isNumber(val) {
 }
 
 function convertNum(val) {
+    console.log(val);
     if (val == "" || val == null || val == undefined) {
         return null;
     } else if (isNumber(val)) {
+        console.log("trrr");
         return parseFloat(val);
     }
     return val;
@@ -919,14 +921,14 @@ Page({
         pieChartNo: 0,
         average: [],
         variance: [],
-        placeData: "折线" //第一行显示
+        placeData: ""//第一行显示
     },
     changeChart(event) {
         var value = event.detail;
         var newFirstHolder = (value == "line") ? "折线" :
-                            (value == "bar") ? "柱" :
-                            (value == "pie") ? "饼" :
-                            (value == "scatter") ? "散点组" : "";
+            (value == "bar") ? "柱" :
+            (value == "pie") ? "饼" :
+            (value == "scatter") ? "散点组" : "";
         // 更换图的时候，更新此图模板的数据
         var newOption2 = [];
         for (var template of templates[value + 'Templates']) {
@@ -1102,7 +1104,8 @@ Page({
                 this.setData({
                     value1: value,
                     option2: newOption2,
-                    value2: newOption2[0].value
+                    value2: newOption2[0].value,
+                    placeData: (value == "line") ? "折线" : (value == "bar") ? "柱" : (value == "pie") ? "饼" : (value == "scatter") ? "散点组" : "" 
                 });
             });
         }
@@ -1294,6 +1297,7 @@ Page({
             ret.push(tmp);
         }
         console.log(ret);
+        console.log(typeof ret[1][1]);
         return ret;
     },
     resetData: function (newData) {
@@ -1321,6 +1325,7 @@ Page({
     repaint: function () {
         inputData = this.convertPaintData();
         xType = this.judgeXType();
+        console.log(xType);
         yType = this.judgeYType();
         updateShow();
         switch (this.data.value1) {
@@ -1367,7 +1372,7 @@ Page({
                         screenDirection: wx.getStorageSync('system'),
                     });
                     updateTemplate(index, backData.template);
-                    
+
                 }
             },
             success(result) {
