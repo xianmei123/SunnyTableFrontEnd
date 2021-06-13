@@ -89,7 +89,7 @@
             <view class="divide-H"></view>
             <block wx:for="{{iterator1}}" wx:for-index="i">
                 <view class="text-item">
-                    <van-field placeholder="横坐标{{ i + 1 }}" border="{{ true }}" bind:change="getXValue"
+                    <van-field value="{{xValues[i]}}" placeholder="横坐标{{ i + 1 }}" border="{{ true }}" bind:change="getXValue"
                         data-a="{{i + 1}}" bindtap="changeCurrentX" />
                 </view>
                 <block wx:for="{{iterator2}}" wx:for-item="j">

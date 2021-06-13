@@ -1031,18 +1031,28 @@ Page({
                             var newDatas = [];
                             var dataArray = data["dataArray"];
                             var i;
+                            console.log(dataArray);
                             for (i = 1; i < dataArray.length; i++) {
                                 newGroupName.push(dataArray[i]["name"]);
                                 newDatas.push(dataArray[i]["lineData"]);
                             }
-                            console.log('newDatas', newDatas)
+                            var ni1 = []
+                            var ni2 = []
+                            for (var i = 0; i < newGroupName.length; i++) {
+                                ni2.push(i + 1);
+                            }
+                            for (var i = 0; i < dataArray[0]["lineData"].length; i++) {
+                                ni1.push(i + 1);
+                            }
                             this.setData({
+                                iterator1: ni1,
+                                iterator2: ni2,
                                 xValues: dataArray[0]["lineData"],
                                 datas: newDatas,
-                                groupName: newGroupName
+                                groupName: newGroupName,
+                                groupNum: newDatas.length
                             })
-                            console.log(res);
-                            console.log(data);
+                            console.log(this.data.xValues);
                         },
                         fail: res => {
                             console.log("falied")
