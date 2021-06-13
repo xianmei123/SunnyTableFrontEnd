@@ -1092,7 +1092,7 @@ Page({
         var hepler = require('../storage/helper');
         var types = ["barTemplates", "lineTemplates", "pieTemplates", "scatterTemplates"];
         var urls = ['/template/barchart/open/', '/template/linechart/open/', '/template/fanchart/open/', '/template/scatterplot/open/']
-        var res = await hepler.trans(baseUrl + '/template/chart/display/' + wx.getStorageSync('uid') + '/' + 10);
+        var res = await hepler.trans(baseUrl + '/template/chart/display/' + wx.getStorageSync('uid') + '/' + 20);
         for (var i of res.data) {
             var url = baseUrl + urls[i.type - 1] + i.fid;
             var template = await hepler.trans(url);

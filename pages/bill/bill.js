@@ -127,8 +127,8 @@ Page({
         showCostInput: true,
         showDetailInput: true,
         showVoiceInputMessage: "按住说话",
-        tip: "\nTip:按住说话时，会将输入转换为详细信息、金额和类型三部分\n" + 
-        "语音输入模板有：1. xxx花费/花了xxx元  2. xxx收入/赚了xxx元，还有更多等待您的探索!",
+        tip: "\nTip:按住说话时，会将输入转换为详细信息、金额和 收入/支出 三部分。\n" + 
+        "语音输入建议模板有：1. xxx（例：买了一个苹果），花费/花了xxx元  2. xxx，收入/赚了xxx元，还有更多等待您的探索!",
         billData: [],
         icons: getApp().globalData.icons,
     },
@@ -381,7 +381,7 @@ Page({
 
     },
 
-    saveBill() {
+   async saveBill() {
         this.queryBill();
         var url = "https://www.jaripon.xyz/bill/add";
 
@@ -418,8 +418,8 @@ Page({
         wx.showToast({
             title: '保存账单成功',
         });
-        this.updateBillDataNotShow();
-        this.updateBillDataNotShow();
+        await this.updateBillDataNotShow();
+        //this.updateBillDataNotShow();
     },
     // condition: {
     //     show: false,
