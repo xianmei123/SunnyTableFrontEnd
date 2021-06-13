@@ -116,7 +116,7 @@
             <van-cell-group>
                 <van-cell center title="{{billItem.detail}}"
                     value="{{billItem.income == 'true' ? billItem.cost : -billItem.cost}}"
-                    label=" {{ billItem.type}} {{billItem.time}}" bind:click = "modifyBill" data-item="{{billItem}}">
+                    label=" {{ billItem.type}} {{billItem.time}}" bind:click = "modifyBill" data-item="{{billItem}}" value-class="value-font" title-class="title-font">
                     <view slot="icon" style="width:70rpx">
                         <van-icon name="{{icons[filter.getIndex(billItem.type)]}}" size="50rpx" />
                     </view>

@@ -240,9 +240,7 @@ function setLineOption(lineChart, template) {
     }
     option = {
         dataset: {
-            source: [["ll", "y", "z"],
-                    [1,3,5],
-                    [2,4,6]]
+            source: inputData
         },
         dataZoom: [{
                 type: "inside",
@@ -1378,6 +1376,7 @@ Page({
                 index = 3;
                 break;
         }
+        var groupNum = getPage().data.groupNum;
         wx.navigateTo({
             url: '../attribute/attribute',
             events: {
@@ -1393,7 +1392,7 @@ Page({
                 result.eventChannel.emit("changeTemplate", {
                     index: index,
                     template: indexToGraph[index].template,
-                    count: getPage().data.groupNum,
+                    count: groupNum
                 });
             },
 

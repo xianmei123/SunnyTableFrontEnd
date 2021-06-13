@@ -1,4 +1,5 @@
 // pages/tutorial/tutorial.js
+const baseUrl = "https://www.jaripon.xyz";
 Page({
 
 	/**

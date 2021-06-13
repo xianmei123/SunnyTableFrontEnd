@@ -51,3 +51,15 @@ page {
 	height: 120rpx;
 	margin-left: 20rpx;
 }
+
+.value-font {
+	color: black !important;
+	font-weight: bold;
+	font-size: 20px;
+	font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+	margin-bottom: 25px;
+}
+
+.title-font{
+	font-size: 17px;
+}
