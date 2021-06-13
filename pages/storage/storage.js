@@ -334,6 +334,17 @@ Page({
       if (await helper.hasError(res)) break ;
       this.data.fileList.splice(0,1)
     }
+    if(fileList.length==0){
+      wx.showToast({
+        title: '清空成功',
+        icon: 'success'
+      })
+    }else {
+      wx.showToast({
+        title: '服务器繁忙',
+        icon:'error'
+      })
+    }
       this.setData({fileList:this.data.fileList})
     // this.setData({fileList:[]})
   },
@@ -431,7 +442,7 @@ Page({
     let start = this.data.touchS
     let end = [e.changedTouches[0].pageX,e.changedTouches[0].pageY]
     var dirStack = this.data.dirStack
-    if (start[0] > end[0] + 100 ) {
+    if (start[0] > end[0] + 100 || end[0] > start[0] + 100) {
       if(dirStack.length > 1)
          if(await this.changeDir(dirStack[dirStack.length - 2])){
             dirStack.splice(dirStack.length-1,1)

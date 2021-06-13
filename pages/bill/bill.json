@@ -13,5 +13,6 @@
   "van-radio-group": "@vant/weapp/radio-group/index",
   "van-icon": "@vant/weapp/icon/index"
   },
-  "navigationBarTitleText": "账单"
+  "navigationBarTitleText": "账单",
+  "enablePullDownRefresh": true
 }

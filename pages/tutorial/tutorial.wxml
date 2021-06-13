@@ -13,6 +13,5 @@
  
 </scroll-view>
 
-<button bindtap="goIndex" style="margin-top:0rpx"  type="primary">进入小程序</button>
-
+<button bindtap="goIndex" style="margin-top:30rpx"  type="primary" class="button">进入小程序</button>
 <view style="text-align: center;font-size: 10px;">{{tip}}</view>

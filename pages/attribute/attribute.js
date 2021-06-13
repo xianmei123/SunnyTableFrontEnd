@@ -79,8 +79,8 @@ Page({
 		var [legendPos, lineColors] = this.getTotAttribute(template, '线图')
 		var [lineLegendPosTop, lineLegendPosBottom, lineLegendPosLeft, lineLegendPosRight, linePosVertical] = legendPos
 		var lineAreaStyle = this.transArrColor(template, '区域颜色')
-		console.log('线色', lineColors)
-		console.log(template)
+		console.log('模板!', template)
+		console.log('uese!',this.data.uses)
 		this.setData({
 			lineRaiuds: template.radius,
 			lineShowDigit: template.showDigit,
@@ -348,7 +348,7 @@ Page({
 			scatterPosVertical,
 			scatterColors,
 			scatterColorsValue,
-			scatterUseRegression: JSON.parse(template.useRegression),
+			scatterUseRegression: template.useRegression,
 			scatterIndexRegression: template.indexRegression.toString()
 		})
 	},
@@ -391,8 +391,9 @@ Page({
 			for (var x = 0; x < data.count; x++)
 				uses.push(x)
 			this.setData({
-				uses
+				uses:uses
 			})
+			console.log('uses',this.data.uses)
 		})
 
 	},
