@@ -127,7 +127,7 @@
             </view>
         </van-swipe-cell>
     </block>
-    <van-button round type="info" bindtap="updateBillData">更新账单数据</van-button>
+    <!-- <van-button round type="info" bindtap="updateBillData">更新账单数据</van-button> -->
 </view>
 <!-- 新建账单类别选择的弹出层 -->
 <van-popup show="{{ newBill.checkbox.show }}" position="center" custom-style="width:90%"
