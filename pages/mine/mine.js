@@ -53,6 +53,9 @@ Page({
     })
   },
   goTutorial(){
-
+    wx.setStorageSync('goTutorial', true)
+    wx.navigateTo({
+      url: '/pages/tutorial/tutorial',
+    })
   }
 })

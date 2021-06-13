@@ -65,7 +65,11 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-    var isFirst = wx.getStorageSync("isFirst");
+	var isFirst = wx.getStorageSync("isFirst");
+	if(wx.getStorageSync('goTutorial')){
+		wx.setStorageSync('goTutorial', false)
+		return
+	}
     if (!isFirst) {
       wx.switchTab({
         url: '../index/index'

@@ -110,8 +110,7 @@ Page({
 			lineStack: [0, 0]
 			// lineStack: this.transArray(template.stack)
 		})
-		console.log('colors', this.data.lineTextColor, this.data.lineColors)
-		console.log(this.data.lineColors)
+		console.log(this.data.lineShowXGradient,this.data.lineShowYGradient)
 	},
 	fillZero(str) {
 		if (parseInt(str, 16) < 16) {

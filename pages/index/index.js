@@ -27,7 +27,16 @@ Page({
 				name: '散点图',
 				pic: ['scatter1.png', 'scatter2.png', 'scatter3.png']
 			}
-		]
+		],
+		bill_pics: [{
+			name: '账单',
+			pic: ["bill1.PNG", "bill2.PNG"]
+		},
+		{
+			name: '分析',
+			pic: ['analysis1.PNG', 'analysis2.PNG']
+		},
+	]
 
 	},
 	onshow: function () {
@@ -59,6 +68,11 @@ Page({
 	goSelectModel() {
 		wx.navigateTo({
 			url: '../model_select/model_select'
+		})
+	},
+	goBill(){
+		wx.navigateTo({
+		  url: '/pages/bill/bill',
 		})
 	},
 	onLoad() {
