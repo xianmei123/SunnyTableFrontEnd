@@ -873,7 +873,16 @@ Page({
             value: 2
         }, {
             name: "删除列",
-            value: 3,
+            value: 3
+        }, {
+            name: "求和",
+            value: 4
+        }, {
+            name: "计算均值",
+            value: 5
+        }, {
+            name: "计算方差",
+            value: 6
         }],
         saveSheetOptions: [{
             name: "保存模板",
@@ -993,7 +1002,7 @@ Page({
         });
     },
     onSelectEditTable(event) {
-        var funs = [this.addX, this.addDataGroup, this.delX, this.delGroup];
+        var funs = [this.addX, this.addDataGroup, this.delX, this.delGroup, this.calculateSum, this.calculateAverage, this.calculateVariance];
         funs[event.detail.value]();
     },
     onCloseSaveSheet() {
@@ -1633,10 +1642,18 @@ Page({
         this.repaint();
     },
     async calculateSum() {
+        let tmp = [];
+        for (var i = 0; i < this.data.xValues.length; i++) {
+            let tmp2 = [];
+            for (var j = 0; j < this.data.groupNum; j++) {
+                tmp2.push(this.data.datas[j][i]);
+            }
+            tmp.push(tmp2);
+        }
         let ret = await new Promise((resolve, reject) => {
             wx.request({
                 url: baseUrl + "/expression/sum",
-                data: this.data.datas,
+                data: tmp,
                 method: "POST",
                 success: (res) => {
                     console.log(res.data);
@@ -1645,20 +1662,36 @@ Page({
                 fail: function (res) {
                     wx.showToast({
                         icon: 'error',
-                        title: '计算均值失败'
+                        title: '求和失败'
                     })
                 }
             });
         });
+        var newGroup = this.data.groupName;
+        var newData = this.data.datas;
+        var nit2 = this.data.iterator2;
+        nit2.push(nit2.length + 1);
+        newGroup.push("和");
+        newData.push(ret);
         this.setData({
-            average: ret
-        })
+            iterator2: nit2,
+            datas: newData,
+            groupName: newGroup
+        });
     },
     async calculateAverage() {
+        let tmp = [];
+        for (var i = 0; i < this.data.xValues.length; i++) {
+            let tmp2 = [];
+            for (var j = 0; j < this.data.groupNum; j++) {
+                tmp2.push(this.data.datas[j][i]);
+            }
+            tmp.push(tmp2);
+        }
         let ret = await new Promise((resolve, reject) => {
             wx.request({
                 url: baseUrl + "/expression/average",
-                data: this.data.datas,
+                data: tmp,
                 method: "POST",
                 success: (res) => {
                     console.log(res.data);
@@ -1675,12 +1708,31 @@ Page({
         this.setData({
             average: ret
         })
+        var newGroup = this.data.groupName;
+        var newData = this.data.datas;
+        var nit2 = this.data.iterator2;
+        nit2.push(nit2.length + 1);
+        newGroup.push("均值");
+        newData.push(ret);
+        this.setData({
+            iterator2: nit2,
+            datas: newData,
+            groupName: newGroup
+        });
     },
     async calculateVariance() {
+        let tmp = [];
+        for (var i = 0; i < this.data.xValues.length; i++) {
+            let tmp2 = [];
+            for (var j = 0; j < this.data.groupNum; j++) {
+                tmp2.push(this.data.datas[j][i]);
+            }
+            tmp.push(tmp2);
+        }
         let ret = await new Promise((resolve, reject) => {
             wx.request({
                 url: baseUrl + "/expression/variance",
-                data: this.data.datas,
+                data: tmp,
                 method: "POST",
                 success: (res) => {
                     console.log(res.data);
@@ -1689,20 +1741,37 @@ Page({
                 fail: function (res) {
                     wx.showToast({
                         icon: 'error',
-                        title: '计算均值失败'
+                        title: '计算方差失败'
                     })
                 }
             });
         });
+        console.log(ret);
+        var newGroup = this.data.groupName;
+        var newData = this.data.datas;
+        var nit2 = this.data.iterator2;
+        nit2.push(nit2.length + 1);
+        newGroup.push("方差");
+        newData.push(ret);
         this.setData({
-            average: ret
-        })
+            iterator2: nit2,
+            datas: newData,
+            groupName: newGroup
+        });
     },
-    async calculateuncertainty() {
+    async calculateUncertainty() {
+        let tmp = [];
+        for (var i = 0; i < this.data.xValues.length; i++) {
+            let tmp2 = [];
+            for (var j = 0; j < this.data.groupNum; j++) {
+                tmp2.push(this.data.datas[j][i]);
+            }
+            tmp.push(tmp2);
+        }
         let ret = await new Promise((resolve, reject) => {
             wx.request({
                 url: baseUrl + "/expression/uncertainty",
-                data: this.data.datas,
+                data: tmp,
                 method: "POST",
                 success: (res) => {
                     console.log(res.data);
@@ -1711,14 +1780,23 @@ Page({
                 fail: function (res) {
                     wx.showToast({
                         icon: 'error',
-                        title: '计算均值失败'
+                        title: '计算不确定度失败'
                     })
                 }
             });
         });
+        console.log(ret);
+        var newGroup = this.data.groupName;
+        var newData = this.data.datas;
+        var nit2 = this.data.iterator2;
+        nit2.push(nit2.length + 1);
+        newGroup.push("不确定度");
+        newData.push(ret);
         this.setData({
-            average: ret
-        })
+            iterator2: nit2,
+            datas: newData,
+            groupName: newGroup
+        });
     },
     // 保存模板
     saveTemplate: function () {
