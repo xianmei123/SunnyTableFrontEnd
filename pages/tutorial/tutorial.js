@@ -55,7 +55,7 @@ Page({
 	 */
 	onLoad: function (options) {
 		var isFirst = wx.getStorageSync('isFirst');
-		if (isFirst) {
+		if (!isFirst) {
 			wx.switchTab({
 				url: '../index/index'
 			});
