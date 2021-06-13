@@ -29,8 +29,8 @@ Page({
 				title: '折线图',
 				unique: 'unique_1',
 				url: 'https://www.jaripon.xyz/image/t4.jpg'
-      },
-      {
+			},
+			{
 				selected: false,
 				title: '折线图',
 				unique: 'unique_1',
@@ -54,20 +54,12 @@ Page({
 	 * 生命周期函数--监听页面加载
 	 */
 	onLoad: function (options) {
-		wx.request({
-			url: baseUrl + "/",
-			method: 'POST',
-			success: res => {
-				if (!res.first) {
-					wx.switchTab({
-						url: '../index/index'
-					});
-				}
-				
-			}
-			
-		})
-		
+		var isFirst = wx.getStorageSync('isFirst');
+		if (isFirst) {
+			wx.switchTab({
+				url: '../index/index'
+			});
+		}
 	},
 
 	/**
