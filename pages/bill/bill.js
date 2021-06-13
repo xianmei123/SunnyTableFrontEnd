@@ -357,6 +357,7 @@ Page({
         this.setData({
             'date.show': false,
         });
+        this.updateBillDataNotShow();
     },
 
     onConfirmCheckBox(event) {
@@ -377,6 +378,7 @@ Page({
             'newBill.date.date': event.detail,
             'newBill.date.dateStr': str
         });
+
     },
 
     saveBill() {
@@ -1012,10 +1014,12 @@ Page({
                 filePath: tempFilePath,
                 name: 'file',
                 success: res => {
+
                     console.log(res);
                     var data = JSON.parse(res.data);
                     console.log(data);
                     if (!"code" in data) {
+
                         this.setData({
                             "newBill.detail": data.detail,
                             "newBill.cost": data.cost,
