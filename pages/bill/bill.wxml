@@ -236,7 +236,7 @@
     <text>\n</text>
     <button class="button" type="primary" bindtouchstart='touchStart'
         bindtouchend='touchEnd'>{{showVoiceInputMessage}}</button>
-    <view style="text-align: center;font-size: 10px;margin-top: 10px">{{tip}}</view>
+    <view style="text-align: center;font-size: 10px;margin-top: 10px; font-weight: bold">{{tip}}</view>
 </van-popup>
 <!-- 底部按钮 -->
 <van-row class="bottom_box">

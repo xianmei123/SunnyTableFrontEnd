@@ -101,7 +101,6 @@ function setBarOption() {
                 xAxisIndex: 0,
                 filterMode: 'none',
                 height: 0,
-                start: inputData.length < 8 ? 0 : 50
             },
             {
                 type: "inside",
@@ -138,6 +137,11 @@ function setBarOption() {
         }],
 
     };
+    if (inputData.length < 8 ) {
+        option.dataZoom[0].start = 0;
+    } else {
+        option.dataZoom[0].startValue = inputData.length - 7;
+    }
     return option;
 }
 

@@ -235,7 +235,7 @@ function updateTemp() {
 		"name": "饼状图默认模板",
 		"userId": null,
 
-		"precision": 2,
+		"precisions": 2,
 		"color": [
 			"#c1232b",
 			"#27727b",
@@ -307,10 +307,16 @@ function updateTemp() {
 }
 	var sb = [lineTemplate, barTemplate, pieTemplate, scatterTemplate];
 	for (var i of sb) {
+		console.log(i);
+		
 		wx.request({
-			url: baseUrl + '/template/' +  i.name === "pie" ? 'fan' : i.name + '/updateAll',
+			url: baseUrl + '/template/' +  (i.name === "pie" ? 'fan' : i.name) + '/updateAll',
+			method: 'POST',
 			data: i.json,
 			success: res => {
+				console.log(res);
+			},
+			fail: res => {
 				console.log(res);
 			}
 		});
