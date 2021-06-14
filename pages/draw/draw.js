@@ -1271,7 +1271,8 @@ Page({
             datas: newDatas,
             groupName: newGroupName,
             iterator2: newIterator2,
-            groupNum: this.data.groupNum - 1
+            groupNum: this.data.groupNum - 1,
+            currentCell: ""
         })
         
     },
@@ -1288,7 +1289,8 @@ Page({
         this.setData({
             iterator1: newIterator1,
             xValues: newXValues,
-            datas: newDatas
+            datas: newDatas,
+            currentCell: ""
         })
 
     },
