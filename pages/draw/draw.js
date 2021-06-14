@@ -88,6 +88,7 @@ var line = new graph.LineGraph("line");
 var bar = new graph.BarGraph("bar");
 var pie = new graph.PieGraph("pie");
 var scatter = new graph.ScatterGraph("scatter");
+var draftId = null;
 
 var draftNum = 0;
 var graphName = ""; // 在图的最上方显示的标题
@@ -240,9 +241,11 @@ function setLineOption(lineChart, template) {
     }
     option = {
         dataset: {
-            source: [["ll", "y", "z"],
-                    [1,3,5],
-                    [2,4,6]]
+            source: [
+                ["ll", "y", "z"],
+                [1, 3, 5],
+                [2, 4, 6]
+            ]
         },
         dataZoom: [{
                 type: "inside",
@@ -944,7 +947,7 @@ Page({
         pieChartNo: 0,
         average: [],
         variance: [],
-        placeData: ""//第一行显示
+        placeData: "" //第一行显示
     },
     changeChart(event) {
         var value = event.detail;
@@ -1116,7 +1119,7 @@ Page({
                 this.openChart(res.data)
             })
             eventChannel.on("goDraw", res => {
-                var value = res.value; 
+                var value = res.value;
                 var newOption2 = [];
                 for (var template of templates[value + 'Templates']) {
                     newOption2.push({
@@ -1128,7 +1131,7 @@ Page({
                     value1: value,
                     option2: newOption2,
                     value2: newOption2[0].value,
-                    placeData: (value == "line") ? "折线" : (value == "bar") ? "柱" : (value == "pie") ? "饼" : (value == "scatter") ? "散点组" : "" 
+                    placeData: (value == "line") ? "折线" : (value == "bar") ? "柱" : (value == "pie") ? "饼" : (value == "scatter") ? "散点组" : ""
                 });
             });
         }
@@ -1201,9 +1204,10 @@ Page({
         this.changeCurrent(event);
     },
     addDataGroup: function () {
-        if (this.data.groupNum == 5) {
+        if (this.data.groupNum == 10) {
             wx.showToast({
-                title: '最多5个数据组',
+                title: '最多10列',
+                icon: "error"
             });
             return;
         }
@@ -1231,9 +1235,10 @@ Page({
         this.changeCurrentGroupName(event);
     },
     addX: function () {
-        if (this.data.xValues.length == 10) {
+        if (this.data.xValues.length == 20) {
             wx.showToast({
-                title: '最多10个横坐标',
+                title: '最多20个横坐标',
+                icon: "error"
             });
             return;
         }
@@ -1285,9 +1290,8 @@ Page({
     },
     judgeXType: function () {
         var i;
-        var regex = /^[0-9]+.?[0-9]*/;
         for (i = 0; i < this.data.xValues.length; i++) {
-            if (!regex.test(this.data.xValues[i])) {
+            if (!isNumber(this.data.xValues[i])) {
                 return "string";
             }
         }
@@ -1295,10 +1299,9 @@ Page({
     },
     judgeYType: function () {
         var i, j;
-        var regex = /^[0-9]+.?[0-9]*/;
         for (i = 0; i < this.data.groupNum; i++) {
             for (j = 0; j < this.data.xValues.length; j++) {
-                if (!regex.test(this.data.datas[i][j])) {
+                if (!isNumber(this.data.xValues[i])) {
                     return "string";
                 }
             }
@@ -1818,15 +1821,28 @@ Page({
     },
     onShow() {},
     onReady: function () {
+        var initGraphName = graphName;
         setInterval(() => {
             var page = getPage();
             if (page.route == "pages/draw/draw") {
-                console.log(page.route);
                 var ret = {};
-                ret["id"] = null;
-                draftNum++;
-                ret["name"] = "草稿";
-                ret["userId"] = wx.getStorageSync('uid');
+                ret["id"] = Date.now();
+                console.log(ret);
+                ret["name"] = "test111";
+                ret["xlabel"] = xName;
+                ret["ylabel"] = yName;
+                ret["xid"] = 0;
+                ret["yid"] = [0, 0];
+                ret["xbegin"] = (this.data.defaultRegion) ? 0 :
+                    (this.data.x1 > this.data.x2) ? this.data.x2 : this.data.x1;
+                ret["ybegin"] = (this.data.defaultRegion) ? 0 :
+                    (this.data.y1 > this.data.y2) ? this.data.y2 : this.data.y1;
+                ret["length"] = 3;
+                ret["width"] = 4;
+                var data = {};
+                data["id"] = Date.now();
+                data["name"] = "tst";
+                data['userId'] = wx.getStorageSync('uid');
                 var i;
                 var dataArray = [];
                 dataArray.push({
@@ -1842,19 +1858,99 @@ Page({
                     }
                     dataArray.push(obj);
                 }
-                ret["dataArray"] = dataArray;
-                var url = "https://www.jaripon.xyz/data/save";
-                wx.request({
-                    url: url,
-                    data: ret,
-                    method: "POST",
-                    success: function (res) {
-                        console.log(res);
-                    },
-                    fail: function (res) {
-                        console.log("fail");
+                data["dataArray"] = dataArray;
+                ret["data"] = data;
+                if (draftId == null && graphName == initGraphName) {
+                    var url;
+                    if (this.data.value1 == "bar") {
+                        bar.template.isVisible = "false";
+                        bar.template.userId = wx.getStorageSync('uid');
+                        ret["barChart"] = convertToBackTemplate(bar.template, "bar");
+                        ret["barChart"]["name"] = graphName;
+                        url = "https://www.jaripon.xyz/chart/barchart/save";
                     }
-                });
+                    if (this.data.value1 == "line") {
+                        line.template.isVisible = "false";
+                        line.template.userId = wx.getStorageSync('uid');
+                        ret["lineChart"] = convertToBackTemplate(line.template, "line");
+                        ret["lineChart"]["name"] = "3333";
+                        console.log(ret["lineChart"]);
+                        url = "https://www.jaripon.xyz/chart/linechart/save"
+                    }
+                    if (this.data.value1 == "pie") {
+                        pie.template.isVisible = "false";
+                        pie.template.userId = wx.getStorageSync('uid');
+                        ret["fanChart"] = convertToBackTemplate(pie.template, "pie");
+                        ret["fanChart"]["name"] = graphName;
+                        url = "https://www.jaripon.xyz/chart/fanchart/save"
+                    }
+                    if (this.data.value1 == "scatter") {
+                        scatter.template.isVisible = "false";
+                        scatter.template.userId = wx.getStorageSync('uid');
+                        ret["scatterPlot"] = convertToBackTemplate(scatter.template, "scatter");
+                        ret["scatterPlot"]["name"] = graphName;
+                        url = "https://www.jaripon.xyz/chart/scatterplot/save";
+                    }
+                    console.log(ret);
+                    wx.request({
+                        url: url,
+                        data: ret,
+                        method: "POST",
+                        success: function (res) {
+                            console.log(res);
+                            //todo
+                            draftId = res.data["id"];
+                            console.log(res.data);
+                        },
+                        fail: function (res) {
+                            console.log("fail");
+                        }
+                    });
+                } else {
+                    ret["id"] = draftId;
+                    ret["data"]["id"] = draftId;
+                    var url;
+                    if (this.data.value1 == "bar") {
+                        bar.template.isVisible = "false";
+                        bar.template.userId = wx.getStorageSync('uid');
+                        ret["barChart"] = convertToBackTemplate(bar.template, "bar");
+                        ret["barChart"]["name"] = graphName;
+                        url = "https://www.jaripon.xyz/chart/barchart/replace";
+                    }
+                    if (this.data.value1 == "line") {
+                        line.template.isVisible = "false";
+                        line.template.userId = wx.getStorageSync('uid');
+                        ret["lineChart"] = convertToBackTemplate(line.template, "line");
+                        ret["lineChart"]["name"] = graphName;
+                        url = "https://www.jaripon.xyz/chart/linechart/replace"
+                    }
+                    if (this.data.value1 == "pie") {
+                        pie.template.isVisible = "false";
+                        pie.template.userId = wx.getStorageSync('uid');
+                        ret["fanChart"] = convertToBackTemplate(pie.template, "pie");
+                        ret["fanChart"]["name"] = graphName;
+                        url = "https://www.jaripon.xyz/chart/fanchart/replace"
+                    }
+                    if (this.data.value1 == "scatter") {
+                        scatter.template.isVisible = "false";
+                        scatter.template.userId = wx.getStorageSync('uid');
+                        ret["scatterPlot"] = convertToBackTemplate(scatter.template, "scatter");
+                        ret["scatterPlot"]["name"] = graphName;
+                        url = "https://www.jaripon.xyz/chart/scatterplot/replace";
+                    }
+                    ret["id"] = draftId;
+                    wx.request({
+                        url: url,
+                        data: ret,
+                        method: "POST",
+                        success: function (res) {
+                            console.log(res);
+                        },
+                        fail: function (res) {
+                            console.log("fail");
+                        }
+                    });
+                }
             }
         }, 120000);
     },
