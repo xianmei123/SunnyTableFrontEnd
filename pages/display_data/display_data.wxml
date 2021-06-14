@@ -24,10 +24,3 @@
   </block>
 </scroll-view>
 <view class="divide_H"></view>
-<van-button type="default" bindtap="actionSheetTap">编辑表格</van-button>
-<action-sheet hidden="{{actionSheetHidden}}" bindchange="actionSheetbindchange">
-  <block wx:for-items="{{actionSheetItems}}">
-    <action-sheet-item bindtap="bind{{item.bindtap}}">{{item.txt}}</action-sheet-item>
-  </block>
-  <action-sheet-cancel class="cancel">取消</action-sheet-cancel>
-</action-sheet>
