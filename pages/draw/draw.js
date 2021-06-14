@@ -850,10 +850,10 @@ Page({
         showBarChart: true,
         showPieChart: true,
         showScatterChart: true,
-        errorLineChart: "请您输入数据进行画图。",
-        errorBarChart: "请您输入数据进行画图。",
-        errorPieChart: "请您输入数据进行画图，并在下方选择您要画的饼图序号。",
-        errorScatterChart: "请您输入数据进行画图。\ntip：散点图只能绘制横纵坐标全为数值的图。",
+        errorLineChart: "请您输入数据进行画图。\ntip：堆叠折线图横坐标只能为字符哦。",
+        errorBarChart: "请您输入数据进行画图。\ntip：柱状图横坐标只能为字符哦。",
+        errorPieChart: "请您输入数据进行画图。\ntip：饼状图横坐标只能为字符哦。",
+        errorScatterChart: "请您输入数据进行画图。\ntip：散点图只能绘制横纵坐标全为数值的图哦。",
 
         /**是否战术输入模板名字 */
         showInputTemplateName: false,
@@ -1572,24 +1572,29 @@ Page({
             bar.template.isVisible = "false";
             bar.template.userId = wx.getStorageSync('uid');
             ret["barChart"] = convertToBackTemplate(bar.template, "bar");
+            ret["barChart"]["name"] = wx.getStorageSync('uid') + graphName;
             url = "https://www.jaripon.xyz/chart/barchart/save";
         }
         if (this.data.value1 == "line") {
             line.template.isVisible = "false";
             line.template.userId = wx.getStorageSync('uid');
             ret["lineChart"] = convertToBackTemplate(line.template, "line");
+            ret["lineChart"]["name"] = wx.getStorageSync('uid') + graphName;
+            console.log("dddd" + ret["lineChart"]["name"]);
             url = "https://www.jaripon.xyz/chart/linechart/save"
         }
         if (this.data.value1 == "pie") {
             pie.template.isVisible = "false";
             pie.template.userId = wx.getStorageSync('uid');
             ret["fanChart"] = convertToBackTemplate(pie.template, "pie");
+            ret["fanChart"]["name"] = wx.getStorageSync('uid') + graphName;
             url = "https://www.jaripon.xyz/chart/fanchart/save"
         }
         if (this.data.value1 == "scatter") {
             scatter.template.isVisible = "false";
             scatter.template.userId = wx.getStorageSync('uid');
             ret["scatterPlot"] = convertToBackTemplate(scatter.template, "scatter");
+            ret["scatterPlot"]["name"] = wx.getStorageSync('uid') + graphName;
             url = "https://www.jaripon.xyz/chart/scatterplot/save";
         }
         console.log(ret);
@@ -1872,7 +1877,7 @@ Page({
                         line.template.isVisible = "false";
                         line.template.userId = wx.getStorageSync('uid');
                         ret["lineChart"] = convertToBackTemplate(line.template, "line");
-                        ret["lineChart"]["name"] = "3333";
+                        ret["lineChart"]["name"] = "33334";
                         console.log(ret["lineChart"]);
                         url = "https://www.jaripon.xyz/chart/linechart/save"
                     }
