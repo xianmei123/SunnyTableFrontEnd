@@ -45,6 +45,7 @@ App({
 				console.log(res);
 				//res.data.openid = '0' //此处暂时用0标识
 				wx.setStorageSync('uid', res.data.openid)
+				wx.setStorageSync('isFirst', JSON.parse(res.data.first));
 				// var url = baseUrl + '/user/login/'+res.data.openid
 				//res = await trans(url)
 				//console.log(res)

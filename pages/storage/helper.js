@@ -15,7 +15,7 @@ export var trans = async function (url, data, method) {
 export var hasError = function (res) {
 	if ((res.data.code && res.data.code != 0) || (res.statusCode && res.statusCode != 200)) {
 		wx.showToast({
-			title: '操作失败',
+			title: '服务器繁忙',
 			icon: 'error'
 		})
 		return true

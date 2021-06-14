@@ -23,14 +23,14 @@ Page({
 			}
 		],
 		id: 0,
-		maxnum: 10,
+		maxnum:20,
 	},
 	async onLoad() {
 		helper = require('../storage/helper');
 		draw = require('../draw/draw');
 		//1--bar,2--line,3--pie,4-scatter
 		var map = [1, 0, 2, 3]
-		var url = baseUrl + '/template/chart/display/' + wx.getStorageSync('uid') + '/' + 10
+		var url = baseUrl + '/template/chart/display/' + wx.getStorageSync('uid') + '/' + 20
 		console.log(url)
 		var res = await helper.trans(url)
 		console.log('返回',res)

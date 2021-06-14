@@ -32,7 +32,8 @@
         <text>{{billTitle}}\n\n</text>
         <block wx:for="{{ showBillData }}" wx:for-item="billItem" wx:for-index="index">
             <van-cell-group>
-                <van-cell center title="{{billItem.detail}}" value="{{billItem.income == 'true' ? billItem.cost : -billItem.cost}}" label=" {{ billItem.type}} {{billItem.time}}" bind:click="modifyBill" data-item="{{billItem}}">
+                <van-cell center title="{{billItem.detail}}" value="{{billItem.income == 'true' ? billItem.cost : -billItem.cost}}" label=" {{ billItem.type}} {{billItem.time}}" bind:click="modifyBill" data-item="{{billItem}}" 
+                value-class="value-font" title-class="title-font">
                     <view slot="icon" style="width:70rpx">
                         <van-icon name="{{icons[filter.getIndex(billItem.type)]}}" size="50rpx" />
                     </view>
