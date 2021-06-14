@@ -185,17 +185,6 @@ function setLineOption(lineChart, template) {
     var showAverageMarkLine = getSplit(template.showAverageMarkLine);
     var stack = template.stack.split(" ");
 
-    if (template.stack != "" && xType === "number") {
-        getPage().setData({
-            errorLineChart: '抱歉，目前堆叠图的横坐标不支持数值类型'
-        });
-        return false;
-    } else {
-        getPage().setData({
-            errorLineChart: '请输入数据进行画图'
-        });
-    }
-
     for (var i = 1; i < inputData[0].length; i++) {
         var name = inputData[0][i];
         var tempJson = {
@@ -861,10 +850,10 @@ Page({
         showBarChart: true,
         showPieChart: true,
         showScatterChart: true,
-        errorLineChart: "请您输入数据进行画图。\ntip：堆叠折线图横坐标只能为字符哦。",
-        errorBarChart: "请您输入数据进行画图。\ntip：柱状图横坐标只能为字符哦。",
-        errorPieChart: "请您输入数据进行画图。\ntip：饼状图横坐标只能为字符哦。",
-        errorScatterChart: "请您输入数据进行画图。\ntip：散点图只能绘制横纵坐标全为数值的图哦。",
+        errorLineChart: "请您输入数据进行画图。",
+        errorBarChart: "请您输入数据进行画图。",
+        errorPieChart: "请您输入数据进行画图，并在下方选择您要画的饼图序号。",
+        errorScatterChart: "请您输入数据进行画图。\ntip：散点图只能绘制横纵坐标全为数值的图。",
 
         /**是否战术输入模板名字 */
         showInputTemplateName: false,
@@ -1108,9 +1097,8 @@ Page({
         for (var i of res.data) {
             var url = baseUrl + urls[i.type - 1] + i.fid;
             var template = await hepler.trans(url);
-            var rightTemp = convertFromBackTemplate(template.data, types[i.type - 1].split("Template")[0]);
-            templates[types[i.type - 1]].push(rightTemp);
-            tempIdToTemplate.set(i.fid, rightTemp);
+            templates[types[i.type - 1]].push(convertFromBackTemplate(template.data, types[i.type - 1].split("Template")[0]));
+            tempIdToTemplate.set(i.fid, template.data);
             //console.log(tempIdToTemplate.get(i.fid));
         }
         console.log("tempIdToTemplate", tempIdToTemplate);
@@ -1310,7 +1298,7 @@ Page({
         var i, j;
         for (i = 0; i < this.data.groupNum; i++) {
             for (j = 0; j < this.data.xValues.length; j++) {
-                if (!isNumber(this.data.xValues[i])) {
+                if (!isNumber(this.data.datas[i][j])) {
                     return "string";
                 }
             }
@@ -1584,29 +1572,28 @@ Page({
             bar.template.isVisible = "false";
             bar.template.userId = wx.getStorageSync('uid');
             ret["barChart"] = convertToBackTemplate(bar.template, "bar");
-            ret["barChart"]["name"] = wx.getStorageSync('uid') + graphName;
+            ret["barChart"]["name"] = Date.now();
             url = "https://www.jaripon.xyz/chart/barchart/save";
         }
         if (this.data.value1 == "line") {
             line.template.isVisible = "false";
             line.template.userId = wx.getStorageSync('uid');
             ret["lineChart"] = convertToBackTemplate(line.template, "line");
-            ret["lineChart"]["name"] = wx.getStorageSync('uid') + graphName;
-            console.log("dddd" + ret["lineChart"]["name"]);
+            ret["lineChart"]["name"] = Date.now();
             url = "https://www.jaripon.xyz/chart/linechart/save"
         }
         if (this.data.value1 == "pie") {
             pie.template.isVisible = "false";
             pie.template.userId = wx.getStorageSync('uid');
             ret["fanChart"] = convertToBackTemplate(pie.template, "pie");
-            ret["fanChart"]["name"] = wx.getStorageSync('uid') + graphName;
+            ret["fanChart"]["name"] = Date.now();
             url = "https://www.jaripon.xyz/chart/fanchart/save"
         }
         if (this.data.value1 == "scatter") {
             scatter.template.isVisible = "false";
             scatter.template.userId = wx.getStorageSync('uid');
             ret["scatterPlot"] = convertToBackTemplate(scatter.template, "scatter");
-            ret["scatterPlot"]["name"] = wx.getStorageSync('uid') + graphName;
+            ret["scatterPlot"]["name"] = Date.now();
             url = "https://www.jaripon.xyz/chart/scatterplot/save";
         }
         console.log(ret);
@@ -1837,74 +1824,71 @@ Page({
     },
     onShow() {},
     onReady: function () {
-        var initGraphName = graphName;
         setInterval(() => {
             var page = getPage();
             if (page.route == "pages/draw/draw") {
                 var ret = {};
-                ret["id"] = Date.now();
-                console.log(ret);
-                ret["name"] = "test111";
-                ret["xlabel"] = xName;
-                ret["ylabel"] = yName;
-                ret["xid"] = 0;
-                ret["yid"] = [0, 0];
-                ret["xbegin"] = (this.data.defaultRegion) ? 0 :
-                    (this.data.x1 > this.data.x2) ? this.data.x2 : this.data.x1;
-                ret["ybegin"] = (this.data.defaultRegion) ? 0 :
-                    (this.data.y1 > this.data.y2) ? this.data.y2 : this.data.y1;
-                ret["length"] = 3;
-                ret["width"] = 4;
-                var data = {};
-                data["id"] = Date.now();
-                data["name"] = "tst";
-                data['userId'] = wx.getStorageSync('uid');
-                var i;
-                var dataArray = [];
-                dataArray.push({
-                    "name": "xLabel",
-                    "cid": null,
-                    "lineData": this.data.xValues
-                });
-                for (i = 0; i < this.data.groupNum; i++) {
-                    var obj = {
-                        "name": this.data.groupName[i],
+                    ret["id"] = null;
+                    console.log(graphName);
+                    ret["name"] = "草稿";
+                    ret["xlabel"] = xName;
+                    ret["ylabel"] = yName;
+                    ret["xid"] = 0;
+                    ret["yid"] = [0, 0];
+                    ret["xbegin"] = (this.data.defaultRegion) ? 0 :
+                        (this.data.x1 > this.data.x2) ? this.data.x2 : this.data.x1;
+                    ret["ybegin"] = (this.data.defaultRegion) ? 0 :
+                        (this.data.y1 > this.data.y2) ? this.data.y2 : this.data.y1;
+                    ret["length"] = 3;
+                    ret["width"] = 4;
+                    var data = {};
+                    data["id"] = null;
+                    data["name"] = graphName;
+                    data['userId'] = wx.getStorageSync('uid');
+                    var i;
+                    var dataArray = [];
+                    dataArray.push({
+                        "name": "xLabel",
                         "cid": null,
-                        "lineData": this.data.datas[i]
+                        "lineData": this.data.xValues
+                    });
+                    for (i = 0; i < this.data.groupNum; i++) {
+                        var obj = {
+                            "name": this.data.groupName[i],
+                            "cid": null,
+                            "lineData": this.data.datas[i]
+                        }
+                        dataArray.push(obj);
                     }
-                    dataArray.push(obj);
-                }
-                data["dataArray"] = dataArray;
-                ret["data"] = data;
-                if (draftId == null && graphName == initGraphName) {
+                    data["dataArray"] = dataArray;
+                    ret["data"] = data;
                     var url;
                     if (this.data.value1 == "bar") {
                         bar.template.isVisible = "false";
                         bar.template.userId = wx.getStorageSync('uid');
                         ret["barChart"] = convertToBackTemplate(bar.template, "bar");
-                        ret["barChart"]["name"] = graphName;
+                        ret["barChart"]["name"] = Date.now();
                         url = "https://www.jaripon.xyz/chart/barchart/save";
                     }
                     if (this.data.value1 == "line") {
                         line.template.isVisible = "false";
                         line.template.userId = wx.getStorageSync('uid');
                         ret["lineChart"] = convertToBackTemplate(line.template, "line");
-                        ret["lineChart"]["name"] = "33334";
-                        console.log(ret["lineChart"]);
+                        ret["lineChart"]["name"] = Date.now();
                         url = "https://www.jaripon.xyz/chart/linechart/save"
                     }
                     if (this.data.value1 == "pie") {
                         pie.template.isVisible = "false";
                         pie.template.userId = wx.getStorageSync('uid');
                         ret["fanChart"] = convertToBackTemplate(pie.template, "pie");
-                        ret["fanChart"]["name"] = graphName;
+                        ret["fanChart"]["name"] = Date.now();
                         url = "https://www.jaripon.xyz/chart/fanchart/save"
                     }
                     if (this.data.value1 == "scatter") {
                         scatter.template.isVisible = "false";
                         scatter.template.userId = wx.getStorageSync('uid');
                         ret["scatterPlot"] = convertToBackTemplate(scatter.template, "scatter");
-                        ret["scatterPlot"]["name"] = graphName;
+                        ret["scatterPlot"]["name"] = Date.now();
                         url = "https://www.jaripon.xyz/chart/scatterplot/save";
                     }
                     console.log(ret);
@@ -1914,59 +1898,56 @@ Page({
                         method: "POST",
                         success: function (res) {
                             console.log(res);
-                            //todo
                             draftId = res.data["id"];
-                            console.log(res.data);
                         },
                         fail: function (res) {
                             console.log("fail");
                         }
                     });
-                } else {
-                    ret["id"] = draftId;
-                    ret["data"]["id"] = draftId;
-                    var url;
-                    if (this.data.value1 == "bar") {
-                        bar.template.isVisible = "false";
-                        bar.template.userId = wx.getStorageSync('uid');
-                        ret["barChart"] = convertToBackTemplate(bar.template, "bar");
-                        ret["barChart"]["name"] = graphName;
-                        url = "https://www.jaripon.xyz/chart/barchart/replace";
-                    }
-                    if (this.data.value1 == "line") {
-                        line.template.isVisible = "false";
-                        line.template.userId = wx.getStorageSync('uid');
-                        ret["lineChart"] = convertToBackTemplate(line.template, "line");
-                        ret["lineChart"]["name"] = graphName;
-                        url = "https://www.jaripon.xyz/chart/linechart/replace"
-                    }
-                    if (this.data.value1 == "pie") {
-                        pie.template.isVisible = "false";
-                        pie.template.userId = wx.getStorageSync('uid');
-                        ret["fanChart"] = convertToBackTemplate(pie.template, "pie");
-                        ret["fanChart"]["name"] = graphName;
-                        url = "https://www.jaripon.xyz/chart/fanchart/replace"
-                    }
-                    if (this.data.value1 == "scatter") {
-                        scatter.template.isVisible = "false";
-                        scatter.template.userId = wx.getStorageSync('uid');
-                        ret["scatterPlot"] = convertToBackTemplate(scatter.template, "scatter");
-                        ret["scatterPlot"]["name"] = graphName;
-                        url = "https://www.jaripon.xyz/chart/scatterplot/replace";
-                    }
-                    ret["id"] = draftId;
-                    wx.request({
-                        url: url,
-                        data: ret,
-                        method: "POST",
-                        success: function (res) {
-                            console.log(res);
-                        },
-                        fail: function (res) {
-                            console.log("fail");
-                        }
-                    });
+            } else {
+                ret["id"] = draftId;
+                ret["data"]["id"] = draftId;
+                var url;
+                if (this.data.value1 == "bar") {
+                    bar.template.isVisible = "false";
+                    bar.template.userId = wx.getStorageSync('uid');
+                    ret["barChart"] = convertToBackTemplate(bar.template, "bar");
+                    ret["barChart"]["name"] = graphName;
+                    url = "https://www.jaripon.xyz/chart/barchart/replace";
                 }
+                if (this.data.value1 == "line") {
+                    line.template.isVisible = "false";
+                    line.template.userId = wx.getStorageSync('uid');
+                    ret["lineChart"] = convertToBackTemplate(line.template, "line");
+                    ret["lineChart"]["name"] = graphName;
+                    url = "https://www.jaripon.xyz/chart/linechart/replace"
+                }
+                if (this.data.value1 == "pie") {
+                    pie.template.isVisible = "false";
+                    pie.template.userId = wx.getStorageSync('uid');
+                    ret["fanChart"] = convertToBackTemplate(pie.template, "pie");
+                    ret["fanChart"]["name"] = graphName;
+                    url = "https://www.jaripon.xyz/chart/fanchart/replace"
+                }
+                if (this.data.value1 == "scatter") {
+                    scatter.template.isVisible = "false";
+                    scatter.template.userId = wx.getStorageSync('uid');
+                    ret["scatterPlot"] = convertToBackTemplate(scatter.template, "scatter");
+                    ret["scatterPlot"]["name"] = graphName;
+                    url = "https://www.jaripon.xyz/chart/scatterplot/replace";
+                }
+                ret["id"] = draftId;
+                wx.request({
+                    url: url,
+                    data: ret,
+                    method: "POST",
+                    success: function (res) {
+                        console.log(res);
+                    },
+                    fail: function (res) {
+                        console.log("fail");
+                    }
+                });
             }
         }, 120000);
     },
@@ -2027,12 +2008,6 @@ function updateShow() {
 }
 
 function isShowLineChart() {
-    if (line.template != undefined && line.template.stack != "" && xType === "number") {
-        getPage().setData({
-            errorLineChart: '抱歉，目前堆叠图的横坐标不支持数值类型'
-        });
-        return false;
-    }
     return Object.keys(inputData).length != 0;
 }
 
@@ -2136,26 +2111,10 @@ function updateScatterData(inputData) {
 function updateTemplate(updateGraphIndex, template) {
     indexToGraph[updateGraphIndex].setTemplate(template);
     console.log(line.template);
-    if (updateGraphIndex == 0) {
-        if (!isShowLineChart()) {
-            getPage().setData({
-                showLineChart: false
-            })
-        } else {
-            getPage().setData({
-                showLineChart: true
-            })
-            setLineOption(indexToGraph[updateGraphIndex].chart, template);
-        }
-
-    } else if (updateGraphIndex == 1) {
-        if (!isShowBarChart()) {
-            getPage().setData({
-                showLineChart: false
-            })
-        } else {
-            setBarOption(indexToGraph[updateGraphIndex].chart, template);
-        }
+    if (updateGraphIndex == 0 && isShowLineChart()) {
+        setLineOption(indexToGraph[updateGraphIndex].chart, template);
+    } else if (updateGraphIndex == 1 && isShowBarChart()) {
+        setBarOption(indexToGraph[updateGraphIndex].chart, template);
     } else if (updateGraphIndex == 2) {
         setPieOption(indexToGraph[updateGraphIndex].chart, template);
     } else if (updateGraphIndex == 3 && isShowScatterChart()) {
