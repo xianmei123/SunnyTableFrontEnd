@@ -185,6 +185,17 @@ function setLineOption(lineChart, template) {
     var showAverageMarkLine = getSplit(template.showAverageMarkLine);
     var stack = template.stack.split(" ");
 
+    if (template.stack != "" && xType === "number") {
+        getPage().setData({
+            errorLineChart: '抱歉，目前堆叠图的横坐标不支持数值类型'
+        });
+        return false;
+    } else {
+        getPage().setData({
+            errorLineChart: '请输入数据进行画图'
+        });
+    }
+
     for (var i = 1; i < inputData[0].length; i++) {
         var name = inputData[0][i];
         var tempJson = {
@@ -1097,8 +1108,9 @@ Page({
         for (var i of res.data) {
             var url = baseUrl + urls[i.type - 1] + i.fid;
             var template = await hepler.trans(url);
-            templates[types[i.type - 1]].push(convertFromBackTemplate(template.data, types[i.type - 1].split("Template")[0]));
-            tempIdToTemplate.set(i.fid, template.data);
+            var rightTemp = convertFromBackTemplate(template.data, types[i.type - 1].split("Template")[0]);
+            templates[types[i.type - 1]].push(rightTemp);
+            tempIdToTemplate.set(i.fid, rightTemp);
             //console.log(tempIdToTemplate.get(i.fid));
         }
         console.log("tempIdToTemplate", tempIdToTemplate);
@@ -1404,7 +1416,7 @@ Page({
                 result.eventChannel.emit("changeTemplate", {
                     index: index,
                     template: indexToGraph[index].template,
-                    count: groupName 
+                    count: groupName
                 });
             },
 
@@ -2010,6 +2022,12 @@ function updateShow() {
 }
 
 function isShowLineChart() {
+    if (line.template != undefined && line.template.stack != "" && xType === "number") {
+        getPage().setData({
+            errorLineChart: '抱歉，目前堆叠图的横坐标不支持数值类型'
+        });
+        return false;
+    }
     return Object.keys(inputData).length != 0;
 }
 
@@ -2113,10 +2131,26 @@ function updateScatterData(inputData) {
 function updateTemplate(updateGraphIndex, template) {
     indexToGraph[updateGraphIndex].setTemplate(template);
     console.log(line.template);
-    if (updateGraphIndex == 0 && isShowLineChart()) {
-        setLineOption(indexToGraph[updateGraphIndex].chart, template);
-    } else if (updateGraphIndex == 1 && isShowBarChart()) {
-        setBarOption(indexToGraph[updateGraphIndex].chart, template);
+    if (updateGraphIndex == 0) {
+        if (!isShowLineChart()) {
+            getPage().setData({
+                showLineChart: false
+            })
+        } else {
+            getPage().setData({
+                showLineChart: true
+            })
+            setLineOption(indexToGraph[updateGraphIndex].chart, template);
+        }
+
+    } else if (updateGraphIndex == 1) {
+        if (!isShowBarChart()) {
+            getPage().setData({
+                showLineChart: false
+            })
+        } else {
+            setBarOption(indexToGraph[updateGraphIndex].chart, template);
+        }
     } else if (updateGraphIndex == 2) {
         setPieOption(indexToGraph[updateGraphIndex].chart, template);
     } else if (updateGraphIndex == 3 && isShowScatterChart()) {
