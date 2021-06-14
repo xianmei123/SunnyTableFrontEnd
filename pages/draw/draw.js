@@ -1281,10 +1281,10 @@ Page({
         var newXValues = this.data.xValues;
         var newDatas = this.data.datas;
         newIterator1.pop();
-        newXValues.splice(this.data.region[1], 1);
+        newXValues.pop();
         var i;
         for (i = 0; i < newDatas.length; i++) {
-            newDatas[i].splice(this.data.region[1], 1);
+            newDatas[i].pop();
         }
         this.setData({
             iterator1: newIterator1,
