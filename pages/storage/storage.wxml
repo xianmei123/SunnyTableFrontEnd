@@ -54,9 +54,9 @@
   </view>
   <view class="item" bindtap="delObj" style="height:{{activeObj.type==3?'100rpx':'130rpx'}};font-weight:400">删除</view>
   <view class="item" bindtap="moveObj" style="height:{{activeObj.type==3?'100rpx':'130rpx'}};font-weight:400"> 移动</view>
-  <view class="item" wx:if="{{activeObj.type == 3}}" style="height:100rpx;font-weight:400">
+  <!-- <view class="item" wx:if="{{activeObj.type == 3}}" style="height:100rpx;font-weight:400">
     <button open-type="share" class="button" data-id= "{{activeObj.id}}">分享</button>
-  </view>
+  </view> -->
 </van-popup>
 <!-- <view style="height:250rpx"></view> -->
 </view>
