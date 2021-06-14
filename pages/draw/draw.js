@@ -1688,6 +1688,9 @@ Page({
                 }
             });
         });
+        for (var i = 0; i < ret.length; i++) {
+            ret[i] = ret[i] + "";
+        }
         var newGroup = this.data.groupName;
         var newData = this.data.datas;
         var nit2 = this.data.iterator2;
@@ -1695,6 +1698,7 @@ Page({
         newGroup.push("和");
         newData.push(ret);
         this.setData({
+            groupNum: this.data.groupNum + 1,
             iterator2: nit2,
             datas: newData,
             groupName: newGroup
@@ -1729,6 +1733,9 @@ Page({
         this.setData({
             average: ret
         })
+        for (var i = 0; i < ret.length; i++) {
+            ret[i] = ret[i] + "";
+        }
         var newGroup = this.data.groupName;
         var newData = this.data.datas;
         var nit2 = this.data.iterator2;
@@ -1736,6 +1743,7 @@ Page({
         newGroup.push("均值");
         newData.push(ret);
         this.setData({
+            groupNum: this.data.groupNum + 1,
             iterator2: nit2,
             datas: newData,
             groupName: newGroup
@@ -1768,6 +1776,10 @@ Page({
             });
         });
         console.log(ret);
+        for (var i = 0; i < ret.length; i++) {
+            ret[i] = ret[i] + "";
+        }
+        console.log(ret);
         var newGroup = this.data.groupName;
         var newData = this.data.datas;
         var nit2 = this.data.iterator2;
@@ -1775,10 +1787,12 @@ Page({
         newGroup.push("方差");
         newData.push(ret);
         this.setData({
+            groupNum: this.data.groupNum + 1,
             iterator2: nit2,
             datas: newData,
             groupName: newGroup
         });
+        console.log(this.data.datas);
     },
     async calculateUncertainty() {
         let tmp = [];
