@@ -59,6 +59,7 @@ Page({
 		scatterTextColor: 'rgb(0,154,97)', //初始值
 		scatterTextColorPick: false,
 		scatterPosVertical: false,
+		scatterUseRegression:false,
 		defaulteTemplate: [] //传入的默认template
 	},
 	getTotAttribute(template, name) {
@@ -110,7 +111,8 @@ Page({
 			lineStack: [0, 0]
 			// lineStack: this.transArray(template.stack)
 		})
-		console.log(this.data.lineShowXGradient,this.data.lineShowYGradient)
+		console.log('test',this.data.lineShowXGradient,this.data.lineShowYGradient)
+		console.log('test',typeof(template.showXGradient))
 	},
 	fillZero(str) {
 		if (parseInt(str, 16) < 16) {
@@ -165,12 +167,15 @@ Page({
 			})
 		}
 	},
+	transNullToPercent(res){
+		return res==null? res+'':res + '%'
+	},
 	getLineTemplate() {
 		var template = this.data.defaulteTemplate
 		var [legendPos, lineColors] = this.getTotAttribute(template, '线图')
 		var [lineLegendPosTop, lineLegendPosBottom, lineLegendPosLeft, lineLegendPosRight, linePosVertical] = legendPos
 		var lengendPosList = [
-			(this.data.lineLegendPosTop || lineLegendPosTop) + '%', (this.data.lineLegendPosBottom || lineLegendPosBottom) + '%', (this.data.lineLegendPosLeft || lineLegendPosLeft) + '%', (this.data.lineLegendPosRight || lineLegendPosRight) + '%' + linePosVertical ? 'vetical' : 'horizon'
+			this.transNullToPercent(this.data.lineLegendPosTop || lineLegendPosTop), this.transNullToPercent(this.data.lineLegendPosBottom || lineLegendPosBottom), this.transNullToPercent(this.data.lineLegendPosLeft || lineLegendPosLeft), this.transNullToPercent(this.data.lineLegendPosRight || lineLegendPosRight), this.data.linePosVertical ? 'vertical' : 'horizon'
 		].join(',')
 		console.log(lengendPosList)
 		var stack = []
@@ -181,6 +186,7 @@ Page({
 			radius: (this.data.lineRaiuds || template.radius).toString(),
 			color: this.data.lineColors.map(this.transSigleColor),
 			showDigit: this.data.lineShowDigit,
+			showSymbol:this.data.lineShowSymbol,
 			font: this.data.lineFont || template.font,
 			legendPos: lengendPosList,
 			textColor: this.rgb2hex(this.data.lineTextColor),
@@ -206,7 +212,7 @@ Page({
 			}).join(' '),
 			showGradient: this.data.lineShowGradient,
 			showXGradient: this.data.lineShowXGradient,
-			showYGradient: this.data.lineYShowGradient,
+			showYGradient: this.data.lineShowYGradient,
 			stack: stack.join(' '),
 		}
 	},
@@ -216,8 +222,8 @@ Page({
 		var [barLegendPosTop, barLegendPosBottom, barLegendPosLeft, barLegendPosRight, barPosVertical] = legendPos
 		console.log('bar!', template)
 		this.setData({
-			barWidth: template.width.split('%')[0],
-			barGap: template.gap.split('%')[0],
+			barWidth: this.transSinglePercent(template.width),
+			barGap: this.transSinglePercent(template.gap),
 			barFont: template.font,
 			barLegendPosTop,
 			barLegendPosBottom,
@@ -228,6 +234,7 @@ Page({
 			barModelName: template.name,
 			barPosVertical,
 			barColors,
+			barShowDigit:template.showDigit,
 			barShowEmphasis: this.transArray(template.showEmphasis),
 			barShowMinMarkPoint: this.transArray(template.showMinMarkPoint),
 			barShowMaxMarkPoint: this.transArray(template.showMaxMarkPoint),
@@ -242,7 +249,7 @@ Page({
 		var template = this.data.defaulteTemplate
 		var [legendPos, barColors] = this.getTotAttribute(template, '柱图')
 		var [barLegendPosTop, barLegendPosBottom, barLegendPosLeft, barLegendPosRight, barPosVertical] = legendPos
-		var lengendPosList = [(this.data.barLegendPosTop || barLegendPosTop) + '%', (this.data.barLegendPosBottom || barLegendPosBottom) + '%', (this.data.barLegendPosLeft || barLegendPosLeft) + '%', (this.data.barLegendPosRight || barLegendPosRight) + '%' + barPosVertical ? 'vetical' : 'horizon'].join(',')
+		var lengendPosList = [this.transNullToPercent(this.data.barLegendPosTop || barLegendPosTop), this.transNullToPercent(this.data.barLegendPosBottom || barLegendPosBottom), this.transNullToPercent(this.data.barLegendPosLeft || barLegendPosLeft), this.transNullToPercent(this.data.barLegendPosRight || barLegendPosRight), this.data.barPosVertical ? 'vertical' : 'horizon'].join(',')
 		var stack = []
 		for (var x = 0; x < template.stack.length; x++) {
 			stack.push(this.data.barStack[x] || template.stack[x])
@@ -284,7 +291,7 @@ Page({
 			pieShowPercent: template.showPercent,
 			pieShowLabel: template.showLabel,
 			pieTitleFont: template.titleFont,
-			pieLabelFont: template.pieLabelFont,
+			pieLabelFont: template.labelFont,
 			pieLegendPosTop,
 			pieLegendPosBottom,
 			pieLegendPosLeft,
@@ -307,7 +314,7 @@ Page({
 		var template = this.data.defaulteTemplate
 		var [legendPos, pieColors] = this.getTotAttribute(template, '饼图')
 		var [pieLegendPosTop, pieLegendPosBottom, pieLegendPosLeft, pieLegendPosRight, piePosVertical] = legendPos
-		var lengendPosList = [(this.data.pieLegendPosTop || pieLegendPosTop) + '%', (this.data.pieLegendPosBottom || pieLegendPosBottom) + '%', (this.data.pieLegendPosLeft || pieLegendPosLeft) + '%', (this.data.pieLegendPosRight || pieLegendPosRight) + '%' + piePosVertical ? 'vetical' : 'horizon'].join(',')
+		var lengendPosList = [this.transNullToPercent(this.data.pieLegendPosTop || pieLegendPosTop), this.transNullToPercent(this.data.pieLegendPosBottom || pieLegendPosBottom), this.transNullToPercent(this.data.pieLegendPosLeft || pieLegendPosLeft), this.transNullToPercent(this.data.pieLegendPosRight || pieLegendPosRight),  this.data.piePosVertical ? 'vertical' : 'horizon'].join(',')
 		var radius = [this.data.pieRadius[0] ? this.data.pieRadius[0] + "%" : template.radius[0], this.data.pieRadius[1] ? this.data.pieRadius[1] + "%" : template.radius]
 		return {
 			radius: radius.join(' '),
@@ -350,16 +357,17 @@ Page({
 			scatterUseRegression: template.useRegression,
 			scatterIndexRegression: template.indexRegression.toString()
 		})
+		console.log(typeof(this.data.scatterUseRegression))
 	},
 	getScatterTemplate() {
 		var template = this.data.defaulteTemplate
 		var [legendPos, scatterColors] = this.getTotAttribute(template, '散点图')
 		var [scatterLegendPosTop, scatterLegendPosBottom, scatterLegendPosLeft, scatterLegendPosRight, scatterPosVertical] = legendPos
-		var lengendPosList = [this.data.scatterLegendPosTop || scatterLegendPosTop + '%', this.data.scatterLegendPosBottom || scatterLegendPosBottom + '%', this.data.scatterLegendPosLeft || scatterLegendPosLeft + '%', this.data.scatterLegendPosRight || scatterLegendPosRight + '%' + scatterPosVertical ? 'vetical' : 'horizon'].join(',')
+		var lengendPosList = [this.transNullToPercent(this.data.scatterLegendPosTop || scatterLegendPosTop), this.transNullToPercent(this.data.scatterLegendPosBottom || scatterLegendPosBottom ), this.transNullToPercent(this.data.scatterLegendPosLeft || scatterLegendPosLeft), this.transNullToPercent(this.data.scatterLegendPosRight || scatterLegendPosRight), this.data.scatterPosVertical ? 'vertical' : 'horizon'].join(',')
 		console.log('scatter', template)
 		return {
 			showLine: this.data.scatterShowLine,
-			increate: this.data.scatterIncrease,
+			increase: this.data.scatterIncrease,
 			color: this.data.scatterColors.map(this.transSigleColor),
 			showDigit: this.data.scatterShowDigit,
 			font: this.data.scatterFont || tmeplate.font,
@@ -397,7 +405,6 @@ Page({
 
 	},
 	onUnload() {
-
 		var tmeplates = [this.getLineTemplate, this.getBarTemplate, this.getPieTemplate, this.getScatterTemplate]
 		var index = this.data.type
 		var template = this.data.defaulteTemplate
