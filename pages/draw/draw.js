@@ -185,12 +185,7 @@ function setLineOption(lineChart, template) {
     var showAverageMarkLine = getSplit(template.showAverageMarkLine);
     var stack = template.stack.split(" ");
 
-    if (template.stack != "" && xType === "number") {
-        getPage().setData({
-            errorLineChart: '抱歉，目前堆叠图的横坐标不支持数值类型'
-        });
-        return false;
-    } else {
+    if (template.stack != "" && xType === "number" && !isSetStack) {
         getPage().setData({
             errorLineChart: '请输入数据进行画图'
         });
@@ -771,8 +766,7 @@ function setScatterOption(scatterChart, template) {
         },
         series: series,
     };
-    var indexToTransform = [
-        {
+    var indexToTransform = [{
             transform: {
                 type: 'ecStat:regression'
             }
@@ -804,7 +798,7 @@ function setScatterOption(scatterChart, template) {
         }
     ]
     if (JSON.parse(template.useRegression)) {
-    // if (JSON.parse("true")) {
+        // if (JSON.parse("true")) {
         option.dataset.push(indexToTransform[parseInt(template.indexRegression)]);
         option.series.push({
             type: 'line',
@@ -1126,7 +1120,7 @@ Page({
         var hepler = require('../storage/helper');
         var types = ["barTemplates", "lineTemplates", "pieTemplates", "scatterTemplates"];
         var urls = ['/template/barchart/open/', '/template/linechart/open/', '/template/fanchart/open/', '/template/scatterplot/open/']
-        var res = await hepler.trans(baseUrl + '/template/chart/display/' + wx.getStorageSync('uid') + '/' + 20);
+        var res = await hepler.trans(baseUrl + '/template/chart/display/' + wx.getStorageSync('uid') + '/' + 65535);
         for (var i of res.data) {
             var url = baseUrl + urls[i.type - 1] + i.fid;
             var template = await hepler.trans(url);
@@ -1296,7 +1290,7 @@ Page({
             groupNum: this.data.groupNum - 1,
             currentCell: ""
         })
-        
+
     },
     delX: function () {
         var newIterator1 = this.data.iterator1;
@@ -1351,7 +1345,7 @@ Page({
         }
         return "number";
     },
-    judgeColumnType(column) {           //返回 -1 错误 0 空 1 正确
+    judgeColumnType(column) { //返回 -1 错误 0 空 1 正确
         for (var i = 0; i < column.length; i++) {
             if (column[i] == "") {
                 if (i == 0) {
@@ -2105,20 +2099,33 @@ function updateShow() {
     });
 }
 
+
+function isSetStack() {
+    var stack = line.template.stack.split(" ");
+    var set = new Set();
+    stack.forEach(element => {
+        set.add(element);
+    });
+    if (set.size != stack.length) {
+        var pages = getCurrentPages();
+        var nowPage = pages[pages.length - 1].route === "pages/draw/draw" ? pages[pages.length - 1] : pages[pages.length - 2]
+        nowPage.setData({
+            errorLineChart: '抱歉，目前堆叠图的横坐标不支持数值类型'
+        });
+        return true;
+    }
+    return false;
+}
+
 function isShowLineChart() {
     if (xType === "error" || yType === "error") {
+        getPage().setData({
+            errorLineChart: '请检查您的数据是否有空值'
+        });
         return false;
     }
-    if (line.template != undefined && xType === "number") {
-        var stack = line.template.stack.split(" ");
-        for (var i = 0; i < stack.length - 1; ++i) {
-            if (parseInt(stack[i]) + 1 != parseInt(stack[i + 1])) {
-                getPage().setData({
-                    errorLineChart: '抱歉，目前堆叠图的横坐标不支持数值类型'
-                });
-                return false;
-            }
-        }
+    if (line.template != undefined && xType === "number" && isSetStack()) {
+        return false;
     }
     return Object.keys(inputData).length != 0;
 }
@@ -2129,6 +2136,9 @@ function isShowLineChart() {
  */
 function isShowBarChart() {
     if (xType === "error" || yType === "error") {
+        getPage().setData({
+            errorBarChart: '请检查您的数据是否有空值'
+        });
         return false;
     }
     if (xType === "number" && yType === "number") {
@@ -2146,6 +2156,9 @@ function isShowBarChart() {
  */
 function isShowPieChart() {
     if (xType === "error" || yType === "error") {
+        getPage().setData({
+            errorLineChart: '请检查您的数据是否有空值'
+        });
         return false;
     }
     return (xType === "string" && yType === "number") || (xType === "string" && yType === "number");
@@ -2157,6 +2170,9 @@ function isShowPieChart() {
  */
 function isShowScatterChart() {
     if (xType === "error" || yType === "error") {
+        getPage().setData({
+            errorLineChart: '请检查您的数据是否有空值'
+        });
         return false;
     }
     return (xType === "number" && yType === "number") && Object.keys(inputData).length != 0;
@@ -2236,18 +2252,19 @@ function updateScatterData(inputData) {
  */
 function updateTemplate(updateGraphIndex, template) {
     indexToGraph[updateGraphIndex].setTemplate(template);
+    var pages = getCurrentPages();
+    var pageNow = pages[pages.length - 2];
     if (updateGraphIndex == 0) {
         if (!isShowLineChart()) {
-            getPage().setData({
+            pageNow.setData({
                 showLineChart: false
-            })
+            });
         } else {
             getPage().setData({
                 showLineChart: true
             })
             setLineOption(indexToGraph[updateGraphIndex].chart, template);
         }
-
     } else if (updateGraphIndex == 1) {
         if (!isShowBarChart()) {
             getPage().setData({
