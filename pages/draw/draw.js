@@ -126,7 +126,7 @@ function isNumber(val) {
 function convertNum(val) {
     console.log(val);
     if (val == "" || val == null || val == undefined) {
-        return null;
+        return "";
     } else if (isNumber(val)) {
         console.log("trrr");
         return parseFloat(val);
@@ -1303,6 +1303,9 @@ Page({
     judgeXType: function () {
         var i;
         for (i = 0; i < this.data.xValues.length; i++) {
+            if (this.data.xValues[i] == "") {
+                return "error";
+            }
             if (!isNumber(this.data.xValues[i])) {
                 return "string";
             }
@@ -1313,6 +1316,12 @@ Page({
         var i, j;
         for (i = 0; i < this.data.groupNum; i++) {
             for (j = 0; j < this.data.xValues.length; j++) {
+                if (this.judgeColumnType(this.data.datas[i]) == 0) {
+                    continue;
+                }
+                if (this.judgeColumnType(this.data.datas[i]) == -1) {
+                    return "error";
+                }
                 if (!isNumber(this.data.datas[i][j])) {
                     return "string";
                 }
@@ -1320,22 +1329,52 @@ Page({
         }
         return "number";
     },
+    judgeColumnType(column) {           //返回 -1 错误 0 空 1 正确
+        for (var i = 0; i < column.length; i++) {
+            if (column[i] == "") {
+                if (i == 0) {
+                    for (var j = 1; j < column.length; j++) {
+                        if (column[j] != "") {
+                            return -1;
+                        }
+                    }
+                    return 0;
+                } else {
+                    return -1;
+                }
+            }
+        }
+        return 1;
+    },
     convertPaintData: function () { //转化所需数据
         var ret = [];
+        var flag = [];
         var i;
         var j;
-        ret.push(this.data.groupName.slice(0));
-        ret[0].unshift("虽然啥都没有，但是还是要传");
+        for (i = 0; i < this.data.groupNum; i++) {
+            if (this.judgeColumnType(this.data.datas[i]) == 0) {
+                flag.push(i);
+            }
+        }
+        var group = [];
+        group.push("");
+        for (i = 0; i < this.data.groupNum; i++) {
+            if (flag.indexOf(i) < 0) {
+                group.push(this.data.groupName[i]);
+            }
+        }
+        ret.push(group);
         for (i = 0; i < this.data.xValues.length; i++) {
             var tmp = [];
             tmp.push(convertNum(this.data.xValues[i]));
             for (j = 0; j < this.data.groupNum; j++) {
-                tmp.push(convertNum(this.data.datas[j][i]));
+                if (flag.indexOf(j) < 0) {
+                    tmp.push(convertNum(this.data.datas[j][i]));
+                }
             }
             ret.push(tmp);
         }
         console.log(ret);
-        console.log(typeof ret[1][1]);
         return ret;
     },
     resetData: function (newData) {
@@ -1365,6 +1404,7 @@ Page({
         xType = this.judgeXType();
         console.log(xType);
         yType = this.judgeYType();
+        console.log(yType);
         updateShow();
         switch (this.data.value1) {
             case "line":
