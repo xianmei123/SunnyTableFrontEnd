@@ -39,6 +39,7 @@ Page({
 	]
 
 	},
+	
 	onshow: function () {
 	},
 	// 事件处理函数
