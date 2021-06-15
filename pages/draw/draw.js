@@ -980,6 +980,18 @@ Page({
         //console.log(tempIdToTemplate.get(event.detail));
         updateTemplate(typeToIndex.get(this.data.value1), tempIdToTemplate.get(event.detail));
     },
+    reGetTemplate() {
+        var newOption2 = [];
+        for (var template of templates[this.data.value1 + 'Templates']) {
+            newOption2.push({
+                text: template.name,
+                value: template.id
+            });
+        }
+        this.setData({
+            option2: newOption2,
+        });
+    },
     actionEditTable() {
         this.setData({
             showEditSheet: !this.data.showEditSheet
@@ -2227,18 +2239,53 @@ function updateTemplate(updateGraphIndex, template) {
  */
 
 function saveTemplate(template, type, name) {
-    template.isVisible = "true";
-    template.userId = wx.getStorageSync('uid');
-    template.name = name;
+    var newTemplate = JSON.parse(JSON.stringify(template));
+    newTemplate.isVisible = "true";
+    newTemplate.userId = wx.getStorageSync('uid');
+    newTemplate.name = name;
+    var ppp = getPage();
     wx.request({
         url: "https://www.jaripon.xyz/template/" + (type === "pie" ? "fanchart" : type === "scatter" ? type + "plot" : type + "chart") + "/save",
-        data: convertToBackTemplate(template, type),
+        data: convertToBackTemplate(newTemplate, type),
         method: "POST",
         dataType: "json",
         success: function (res) {
-            templates[type + "Templates"].push(template);
-            tempIdToTemplate.set(res.data, template);
-            console.log(res);
+            newTemplate.id = res.data;
+            templates[type + "Templates"].push(newTemplate);
+            tempIdToTemplate.set(res.data, newTemplate);
+            var newOption2 = [];
+            for (var template of templates[ppp.data.value1 + 'Templates']) {
+                newOption2.push({
+                    text: template.name,
+                    value: template.id
+                });
+            }
+            ppp.setData({
+                option2: newOption2,
+            });
+            ppp.setData({
+                value2: res.data
+            });
+            //console.log(tempIdToTemplate.get(i.fid));
+            /**替换原来的 */
+            var urls = ['/template/linechart/open/', '/template/barchart/open/', '/template/fanchart/open/', '/template/scatterplot/open/']
+            var url = baseUrl + urls[typeToIndex.get(type)] + template.id;
+            var types = ["lineTemplates", "barTemplates", "pieTemplates", "scatterTemplates"];
+            wx.request({
+                url: url,
+                method: 'POST',
+                success: res => {
+                    var tempData = convertFromBackTemplate(res.data, types[typeToIndex.get(type)].split("Templates")[0]);
+                    for (var sb of templates[types[typeToIndex.get(type)]]) {
+                        if (sb.id === template.id) {
+                            sb = tempData;
+                        }
+                    }
+                    tempIdToTemplate.delete(template.id);
+                    tempIdToTemplate.set(template.id, tempData);
+                }
+            });
+
             wx.showToast({
                 title: '保存成功',
             });

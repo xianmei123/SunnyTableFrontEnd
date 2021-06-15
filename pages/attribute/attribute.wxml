@@ -11,14 +11,6 @@
 			<van-field label-class="van_field" label="数据点半径" model:value="{{  lineRaiuds }}" type="number"
 				placeholder="请输入数字" border="{{ true }}" />
 		</van-row>
-		<van-row>
-			<van-field label-class="van_field" label="标记点大小" model:value="{{  lineMarkPointSize }}" type="number"
-				placeholder="请输入数字" border="{{ true }}" />
-		</van-row>
-		<van-cell title="标记点种类">
-			<van-stepper model:value="{{ lineMarkPointStyle }}" long-press="{{ false }}" min="10" max="30"
-				integer="{{true}}" bind:change="changeSingleItem" data-name="lineMarkPointStyle" />
-		</van-cell>
 		<van-cell title="字体大小">
 			<van-stepper model:value="{{ lineFont }}" long-press="{{ false }}" min="10" max="30" integer="{{true}}"
 				bind:change="changeSingleItem" data-name="lineFont" />
@@ -62,6 +54,16 @@
 				show="{{lineColors[index].show}}" data-color="lineColors[{{index}}].rgb" />
 		</van-cell>
 	</van-cell-group>
+	<van-cell-group title="标记点设置">
+		<van-row>
+			<van-field label-class="van_field" label="标记点大小" model:value="{{  lineMarkPointSize }}" type="number"
+				placeholder="请输入数字" border="{{ true }}" />
+		</van-row>
+		<van-cell title="标记点种类">
+			<van-stepper model:value="{{ lineMarkPointStyle }}" long-press="{{ false }}" min="0" max="7"
+				integer="{{true}}" bind:change="changeSingleItem" data-name="lineMarkPointStyle" />
+		</van-cell>
+	</van-cell-group>
 	<van-cell-group title="图例设置">
 		<van-cell title="竖放图例">
 			<van-switch model:checked="{{ linePosVertical }}" bind:change="changeSingleItem"
@@ -69,12 +71,12 @@
 		</van-cell>
 		<van-field label-class="van_field" label="图例上边距" model:value="{{  lineLegendPosTop }}" type="number"
 			placeholder="请输入数字" border="{{ true }}" />
-		<van-field label-class="van_field" label="图例下边距" model:value="{{  lineLegendPosBottom }}" placeholder="下边距优先级低于上边距"
-			border="{{ true }}" />
+		<van-field label-class="van_field" label="图例下边距" model:value="{{  lineLegendPosBottom }}"
+			placeholder="下边距优先级低于上边距" border="{{ true }}" />
 		<van-field label-class="van_field" label="图例左边距" model:value="{{   lineLegendPosLeft }}" type="number"
 			placeholder="请输入数字" border="{{ true }}" />
-		<van-field label-class="van_field" label="图例右边距" model:value="{{  lineLegendPosRight }}" placeholder="右边距优先级低于左边距"
-			border="{{ true }}" />
+		<van-field label-class="van_field" label="图例右边距" model:value="{{  lineLegendPosRight }}"
+			placeholder="右边距优先级低于左边距" border="{{ true }}" />
 	</van-cell-group>
 	<van-cell-group title="折线聚焦">
 		<van-cell wx:for="{{uses}}" title="折线{{index}}聚焦">
@@ -150,6 +152,16 @@
 				data-color="barTextColor" />
 		</van-cell>
 	</van-cell-group>
+	<van-cell-group title="标记点设置">
+		<van-row>
+			<van-field label-class="van_field" label="标记点大小" model:value="{{  barMarkPointSize }}" type="number"
+				placeholder="请输入数字" border="{{ true }}" />
+		</van-row>
+		<van-cell title="标记点种类">
+			<van-stepper model:value="{{ barMarkPointStyle }}" long-press="{{ false }}" min="0" max="7"
+				integer="{{true}}" bind:change="changeSingleItem" data-name="barMarkPointStyle" />
+		</van-cell>
+	</van-cell-group>
 	<van-cell-group title="柱图颜色">
 		<van-cell wx:for="{{uses}}" title="{{barColors[index].text}}">
 			<view style="background:{{barColors[index].rgb}}" class="color_picker" bindtap="toPick"
@@ -166,12 +178,12 @@
 		</van-cell>
 		<van-field label-class="van_field" label="图例上边距" model:value="{{  barLegendPosTop }}" type="number"
 			placeholder="请输入数字" border="{{ true }}" />
-		<van-field label-class="van_field" label="图例下边距" model:value="{{  barLegendPosBottom }}" placeholder="下边距优先级低于上边距"
-			border="{{ true }}" />
+		<van-field label-class="van_field" label="图例下边距" model:value="{{  barLegendPosBottom }}"
+			placeholder="下边距优先级低于上边距" border="{{ true }}" />
 		<van-field label-class="van_field" label="图例左边距" model:value="{{  barLegendPosLeft }}" type="number"
 			placeholder="请输入数字" border="{{ true }}" />
-		<van-field label-class="van_field" label="图例右边距" model:value="{{  barLegendPosRight }}" placeholder="右边距优先级低于左边距"
-			border="{{ true }}" />
+		<van-field label-class="van_field" label="图例右边距" model:value="{{  barLegendPosRight }}"
+			placeholder="右边距优先级低于左边距" border="{{ true }}" />
 	</van-cell-group>
 	<van-cell-group title="柱聚焦">
 		<van-cell wx:for="{{uses}}" title="柱{{index}}聚焦">
@@ -214,8 +226,8 @@
 				placeholder="请输入数字(百分比)" border="{{ true }}" />
 		</van-row>
 		<van-cell title="扇形圆角">
-			<van-stepper model: value="{{ pieboardRadius }}" long-press="{{ false }}" min="0" max="30"
-				integer="{{true}}" bind:change="changeSingleItem" data-name="pieboardRadius" />
+			<van-stepper model: value="{{ pieBorderRadius }}" long-press="{{ false }}" min="0" max="30"
+				integer="{{true}}" bind:change="changeSingleItem" data-name="pieBorderRadius" />
 		</van-cell>
 		<van-cell title="百分比精度">
 			<van-stepper model: value="{{ piePrecision }}" long-press="{{ false }}" min="0" max="10" integer="{{true}}"
@@ -257,12 +269,12 @@
 		</van-cell>
 		<van-field label-class="van_field" label="图例上边距" model:value="{{  pieLegendPosTop }}" type="number"
 			placeholder="请输入数字" border="{{ true }}" />
-		<van-field label-class="van_field" label="图例下边距" model:value="{{  pieLegendPosBottom }}" placeholder="下边距优先级低于上边距"
-			border="{{ true }}" />
+		<van-field label-class="van_field" label="图例下边距" model:value="{{  pieLegendPosBottom }}"
+			placeholder="下边距优先级低于上边距" border="{{ true }}" />
 		<van-field label-class="van_field" label="图例左边距" model:value="{{  pieLegendPosLeft }}" type="number"
 			placeholder="请输入数字" border="{{ true }}" />
-		<van-field label-class="van_field" label="图例右边距" model:value="{{  pieLegendPosBottom }}" placeholder="右边距优先级低于左边距"
-			border="{{ true }}" />
+		<van-field label-class="van_field" label="图例右边距" model:value="{{  pieLegendPosRight }}"
+			placeholder="右边距优先级低于左边距" border="{{ true }}" />
 	</van-cell-group>
 	<van-cell-group title="圆环图">
 		<van-cell title="使用圆环">
@@ -283,10 +295,12 @@
 		<van-radio-group value="{{pieRoseType}}" wx:if="{{ pieShowRose }}" bind:change="changeSingleItem"
 			data-name="pieRoseType">
 			<van-cell-group>
-				<van-cell title="半径模式" clickable bind:click="modifySingleItem" data-name="scatterIndexRegression" data-value="0">
+				<van-cell title="半径模式" clickable bind:click="modifySingleItem" data-name="scatterIndexRegression"
+					data-value="0">
 					<van-radio slot="right-icon" name="0" />
 				</van-cell>
-				<van-cell title="面积模式" clickable bind:click="modifySingleItem" data-name="scatterIndexRegression" data-value="1">
+				<van-cell title="面积模式" clickable bind:click="modifySingleItem" data-name="scatterIndexRegression"
+					data-value="1">
 					<van-radio slot="right-icon" name="1" />
 				</van-cell>
 			</van-cell-group>
@@ -339,34 +353,40 @@
 		</van-cell>
 		<van-field label-class="van_field" label="图例上边距" model:value="{{  scatterLegendPosTop }}" type="number"
 			placeholder="请输入数字" border="{{ true }}" />
-			<van-field label-class="van_field" label="图例下边距" model:value="{{  scatterLegendPosBottom }}" placeholder="下边距优先级低于上边距" border="{{ true }}" />
+		<van-field label-class="van_field" label="图例下边距" model:value="{{  scatterLegendPosBottom }}"
+			placeholder="下边距优先级低于上边距" border="{{ true }}" />
 		<van-field label-class="van_field" label="图例左边距" model:value="{{  scatterLegendPosLeft }}" type="number"
 			placeholder="请输入数字" border="{{ true }}" />
-			<van-field label-class="van_field" label="图例右边距" model:value="{{  scatterLegendPosBottom }}" placeholder="右边距优先级低于左边距" border="{{ true }}" />
+		<van-field label-class="van_field" label="图例右边距" model:value="{{  scatterLegendPosRight }}"
+			placeholder="右边距优先级低于左边距" border="{{ true }}" />
 	</van-cell-group>
 	<van-cell-group title="曲线回归">
 		<van-cell title="启用回归">
 			<van-switch model:checked="{{ scatterUseRegression }}" bind:change="changeSingleItem"
 				data-name="scatterUseRegression" />
 		</van-cell>
-		<view wx:if="{{scatterUseRegression}}"> 
-		<van-radio-group  value="{{scatterIndexRegression}}"
-			 bind:change="changeSingleItem" data-name="scatterIndexRegression">
-			<van-cell-group>
-				<van-cell title="线性回归" clickable bind:click="modifySingleItem" data-name="scatterIndexRegression" data-value="0">
-					<van-radio slot="right-icon" name="0" />
-				</van-cell>
-				<van-cell title="指数回归" clickable  bind:click="modifySingleItem" data-name="scatterIndexRegression" data-value="1">
-					<van-radio slot="right-icon" name="1" />
-				</van-cell>
-				<van-cell title="对数回归" clickable>
-					<van-radio slot="right-icon" name="2" dbind:click="modifySingleItem" data-name="scatterIndexRegression" data-value="2" />
-				</van-cell>
-				<van-cell title="多项式回归" clickable>
-					<van-radio slot="right-icon" name="3" bind:click="modifySingleItem" data-name="scatterIndexRegression" data-value="3"/>
-				</van-cell>
-			</van-cell-group>
-		</van-radio-group>
+		<view wx:if="{{scatterUseRegression}}">
+			<van-radio-group value="{{scatterIndexRegression}}" bind:change="changeSingleItem"
+				data-name="scatterIndexRegression">
+				<van-cell-group>
+					<van-cell title="线性回归" clickable bind:click="modifySingleItem" data-name="scatterIndexRegression"
+						data-value="0">
+						<van-radio slot="right-icon" name="0" />
+					</van-cell>
+					<van-cell title="指数回归" clickable bind:click="modifySingleItem" data-name="scatterIndexRegression"
+						data-value="1">
+						<van-radio slot="right-icon" name="1" />
+					</van-cell>
+					<van-cell title="对数回归" clickable>
+						<van-radio slot="right-icon" name="2" dbind:click="modifySingleItem"
+							data-name="scatterIndexRegression" data-value="2" />
+					</van-cell>
+					<van-cell title="多项式回归" clickable>
+						<van-radio slot="right-icon" name="3" bind:click="modifySingleItem"
+							data-name="scatterIndexRegression" data-value="3" />
+					</van-cell>
+				</van-cell-group>
+			</van-radio-group>
 		</view>
 	</van-cell-group>
 </view>
