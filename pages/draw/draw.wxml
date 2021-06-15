@@ -1,6 +1,8 @@
 <!-- 垂直滚动，这里必须设置高度 -->
 <van-dropdown-menu style="display:{{isHideTabel}}">
-    <van-dropdown-item model:value="{{ value1 }}" options="{{ option1 }}" bindchange="changeChart"/>
+    <van-dropdown-item model:value="{{ value1 }}" options="{{ option1 }}" bindchange="changeChart">
+        <view slot='right-icon'>duck </view>
+    </van-dropdown-item>
     <van-dropdown-item model:value="{{ value2 }}" options="{{ option2 }}" bindchange="changeTemplate" bindopen="reGetTemplate"/>
 </van-dropdown-menu>
 <view class="box1" name="图表部分">

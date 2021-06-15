@@ -419,10 +419,10 @@ Page({
     })
   },
   onShareAppMessage(res){
-    return {
-      title:activeObj.name,
-      path:'/pages/storage/storage?id=' + activeObj.id + "&" + "uid=" + getStorageSync('uid') 
-    }
+    // return {
+    //   title:activeObj.name,
+    //   path:'/pages/index/index?id=' + activeObj.id + "&" + "uid=" + getStorageSync('uid') 
+    //    }
   },
   async onPullDownRefresh(){
     await this.flush(true)

@@ -30,11 +30,11 @@ Page({
 		],
 		bill_pics: [{
 			name: '账单',
-			pic: ["bill1.PNG", "bill2.PNG"]
+			pic: ["bill1.png", "bill2.png"]
 		},
 		{
 			name: '分析',
-			pic: ['analysis1.PNG', 'analysis2.PNG']
+			pic: ['analysis1.png', 'analysis2.png']
 		},
 	]
 
@@ -75,7 +75,8 @@ Page({
 		  url: '/pages/bill/bill',
 		})
 	},
-	onLoad() {
+	onLoad(option) {
+		console.log(option)
 		wx.showShareMenu({
 			withShareTicket: true,
 		})

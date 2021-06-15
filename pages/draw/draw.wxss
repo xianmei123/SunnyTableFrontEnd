@@ -94,4 +94,5 @@
   }
   .van-dropdown-item__option{
 	background-color: #457B9D !important;
+	/* text-align: center !important; */
   }

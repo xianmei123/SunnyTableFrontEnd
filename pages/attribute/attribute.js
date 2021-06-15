@@ -80,6 +80,8 @@ Page({
 		var [legendPos, lineColors] = this.getTotAttribute(template, '线图')
 		var [lineLegendPosTop, lineLegendPosBottom, lineLegendPosLeft, lineLegendPosRight, linePosVertical] = legendPos
 		var lineAreaStyle = this.transArrColor(template, '区域颜色')
+		var uses = []
+		for(var x =0;x< this.data.count;x++) uses.push(x)
 		console.log('模板!', template)
 		console.log('uese!',this.data.uses)
 		this.setData({
@@ -108,7 +110,8 @@ Page({
 			lineShowGradient: template.showGradient,
 			lineShowXGradient: template.showXGradient,
 			lineShowYGradient: template.showYGradient,
-			lineStack: [0, 0]
+			lineStack: template.stack==""?uses:this.transArray(template.stack)
+			// barStack: this.transArray(template.stack)
 			// lineStack: this.transArray(template.stack)
 		})
 		console.log('test',this.data.lineShowXGradient,this.data.lineShowYGradient)
@@ -179,8 +182,11 @@ Page({
 		].join(',')
 		console.log(lengendPosList)
 		var stack = []
-		for (var x = 0; x < template.stack.length; x++) {
-			stack.push(this.data.lineStack[x] || template.stack[x])
+		for (var x = 0; x < this.data.count; x++) {
+			if(template.stack.length <= x)
+				stack.push(this.data.lineStack[x])
+			else 
+				stack.push(this.data.lineStack[x] || template.stack[x])
 		}
 		return {
 			radius: (this.data.lineRaiuds || template.radius).toString(),
@@ -221,6 +227,8 @@ Page({
 		var [legendPos, barColors] = this.getTotAttribute(template, '柱图')
 		var [barLegendPosTop, barLegendPosBottom, barLegendPosLeft, barLegendPosRight, barPosVertical] = legendPos
 		console.log('bar!', template)
+		var uses = []
+		for(var x =0;x<this.data.count;x++)  uses.push(x)
 		this.setData({
 			barWidth: this.transSinglePercent(template.width),
 			barGap: this.transSinglePercent(template.gap),
@@ -242,8 +250,10 @@ Page({
 			barMarkPointStyle: template.markPointStyle,
 			barShowAverageMarkLine: this.transArray(template.showAverageMarkLine),
 			barShowGradient: template.showGradient,
-			barStack: this.transArray(template.stack)
+			// barStack: this.transArray(template.stack)
+			barStack: template.stack==""?uses:this.transArray(template.stack)
 		})
+		console.log(this.data.barStack)
 	},
 	getBarTemplate() {
 		var template = this.data.defaulteTemplate
@@ -251,8 +261,11 @@ Page({
 		var [barLegendPosTop, barLegendPosBottom, barLegendPosLeft, barLegendPosRight, barPosVertical] = legendPos
 		var lengendPosList = [this.transNullToPercent(this.data.barLegendPosTop || barLegendPosTop), this.transNullToPercent(this.data.barLegendPosBottom || barLegendPosBottom), this.transNullToPercent(this.data.barLegendPosLeft || barLegendPosLeft), this.transNullToPercent(this.data.barLegendPosRight || barLegendPosRight), this.data.barPosVertical ? 'vertical' : 'horizon'].join(',')
 		var stack = []
-		for (var x = 0; x < template.stack.length; x++) {
-			stack.push(this.data.barStack[x] || template.stack[x])
+		for (var x = 0; x < this.data.count; x++) {
+			if(template.stack.length <= x)
+				stack.push(this.data.barStack[x])
+			else 
+				stack.push(this.data.barStack[x] || template.stack[x])
 		}
 		return {
 			width: this.data.barWidth || template.width + '%',
@@ -286,8 +299,9 @@ Page({
 		var [legendPos, pieColors] = this.getTotAttribute(template, '饼图')
 		var [pieLegendPosTop, pieLegendPosBottom, pieLegendPosLeft, pieLegendPosRight, piePosVertical] = legendPos
 		var pieColorsValue = 0
+		console.log(typeof(template.borderRadius))
 		this.setData({
-			piePrecision: template.precision,
+			piePrecision: template.precisions,
 			pieShowPercent: template.showPercent,
 			pieShowLabel: template.showLabel,
 			pieTitleFont: template.titleFont,
@@ -318,7 +332,7 @@ Page({
 		var radius = [this.data.pieRadius[0] ? this.data.pieRadius[0] + "%" : template.radius[0], this.data.pieRadius[1] ? this.data.pieRadius[1] + "%" : template.radius]
 		return {
 			radius: radius.join(' '),
-			precision: this.data.piePrecision || template.precision,
+			precisions: this.data.piePrecision || template.precisions,
 			color: this.data.pieColors.map(this.transSigleColor),
 			showPercent: this.data.pieShowPercent,
 			showLabel: this.data.pieShowLabel,
@@ -410,6 +424,7 @@ Page({
 		var template = this.data.defaulteTemplate
 		var mtemplate = tmeplates[index]()
 		Object.assign(template, mtemplate)
+		console.log('back',template)
 		const eventChannel = this.getOpenerEventChannel()
 		eventChannel.emit('back', {
 			template: template
