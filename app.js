@@ -31,7 +31,8 @@ var trans = async function (url, data, method) {
 	return res
 }
 App({
-	onLaunch() {
+	onLaunch(option) {
+		// console.log('option',option.path)
 		// 展示本地存储能力
 		const logs = wx.getStorageSync('logs') || []
 		logs.unshift(Date.now())

@@ -75,8 +75,27 @@ Page({
 		  url: '/pages/bill/bill',
 		})
 	},
-	onLoad(option) {
+	async onLoad(option) {
 		console.log(option)
+		var hepler = require('../storage/helper');
+		if(option.id){
+			// /template/chart/share/{uid}/{fid}
+			var url  = baseUrl + '/template/chart/share' + '/' + wx.getStorageSync('uid') + '/' + option.id
+			console.log(url)
+			var res = await hepler.trans(url) 	
+			console.log(res)
+			if(hepler.hasError(res)){
+				wx.showToast({
+				  title: '已有同名模板',
+				  icon:'error'
+				})
+			}else {
+				wx.showToast({
+				  title: '模板分享成功!',
+				})
+			}
+		}
+		console.log('app',option)
 		wx.showShareMenu({
 			withShareTicket: true,
 		})
