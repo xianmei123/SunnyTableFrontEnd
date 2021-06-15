@@ -1018,11 +1018,10 @@ Page({
                     console.log(res);
                     var data = JSON.parse(res.data);
                     console.log(data);
-                    if (!"code" in data) {
-
+                    if (!("code" in data)) {
                         this.setData({
                             "newBill.detail": data.detail,
-                            "newBill.cost": data.cost,
+                            "newBill.cost": data.cost == "十" ? 10: data.cost ,
                         });
                         if (data.io == 0) {
                             this.setData({
@@ -1042,7 +1041,7 @@ Page({
                     } else {
                         wx.showModal({
                             title: "Tip",
-                            content: data.message + '请按模板输入',
+                            content: data.message + '，请按模板输入',
                             showCancel: false,
                         })
                     }
