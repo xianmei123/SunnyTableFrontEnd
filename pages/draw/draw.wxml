@@ -62,9 +62,9 @@
 
 <view style="display:{{isHideTabel}}">
     <text >\n</text>
-    <view class="border">
+    <view class="border" style="{{screenDirection != 0 ? 'margin-left:'+ statusBarHeight+ 'px':''}}" >
         <van-field value="{{graphName}}" placeholder="输入图表名称" border="{{ true }}" bind:change="setChartName" />
-        <van-row>
+        <van-row  >
             <van-col span="12">
                 <van-field value="{{xName}}" placeholder="输入横轴名称" border="{{ true }}" bind:change="setXName" />
             </van-col>
@@ -76,7 +76,7 @@
     <text>当前单元格数据：{{currentCell}}</text>
     <text>\n</text>
     <view class="title">输入数据</view>
-    <view class="box1" name="表格部分">
+    <view class="box1" name="表格部分" style="{{screenDirection != 0 ? 'margin-left:'+ statusBarHeight+ 'px':''}}">
         <!-- 表格 -->
         <scroll-view class="scroll-view_H" scroll-x="true" style="width: 100%">
             <view class="text-item">

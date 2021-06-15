@@ -1117,6 +1117,7 @@ Page({
         }
     },
     async onLoad() {
+        this.setData({statusBarHeight: 0.9*wx.getSystemInfoSync()['statusBarHeight']})
         var hepler = require('../storage/helper');
         var types = ["barTemplates", "lineTemplates", "pieTemplates", "scatterTemplates"];
         var urls = ['/template/barchart/open/', '/template/linechart/open/', '/template/fanchart/open/', '/template/scatterplot/open/']

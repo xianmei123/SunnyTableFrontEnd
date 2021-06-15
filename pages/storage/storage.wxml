@@ -36,7 +36,6 @@
     </van-col>
   </van-row>
 </view>
-
 <text>\n\n\n\n</text>
 <!-- 当前文件夹内容 -->
 <view>
