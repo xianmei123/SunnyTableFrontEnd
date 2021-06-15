@@ -771,31 +771,41 @@ function setScatterOption(scatterChart, template) {
         },
         series: series,
     };
-    var indexToTransform = [{
-            type: 'ecStat:regression'
-        },
+    var indexToTransform = [
         {
-            type: 'ecStat:regression',
-            config: {
-                method: 'exponential',
+            transform: {
+                type: 'ecStat:regression'
             }
         },
         {
-            type: 'ecStat:regression',
-            config: {
-                method: 'logarithmic'
+            transform: {
+                type: 'ecStat:regression',
+                config: {
+                    method: 'exponential',
+                }
             }
         },
         {
-            type: 'ecStat:regression',
-            config: {
-                method: 'polynomial',
-                order: 3
+            transform: {
+                type: 'ecStat:regression',
+                config: {
+                    method: 'logarithmic'
+                }
+            }
+        },
+        {
+            transform: {
+                type: 'ecStat:regression',
+                config: {
+                    method: 'polynomial',
+                    order: 3
+                }
             }
         }
     ]
     if (JSON.parse(template.useRegression)) {
-        option.dataset.push(indexToTransform[template.indexRegression]);
+    // if (JSON.parse("true")) {
+        option.dataset.push(indexToTransform[parseInt(template.indexRegression)]);
         option.series.push({
             type: 'line',
             smooth: true,
@@ -1422,6 +1432,7 @@ Page({
                     getPage().setData({
                         screenDirection: wx.getStorageSync('system'),
                     });
+                    console.log(backData.template);
                     updateTemplate(index, backData.template);
 
                 }
@@ -2055,11 +2066,19 @@ function updateShow() {
 }
 
 function isShowLineChart() {
-    if (line.template != undefined && line.template.stack != "" && xType === "number") {
-        getPage().setData({
-            errorLineChart: '抱歉，目前堆叠图的横坐标不支持数值类型'
-        });
+    if (xType === "error" || yType === "error") {
         return false;
+    }
+    if (line.template != undefined && xType === "number") {
+        var stack = line.template.stack.split(" ");
+        for (var i = 0; i < stack.length - 1; ++i) {
+            if (parseInt(stack[i]) + 1 != parseInt(stack[i + 1])) {
+                getPage().setData({
+                    errorLineChart: '抱歉，目前堆叠图的横坐标不支持数值类型'
+                });
+                return false;
+            }
+        }
     }
     return Object.keys(inputData).length != 0;
 }
@@ -2069,6 +2088,15 @@ function isShowLineChart() {
  * @returns 是否显示条形图
  */
 function isShowBarChart() {
+    if (xType === "error" || yType === "error") {
+        return false;
+    }
+    if (xType === "number" && yType === "number") {
+        getPage().setData({
+            errorBarChart: '抱歉，目前柱状图不支持横坐标为连续数值'
+        });
+        return false;
+    }
     return (xType === "string" && yType === "number") || (xType === "number" && yType === "string") && Object.keys(inputData).length != 0;
 }
 
@@ -2077,6 +2105,9 @@ function isShowBarChart() {
  * @returns 是否显示饼状图
  */
 function isShowPieChart() {
+    if (xType === "error" || yType === "error") {
+        return false;
+    }
     return (xType === "string" && yType === "number") || (xType === "string" && yType === "number");
 }
 
@@ -2085,6 +2116,9 @@ function isShowPieChart() {
  * @returns 是否显示散点图
  */
 function isShowScatterChart() {
+    if (xType === "error" || yType === "error") {
+        return false;
+    }
     return (xType === "number" && yType === "number") && Object.keys(inputData).length != 0;
 }
 
@@ -2103,8 +2137,8 @@ function getPage() {
  * @param {*} inputData 
  */
 function updateLineData(inputData) {
-    line.init(xType, yType);
     if (isShowLineChart()) {
+        line.init(xType, yType);
         setLineOption(line.chart, line.template);
     }
 }
@@ -2115,9 +2149,8 @@ function updateLineData(inputData) {
  * @param {*} inputData 
  */
 function updateBarData(inputData) {
-    bar.init(inputData, xType, yType);
-    console.log("BARtYPE", xType, yType);
     if (isShowBarChart()) {
+        bar.init(inputData, xType, yType);
         setBarOption(bar.chart, bar.template);
     }
 }
@@ -2150,8 +2183,8 @@ function updatePieData(name, data) {
  * @param {*} inputData 
  */
 function updateScatterData(inputData) {
-    scatter.init(inputData, xType, yType);
     if (isShowScatterChart()) {
+        scatter.init(inputData, xType, yType);
         setScatterOption(scatter.chart, scatter.template);
     }
 }
@@ -2163,7 +2196,6 @@ function updateScatterData(inputData) {
  */
 function updateTemplate(updateGraphIndex, template) {
     indexToGraph[updateGraphIndex].setTemplate(template);
-    console.log(line.template);
     if (updateGraphIndex == 0) {
         if (!isShowLineChart()) {
             getPage().setData({
@@ -2179,9 +2211,12 @@ function updateTemplate(updateGraphIndex, template) {
     } else if (updateGraphIndex == 1) {
         if (!isShowBarChart()) {
             getPage().setData({
-                showLineChart: false
+                showBarChart: false
             })
         } else {
+            getPage().setData({
+                showBarChart: true
+            })
             setBarOption(indexToGraph[updateGraphIndex].chart, template);
         }
     } else if (updateGraphIndex == 2) {
@@ -2353,7 +2388,7 @@ function convertFromBackTemplate(template, type) {
         case "scatter":
             for (var key in template) {
                 if (key === "showLine" || key === "showDigit" || key === "isVisible" ||
-                    key === "increase") {
+                    key === "increase" || key === "useRegression") {
                     tempJson[key] = JSON.parse(template[key]);
                 } else if (key === "radius") {
                     tempJson[key] = parseFloat(template[key]) * 100 + "%";
