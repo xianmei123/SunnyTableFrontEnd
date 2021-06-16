@@ -2266,7 +2266,7 @@ function updateScatterData(inputData) {
 function updateTemplate(updateGraphIndex, template) {
     indexToGraph[updateGraphIndex].setTemplate(template);
     var pages = getCurrentPages();
-    var pageNow = pages[pages.length - 2];
+    var pageNow =  pages[pages.length - 1].route === "pages/draw/draw" ? pages[pages.length - 1] : pages[pages.length - 2]
     if (updateGraphIndex == 0) {
         if (!isShowLineChart()) {
             pageNow.setData({
