@@ -117,7 +117,7 @@
 	</van-cell-group>
 	<van-cell-group title="区域堆叠">
 		<van-cell wx:for="{{uses}}" title="折线{{index}}编号">
-			<van-stepper model:value="{{lineStack[index]  }}" long-press="{{ false }}" min="0" max="9"
+			<van-stepper model:value="{{lineStack[index]  }}" long-press="{{ false }}" min="1" max="10"
 				integer="{{true}}" bind:change="changeSingleItem" data-name="lineStack[{{index}}]" />
 		</van-cell>
 	</van-cell-group>
@@ -209,7 +209,7 @@
 	</van-cell-group>
 	<van-cell-group title="区域堆叠">
 		<van-cell wx:for="{{uses}}" title="柱{{index}}编号">
-			<van-stepper model:value="{{barStack[index]  }}" long-press="{{ false }}" min="0" max="9" integer="{{true}}"
+			<van-stepper model:value="{{barStack[index]  }}" long-press="{{ false }}" min="1" max="10" integer="{{true}}"
 				bind:change="changeSingleItem" data-name="barStack[{{index}}]" />
 		</van-cell>
 	</van-cell-group>

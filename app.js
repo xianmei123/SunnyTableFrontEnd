@@ -31,31 +31,14 @@ var trans = async function (url, data, method) {
 	return res
 }
 App({
-	onLaunch() {
+	onLaunch(option) {
+		// console.log('option',option.path)
 		// 展示本地存储能力
 		const logs = wx.getStorageSync('logs') || []
 		logs.unshift(Date.now())
 		wx.setStorageSync('logs', logs)
 		// 登录
-		var baseUrl = 'https://www.jaripon.xyz'
-		wx.login({
-			success: async function (res) {
-				console.log(res);
-				res = await trans(baseUrl + '/wechat/login/' + res.code, "")
-				console.log(res);
-				//res.data.openid = '0' //此处暂时用0标识
-				wx.setStorageSync('uid', res.data.openid)
-				wx.setStorageSync('isFirst', JSON.parse(res.data.first));
-				// var url = baseUrl + '/user/login/'+res.data.openid
-				//res = await trans(url)
-				//console.log(res)
-				wx.setStorageSync('rootId', res.data.fid)
-				var url = baseUrl + '/file/dir/open/' + res.data.openid + '/' + wx.getStorageSync('rootId')
-				res = await trans(url)
-				console.log(res.data)
-				console.log(wx.getStorageSync('uid'))
-			}
-		});
+		
 		// console.log(wx.getSystemInfoSync());
 		wx.setStorageSync('system', wx.getSystemInfoSync().system.indexOf("iOS") != -1 ? 1 : 0);
 	},

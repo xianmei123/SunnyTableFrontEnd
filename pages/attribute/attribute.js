@@ -81,7 +81,7 @@ Page({
 		var [lineLegendPosTop, lineLegendPosBottom, lineLegendPosLeft, lineLegendPosRight, linePosVertical] = legendPos
 		var lineAreaStyle = this.transArrColor(template, '区域颜色')
 		var uses = []
-		for(var x =0;x< this.data.count;x++) uses.push(x)
+		for(var x =0;x< this.data.count;x++) uses.push(x+1)
 		console.log('模板!', template)
 		console.log('uese!',this.data.uses)
 		this.setData({
@@ -228,7 +228,7 @@ Page({
 		var [barLegendPosTop, barLegendPosBottom, barLegendPosLeft, barLegendPosRight, barPosVertical] = legendPos
 		console.log('bar!', template)
 		var uses = []
-		for(var x =0;x<this.data.count;x++)  uses.push(x)
+		for(var x =0;x<this.data.count;x++)  uses.push(x+1)
 		this.setData({
 			barWidth: this.transSinglePercent(template.width),
 			barGap: this.transSinglePercent(template.gap),

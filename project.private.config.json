@@ -13,12 +13,6 @@
         "miniprogram": {
             "list": [
                 {
-                    "name": "pages/storage/storage",
-                    "pathName": "pages/storage/storage",
-                    "query": "",
-                    "scene": null
-                },
-                {
                     "name": "pages/mine/mine",
                     "pathName": "pages/mine/mine",
                     "query": "",

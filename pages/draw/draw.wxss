@@ -93,6 +93,16 @@
 	/* color:#003153; */
   }
   .van-dropdown-item__option{
-	background-color: #457B9D !important;
-	/* text-align: center !important; */
+	width: 680rpx !important;
+	text-align: center !important;
   }
+  .van-dropdown-item__title{
+	  width: 680rpx !important;
+	  text-align: center !important;
+  }
+  .van-dropdown-item__icon {
+    width: 1000rpx;
+}
+  /* .van-dropdown-item__value{
+	  width: 0rpx !important;
+  } */

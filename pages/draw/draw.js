@@ -276,7 +276,7 @@ function setLineOption(lineChart, template) {
         ],
         grid: {
             bottom: "10%",
-            left: '0%',
+            left: '5%',
             containLabel: true
         },
         title: {
@@ -468,7 +468,7 @@ function setBarOption(barChart, template) {
         },
         grid: {
             bottom: "10%",
-            left: '0%',
+            left: '5%',
             containLabel: true
         },
         dataZoom: [{
@@ -614,7 +614,7 @@ function setPieOption(pieChart, template) {
     option = {
         grid: {
             bottom: "10%",
-            left: '0%',
+            left: '5%',
             containLabel: true
         },
         title: {
@@ -739,7 +739,7 @@ function setScatterOption(scatterChart, template) {
         ],
         grid: {
             bottom: "10%",
-            left: '0%',
+            left: '5%',
             containLabel: true
         },
         title: {
@@ -1117,6 +1117,9 @@ Page({
         }
     },
     async onLoad() {
+        this.setData({
+            statusBarHeight: 0.9 * wx.getSystemInfoSync()['statusBarHeight']
+        })
         var hepler = require('../storage/helper');
         var types = ["barTemplates", "lineTemplates", "pieTemplates", "scatterTemplates"];
         var urls = ['/template/barchart/open/', '/template/linechart/open/', '/template/fanchart/open/', '/template/scatterplot/open/']
@@ -1423,6 +1426,7 @@ Page({
         console.log(xType);
         yType = this.judgeYType();
         console.log(yType);
+        inputData[0][0] = "xLabel" 
         updateShow();
         switch (this.data.value1) {
             case "line":
@@ -2063,28 +2067,37 @@ function resetCharts(value) {
     var thisPage = getPage();
     switch (value) {
         case "line":
-            thisPage.selectComponent('#lineChartId').init((canvas, width, height, dpr) => {
-                return initLineChart(canvas, width, height, dpr);
-            });
+            if (thisPage.data.showLineChart) {
+                thisPage.selectComponent('#lineChartId').init((canvas, width, height, dpr) => {
+                    return initLineChart(canvas, width, height, dpr);
+                });
+            }
+
             break;
         case "bar":
-            thisPage.selectComponent('#barChartId').init((canvas, width, height, dpr) => {
-                return initBarChart(canvas, width, height, dpr);
-            });
+            if (thisPage.data.showBarChart) {
+                thisPage.selectComponent('#barChartId').init((canvas, width, height, dpr) => {
+                    return initBarChart(canvas, width, height, dpr);
+                });
+            }
             break;
         case "pie":
-            thisPage.selectComponent('#pieChartId').init((canvas, width, height, dpr) => {
+            if (thisPage.data.showPieChart) {
+                thisPage.selectComponent('#pieChartId').init((canvas, width, height, dpr) => {
 
-                return initPieChart(canvas, width, height, dpr);
+                    return initPieChart(canvas, width, height, dpr);
 
-            });
+                });
+            }
             break;
         case "scatter":
-            thisPage.selectComponent('#scatterChartId').init((canvas, width, height, dpr) => {
+            if (thisPage.data.showScatterChart) {
+                thisPage.selectComponent('#scatterChartId').init((canvas, width, height, dpr) => {
 
-                return initScatterChart(canvas, width, height, dpr);
+                    return initScatterChart(canvas, width, height, dpr);
 
-            });
+                });
+            }
             break;
     }
 }
@@ -2255,7 +2268,7 @@ function updateScatterData(inputData) {
 function updateTemplate(updateGraphIndex, template) {
     indexToGraph[updateGraphIndex].setTemplate(template);
     var pages = getCurrentPages();
-    var pageNow = pages[pages.length - 2];
+    var pageNow =  pages[pages.length - 1].route === "pages/draw/draw" ? pages[pages.length - 1] : pages[pages.length - 2]
     if (updateGraphIndex == 0) {
         if (!isShowLineChart()) {
             pageNow.setData({
@@ -2523,19 +2536,19 @@ function myFullScreen() {
 function setLegendOption(option, legendPos) {
     var legendArr = legendPos.split(",");
     var tempJson = {};
-    if (legendArr[0] != "") {
+    if (legendArr[0] != null) {
         tempJson.top = legendArr[0];
     }
-    if (legendArr[1] != "") {
+    if (legendArr[1] != null) {
         tempJson.bottom = legendArr[1];
     }
-    if (legendArr[2] != "") {
+    if (legendArr[2] != null) {
         tempJson.left = legendArr[2];
     }
-    if (legendArr[3] != "") {
+    if (legendArr[3] != null) {
         tempJson.right = legendArr[3];
     }
-    if (legendArr[4] != "") {
+    if (legendArr[4] != null) {
         tempJson.orient = legendArr[4];
     } else {
         tempJson.orient = 'horizontal';

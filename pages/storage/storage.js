@@ -419,10 +419,13 @@ Page({
     })
   },
   onShareAppMessage(res){
-    // return {
-    //   title:activeObj.name,
-    //   path:'/pages/index/index?id=' + activeObj.id + "&" + "uid=" + getStorageSync('uid') 
-    //    }
+    var path =  '/pages/index/index?id=' + this.data.activeObj.id 
+    console.log(path)
+    return {
+      title: '分享模板  '+ this.data.activeObj.name,
+      path:path
+      // path:'/pages/index/index?id=0&'
+       }
   },
   async onPullDownRefresh(){
     await this.flush(true)
