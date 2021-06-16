@@ -1204,6 +1204,7 @@ Page({
     changeCurrentGroupName(event) {
         var groupId = event.target.dataset.a + 1;
         this.setData({
+            region: [groupId - 1, -1],
             currentCell: this.data.groupName[groupId - 1]
         });
 
@@ -1211,6 +1212,7 @@ Page({
     changeCurrentX(event) {
         var dataId = event.target.dataset.a;
         this.setData({
+            region: [-1, dataId - 1],
             currentCell: this.data.xValues[dataId - 1]
         });
 
@@ -1282,9 +1284,17 @@ Page({
         })
     },
     delGroup: function () {
+        if (this.data.region[0] == -1) {
+            wx.showToast({
+              title: '不能删除第一列',
+              icon: "error"
+            });
+            return;
+        }
         var newIterator2 = this.data.iterator2;
         var newDatas = this.data.datas;
         var newGroupName = this.data.groupName;
+        var groupNum = this.data.groupNum;
         newGroupName.splice(this.data.region[0], 1);
         newDatas.splice(this.data.region[0], 1);
         newIterator2.pop();
@@ -1293,14 +1303,23 @@ Page({
             groupName: newGroupName,
             iterator2: newIterator2,
             groupNum: this.data.groupNum - 1,
-            currentCell: ""
+            currentCell: "",
+            region: [(this.data.region[0] == groupNum - 1 ? groupNum - 2 : this.data.region[0]), this.data.region[1]]
         })
 
     },
     delX: function () {
+        if (this.data.region[1] == -1) {
+            wx.showToast({
+              title: '不能删除第一行',
+              icon: "error"
+            });
+            return;
+        }
         var newIterator1 = this.data.iterator1;
         var newXValues = this.data.xValues;
         var newDatas = this.data.datas;
+        var xNum = newXValues.length;
         newIterator1.pop();
         newXValues.splice(this.data.region[1], 1);
         var i;
@@ -1311,9 +1330,9 @@ Page({
             iterator1: newIterator1,
             xValues: newXValues,
             datas: newDatas,
-            currentCell: ""
+            currentCell: "",
+            region: [this.data.region[0], (this.data.region[1] == xNum - 1 ? xNum - 2 : this.data.region[1])]
         })
-
     },
     giveData: function (givenData) {
         this.setData({
