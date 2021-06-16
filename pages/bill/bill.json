@@ -11,7 +11,8 @@
     "van-dropdown-item": "@vant/weapp/dropdown-item/index",
     "van-radio": "@vant/weapp/radio/index",
   "van-radio-group": "@vant/weapp/radio-group/index",
-  "van-icon": "@vant/weapp/icon/index"
+  "van-icon": "@vant/weapp/icon/index",
+  "van-toast": "@vant/weapp/toast/index"
   },
   "navigationBarTitleText": "账单",
   "enablePullDownRefresh": true

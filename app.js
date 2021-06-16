@@ -49,7 +49,8 @@ App({
 				wx.setStorageSync('isFirst', JSON.parse(res.data.first));
 				// var url = baseUrl + '/user/login/'+res.data.openid
 				//res = await trans(url)
-				//console.log(res)
+				console.log("dd"+wx.getStorageSync('isFirst'));
+				
 				wx.setStorageSync('rootId', res.data.fid)
 				var url = baseUrl + '/file/dir/open/' + res.data.openid + '/' + wx.getStorageSync('rootId')
 				res = await trans(url)

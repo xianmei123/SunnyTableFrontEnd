@@ -1,3 +1,4 @@
+import Toast from '../../@vant/weapp/dist/toast/toast';
 var billId = 0;
 var id4replace = 0;
 
@@ -476,11 +477,18 @@ Page({
     },
 
     onConfirmBill() {
+        if (this.data.newBill.messageIO == null || this.data.newBill.messageDetail == null) {
+            
+            Toast.fail('存在空数据');
+            return;
+        }
+        
         this.setData({
             'newBill.show': false,
             'newBill.io': this.data.newBill.messageIO,
             'newBill.detail': this.data.newBill.messageDetail
         });
+        
         this.saveBill();
     },
 
