@@ -568,9 +568,13 @@ function initPieChart(canvas, width, height, dpr) {
  */
 function setPieOption(pieChart, template) {
     pieChart.clear();
+    getPage().setData({
+        errorPieChart: '请输入数据进行画图'
+    });
     var option;
     var series = [];
     var legendArr = template.legendPos.split(",");
+    
     var tempJson = {
         name: pie.name,
         type: 'pie',
@@ -761,11 +765,14 @@ function setScatterOption(scatterChart, template) {
             type: scatter.yType === "string" ? "category" : "value",
             boundaryGap: yType === "string" ? false : true
         },
-        tooltip: {
-            trigger: 'item'
-        },
+        
         series: series,
     };
+    if (template.showDigit) {
+        option.tooltip = {
+            trigger: 'item'
+        }
+    }
     var indexToTransform = [{
             transform: {
                 type: 'ecStat:regression'
@@ -2191,7 +2198,13 @@ function isShowBarChart() {
 function isShowPieChart() {
     if (xType === "error" || yType === "error") {
         getPage().setData({
-            errorLineChart: '请检查您的数据是否有空值'
+            errorPieChart: '请检查您的数据是否有空值'
+        });
+        return false;
+    }
+    if (xType === "number" && yType === "number") {
+        getPage().setData({
+            errorPieChart: '抱歉，目前饼状图不支持横坐标为数值类型'
         });
         return false;
     }
@@ -2205,7 +2218,7 @@ function isShowPieChart() {
 function isShowScatterChart() {
     if (xType === "error" || yType === "error") {
         getPage().setData({
-            errorLineChart: '请检查您的数据是否有空值'
+            errorScatterChart: '请检查您的数据是否有空值'
         });
         return false;
     }
@@ -2311,9 +2324,28 @@ function updateTemplate(updateGraphIndex, template) {
             setBarOption(indexToGraph[updateGraphIndex].chart, template);
         }
     } else if (updateGraphIndex == 2) {
-        setPieOption(indexToGraph[updateGraphIndex].chart, template);
+        if (!isShowPieChart()) {
+            getPage().setData({
+                showPieChart: false
+            });
+        } else {
+            getPage().setData({
+                showPieChart: true
+            });
+            setPieOption(indexToGraph[updateGraphIndex].chart, template);
+        }
     } else if (updateGraphIndex == 3 && isShowScatterChart()) {
-        setScatterOption(indexToGraph[updateGraphIndex].chart, template);
+        if (!isShowScatterChart()) {
+            getPage().setData({
+                showScatterChart: false
+            });
+        } else {
+            getPage().setData({
+                showScatterChart: true
+            });
+            setScatterOption(indexToGraph[updateGraphIndex].chart, template);
+        }
+        
     }
 
 }
@@ -2555,19 +2587,19 @@ function myFullScreen() {
 function setLegendOption(option, legendPos) {
     var legendArr = legendPos.split(",");
     var tempJson = {};
-    if (legendArr[0] != null) {
+    if (legendArr[0] != "null") {
         tempJson.top = legendArr[0];
     }
-    if (legendArr[1] != null) {
+    if (legendArr[1] != "nul") {
         tempJson.bottom = legendArr[1];
     }
-    if (legendArr[2] != null) {
+    if (legendArr[2] != "null") {
         tempJson.left = legendArr[2];
     }
-    if (legendArr[3] != null) {
+    if (legendArr[3] != "null") {
         tempJson.right = legendArr[3];
     }
-    if (legendArr[4] != null) {
+    if (legendArr[4] != "null") {
         tempJson.orient = legendArr[4];
     } else {
         tempJson.orient = 'horizontal';

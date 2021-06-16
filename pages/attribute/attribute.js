@@ -171,14 +171,15 @@ Page({
 		}
 	},
 	transNullToPercent(res){
-		return res==null? res+'':res + '%'
+		console.log('check res is',res,typeof(res),res=="")
+		return res==""? 'null':res + '%'
 	},
 	getLineTemplate() {
 		var template = this.data.defaulteTemplate
 		var [legendPos, lineColors] = this.getTotAttribute(template, '线图')
 		var [lineLegendPosTop, lineLegendPosBottom, lineLegendPosLeft, lineLegendPosRight, linePosVertical] = legendPos
 		var lengendPosList = [
-			this.transNullToPercent(this.data.lineLegendPosTop || lineLegendPosTop), this.transNullToPercent(this.data.lineLegendPosBottom || lineLegendPosBottom), this.transNullToPercent(this.data.lineLegendPosLeft || lineLegendPosLeft), this.transNullToPercent(this.data.lineLegendPosRight || lineLegendPosRight), this.data.linePosVertical ? 'vertical' : 'horizon'
+			this.transNullToPercent(this.data.lineLegendPosTop ), this.transNullToPercent(this.data.lineLegendPosBottom ), this.transNullToPercent(this.data.lineLegendPosLeft), this.transNullToPercent(this.data.lineLegendPosRight ), this.data.linePosVertical ? 'vertical' : 'horizon'
 		].join(',')
 		console.log(lengendPosList)
 		var stack = []
@@ -259,7 +260,7 @@ Page({
 		var template = this.data.defaulteTemplate
 		var [legendPos, barColors] = this.getTotAttribute(template, '柱图')
 		var [barLegendPosTop, barLegendPosBottom, barLegendPosLeft, barLegendPosRight, barPosVertical] = legendPos
-		var lengendPosList = [this.transNullToPercent(this.data.barLegendPosTop || barLegendPosTop), this.transNullToPercent(this.data.barLegendPosBottom || barLegendPosBottom), this.transNullToPercent(this.data.barLegendPosLeft || barLegendPosLeft), this.transNullToPercent(this.data.barLegendPosRight || barLegendPosRight), this.data.barPosVertical ? 'vertical' : 'horizon'].join(',')
+		var lengendPosList = [this.transNullToPercent(this.data.barLegendPosTop ), this.transNullToPercent(this.data.barLegendPosBottom ), this.transNullToPercent(this.data.barLegendPosLeft ), this.transNullToPercent(this.data.barLegendPosRight ), this.data.barPosVertical ? 'vertical' : 'horizon'].join(',')
 		var stack = []
 		for (var x = 0; x < this.data.count; x++) {
 			if(template.stack.length <= x)
@@ -328,7 +329,7 @@ Page({
 		var template = this.data.defaulteTemplate
 		var [legendPos, pieColors] = this.getTotAttribute(template, '饼图')
 		var [pieLegendPosTop, pieLegendPosBottom, pieLegendPosLeft, pieLegendPosRight, piePosVertical] = legendPos
-		var lengendPosList = [this.transNullToPercent(this.data.pieLegendPosTop || pieLegendPosTop), this.transNullToPercent(this.data.pieLegendPosBottom || pieLegendPosBottom), this.transNullToPercent(this.data.pieLegendPosLeft || pieLegendPosLeft), this.transNullToPercent(this.data.pieLegendPosRight || pieLegendPosRight),  this.data.piePosVertical ? 'vertical' : 'horizon'].join(',')
+		var lengendPosList = [this.transNullToPercent(this.data.pieLegendPosTop ), this.transNullToPercent(this.data.pieLegendPosBottom ), this.transNullToPercent(this.data.pieLegendPosLeft ), this.transNullToPercent(this.data.pieLegendPosRight ),  this.data.piePosVertical ? 'vertical' : 'horizon'].join(',')
 		var radius = [this.data.pieRadius[0] ? this.data.pieRadius[0] + "%" : template.radius[0], this.data.pieRadius[1] ? this.data.pieRadius[1] + "%" : template.radius]
 		return {
 			radius: radius.join(' '),
@@ -377,7 +378,7 @@ Page({
 		var template = this.data.defaulteTemplate
 		var [legendPos, scatterColors] = this.getTotAttribute(template, '散点图')
 		var [scatterLegendPosTop, scatterLegendPosBottom, scatterLegendPosLeft, scatterLegendPosRight, scatterPosVertical] = legendPos
-		var lengendPosList = [this.transNullToPercent(this.data.scatterLegendPosTop || scatterLegendPosTop), this.transNullToPercent(this.data.scatterLegendPosBottom || scatterLegendPosBottom ), this.transNullToPercent(this.data.scatterLegendPosLeft || scatterLegendPosLeft), this.transNullToPercent(this.data.scatterLegendPosRight || scatterLegendPosRight), this.data.scatterPosVertical ? 'vertical' : 'horizon'].join(',')
+		var lengendPosList = [this.transNullToPercent(this.data.scatterLegendPosTop ), this.transNullToPercent(this.data.scatterLegendPosBottom ), this.transNullToPercent(this.data.scatterLegendPosLeft ), this.transNullToPercent(this.data.scatterLegendPosRight ), this.data.scatterPosVertical ? 'vertical' : 'horizon'].join(',')
 		console.log('scatter', template)
 		return {
 			showLine: this.data.scatterShowLine,
