@@ -1,4 +1,4 @@
-import Toast from '../../@vant/weapp/dist/toast/toast';
+
 var billId = 0;
 var id4replace = 0;
 
@@ -128,8 +128,8 @@ Page({
         showCostInput: true,
         showDetailInput: true,
         showVoiceInputMessage: "按住说话",
-        tip: "\nTip:按住说话时，会将输入转换为详细信息、金额和 收入/支出 三部分。\n" + 
-        "语音输入建议模板有：1. xxx（例：买了一个苹果），花费/花了xxx元  2. xxx，收入/赚了xxx元，还有更多等待您的探索!",
+        tip: "\nTip:按住说话时，会将输入转换为详细信息、金额和 收入/支出 三部分。\n" +
+            "语音输入建议模板有：1. xxx（例：买了一个苹果），花费/花了xxx元  2. xxx，收入/赚了xxx元，还有更多等待您的探索!",
         billData: [],
         icons: getApp().globalData.icons,
     },
@@ -382,7 +382,7 @@ Page({
 
     },
 
-   async saveBill() {
+    saveBill() {
         this.queryBill();
         var url = "https://www.jaripon.xyz/bill/add";
 
@@ -419,8 +419,8 @@ Page({
         wx.showToast({
             title: '保存账单成功',
         });
-        await this.updateBillDataNotShow();
-        //this.updateBillDataNotShow();
+        this.updateBillDataNotShow();
+        this.updateBillDataNotShow();
     },
     // condition: {
     //     show: false,
@@ -478,18 +478,24 @@ Page({
 
     onConfirmBill() {
         if (this.data.newBill.messageIO == null || this.data.newBill.messageDetail == null) {
-            
-            Toast.fail('存在空数据');
-            return;
+            wx.showToast({
+                title: '数据不可为空',
+                icon: 'error'
+            });
+        } else if (this.data.newBill.messageDetail.replaceAll(" ", "") == "") {
+            wx.showToast({
+                title: '用途不可为空格',
+                icon: 'error'
+            });
+        } else {
+            this.setData({
+                'newBill.show': false,
+                'newBill.io': this.data.newBill.messageIO,
+                'newBill.detail': this.data.newBill.messageDetail
+            });
+            this.saveBill();
         }
-        
-        this.setData({
-            'newBill.show': false,
-            'newBill.io': this.data.newBill.messageIO,
-            'newBill.detail': this.data.newBill.messageDetail
-        });
-        
-        this.saveBill();
+
     },
 
     onToday1() {
@@ -1029,7 +1035,7 @@ Page({
                     if (!("code" in data)) {
                         this.setData({
                             "newBill.detail": data.detail,
-                            "newBill.cost": data.cost == "十" ? 10: data.cost ,
+                            "newBill.io": data.cost == "十" ? 10 : parseInt(data.cost),
                         });
                         if (data.io == 0) {
                             this.setData({
@@ -1062,10 +1068,10 @@ Page({
         });
         this.updateBillDataNotShow();
     },
-    async onPullDownRefresh(){
+    async onPullDownRefresh() {
         this.updateBillData();
         wx.stopPullDownRefresh({
-          success: (res) => {},
+            success: (res) => {},
         })
-      }
+    }
 });

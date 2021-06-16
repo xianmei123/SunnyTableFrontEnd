@@ -568,9 +568,13 @@ function initPieChart(canvas, width, height, dpr) {
  */
 function setPieOption(pieChart, template) {
     pieChart.clear();
+    getPage().setData({
+        errorPieChart: '请输入数据进行画图'
+    });
     var option;
     var series = [];
     var legendArr = template.legendPos.split(",");
+    
     var tempJson = {
         name: pie.name,
         type: 'pie',
@@ -761,11 +765,14 @@ function setScatterOption(scatterChart, template) {
             type: scatter.yType === "string" ? "category" : "value",
             boundaryGap: yType === "string" ? false : true
         },
-        tooltip: {
-            trigger: 'item'
-        },
+        
         series: series,
     };
+    if (template.showDigit) {
+        option.tooltip = {
+            trigger: 'item'
+        }
+    }
     var indexToTransform = [{
             transform: {
                 type: 'ecStat:regression'
@@ -1182,13 +1189,6 @@ Page({
         this.data.yName = event.detail;
         yName = event.detail;
     },
-    changeRegion: function (event) {
-        var newRegion = [event.target.dataset.a, event.target.dataset.b];
-        console.log("现在是" + newRegion[0] + newRegion[1]);
-        this.setData({
-            region: newRegion
-        });
-    },
     getXValue: function (event) {
         var index = event.target.dataset.a;
         var newXValue = this.data.xValues;
@@ -1204,6 +1204,7 @@ Page({
         var dataId = event.target.dataset.b;
         var newData = this.data.datas;
         this.setData({
+            region: [groupId - 1, dataId - 1],
             currentCell: newData[groupId - 1][dataId - 1]
         });
     },
@@ -1242,7 +1243,11 @@ Page({
         var newIterator2 = this.data.iterator2;
         var newDatas = this.data.datas;
         var newGroupName = this.data.groupName;
-        newDatas.push([]);
+        var tmp = [];
+        for (var i = 0; i < this.data.xValues.length; i++) {
+            tmp.push("");
+        }
+        newDatas.push(tmp);
         newIterator2.push(newIterator2.length + 1);
         newGroupName.push("");
         this.setData({
@@ -1272,8 +1277,12 @@ Page({
         }
         var newIterator1 = this.data.iterator1;
         var newXValues = this.data.xValues;
+        var newDatas = this.data.datas;
         newIterator1.push(newIterator1.length + 1);
         newXValues.push("");
+        for (var i = 0; i < newDatas.length; i++) {
+            newDatas[i].push("");
+        }
         this.setData({
             iterator1: newIterator1,
             xValues: newXValues
@@ -1300,10 +1309,10 @@ Page({
         var newXValues = this.data.xValues;
         var newDatas = this.data.datas;
         newIterator1.pop();
-        newXValues.pop();
+        newXValues.splice(this.data.region[1], 1);
         var i;
         for (i = 0; i < newDatas.length; i++) {
-            newDatas[i].pop();
+            newDatas[i].splice(this.data.region[1], 1);
         }
         this.setData({
             iterator1: newIterator1,
@@ -1424,6 +1433,7 @@ Page({
         console.log(xType);
         yType = this.judgeYType();
         console.log(yType);
+        inputData[0][0] = "xLabel" 
         updateShow();
         switch (this.data.value1) {
             case "line":
@@ -2169,7 +2179,13 @@ function isShowBarChart() {
 function isShowPieChart() {
     if (xType === "error" || yType === "error") {
         getPage().setData({
-            errorLineChart: '请检查您的数据是否有空值'
+            errorPieChart: '请检查您的数据是否有空值'
+        });
+        return false;
+    }
+    if (xType === "number" && yType === "number") {
+        getPage().setData({
+            errorPieChart: '抱歉，目前饼状图不支持横坐标为数值类型'
         });
         return false;
     }
@@ -2183,7 +2199,7 @@ function isShowPieChart() {
 function isShowScatterChart() {
     if (xType === "error" || yType === "error") {
         getPage().setData({
-            errorLineChart: '请检查您的数据是否有空值'
+            errorScatterChart: '请检查您的数据是否有空值'
         });
         return false;
     }
@@ -2265,7 +2281,7 @@ function updateScatterData(inputData) {
 function updateTemplate(updateGraphIndex, template) {
     indexToGraph[updateGraphIndex].setTemplate(template);
     var pages = getCurrentPages();
-    var pageNow = pages[pages.length - 2];
+    var pageNow =  pages[pages.length - 1].route === "pages/draw/draw" ? pages[pages.length - 1] : pages[pages.length - 2]
     if (updateGraphIndex == 0) {
         if (!isShowLineChart()) {
             pageNow.setData({
@@ -2289,9 +2305,28 @@ function updateTemplate(updateGraphIndex, template) {
             setBarOption(indexToGraph[updateGraphIndex].chart, template);
         }
     } else if (updateGraphIndex == 2) {
-        setPieOption(indexToGraph[updateGraphIndex].chart, template);
+        if (!isShowPieChart()) {
+            getPage().setData({
+                showPieChart: false
+            });
+        } else {
+            getPage().setData({
+                showPieChart: true
+            });
+            setPieOption(indexToGraph[updateGraphIndex].chart, template);
+        }
     } else if (updateGraphIndex == 3 && isShowScatterChart()) {
-        setScatterOption(indexToGraph[updateGraphIndex].chart, template);
+        if (!isShowScatterChart()) {
+            getPage().setData({
+                showScatterChart: false
+            });
+        } else {
+            getPage().setData({
+                showScatterChart: true
+            });
+            setScatterOption(indexToGraph[updateGraphIndex].chart, template);
+        }
+        
     }
 
 }
@@ -2533,19 +2568,19 @@ function myFullScreen() {
 function setLegendOption(option, legendPos) {
     var legendArr = legendPos.split(",");
     var tempJson = {};
-    if (legendArr[0] != null) {
+    if (legendArr[0] != "null") {
         tempJson.top = legendArr[0];
     }
-    if (legendArr[1] != null) {
+    if (legendArr[1] != "nul") {
         tempJson.bottom = legendArr[1];
     }
-    if (legendArr[2] != null) {
+    if (legendArr[2] != "null") {
         tempJson.left = legendArr[2];
     }
-    if (legendArr[3] != null) {
+    if (legendArr[3] != "null") {
         tempJson.right = legendArr[3];
     }
-    if (legendArr[4] != null) {
+    if (legendArr[4] != "null") {
         tempJson.orient = legendArr[4];
     } else {
         tempJson.orient = 'horizontal';
