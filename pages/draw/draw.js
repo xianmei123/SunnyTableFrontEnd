@@ -1179,13 +1179,6 @@ Page({
         this.data.yName = event.detail;
         yName = event.detail;
     },
-    changeRegion: function (event) {
-        var newRegion = [event.target.dataset.a, event.target.dataset.b];
-        console.log("现在是" + newRegion[0] + newRegion[1]);
-        this.setData({
-            region: newRegion
-        });
-    },
     getXValue: function (event) {
         var index = event.target.dataset.a;
         var newXValue = this.data.xValues;
@@ -1201,6 +1194,7 @@ Page({
         var dataId = event.target.dataset.b;
         var newData = this.data.datas;
         this.setData({
+            region: [groupId - 1, dataId - 1],
             currentCell: newData[groupId - 1][dataId - 1]
         });
     },
@@ -1239,7 +1233,11 @@ Page({
         var newIterator2 = this.data.iterator2;
         var newDatas = this.data.datas;
         var newGroupName = this.data.groupName;
-        newDatas.push([]);
+        var tmp = [];
+        for (var i = 0; i < this.data.xValues.length; i++) {
+            tmp.push("");
+        }
+        newDatas.push(tmp);
         newIterator2.push(newIterator2.length + 1);
         newGroupName.push("");
         this.setData({
@@ -1269,8 +1267,12 @@ Page({
         }
         var newIterator1 = this.data.iterator1;
         var newXValues = this.data.xValues;
+        var newDatas = this.data.datas;
         newIterator1.push(newIterator1.length + 1);
         newXValues.push("");
+        for (var i = 0; i < newDatas.length; i++) {
+            newDatas[i].push("");
+        }
         this.setData({
             iterator1: newIterator1,
             xValues: newXValues
@@ -1297,10 +1299,10 @@ Page({
         var newXValues = this.data.xValues;
         var newDatas = this.data.datas;
         newIterator1.pop();
-        newXValues.pop();
+        newXValues.splice(this.data.region[1], 1);
         var i;
         for (i = 0; i < newDatas.length; i++) {
-            newDatas[i].pop();
+            newDatas[i].splice(this.data.region[1], 1);
         }
         this.setData({
             iterator1: newIterator1,
