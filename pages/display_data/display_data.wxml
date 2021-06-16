@@ -1,26 +1,22 @@
 <scroll-view class="scroll-view_H" scroll-x="true" style="width: 100%">
   <view class="text-item">
-    <van-field value="数据组" disabled bindtap="changeCurrentX" />
+    <van-field value="横坐标" disabled bindtap="changeCurrentX" />
   </view>
   <block wx:for="{{iterator2}}" wx:for-index="i">
     <view class="text-item">
-      <van-field value="{{ groupName[i] }}" placeholder="数据组{{ i + 1 }}" bind:change="setGroupName" data-a="{{i}}"
-        bindtap="changeCurrentGroupName" />
+      <van-field value="{{ groupName[i] }}" placeholder="数据组{{ i + 1 }}"  data-a="{{i}}" />
     </view>
   </block>
-  <view class="divide-H"></view>
+  <text>\n</text>
   <block wx:for="{{iterator1}}" wx:for-index="i">
     <view class="text-item">
-      <van-field placeholder="横坐标{{ i + 1 }}" border="{{ true }}" bind:change="getXValue" data-a="{{i + 1}}"
-        bindtap="changeCurrentX" />
+      <van-field value="{{ xValues[i] }}" placeholder="横坐标{{ i + 1 }}" border="{{ true }}"/>
     </view>
     <block wx:for="{{iterator2}}" wx:for-item="j">
       <view class="text-item">
-        <van-field value="{{ datas[j-1][i] }}" placeholder="数据{{ j }}" border="{{ true }}" bind:change="getData"
-          data-a="{{j}}" data-b="{{i + 1}}" bindtap="changeCurrent" />
+        <van-field value="{{ datas[j-1][i] }}"  placeholder="数据{{ j }}" border="{{ true }}"/>
       </view>
     </block>
-    <view class="divide_H"></view>
+    <text>\n</text>
   </block>
 </scroll-view>
-<view class="divide_H"></view>

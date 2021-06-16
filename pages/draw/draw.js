@@ -1590,20 +1590,21 @@ Page({
     },
     //打开数据
     openData: function (data) {
+        console.log("openData");
         var newGroupName = [];
         var newDatas = [];
-        var dataArray = data["dataArray"];
+        var dataArray = data["data"]["data"]["dataArray"];
+        console.log(dataArray);
         var i;
         for (i = 1; i < dataArray.length; i++) {
             newGroupName.push(dataArray[i]["name"]);
             newDatas.push(dataArray[i]["lineData"]);
         }
-        console.log('newDatas', newDatas)
         this.setData({
             xValues: dataArray[0]["lineData"],
             datas: newDatas,
             groupName: newGroupName
-        })
+        });
     },
     //导出数据
     exportData() {
@@ -1718,6 +1719,7 @@ Page({
     },
     //打开图表
     openChart(chart) {
+        console.log("openChart");
         xName = chart["data"]["xlabel"];
         yName = chart["data"]["ylabel"];
         graphName = chart["data"]["name"];
@@ -1737,6 +1739,7 @@ Page({
         var newDatas = [];
         var dataArray = chart["data"]["data"]["dataArray"];
         console.log(dataArray);
+        console.log(xName);
         var i;
         for (i = 1; i < dataArray.length; i++) {
             newGroupName.push(dataArray[i]["name"]);
@@ -1747,7 +1750,9 @@ Page({
             xValues: dataArray[0]["lineData"],
             datas: newDatas,
             groupName: newGroupName,
-            graphName: chart["data"]["name"]
+            graphName: chart["data"]["name"],
+            xName: xName,
+            yName: yName
         });
         this.repaint();
     },

@@ -1,7 +1,7 @@
 Page({
     data: {
-        iterator1: [1, 2],
-        iterator2: [1, 2],
+        iterator1: [],
+        iterator2: [],
         datas: [
             [2, 3],
             [4, 5]
@@ -10,7 +10,6 @@ Page({
             1, 2
         ],
         groupName: ["group1", "group2"],
-        firstReady: false,
         groupNum: 2
     },
     changeRegion: function (event) {
@@ -156,63 +155,61 @@ Page({
         }
         return "number";
     },
-    openData: function (data) {
-        var newGroupName = [];
-        var newDatas = [];
-        var dataArray = data["dataArray"];
-        var i;
-        for (i = 0; i < dataArray.length; i++) {
-            newGroupName.push(dataArray[i]["name"]);
-            newDatas.push(dataArray[i]["lineData"]);
-        }
-        this.setData({
-            datas: newDatas,
-            groupName: newGroupName
-        })
-    },
-    actionSheetTap() {
-        this.setData({
-            actionSheetHidden: !this.data.actionSheetHidden
-        })
-    },
-    actionSheetbindchange() {
-        this.setData({
-            actionSheetHidden: !this.data.actionSheetHidden
-        })
-    },
-    bindMenu1() {
-        this.setData({
-            actionSheetHidden: !this.data.actionSheetHidden
-        })
-        this.addX();
-    },
-    bindMenu2() {
-        this.setData({
-            actionSheetHidden: !this.data.actionSheetHidden
-        })
-        this.addDataGroup();
-    },
-    bindMenu3() {
-        this.setData({
-            actionSheetHidden: !this.data.actionSheetHidden
-        })
-        this.delX();
-    },
-    bindMenu4() {
-        this.setData({
-            actionSheetHidden: !this.data.actionSheetHidden
-        })
-        this.delGroup();
-    },
-    onCloseInputTempName() {
-        this.setData({
-            showInputTemplateName: false,
-            inputTemplateNameL: ""
-        });
-    },
     isSaveTemplate() {
         this.setData({
             showInputTemplateName: true
         })
-    }
+    },
+    openData: function (data) {
+        console.log(data);
+        var newGroupName = [];
+        var newDatas = [];
+        var dataArray = data["dataArray"];
+        console.log(dataArray);
+        var i;
+        var nit1 = [];
+        var nit2 = [];
+        var newXValues = dataArray[0]["lineData"];
+        for (i = 1; i < dataArray.length; i++) {
+            newGroupName.push(dataArray[i]["name"]);
+            newDatas.push(dataArray[i]["lineData"]);
+            nit2.push(i);
+        }
+        for (i = 1; i <= newXValues.length; i++) {
+            nit1.push(i);
+        }
+        this.setData({
+            iterator1: nit1, 
+            iterator2: nit2,
+            xValues: newXValues,
+            datas: newDatas,
+            groupName: newGroupName
+        });
+        console.log(this.data);
+    },
+    async onLoad() {
+        const eventChannel = this.getOpenerEventChannel();
+        if (eventChannel) {
+            eventChannel.on("openData", res => {
+                console.log(res.data);
+                this.openData(res.data)
+            });
+        }
+    },
+    // onLoad: function() {
+    //     var nit1 = [];
+    //     var nit2 = [];
+    //     for (var i = 1; i <= this.data.xValues.length; i++) {
+    //         nit1.push(i);
+    //     }
+    //     for (var i = 1; i <= this.data.groupName.length; i++) {
+    //         nit2.push(i);
+    //     }
+
+    //     this.setData({
+    //         iterator1: nit1,
+    //         iterator2: nit2
+    //     });
+    //     console.log(this.data);
+    // }
 });
