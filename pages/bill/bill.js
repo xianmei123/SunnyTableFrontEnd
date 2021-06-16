@@ -127,8 +127,8 @@ Page({
         showCostInput: true,
         showDetailInput: true,
         showVoiceInputMessage: "按住说话",
-        tip: "\nTip:按住说话时，会将输入转换为详细信息、金额和 收入/支出 三部分。\n" + 
-        "语音输入建议模板有：1. xxx（例：买了一个苹果），花费/花了xxx元  2. xxx，收入/赚了xxx元，还有更多等待您的探索!",
+        tip: "\nTip:按住说话时，会将输入转换为详细信息、金额和 收入/支出 三部分。\n" +
+            "语音输入建议模板有：1. xxx（例：买了一个苹果），花费/花了xxx元  2. xxx，收入/赚了xxx元，还有更多等待您的探索!",
         billData: [],
         icons: getApp().globalData.icons,
     },
@@ -381,7 +381,7 @@ Page({
 
     },
 
-   async saveBill() {
+    async saveBill() {
         this.queryBill();
         var url = "https://www.jaripon.xyz/bill/add";
 
@@ -476,12 +476,21 @@ Page({
     },
 
     onConfirmBill() {
-        this.setData({
-            'newBill.show': false,
-            'newBill.io': this.data.newBill.messageIO,
-            'newBill.detail': this.data.newBill.messageDetail
-        });
-        this.saveBill();
+        
+        if (this.data.newBill.messageIO == null || this.data.newBill.messageDetail == null) {
+            wx.showToast({
+                title: '数据不可为空',
+                icon: 'error'
+            });
+        } else {
+            this.setData({
+                'newBill.show': false,
+                'newBill.io': this.data.newBill.messageIO,
+                'newBill.detail': this.data.newBill.messageDetail
+            });
+            this.saveBill();
+        }
+
     },
 
     onToday1() {
@@ -1021,7 +1030,7 @@ Page({
                     if (!("code" in data)) {
                         this.setData({
                             "newBill.detail": data.detail,
-                            "newBill.cost": data.cost == "十" ? 10: data.cost ,
+                            "newBill.io": data.cost == "十" ? 10 : parseInt(data.cost),
                         });
                         if (data.io == 0) {
                             this.setData({
@@ -1054,10 +1063,10 @@ Page({
         });
         this.updateBillDataNotShow();
     },
-    async onPullDownRefresh(){
+    async onPullDownRefresh() {
         this.updateBillData();
         wx.stopPullDownRefresh({
-          success: (res) => {},
+            success: (res) => {},
         })
-      }
+    }
 });
