@@ -1,3 +1,4 @@
+
 var billId = 0;
 var id4replace = 0;
 
@@ -381,7 +382,7 @@ Page({
 
     },
 
-    async saveBill() {
+    saveBill() {
         this.queryBill();
         var url = "https://www.jaripon.xyz/bill/add";
 
@@ -418,8 +419,7 @@ Page({
         wx.showToast({
             title: '保存账单成功',
         });
-        await this.updateBillDataNotShow();
-        //this.updateBillDataNotShow();
+        this.updateBillDataNotShow();
     },
     // condition: {
     //     show: false,
@@ -494,6 +494,7 @@ Page({
             });
             this.saveBill();
         }
+        this.updateBillDataNotShow();
 
     },
 
