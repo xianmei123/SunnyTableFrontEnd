@@ -420,7 +420,6 @@ Page({
             title: '保存账单成功',
         });
         this.updateBillDataNotShow();
-        this.updateBillDataNotShow();
     },
     // condition: {
     //     show: false,
@@ -495,6 +494,7 @@ Page({
             });
             this.saveBill();
         }
+        this.updateBillDataNotShow();
 
     },
 
