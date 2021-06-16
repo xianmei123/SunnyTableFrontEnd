@@ -1424,6 +1424,7 @@ Page({
         console.log(xType);
         yType = this.judgeYType();
         console.log(yType);
+        inputData[0][0] = "xLabel" 
         updateShow();
         switch (this.data.value1) {
             case "line":
