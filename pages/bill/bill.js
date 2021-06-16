@@ -476,10 +476,14 @@ Page({
     },
 
     onConfirmBill() {
-        
         if (this.data.newBill.messageIO == null || this.data.newBill.messageDetail == null) {
             wx.showToast({
                 title: '数据不可为空',
+                icon: 'error'
+            });
+        } else if (this.data.newBill.messageDetail.replaceAll(" ", "") == "") {
+            wx.showToast({
+                title: '用途不可为空格',
                 icon: 'error'
             });
         } else {
