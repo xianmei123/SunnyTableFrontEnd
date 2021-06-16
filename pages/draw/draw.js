@@ -2536,19 +2536,19 @@ function myFullScreen() {
 function setLegendOption(option, legendPos) {
     var legendArr = legendPos.split(",");
     var tempJson = {};
-    if (legendArr[0] != null) {
+    if (legendArr[0] != "null") {
         tempJson.top = legendArr[0];
     }
-    if (legendArr[1] != null) {
+    if (legendArr[1] != "nul") {
         tempJson.bottom = legendArr[1];
     }
-    if (legendArr[2] != null) {
+    if (legendArr[2] != "null") {
         tempJson.left = legendArr[2];
     }
-    if (legendArr[3] != null) {
+    if (legendArr[3] != "null") {
         tempJson.right = legendArr[3];
     }
-    if (legendArr[4] != null) {
+    if (legendArr[4] != "null") {
         tempJson.orient = legendArr[4];
     } else {
         tempJson.orient = 'horizontal';
