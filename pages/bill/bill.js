@@ -1033,6 +1033,10 @@ Page({
                     console.log(data);
                     if (!("code" in data)) {
                         this.setData({
+                            "newBill.messageDetail": data.detail,
+                            "newBill.messageIO": data.cost == "十" ? 10 : parseInt(data.cost),
+                        });
+                        this.setData({
                             "newBill.detail": data.detail,
                             "newBill.io": data.cost == "十" ? 10 : parseInt(data.cost),
                         });
